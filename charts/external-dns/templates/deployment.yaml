@@ -30,6 +30,14 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ include "external-dns.imageVersion" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- if .Values.config.dnsSecret }}
+          - name: DNS_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "external-dns.fullname" . }}
+                key: secret
+          {{- end }}
           args:
           {{- if .Values.config.ownerID }}
           - --txt-owner-id={{ .Values.config.ownerID }}
@@ -43,7 +51,7 @@ spec:
           - --rfc2136-zone={{ .Values.config.domain }}
           {{- end }}
           {{- if .Values.config.dnsSecret }}
-          - --rfc2136-tsig-secret={{ .Values.config.dnsSecret }}
+          - --rfc2136-tsig-secret=$(DNS_SECRET)
           {{- end }}
           - --rfc2136-tsig-secret-alg=hmac-sha256
           {{- if .Values.config.keyname }}
