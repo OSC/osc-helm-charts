@@ -1,4 +1,5 @@
 proxy:
+  oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
   clientID: f4db7edc-7f3c-4570-a574-92d78ba8bb9e
   clientSecret: 80c35355-44c8-4d1e-9ff4-3606fe5c5888
   cookieSecret: KMdIWJeLDNssdLoaXxiLBw==

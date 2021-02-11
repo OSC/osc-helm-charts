@@ -24,6 +24,8 @@ jobs:
           python-version: 3.7
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.0.1
+      - name: Run chart-testing (lint)
+        run: ct lint --config .github/config/cf.yaml
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
@@ -31,11 +33,14 @@ jobs:
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
           fi
-      - name: Run chart-testing (lint)
-        run: ct lint --config .github/config/cf.yaml
       - name: Create kind cluster
         uses: container-tools/kind-action@v1
         if: steps.list-changed.outputs.changed == 'true'
+      - name: Install Keycloak
+        if: steps.list-changed.outputs.changed == 'true'
+        run: |
+          helm repo add codecentric https://codecentric.github.io/helm-charts
+          helm install keycloak codecentric/keycloak -n keycloak --create-namespace --version 9.9.2 --values .github/config/keycloak-values.yaml
       - name: Run chart-testing (install)
         run: ct install --config .github/config/cf.yaml
         if: steps.list-changed.outputs.changed == 'true'
