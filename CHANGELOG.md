@@ -1,3 +1,7 @@
+## v0.4.0 / 2021-02-11
+
+* kubernetes-dashboard-proxy: Upgrade oauth2-proxy and support adding allowed groups
+
 ## v0.3.0 / 2021-02-11
 
 * Add kubernetes-dashboard-proxy chart
