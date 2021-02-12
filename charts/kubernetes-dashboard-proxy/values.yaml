@@ -1,0 +1,76 @@
+proxy:
+  oidcIssuerURL:
+  clientID:
+  clientSecret:
+  cookieSecret:
+  cookieName:
+
+kubernetes-dashboard:
+  fullnameOverride: kubernetes-dashboard
+  service:
+    annotations:
+      prometheus.io/probe_module: https-noverify
+      prometheus.io/probe_scheme: https
+  metricsScraper:
+    enabled: true
+  metrics-server:
+    enabled: true
+    fullnameOverride: metrics-server
+
+image:
+  repository: quay.io/oauth2-proxy/oauth2-proxy
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 4180
+  annotations:
+    prometheus.io/probe_module: http-healthz
+    prometheus.io/probe_path: /ping
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    cert-manager.io/cluster-issuer: letsencrypt
+    prometheus.io/probe_path: /ping
+    # nginx.ingress.kubernetes.io/server-alias set by hostAlias
+  host: kubernetes-dashboard-proxy.local
+  hostAlias:
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

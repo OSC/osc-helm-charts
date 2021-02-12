@@ -1,1 +1,3 @@
 target-branch: main
+chart-repos:
+  - kubernetes-dashboard=https://kubernetes.github.io/dashboard/
