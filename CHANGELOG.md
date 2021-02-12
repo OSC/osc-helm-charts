@@ -1,3 +1,7 @@
+## v0.3.0 / 2021-02-11
+
+* Add kubernetes-dashboard-proxy chart
+
 ## v0.2.0 / 2021-02-09
 
 * Deploy external-dns secret using Kubernetes secret
