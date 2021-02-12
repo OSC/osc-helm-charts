@@ -2,8 +2,20 @@ apiVersion: v1
 entries:
   external-dns:
   - apiVersion: v2
+    appVersion: 0.7.6
+    created: "2021-02-12T19:03:52.574730171Z"
+    description: A Helm chart for Kubernetes External DNS
+    digest: 850c43005f6dc570d49e7d8d97b6f1e2e7e044ebac10685f1e3c64b4f717c999
+    maintainers:
+    - name: treydock
+    name: external-dns
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/external-dns-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 0.7.4
-    created: "2021-02-12T17:49:42.919378556Z"
+    created: "2021-02-12T19:03:52.574037771Z"
     description: A Helm chart for Kubernetes External DNS
     digest: bf901662197ca695d8045822e5d8cbb64153870e71012eca8585e954e4933441
     maintainers:
@@ -15,7 +27,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 0.7.4
-    created: "2021-02-12T17:49:42.918915555Z"
+    created: "2021-02-12T19:03:52.573520171Z"
     description: A Helm chart for Kubernetes External DNS
     digest: 2ae8aba89ef66afaa20b27b1207d69e4a959abd475397cc2509aff010732205c
     maintainers:
@@ -28,13 +40,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: 7.0.1
-    created: "2021-02-12T17:49:42.925677779Z"
+    created: "2021-02-12T19:03:52.585490877Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 3.0.1
     description: Kubernetes Dashboard Proxy
-    digest: 116eca6e44ef5c7eada363ab25e12c72655391ed4282d88899be510ac9bffad4
+    digest: edf478bbfe91a06b852553bfe38dd8163968f7c58149d4e3d2f2255ca15bf6d5
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -44,7 +56,7 @@ entries:
     version: 0.2.0
   - apiVersion: v2
     appVersion: 6.1.1
-    created: "2021-02-12T17:49:42.923026269Z"
+    created: "2021-02-12T19:03:52.577211772Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
@@ -58,4 +70,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
-generated: "2021-02-12T17:49:42.918284152Z"
+generated: "2021-02-12T19:03:52.563655966Z"
