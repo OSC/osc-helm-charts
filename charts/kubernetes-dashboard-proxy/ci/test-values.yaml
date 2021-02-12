@@ -4,3 +4,6 @@ proxy:
   clientSecret: 80c35355-44c8-4d1e-9ff4-3606fe5c5888
   cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
   cookieName: _dashboard_proxy
+  allowGroups:
+    - foo
+    - bar
