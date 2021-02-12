@@ -4,6 +4,7 @@ proxy:
   clientSecret:
   cookieSecret:
   cookieName:
+  allowGroups:
 
 kubernetes-dashboard:
   fullnameOverride: kubernetes-dashboard
