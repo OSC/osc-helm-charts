@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.sslExporter.name }}
+  labels:
+    {{- include "ssl-exporter.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "ssl-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ssl-exporter.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ .Files.Get "configs/ssl-exporter.yaml" | sha256sum }}
+    spec:
+      containers:
+        - name: {{ .Values.sslExporter.name }}
+          {{- with .Values.sslExporter.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.sslExporter.image.repository }}:{{ .Values.sslExporter.image.tag }}"
+          imagePullPolicy: {{ .Values.sslExporter.image.pullPolicy }}
+          args:
+            - --config.file=/config/{{ .Values.sslExporter.configName }}.yaml
+            - --web.listen-address=:{{ .Values.sslExporter.service.port }}
+          volumeMounts:
+          - mountPath: /config
+            name: config
+            readOnly: true
+          ports:
+            - containerPort: {{ .Values.sslExporter.service.port }}
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 1
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 30
+          {{- with .Values.sslExporter.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Values.sslExporter.configName }}
+            items:
+            - key: ssl-exporter.yaml
+              path: {{ .Values.sslExporter.configName }}.yaml
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

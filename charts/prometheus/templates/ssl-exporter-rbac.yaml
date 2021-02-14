@@ -1,0 +1,37 @@
+{{- if .Values.sslExporter.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.sslExporter.name }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "ssl-exporter.labels" . | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resources:
+  - secrets
+  verbs: ["list"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.sslExporter.name }}
+  labels:
+    {{- include "ssl-exporter.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Values.sslExporter.name }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "ssl-exporter.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.sslExporter.name }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.sslExporter.name }}
+  namespace: {{ .Release.Namespace | quote }}
+{{- end }}

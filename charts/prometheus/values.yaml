@@ -146,13 +146,34 @@ blackboxExporter:
 
 sslExporter:
   name: ssl-exporter
+  configName: ssl-exporter-config
+  rbac:
+    create: false
   image:
     repository: docker.io/ribbybibby/ssl-exporter
     pullPolicy: IfNotPresent
     tag: "v2.2.0"
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+    privileged: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 50Mi
   service:
     type: ClusterIP
     port: 9219
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
 
 ingressName: ingress-nginx
 

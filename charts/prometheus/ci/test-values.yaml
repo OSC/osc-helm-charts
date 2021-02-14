@@ -7,3 +7,7 @@ proxy:
   allowGroups:
     - foo
     - bar
+
+sslExporter:
+  rbac:
+    create: true
