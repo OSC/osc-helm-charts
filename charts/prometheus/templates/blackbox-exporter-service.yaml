@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.blackboxExporter.name }}
+  labels:
+    {{- include "blackbox-exporter.labels" . | nindent 4 }}
+  {{- with .Values.blackboxExporter.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.blackboxExporter.service.type }}
+  ports:
+    - port: {{ .Values.blackboxExporter.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "blackbox-exporter.selectorLabels" . | nindent 4 }}

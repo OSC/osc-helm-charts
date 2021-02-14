@@ -114,13 +114,35 @@ proxy:
 
 blackboxExporter:
   name: blackbox-exporter
+  configName: blackbox-exporter-config
   image:
     repository: docker.io/prom/blackbox-exporter
     pullPolicy: IfNotPresent
     tag: "v0.18.0"
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - all
+      # Need the following if enable ICMP module
+      # add:
+      # - NET_RAW
+    privileged: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 50Mi
   service:
     type: ClusterIP
     port: 9115
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
 
 sslExporter:
   name: ssl-exporter
