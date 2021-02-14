@@ -1,0 +1,24 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "prometheus.fullname" . }}
+  labels:
+    {{- include "prometheus.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "prometheus.selectorLabels" . | nindent 6 }}
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          {{- include "prometheus.selectorLabels" . | nindent 10 }}
+    - podSelector:
+        matchLabels:
+          {{- include "prometheus-proxy.selectorLabels" . | nindent 10 }}
+    - podSelector:
+        matchLabels:
+          {{- include "blackbox-exporter.selectorLabels" . | nindent 10 }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.ingressName }}

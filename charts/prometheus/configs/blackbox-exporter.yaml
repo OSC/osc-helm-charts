@@ -1,0 +1,67 @@
+modules:
+  http:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes:
+      - 200
+      - 301
+      - 302
+      - 303
+      - 401
+      - 403
+      preferred_ip_protocol: ip4
+      ip_protocol_fallback: false
+      no_follow_redirects: true
+  https:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes:
+      - 200
+      - 301
+      - 302
+      - 303
+      - 401
+      - 403
+      fail_if_not_ssl: true
+      preferred_ip_protocol: ip4
+      ip_protocol_fallback: false
+      no_follow_redirects: true
+  https-noverify:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes:
+      - 200
+      - 401
+      - 403
+      fail_if_not_ssl: true
+      preferred_ip_protocol: ip4
+      ip_protocol_fallback: false
+      tls_config:
+        insecure_skip_verify: true
+  http-healthz:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes:
+      - 200
+      preferred_ip_protocol: ip4
+      ip_protocol_fallback: false
+      no_follow_redirects: true
+  tcp_connect:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: ip4
+      ip_protocol_fallback: false
+  tcp_tls_connect:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: ip4
+      ip_protocol_fallback: false
+      tls: true
+      tls_config:
+        insecure_skip_verify: true
