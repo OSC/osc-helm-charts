@@ -59,7 +59,7 @@ spec:
             {{- if .Values.proxy.cookieName }}
             - --cookie-name={{ .Values.proxy.cookieName }}
             {{- end }}
-            - --upstream=https://{{ include "prometheus.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.dnsDomain }}
+            - --upstream=http://{{ include "prometheus.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.dnsDomain }}:{{ .Values.service.port }}
             - --email-domain=*
             - --insecure-oidc-allow-unverified-email=true
             - --skip-provider-button
