@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.proxy.name }}
+  labels:
+    {{- include "prometheus-proxy.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "prometheus-proxy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "prometheus-proxy.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Values.proxy.name }}
+          {{- with .Values.proxy.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag }}"
+          imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
+          env:
+          {{- if .Values.proxy.clientSecret }}
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.proxy.name }}
+                key: client-secret
+          {{- end }}
+          {{- if .Values.proxy.cookieSecret }}
+          - name: COOKIE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.proxy.name }}
+                key: cookie-secret
+          {{- end }}
+          args:
+            - --http-address=0.0.0.0:{{ .Values.proxy.service.port }}
+            - --reverse-proxy=true
+            {{- if .Values.proxy.oidcIssuerURL }}
+            - --provider=oidc
+            - --oidc-issuer-url={{ .Values.proxy.oidcIssuerURL }}
+            {{- end }}
+            {{- if .Values.proxy.clientID }}
+            - --client-id={{ .Values.proxy.clientID }}
+            {{- end }}
+            {{- if .Values.proxy.clientSecret }}
+            - --client-secret=$(CLIENT_SECRET)
+            {{- end }}
+            {{- if .Values.proxy.cookieSecret }}
+            - --cookie-secret=$(COOKIE_SECRET)
+            {{- end }}
+            - --cookie-httponly=false
+            - --cookie-secure=true
+            - --cookie-samesite=none
+            - --cookie-refresh=180s
+            {{- if .Values.proxy.cookieName }}
+            - --cookie-name={{ .Values.proxy.cookieName }}
+            {{- end }}
+            - --upstream=https://{{ include "prometheus.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.dnsDomain }}
+            - --email-domain=*
+            - --insecure-oidc-allow-unverified-email=true
+            - --skip-provider-button
+            - --silence-ping-logging
+            {{- range .Values.proxy.allowGroups }}
+            - --allowed-group={{ . }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.proxy.service.port }}
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          {{- with .Values.proxy.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

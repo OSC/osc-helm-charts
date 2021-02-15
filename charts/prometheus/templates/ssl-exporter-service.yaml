@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.sslExporter.name }}
+  labels:
+    {{- include "ssl-exporter.labels" . | nindent 4 }}
+  {{- with .Values.sslExporter.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.sslExporter.service.type }}
+  ports:
+    - port: {{ .Values.sslExporter.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "ssl-exporter.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,19 @@
+---
+modules:
+  https:
+    prober: https
+    timeout: 5s
+  https-noverify:
+    prober: https
+    timeout: 5s
+    tls_config:
+      insecure_skip_verify: true
+  tcp:
+    prober: tcp
+    timeout: 5s
+  file:
+    prober: file
+    timeout: 5s
+  kubernetes:
+    prober: kubernetes
+    timeout: 5s

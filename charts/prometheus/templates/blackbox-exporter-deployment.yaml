@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.blackboxExporter.name }}
+  labels:
+    {{- include "blackbox-exporter.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "blackbox-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "blackbox-exporter.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Values.blackboxExporter.name }}
+          {{- with .Values.blackboxExporter.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.blackboxExporter.image.repository }}:{{ .Values.blackboxExporter.image.tag }}"
+          imagePullPolicy: {{ .Values.blackboxExporter.image.pullPolicy }}
+          args:
+            - --config.file=/config/{{ .Values.blackboxExporter.configName }}.yaml
+            - --web.listen-address=:{{ .Values.blackboxExporter.service.port }}
+          volumeMounts:
+          - mountPath: /config
+            name: config
+            readOnly: true
+          ports:
+            - containerPort: {{ .Values.blackboxExporter.service.port }}
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 1
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 30
+          {{- with .Values.blackboxExporter.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        - name: {{ .Values.blackboxExporter.name }}-watch
+          securityContext:
+            {{- toYaml .Values.watch.securityContext | nindent 12 }}
+          image: "{{ .Values.watch.image.repository }}:{{ .Values.watch.image.tag }}"
+          imagePullPolicy: {{ .Values.watch.image.pullPolicy }}
+          args: ["-v", "-t", "-p=/config", "curl", "-X", "POST", "--fail", "-o", "-", "-sS", "http://localhost:{{ .Values.blackboxExporter.service.port }}/-/reload"]
+          volumeMounts:
+          - mountPath: /config
+            name: config
+            readOnly: true
+          {{- with .Values.watch.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Values.blackboxExporter.configName }}
+            items:
+            - key: blackbox-exporter.yaml
+              path: {{ .Values.blackboxExporter.configName }}.yaml
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

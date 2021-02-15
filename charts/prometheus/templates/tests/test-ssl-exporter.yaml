@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "prometheus.fullname" . }}-test-ssl-exporter"
+  labels:
+    {{- include "prometheus.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['-O-','-S','{{ .Values.sslExporter.name }}:{{ .Values.sslExporter.service.port }}/']
+  restartPolicy: Never
