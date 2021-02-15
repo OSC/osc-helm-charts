@@ -2,7 +2,7 @@ apiVersion: v2
 name: prometheus
 description: OSC Prometheus deployment
 type: application
-version: 0.1.2
-appVersion: "v2.23.0"
+version: 0.2.0
+appVersion: "v2.24.1"
 maintainers:
   - name: treydock
