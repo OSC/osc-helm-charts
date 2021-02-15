@@ -1,3 +1,7 @@
+## v0.6.0 / 2021-02-15
+
+* Add prometheus chart
+
 ## v0.5.0 / 2021-02-11
 
 * external-dns: Support for scraping external-dns metrics, update to 0.7.6
