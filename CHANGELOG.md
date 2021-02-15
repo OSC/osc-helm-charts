@@ -1,3 +1,7 @@
+## v0.6.1 / 2021-02-15
+
+* prometheus: Fix upstream flag for prometheus-proxy
+
 ## v0.6.0 / 2021-02-15
 
 * Add prometheus chart
