@@ -56,14 +56,3 @@ Create the name of the service account to use
 {{- define "external-dns.serviceAccountName" -}}
 {{- default (include "external-dns.fullname" .) .Values.serviceAccount.name }}
 {{- end }}
-
-{{/*
-Image version
-*/}}
-{{- define "external-dns.imageVersion" -}}
-{{- if .Values.image.tag }}
-{{- .Values.image.tag }}
-{{- else }}
-{{- printf "v%s" .Chart.AppVersion }}
-{{- end }}
-{{- end }}
