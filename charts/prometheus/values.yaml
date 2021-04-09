@@ -92,7 +92,7 @@ proxy:
   image:
     repository: quay.io/oauth2-proxy/oauth2-proxy
     pullPolicy: IfNotPresent
-    tag: "v7.0.1"
+    tag: "v7.1.2"
   securityContext: {}
   resources: {}
   service:
