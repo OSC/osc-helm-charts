@@ -45,6 +45,9 @@ data:
     - job_name: kubernetes-api-server
       scheme: https
       metrics_path: /metrics
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
       kubernetes_sd_configs:
       - role: endpoints
       relabel_configs:
