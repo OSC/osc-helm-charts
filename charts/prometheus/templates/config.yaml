@@ -45,6 +45,9 @@ data:
     - job_name: kubernetes-api-server
       scheme: https
       metrics_path: /metrics
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
       kubernetes_sd_configs:
       - role: endpoints
       relabel_configs:
@@ -53,10 +56,6 @@ data:
         regex: default;kubernetes;https
       - action: labelmap
         regex: __meta_kubernetes_service_label_(.+)
-      - source_labels: [__meta_kubernetes_service_name]
-        regex: '(.+)'
-        replacement: '$1'
-        target_label: host
     - job_name: kubernetes-kube-proxy
       scheme: http
       metrics_path: /metrics
