@@ -42,6 +42,21 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+    - job_name: kubernetes-api-server
+      scheme: https
+      metrics_path: /metrics
+      kubernetes_sd_configs:
+      - role: endpoints
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+      - source_labels: [__meta_kubernetes_service_name]
+        regex: '(.+)'
+        replacement: '$1'
+        target_label: host
     - job_name: kubernetes-kube-proxy
       scheme: http
       metrics_path: /metrics
