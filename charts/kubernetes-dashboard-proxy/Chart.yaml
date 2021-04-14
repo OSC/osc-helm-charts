@@ -2,11 +2,11 @@ apiVersion: v2
 name: kubernetes-dashboard-proxy
 description: Kubernetes Dashboard Proxy
 type: application
-version: 0.3.0
+version: 0.4.0
 appVersion: "v7.1.2"
 maintainers:
   - name: treydock
 dependencies:
   - name: kubernetes-dashboard
-    version: 3.0.1
+    version: 4.0.3
     repository: https://kubernetes.github.io/dashboard/
