@@ -3,9 +3,9 @@ entries:
   external-dns:
   - apiVersion: v2
     appVersion: v0.7.6
-    created: "2021-04-13T19:55:55.573416016Z"
+    created: "2021-04-14T16:12:57.90833036Z"
     description: A Helm chart for Kubernetes External DNS
-    digest: 2dd64e7d6ad8e9c587f28ef6ac35fb9e2e261b96a16e8475a134ce92bf482c2b
+    digest: a33777fb2b295eb49a8614da106112df9a5ea375280a54addc0898d4588f837d
     maintainers:
     - name: treydock
     name: external-dns
@@ -50,6 +50,22 @@ entries:
     - https://OSC.github.io/osc-helm-charts/external-dns-0.1.0.tgz
     version: 0.1.0
   kubernetes-dashboard-proxy:
+  - apiVersion: v2
+    appVersion: v7.1.2
+    created: "2021-04-14T16:12:57.911238134Z"
+    dependencies:
+    - name: kubernetes-dashboard
+      repository: https://kubernetes.github.io/dashboard/
+      version: 4.0.3
+    description: Kubernetes Dashboard Proxy
+    digest: 8f8bbb1ab8addfeba11d5b78657e0f10ad7c79a05e587f23654c5a3b6afa15f9
+    maintainers:
+    - name: treydock
+    name: kubernetes-dashboard-proxy
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.4.0.tgz
+    version: 0.4.0
   - apiVersion: v2
     appVersion: v7.1.2
     created: "2021-04-13T19:55:55.576312949Z"
@@ -101,9 +117,9 @@ entries:
   prometheus:
   - apiVersion: v2
     appVersion: v2.26.0
-    created: "2021-04-13T19:55:55.577741064Z"
+    created: "2021-04-14T16:12:57.91265347Z"
     description: OSC Prometheus deployment
-    digest: d4ac6da67d490e2bcbe92fc5770d019a31eb7cf0ac2675d126a4c1d417f215ef
+    digest: 85f65a837abf554ae9b9239b77506f3ecf69b01eaa17f10d766edf7ef4ac1752
     maintainers:
     - name: treydock
     name: prometheus
@@ -195,4 +211,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-04-13T19:55:55.572619051Z"
+generated: "2021-04-14T16:12:57.907565141Z"
