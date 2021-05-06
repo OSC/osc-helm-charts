@@ -232,13 +232,13 @@ data:
       metrics_path: /metrics
       static_configs:
       - targets:
-        - {{ .Values.kubeStateMetrics.name }}.{{ .Values.kubeStateMetrics.namespace }}.svc.{{ .Values.dnsDomain }}:{{ .Values.kubeStateMetrics.metricsPort }}
+        - {{ index .Values "kube-state-metrics" "fullnameOverride" }}.{{ template "kube-state-metrics.namespace" . }}.svc.{{ .Values.dnsDomain }}:{{ index .Values "kube-state-metrics" "service" "port" }}
         labels:
           host: kube-state-metrics
     - job_name: kubernetes-state-metrics-telemetry
       metrics_path: /metrics
       static_configs:
       - targets:
-        - {{ .Values.kubeStateMetrics.name }}.{{ .Values.kubeStateMetrics.namespace }}.svc.{{ .Values.dnsDomain }}:{{ .Values.kubeStateMetrics.telemetryPort }}
+        - {{ index .Values "kube-state-metrics" "fullnameOverride" }}.{{ template "kube-state-metrics.namespace" . }}.svc.{{ .Values.dnsDomain }}:{{ index .Values "kube-state-metrics" "selfMonitor" "telemetryPort" }}
         labels:
           host: kube-state-metrics

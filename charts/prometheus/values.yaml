@@ -177,11 +177,45 @@ sslExporter:
 
 ingressName: ingress-nginx
 
-kubeStateMetrics:
-  name: kube-state-metrics
-  namespace: kube-system
-  metricsPort: 8080
-  telemetryPort: 8081
+kube-state-metrics:
+  nameOverride: kube-state-metrics
+  fullnameOverride: kube-state-metrics
+  prometheusScrape: false
+  service:
+    annotations:
+      prometheus.io/probe_skip: "true"
+  collectors:
+    certificatesigningrequests: false
+    configmaps: false
+    cronjobs: false
+    daemonsets: false
+    deployments: false
+    endpoints: false
+    horizontalpodautoscalers: false
+    ingresses: false
+    jobs: false
+    limitranges: false
+    mutatingwebhookconfigurations: false
+    namespaces: false
+    networkpolicies: false
+    nodes: true
+    persistentvolumeclaims: false
+    persistentvolumes: false
+    poddisruptionbudgets: false
+    pods: true
+    replicasets: false
+    replicationcontrollers: false
+    resourcequotas: false
+    secrets: false
+    services: false
+    statefulsets: false
+    storageclasses: false
+    validatingwebhookconfigurations: false
+    verticalpodautoscalers: false
+    volumeattachments: false
+  selfMonitor:
+    enabled: true
+    telemetryPort: 8081
 
 replicaCount: 1
 
