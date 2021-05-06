@@ -228,17 +228,13 @@ data:
         action: labeldrop
       - regex: "helm_sh_chart"
         action: labeldrop
-    - job_name: kubernetes-state-metrics
+    - job_name: kube-state-metrics
       metrics_path: /metrics
       static_configs:
       - targets:
         - {{ index .Values "kube-state-metrics" "fullnameOverride" }}.{{ template "kube-state-metrics.namespace" . }}.svc.{{ .Values.dnsDomain }}:{{ index .Values "kube-state-metrics" "service" "port" }}
-        labels:
-          host: kube-state-metrics
-    - job_name: kubernetes-state-metrics-telemetry
+    - job_name: kube-state-metrics-telemetry
       metrics_path: /metrics
       static_configs:
       - targets:
         - {{ index .Values "kube-state-metrics" "fullnameOverride" }}.{{ template "kube-state-metrics.namespace" . }}.svc.{{ .Values.dnsDomain }}:{{ index .Values "kube-state-metrics" "selfMonitor" "telemetryPort" }}
-        labels:
-          host: kube-state-metrics
