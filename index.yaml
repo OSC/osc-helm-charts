@@ -3,9 +3,9 @@ entries:
   external-dns:
   - apiVersion: v2
     appVersion: v0.7.6
-    created: "2021-04-14T16:12:57.90833036Z"
+    created: "2021-05-07T13:40:39.08223587Z"
     description: A Helm chart for Kubernetes External DNS
-    digest: a33777fb2b295eb49a8614da106112df9a5ea375280a54addc0898d4588f837d
+    digest: 69efd2c738fc98ada52019df6e187d4237ef5411a9a9bfd07fd3a3bf90f1811a
     maintainers:
     - name: treydock
     name: external-dns
@@ -52,13 +52,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.2
-    created: "2021-04-14T16:12:57.911238134Z"
+    created: "2021-05-07T13:40:39.08562957Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 4.0.3
     description: Kubernetes Dashboard Proxy
-    digest: 8f8bbb1ab8addfeba11d5b78657e0f10ad7c79a05e587f23654c5a3b6afa15f9
+    digest: ec9ede8fc80d68231e03a9c7d2b0c804d5144e62fb2e73de28cf14c998d1aefb
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -115,6 +115,22 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.26.0
+    created: "2021-05-07T13:40:39.08851327Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 3.0.1
+    description: OSC Prometheus deployment
+    digest: 447a6a443f8fd1d1b71823f0d1496068e0460a89412704a2b2f4c1d2b46addb2
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.5.0.tgz
+    version: 0.5.0
   - apiVersion: v2
     appVersion: v2.26.0
     created: "2021-04-14T16:12:57.91265347Z"
@@ -211,4 +227,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-04-14T16:12:57.907565141Z"
+generated: "2021-05-07T13:40:39.08157997Z"
