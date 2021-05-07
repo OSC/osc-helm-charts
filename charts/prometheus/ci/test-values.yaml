@@ -11,3 +11,10 @@ proxy:
 sslExporter:
   rbac:
     create: true
+
+kube-state-metrics:
+  collectors:
+    nodes: true
+    pods: true
+  extraArgs:
+    - --metric-labels-allowlist=pods=[account,job]
