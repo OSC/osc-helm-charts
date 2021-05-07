@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ index .Values "kube-state-metrics" "fullnameOverride" }}-test-connection"
+  labels:
+    {{- include "kube-state-metrics.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['-O-','-S','{{ index .Values "kube-state-metrics" "fullnameOverride" }}:{{ index .Values "kube-state-metrics" "service" "port" }}/healthz']
+  restartPolicy: Never

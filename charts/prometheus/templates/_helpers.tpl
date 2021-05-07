@@ -117,3 +117,23 @@ app.kubernetes.io/version: {{ .Values.sslExporter.image.tag | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Selector kube-state-metrics labels
+*/}}
+{{- define "kube-state-metrics.selectorLabels" -}}
+app.kubernetes.io/name: {{ index .Values "kube-state-metrics" "nameOverride" }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Common kube-state-metrics labels
+*/}}
+{{- define "kube-state-metrics.labels" -}}
+helm.sh/chart: {{ include "prometheus.chart" . }}
+{{ include "kube-state-metrics.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ index .Values "kube-state-metrics" "image" "tag" | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
