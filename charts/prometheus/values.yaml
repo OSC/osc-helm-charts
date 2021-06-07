@@ -176,6 +176,7 @@ sslExporter:
       prometheus.io/path: /metrics
 
 ingressName: ingress-nginx
+namespaceReaper: k8-namespace-reaper
 
 kube-state-metrics:
   nameOverride: kube-state-metrics
