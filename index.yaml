@@ -3,9 +3,9 @@ entries:
   external-dns:
   - apiVersion: v2
     appVersion: v0.7.6
-    created: "2021-05-07T13:40:39.08223587Z"
+    created: "2021-06-07T17:31:24.305751409Z"
     description: A Helm chart for Kubernetes External DNS
-    digest: 69efd2c738fc98ada52019df6e187d4237ef5411a9a9bfd07fd3a3bf90f1811a
+    digest: 6366d1bb3013da39d74f2f6f17b82371132ca1b4870348329e8b8a6612cf4f52
     maintainers:
     - name: treydock
     name: external-dns
@@ -52,13 +52,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.2
-    created: "2021-05-07T13:40:39.08562957Z"
+    created: "2021-06-07T17:31:24.309895093Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 4.0.3
     description: Kubernetes Dashboard Proxy
-    digest: ec9ede8fc80d68231e03a9c7d2b0c804d5144e62fb2e73de28cf14c998d1aefb
+    digest: 90269afecf7c7e5ea2569077df9741c2a66972b871313969b62b9182134a505a
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -115,6 +115,22 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.27.1
+    created: "2021-06-07T17:31:24.31309188Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 3.0.1
+    description: OSC Prometheus deployment
+    digest: cd8dcbd01caac33d7f22592137d314b9b65c592fcc06389823a3425c026796f8
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v2
     appVersion: v2.26.0
     created: "2021-05-07T13:40:39.08851327Z"
@@ -227,4 +243,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-05-07T13:40:39.08157997Z"
+generated: "2021-06-07T17:31:24.304986712Z"
