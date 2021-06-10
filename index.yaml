@@ -3,9 +3,9 @@ entries:
   external-dns:
   - apiVersion: v2
     appVersion: v0.7.6
-    created: "2021-06-10T14:16:27.503570032Z"
+    created: "2021-06-10T14:49:20.3735443Z"
     description: A Helm chart for Kubernetes External DNS
-    digest: a213deebd31c9734b04fc24981e3ee14cf9a7eb4d986de961659b825c80b9ffe
+    digest: d94ed7094588cc1f48b5091ad172168373f7092d3c0a5c6a0ab5a3e5b09864e1
     maintainers:
     - name: treydock
     name: external-dns
@@ -52,13 +52,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.2
-    created: "2021-06-10T14:16:27.506159284Z"
+    created: "2021-06-10T14:49:20.375612929Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 4.0.3
     description: Kubernetes Dashboard Proxy
-    digest: 1b63c382c439dc5a5944a0dd5a709b0f9cf45530394d9cf5e3a8f1a8a91049cb
+    digest: c736603be1b3ef02d961c8b36675f4f2c08093df9477de7e26a57e3416d736ab
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -115,6 +115,22 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.27.1
+    created: "2021-06-10T14:49:20.377589357Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 3.0.1
+    description: OSC Prometheus deployment
+    digest: e318d19d1922aff673324c764d73c9395d88e5f0eaf647d47c723cb226d59b6b
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.6.2.tgz
+    version: 0.6.2
   - apiVersion: v2
     appVersion: v2.27.1
     created: "2021-06-10T14:16:27.509513281Z"
@@ -259,4 +275,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-06-10T14:16:27.50286839Z"
+generated: "2021-06-10T14:49:20.373021293Z"
