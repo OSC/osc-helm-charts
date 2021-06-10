@@ -27,6 +27,12 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+      - regex: "feature_node_.+"
+        action: labeldrop
+      - regex: "nvidia_com_.+"
+        action: labeldrop
+      - regex: "cluster"
+        action: labeldrop
     - job_name: kubernetes-cadvisor
       scheme: https
       metrics_path: /metrics/cadvisor
@@ -42,6 +48,12 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+      - regex: "feature_node_.+"
+        action: labeldrop
+      - regex: "nvidia_com_.+"
+        action: labeldrop
+      - regex: "cluster"
+        action: labeldrop
     - job_name: kubernetes-api-server
       scheme: https
       metrics_path: /metrics
