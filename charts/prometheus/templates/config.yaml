@@ -190,8 +190,6 @@ data:
         target_label: __address__
         regex: '([^:]+)(?::\d+)?;(\d+)'
         replacement: '$1:$2'
-      - action: labelmap
-        regex: __meta_kubernetes_pod_label_(.+)
       - source_labels: [__meta_kubernetes_namespace]
         target_label: kubernetes_namespace
       - source_labels: [__meta_kubernetes_pod_name]
@@ -200,12 +198,6 @@ data:
         regex: '(.+);(.+)'
         replacement: '$1:$2'
         target_label: instance
-      - source_labels: [instance]
-        target_label: host
-      - regex: "app_kubernetes_io_(managed_by|version|name|instance|component)"
-        action: labeldrop
-      - regex: "helm_sh_chart"
-        action: labeldrop
     - job_name: kubernetes-ingress-probe
       scrape_timeout: 60s
       scrape_interval: 3m
