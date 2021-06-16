@@ -63,6 +63,9 @@ spec:
           {{- if .Values.config.domain }}
           - --domain-filter={{ .Values.config.domain }}
           {{- end }}
+          {{- if .Values.config.excludeDomain }}
+          - --exclude-domains={{ .Values.config.excludeDomain }}
+          {{- end }}
           - --metrics-address=:{{ .Values.service.port }}
           ports:
             - containerPort: {{ .Values.service.port }}

@@ -2,7 +2,7 @@ apiVersion: v2
 name: external-dns
 description: A Helm chart for Kubernetes External DNS
 type: application
-version: 0.3.1
-appVersion: "v0.7.6"
+version: 0.4.0
+appVersion: "v0.8.0"
 maintainers:
   - name: treydock
