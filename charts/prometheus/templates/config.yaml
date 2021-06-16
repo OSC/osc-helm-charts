@@ -204,10 +204,6 @@ data:
         regex: '(.+);(.+)'
         replacement: '$1:$2'
         target_label: instance
-      - source_labels: [kubernetes_name,__meta_kubernetes_pod_container_port_name]
-        regex: '(.+);(.+)'
-        replacement: '$1:$2'
-        target_label: instance
     - job_name: kubernetes-ingress-probe
       scrape_timeout: 60s
       scrape_interval: 3m
