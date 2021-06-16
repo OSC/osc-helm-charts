@@ -64,12 +64,16 @@ spec:
             - --insecure-oidc-allow-unverified-email=true
             - --skip-provider-button
             - --silence-ping-logging
+            - --metrics-address=:{{ .Values.proxy.metricsService.port }}
             {{- range .Values.proxy.allowGroups }}
             - --allowed-group={{ . }}
             {{- end }}
           ports:
             - containerPort: {{ .Values.proxy.service.port }}
               name: http
+              protocol: TCP
+            - containerPort: {{ .Values.proxy.metricsService.port }}
+              name: metrics
               protocol: TCP
           livenessProbe:
             httpGet:

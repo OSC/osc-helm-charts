@@ -70,12 +70,16 @@ spec:
             - --pass-authorization-header=true
             - --skip-provider-button
             - --silence-ping-logging
+            - --metrics-address=:{{ .Values.metricsService.port }}
             {{- range .Values.proxy.allowGroups }}
             - --allowed-group={{ . }}
             {{- end }}
           ports:
             - containerPort: {{ .Values.service.port }}
               name: http
+              protocol: TCP
+            - containerPort: {{ .Values.metricsService.port }}
+              name: metrics
               protocol: TCP
           livenessProbe:
             httpGet:
