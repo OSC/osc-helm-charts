@@ -46,6 +46,12 @@ service:
   annotations:
     prometheus.io/probe_module: http-healthz
     prometheus.io/probe_path: /ping
+metricsService:
+  type: ClusterIP
+  port: 8080
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/path: /metrics
 
 ingress:
   enabled: true

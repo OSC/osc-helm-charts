@@ -92,7 +92,7 @@ proxy:
   image:
     repository: quay.io/oauth2-proxy/oauth2-proxy
     pullPolicy: IfNotPresent
-    tag: "v7.1.2"
+    tag: "v7.1.3"
   securityContext: {}
   resources: {}
   service:
@@ -101,6 +101,12 @@ proxy:
     annotations:
       prometheus.io/probe_module: http-healthz
       prometheus.io/probe_path: /ping
+  metricsService:
+    type: ClusterIP
+    port: 8080
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
   ingress:
     annotations:
       kubernetes.io/ingress.class: "nginx"

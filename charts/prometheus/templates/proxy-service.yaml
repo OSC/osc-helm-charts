@@ -17,3 +17,24 @@ spec:
       name: http
   selector:
     {{- include "prometheus-proxy.selectorLabels" . | nindent 4 }}
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.proxy.name }}-metrics
+  labels:
+    {{- include "prometheus-proxy.labels" . | nindent 4 }}
+  {{- with .Values.proxy.metricsService.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.proxy.metricsService.type }}
+  ports:
+    - port: {{ .Values.proxy.metricsService.port }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+  selector:
+    {{- include "prometheus-proxy.selectorLabels" . | nindent 4 }}

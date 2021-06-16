@@ -1,5 +1,4 @@
 target-branch: main
 chart-repos:
-  - kubernetes-dashboard=https://kubernetes.github.io/dashboard/
-chart-repos:
   - prometheus-community=https://prometheus-community.github.io/helm-charts/
+  - kubernetes-dashboard=https://kubernetes.github.io/dashboard/
