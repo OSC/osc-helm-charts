@@ -12,7 +12,7 @@ modules:
       - 403
       preferred_ip_protocol: ip4
       ip_protocol_fallback: false
-      no_follow_redirects: true
+      follow_redirects: false
   https:
     prober: http
     timeout: 5s
@@ -27,7 +27,7 @@ modules:
       fail_if_not_ssl: true
       preferred_ip_protocol: ip4
       ip_protocol_fallback: false
-      no_follow_redirects: true
+      follow_redirects: false
   https-noverify:
     prober: http
     timeout: 5s
@@ -49,7 +49,7 @@ modules:
       - 200
       preferred_ip_protocol: ip4
       ip_protocol_fallback: false
-      no_follow_redirects: true
+      follow_redirects: false
   tcp_connect:
     prober: tcp
     timeout: 5s

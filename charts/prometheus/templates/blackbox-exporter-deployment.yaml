@@ -34,13 +34,13 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /-/healthy
               port: http
             initialDelaySeconds: 1
             periodSeconds: 30
           readinessProbe:
             httpGet:
-              path: /
+              path: /-/healthy
               port: http
             initialDelaySeconds: 2
             periodSeconds: 30
