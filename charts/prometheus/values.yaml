@@ -185,6 +185,8 @@ ingressName: ingress-nginx
 namespaceReaper: k8-namespace-reaper
 
 kube-state-metrics:
+  image:
+    tag: v2.1.0
   nameOverride: kube-state-metrics
   fullnameOverride: kube-state-metrics
   prometheusScrape: false

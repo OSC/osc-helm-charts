@@ -8,5 +8,5 @@ maintainers:
   - name: treydock
 dependencies:
   - name: kube-state-metrics
-    version: 3.2.0
+    version: 3.2.2
     repository: https://prometheus-community.github.io/helm-charts/
