@@ -31,7 +31,10 @@ jobs:
             echo "::set-output name=changed::true"
           fi
       - name: Create kind cluster
-        uses: container-tools/kind-action@v1
+        uses: helm/kind-action@v1.2.0
+        with:
+          version: v0.11.1
+          cluster_name: kind
         if: steps.list-changed.outputs.changed == 'true'
       - name: Install Keycloak
         if: steps.list-changed.outputs.changed == 'true'
