@@ -14,7 +14,8 @@ sslExporter:
 
 kube-state-metrics:
   collectors:
-    nodes: true
-    pods: true
-  extraArgs:
-    - --metric-labels-allowlist=pods=[account,job]
+    - nodes
+    - pods
+    - namespaces
+  metricLabelsAllowlist:
+    - pods=[account,job]
