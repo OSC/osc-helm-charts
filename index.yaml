@@ -3,9 +3,9 @@ entries:
   external-dns:
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2021-07-06T15:14:38.731220726Z"
+    created: "2021-08-17T17:51:56.716392502Z"
     description: A Helm chart for Kubernetes External DNS
-    digest: d6173d9ce2be96563a3b0b529972d3a2a0d724595ea8bde36d783a7ac4b9a978
+    digest: dd85976f24825c7f6ad41e5c608d1bbfebc9574a0dcabd99462bede30d56581f
     maintainers:
     - name: treydock
     name: external-dns
@@ -64,13 +64,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2021-07-06T15:14:38.734013962Z"
+    created: "2021-08-17T17:51:56.718749852Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 4.0.3
     description: Kubernetes Dashboard Proxy
-    digest: 100f2d82be7de01ae89d2e4914765257402ac45d161443adebba513ef1e28c13
+    digest: a72cf8b37e5d977199fa8f5d9cba4fb79ca43a350ba39e1f0e33b09bcf9e8af8
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -143,6 +143,22 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.28.1
+    created: "2021-08-17T17:51:56.721847417Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 3.4.2
+    description: OSC Prometheus deployment
+    digest: 7ed1d0d34689f50c0a734c8dbfd5d78cc056b77d0539f3774f2701768dfaf6f6
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.9.0.tgz
+    version: 0.9.0
   - apiVersion: v2
     appVersion: v2.28.1
     created: "2021-07-06T15:14:38.736310992Z"
@@ -415,4 +431,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-07-06T15:14:38.729158499Z"
+generated: "2021-08-17T17:51:56.715710488Z"
