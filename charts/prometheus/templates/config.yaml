@@ -95,20 +95,19 @@ data:
       scheme: http
       metrics_path: /metrics
       kubernetes_sd_configs:
-      - role: node
+      - role: pod
       relabel_configs:
-      - source_labels: [__meta_kubernetes_node_label_feature_node_kubernetes_io_pci_10de_present]
+      - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
         action: keep
-        regex: "true"
-      - source_labels: [__address__]
-        action: replace
-        target_label: __address__
-        regex: '([^:]+)(?::\d+)?'
-        replacement: '$1:9400'
-      - source_labels: [__meta_kubernetes_node_name]
+        regex: "dcgm-exporter"
+      - source_labels: [__meta_kubernetes_pod_node_name]
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: kubernetes_name
     - job_name: kubernetes-services
       scheme: http
       metrics_path: "/probe"
