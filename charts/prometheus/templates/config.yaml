@@ -213,6 +213,10 @@ data:
         target_label: __address__
         regex: '([^:]+)(?::\d+)?;(\d+)'
         replacement: '$1:$2'
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        regex: '(.+)'
+        replacement: '$1'
+        target_label: host
       - source_labels: [__meta_kubernetes_namespace]
         target_label: kubernetes_namespace
       - source_labels: [__meta_kubernetes_pod_name]
@@ -299,8 +303,18 @@ data:
       static_configs:
       - targets:
         - {{ index .Values "kube-state-metrics" "fullnameOverride" }}.{{ template "kube-state-metrics.namespace" . }}.svc.{{ .Values.dnsDomain }}:{{ index .Values "kube-state-metrics" "service" "port" }}
+      metric_relabel_configs:
+      - source_labels: [node]
+        regex: '(.+)'
+        replacement: '$1'
+        target_label: host
     - job_name: kube-state-metrics-telemetry
       metrics_path: /metrics
       static_configs:
       - targets:
         - {{ index .Values "kube-state-metrics" "fullnameOverride" }}.{{ template "kube-state-metrics.namespace" . }}.svc.{{ .Values.dnsDomain }}:{{ index .Values "kube-state-metrics" "selfMonitor" "telemetryPort" }}
+      metric_relabel_configs:
+      - source_labels: [node]
+        regex: '(.+)'
+        replacement: '$1'
+        target_label: host
