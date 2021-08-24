@@ -3,9 +3,9 @@ entries:
   external-dns:
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2021-08-23T20:30:51.443053658Z"
+    created: "2021-08-24T16:08:04.387702372Z"
     description: A Helm chart for Kubernetes External DNS
-    digest: 19e23609c46a22470bee2536d0e409ec9f3dddc36a30bd9c23bd79dc2b6684ba
+    digest: 2c4617e9b3d2ef0415fbcd3a365a55be5bda82df2f4f1acea4484f49e3e4089b
     maintainers:
     - name: treydock
     name: external-dns
@@ -64,13 +64,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2021-08-23T20:30:51.445480974Z"
+    created: "2021-08-24T16:08:04.390364186Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 4.0.3
     description: Kubernetes Dashboard Proxy
-    digest: 3f694d6bf18e2765027346fdd2b6207bdca50391d77331be7742ddde842c4dbc
+    digest: 936e1b5a8da30c59c2a9dc4be5c839a581f16c73cf076e880cc2fd4d0957f45a
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -143,6 +143,22 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.29.1
+    created: "2021-08-24T16:08:04.396868821Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 3.5.0
+    description: OSC Prometheus deployment
+    digest: 39effe1f51e0b4fff54fed9d586d67f3b4713f5dee6d49e112d5815e860e6235
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.10.0.tgz
+    version: 0.10.0
   - apiVersion: v2
     appVersion: v2.28.1
     created: "2021-08-23T20:30:51.448598795Z"
@@ -479,4 +495,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-08-23T20:30:51.442419754Z"
+generated: "2021-08-24T16:08:04.386974868Z"
