@@ -27,6 +27,8 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+      - source_labels: [host]
+        target_label: node
       - regex: "feature_node_.+"
         action: labeldrop
       - regex: "nvidia_com_.+"
@@ -48,6 +50,8 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+      - source_labels: [host]
+        target_label: node
       - regex: "feature_node_.+"
         action: labeldrop
       - regex: "nvidia_com_.+"
@@ -85,6 +89,8 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+      - source_labels: [host]
+        target_label: node
       - regex: "feature_node_.+"
         action: labeldrop
       - regex: "nvidia_com_.+"
@@ -200,6 +206,8 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+      - source_labels: [host]
+        target_label: node
       - source_labels: [__meta_kubernetes_namespace]
         target_label: kubernetes_namespace
       - source_labels: [__meta_kubernetes_pod_name]
