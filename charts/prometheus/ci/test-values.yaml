@@ -23,3 +23,4 @@ kube-state-metrics:
 dcgm-exporter:
   service:
     enable: true
+  nodeSelector: {}
