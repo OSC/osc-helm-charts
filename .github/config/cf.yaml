@@ -1,4 +1,5 @@
 target-branch: main
 chart-repos:
   - prometheus-community=https://prometheus-community.github.io/helm-charts/
+  - dcgm-exporter=https://nvidia.github.io/dcgm-exporter/helm-charts
   - kubernetes-dashboard=https://kubernetes.github.io/dashboard/

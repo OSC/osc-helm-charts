@@ -1,0 +1,15 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ index .Values "dcgm-exporter" "fullnameOverride" }}
+  labels:
+    {{- include "prometheus-dcgm-exporter.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "prometheus-dcgm-exporter.selectorLabels" . | nindent 6 }}
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          {{- include "prometheus.selectorLabels" . | nindent 10 }}

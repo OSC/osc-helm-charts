@@ -91,23 +91,6 @@ data:
         action: labeldrop
       - regex: "cluster"
         action: labeldrop
-    - job_name: kubernetes-dcgm-exporter
-      scheme: http
-      metrics_path: /metrics
-      kubernetes_sd_configs:
-      - role: pod
-      relabel_configs:
-      - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
-        action: keep
-        regex: "dcgm-exporter"
-      - source_labels: [__meta_kubernetes_pod_node_name]
-        regex: '(.+)'
-        replacement: '$1'
-        target_label: host
-      - source_labels: [__meta_kubernetes_namespace]
-        target_label: kubernetes_namespace
-      - source_labels: [__meta_kubernetes_pod_name]
-        target_label: kubernetes_name
     - job_name: kubernetes-services
       scheme: http
       metrics_path: "/probe"
