@@ -3,9 +3,9 @@ entries:
   external-dns:
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2021-09-10T16:14:49.706487859Z"
+    created: "2021-09-10T16:43:43.154785613Z"
     description: A Helm chart for Kubernetes External DNS
-    digest: 079c56f911e8fbe4922b3a49a206313523f206911e3ad9085c22c11e2aea7d79
+    digest: 80bafed2879a5d83ba532a1862f2b8db02f302a37e3c808ba850d696d86d509e
     maintainers:
     - name: treydock
     name: external-dns
@@ -64,13 +64,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2021-09-10T16:14:49.709281544Z"
+    created: "2021-09-10T16:43:43.157396527Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 4.0.3
     description: Kubernetes Dashboard Proxy
-    digest: f6f53208d3f50fc8204f16d709ab457b8c0dc6ad9459c1ecf5f150a3b91efd30
+    digest: 50e00cdc2d95d0c8d5bce112fdb83ab2209ab6c910e40cba39a0cc1d6af7a87f
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -143,6 +143,25 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.29.2
+    created: "2021-09-10T16:43:43.160549243Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 3.5.0
+    - name: dcgm-exporter
+      repository: https://nvidia.github.io/dcgm-exporter/helm-charts
+      version: 2.4.1
+    description: OSC Prometheus deployment
+    digest: 1c2ae54417e515fceef0002110d1e905ccfc03d77ae61e8dbf377a77cdba443d
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.12.1.tgz
+    version: 0.12.1
   - apiVersion: v2
     appVersion: v2.29.2
     created: "2021-09-10T16:14:49.716354011Z"
@@ -530,4 +549,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-09-10T16:14:49.705695407Z"
+generated: "2021-09-10T16:43:43.154060209Z"
