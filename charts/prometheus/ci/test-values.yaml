@@ -19,8 +19,3 @@ kube-state-metrics:
     - namespaces
   metricLabelsAllowlist:
     - pods=[account,job]
-
-dcgm-exporter:
-  service:
-    enable: true
-  nodeSelector: {}
