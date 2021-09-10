@@ -44,3 +44,9 @@ jobs:
       - name: Run chart-testing (install)
         run: ct install --config .github/config/cf.yaml
         if: steps.list-changed.outputs.changed == 'true'
+      - name: Debug failure
+        if: failure()
+        run: |
+          kubectl describe pod -A
+          kubectl describe service -A
+          kubectl describe daemonset -A

@@ -137,3 +137,23 @@ app.kubernetes.io/version: {{ index .Values "kube-state-metrics" "image" "tag" |
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{/*
+Selector dcgm-exporter labels
+*/}}
+{{- define "prometheus-dcgm-exporter.selectorLabels" -}}
+app.kubernetes.io/name: {{ index .Values "dcgm-exporter" "nameOverride" }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Common dcgm-exporter labels
+*/}}
+{{- define "prometheus-dcgm-exporter.labels" -}}
+helm.sh/chart: {{ include "prometheus.chart" . }}
+{{ include "prometheus-dcgm-exporter.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ index .Values "dcgm-exporter" "image" "tag" | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
