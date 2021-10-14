@@ -1,0 +1,22 @@
+---
+name: ingress-require-tls
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: ingress-require-tls
+    rule: require-tls
+    resource: cm-acme-http-solver-web
+    kind: Ingress
+    result: skip
+  - policy: ingress-require-tls
+    rule: require-tls
+    resource: test-pass
+    kind: Ingress
+    result: pass
+  - policy: ingress-require-tls
+    rule: require-tls
+    resource: test-fail
+    kind: Ingress
+    result: fail

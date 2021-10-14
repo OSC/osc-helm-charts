@@ -1,0 +1,22 @@
+---
+name: no-loadbalancers
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: no-loadbalancers
+    rule: no-loadbalancers
+    resource: test-skip
+    kind: Service
+    result: skip
+  - policy: no-loadbalancers
+    rule: no-loadbalancers
+    resource: test-pass
+    kind: Service
+    result: pass
+  - policy: no-loadbalancers
+    rule: no-loadbalancers
+    resource: test-fail
+    kind: Service
+    result: fail

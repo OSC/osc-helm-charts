@@ -1,0 +1,108 @@
+---
+name: pod-user-validation
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: pod-user-validation
+    rule: pods-require-valid-uid
+    resource: pods-require-valid-uid-pass
+    kind: Pod
+    result: pass
+  - policy: pod-user-validation
+    rule: pods-require-valid-uid
+    resource: pods-require-valid-uid-skip
+    kind: Pod
+    result: skip
+  - policy: pod-user-validation
+    rule: pods-require-valid-uid
+    resource: pods-require-valid-uid-skip-op
+    kind: Pod
+    result: skip
+  - policy: pod-user-validation
+    rule: pods-require-valid-uid
+    resource: pods-require-valid-uid-container-pass
+    kind: Pod
+    result: pass
+  - policy: pod-user-validation
+    rule: pods-require-valid-uid
+    resource: pods-require-valid-uid-init-pass
+    kind: Pod
+    result: pass
+  - policy: pod-user-validation
+    rule: pods-require-valid-uid
+    resource: pods-require-valid-uid-fail
+    kind: Pod
+    result: fail
+  - policy: pod-user-validation
+    rule: pods-require-valid-uid
+    resource: pods-require-valid-uid-container-fail
+    kind: Pod
+    result: fail
+  - policy: pod-user-validation
+    rule: pods-require-valid-uid
+    resource: pods-require-valid-uid-init-fail
+    kind: Pod
+    result: fail
+  - policy: pod-user-validation
+    rule: pods-require-valid-gid
+    resource: pods-require-valid-gid-skip
+    kind: Pod
+    result: skip
+  - policy: pod-user-validation
+    rule: pods-require-valid-gid
+    resource: pods-require-valid-gid-skip-op
+    kind: Pod
+    result: skip
+  - policy: pod-user-validation
+    rule: pods-require-valid-gid
+    resource: pods-require-valid-gid-pass
+    kind: Pod
+    result: pass
+  - policy: pod-user-validation
+    rule: pods-require-valid-gid
+    resource: pods-require-valid-gid-container-pass
+    kind: Pod
+    result: pass
+  - policy: pod-user-validation
+    rule: pods-require-valid-gid
+    resource: pods-require-valid-gid-init-pass
+    kind: Pod
+    result: pass
+  - policy: pod-user-validation
+    rule: pods-require-valid-gid
+    resource: pods-require-valid-gid-fail
+    kind: Pod
+    result: fail
+  - policy: pod-user-validation
+    rule: pods-require-valid-gid
+    resource: pods-require-valid-gid-container-fail
+    kind: Pod
+    result: fail
+  - policy: pod-user-validation
+    rule: pods-require-valid-gid
+    resource: pods-require-valid-gid-init-fail
+    kind: Pod
+    result: fail
+  - policy: pod-user-validation
+    rule: fsgroup-require-valid-gid
+    resource: fsgroup-require-valid-gid-skip
+    kind: Pod
+    result: skip
+  - policy: pod-user-validation
+    rule: fsgroup-require-valid-gid
+    resource: fsgroup-require-valid-gid-skip-op
+    kind: Pod
+    result: skip
+  - policy: pod-user-validation
+    rule: fsgroup-require-valid-gid
+    resource: fsgroup-require-valid-gid-pass
+    kind: Pod
+    result: pass
+  - policy: pod-user-validation
+    rule: fsgroup-require-valid-gid
+    resource: fsgroup-require-valid-gid-fail
+    kind: Pod
+    result: fail

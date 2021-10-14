@@ -1,0 +1,45 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-account-validation
+  namespace: kyverno
+spec:
+  background: false
+  validationFailureAction: enforce
+  rules:
+  - name: pods-user-authorized-for-account
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - "user-?*"
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    context:
+    - name: userGroupMap
+      configMap:
+        name: user-groups-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: "{{`{{ request.object.metadata.namespace }}`}} not authorized to charge against account {{`{{ request.object.metadata.labels.account }}`}}"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.metadata.labels.account }}`}}"
+          operator: NotIn
+          value: "{{`{{ userGroupMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+  - name: pods-user-account-prefix
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - "user-?*"
+    validate:
+      message: "{{`{{ request.object.metadata.namespace }}`}} account {{`{{ request.object.metadata.labels.account }}`}} is not a valid project"
+      pattern:
+        metadata:
+          labels:
+            account: "P?*"

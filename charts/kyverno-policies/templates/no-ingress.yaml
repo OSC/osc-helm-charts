@@ -1,0 +1,20 @@
+# https://github.com/kyverno/policies/blob/main/other/restrict_loadbalancer.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: no-ingress
+  namespace: kyverno
+spec:
+  background: true
+  validationFailureAction: enforce
+  rules:
+  - name: user-no-ingress
+    match:
+      resources:
+        kinds:
+        - Ingress
+        namespaces:
+        - "user-?*"
+    validate:
+      message: "Ingress is not allowed."
+      deny: {}

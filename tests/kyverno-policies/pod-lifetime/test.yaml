@@ -1,0 +1,37 @@
+---
+name: pod-lifetime
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: pod-lifetime
+    rule: pods-require-lifetime
+    resource: test-lifetime-skip
+    kind: Pod
+    result: skip
+  - policy: pod-lifetime
+    rule: pods-require-lifetime
+    resource: test-lifetime-pass
+    kind: Pod
+    result: pass
+  - policy: pod-lifetime
+    rule: pods-require-lifetime
+    resource: test-lifetime-fail
+    kind: Pod
+    result: fail
+  - policy: pod-lifetime
+    rule: pods-max-lifetime
+    resource: test-lifetime-skip
+    kind: Pod
+    result: skip
+  - policy: pod-lifetime
+    rule: pods-max-lifetime
+    resource: test-lifetime-max-pass
+    kind: Pod
+    result: pass
+  - policy: pod-lifetime
+    rule: pods-max-lifetime
+    resource: test-lifetime-max-fail
+    kind: Pod
+    result: fail

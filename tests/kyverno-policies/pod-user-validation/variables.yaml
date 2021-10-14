@@ -1,0 +1,73 @@
+policies:
+  - name: pod-user-validation
+    rules:
+      - name: pods-require-valid-uid
+        values:
+          uidMap.data.user-test: '1000'
+      - name: pods-require-valid-gid
+        values:
+          gidMap.data.user-test: '1001'
+      - name: fsgroup-require-valid-gid
+        values:
+          gidMap.data.user-test: '1001'
+    resources:
+      - name: pods-require-valid-uid-skip
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-uid-skip-op
+        values:
+          request.operation: DELETE
+      - name: pods-require-valid-uid-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-uid-container-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-uid-init-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-uid-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-uid-container-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-uid-init-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-gid-skip
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-gid-skip-op
+        values:
+          request.operation: DELETE
+      - name: pods-require-valid-gid-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-gid-container-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-gid-init-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-gid-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-gid-container-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-gid-init-fail
+        values:
+          request.operation: CREATE
+      - name: fsgroup-require-valid-gid-skip
+        values:
+          request.operation: CREATE
+      - name: fsgroup-require-valid-gid-skip-op
+        values:
+          request.operation: DELETE
+      - name: fsgroup-require-valid-gid-pass
+        values:
+          request.operation: CREATE
+      - name: fsgroup-require-valid-gid-fail
+        values:
+          request.operation: CREATE

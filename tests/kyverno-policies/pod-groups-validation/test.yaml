@@ -1,0 +1,33 @@
+---
+name: pod-groups-validation
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: pod-groups-validation
+    rule: pods-user-authorized-for-groups
+    resource: test-skip
+    kind: Pod
+    result: skip
+  - policy: pod-groups-validation
+    rule: pods-user-authorized-for-groups
+    resource: test-skip-op
+    kind: Pod
+    result: skip
+  - policy: pod-groups-validation
+    rule: pods-user-authorized-for-groups
+    resource: test-skip-len
+    kind: Pod
+    result: skip
+  - policy: pod-groups-validation
+    rule: pods-user-authorized-for-groups
+    resource: test-pass
+    kind: Pod
+    result: pass
+  - policy: pod-groups-validation
+    rule: pods-user-authorized-for-groups
+    resource: test-fail
+    kind: Pod
+    result: fail

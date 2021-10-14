@@ -1,0 +1,22 @@
+---
+name: authorized-registries
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: authorized-registries
+    rule: authorized-registries-users
+    resource: test-skip
+    kind: Pod
+    result: skip
+  - policy: authorized-registries
+    rule: authorized-registries-users
+    resource: test-pass
+    kind: Pod
+    result: pass
+  - policy: authorized-registries
+    rule: authorized-registries-users
+    resource: test-fail
+    kind: Pod
+    result: fail

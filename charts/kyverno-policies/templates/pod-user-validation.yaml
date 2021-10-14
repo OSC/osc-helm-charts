@@ -1,0 +1,108 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-user-validation
+  namespace: kyverno
+spec:
+  background: false
+  validationFailureAction: enforce
+  rules:
+  - name: pods-require-valid-uid
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - "user-?*"
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    context:
+    - name: uidMap
+      configMap:
+        name: user-uid-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: >-
+        Invalid user UID specified in fields
+        spec.securityContext.runAsUser or spec.containers[*].securityContext.runAsUser or
+        spec.initContainers[*].securityContext.runAsUser
+      anyPattern:
+      - spec:
+          securityContext:
+            runAsUser: "{{`{{ uidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+          =(initContainers):
+            - =(securityContext):
+                =(runAsUser): "{{`{{ uidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+          containers:
+            - =(securityContext):
+                =(runAsUser): "{{`{{ uidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+      - spec:
+          =(initContainers):
+            - securityContext:
+                runAsUser: "{{`{{ uidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+          containers:
+            - securityContext:
+                runAsUser: "{{`{{ uidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+  - name: pods-require-valid-gid
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - "user-?*"
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    context:
+    - name: gidMap
+      configMap:
+        name: user-gid-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: >-
+        Invalid user GID specified in fields
+        spec.securityContext.runAsGroup or spec.containers[*].securityContext.runAsGroup or
+        spec.initContainers[*].securityContext.runAsGroup
+      anyPattern:
+      - spec:
+          securityContext:
+            runAsGroup: "{{`{{ gidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+          =(initContainers):
+            - =(securityContext):
+                =(runAsGroup): "{{`{{ gidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+          containers:
+            - =(securityContext):
+                =(runAsGroup): "{{`{{ gidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+      - spec:
+          =(initContainers):
+            - securityContext:
+                runAsGroup: "{{`{{ gidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+          containers:
+            - securityContext:
+                runAsGroup: "{{`{{ gidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+  - name: fsgroup-require-valid-gid
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - "user-?*"
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    context:
+    - name: gidMap
+      configMap:
+        name: user-gid-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: >-
+        Invalid user GID specified in fields spec.securityContext.fsGroup
+      pattern:
+        spec:
+          securityContext:
+            fsGroup: "{{`{{ gidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"

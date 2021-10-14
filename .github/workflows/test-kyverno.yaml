@@ -1,0 +1,25 @@
+name: Test Kyverno
+
+on:
+  pull_request:
+    paths:
+      - Makefile
+      - charts/kyverno-policies
+      - tests/kyverno-policies
+      - .github/workflows/test-kyverno.yaml
+
+jobs:
+  test-kyverno-policies:
+    runs-on: ubuntu-latest
+    name: Test Kyverno policies
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+      - name: Test Kyverno policies
+        run: make kyverno-test
