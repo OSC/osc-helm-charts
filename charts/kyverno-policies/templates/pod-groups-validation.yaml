@@ -1,0 +1,35 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-groups-validation
+  namespace: kyverno
+spec:
+  background: false
+  validationFailureAction: enforce
+  rules:
+  - name: pods-user-authorized-for-groups
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - "user-?*"
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    - key: "{{`{{ request.object.spec.securityContext.supplementalGroups.length(@) }}`}}"
+      operator: GreaterThan
+      value: 0
+    context:
+    - name: userGIDMap
+      configMap:
+        name: user-gids-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: "{{`{{ request.object.metadata.namespace }}`}} not authorized to use those supplemental groups"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.spec.securityContext.supplementalGroups[*].to_string(@) }}`}}"
+          operator: NotIn
+          value: "{{`{{ userGIDMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"

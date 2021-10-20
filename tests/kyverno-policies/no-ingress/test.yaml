@@ -1,0 +1,17 @@
+---
+name: no-ingress
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: no-ingress
+    rule: user-no-ingress
+    resource: test-pass
+    kind: Ingress
+    result: skip
+  - policy: no-ingress
+    rule: user-no-ingress
+    resource: test-fail
+    kind: Ingress
+    result: fail

@@ -1,0 +1,22 @@
+---
+name: disallow-host-path
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: disallow-host-path
+    rule: host-path
+    resource: test-skip
+    kind: Pod
+    result: skip
+  - policy: disallow-host-path
+    rule: host-path
+    resource: test-pass
+    kind: Pod
+    result: pass
+  - policy: disallow-host-path
+    rule: host-path
+    resource: test-fail
+    kind: Pod
+    result: fail

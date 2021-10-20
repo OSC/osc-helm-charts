@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-lifetime-skip
+  namespace: test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-lifetime-pass
+  namespace: user-test
+  annotations:
+    pod.kubernetes.io/lifetime: 4h
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-lifetime-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-lifetime-max-pass
+  namespace: user-test
+  annotations:
+    pod.kubernetes.io/lifetime: 4h
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-lifetime-max-fail
+  namespace: user-test
+  annotations:
+    pod.kubernetes.io/lifetime: 48h
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12

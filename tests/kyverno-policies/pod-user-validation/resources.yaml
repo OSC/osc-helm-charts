@@ -1,0 +1,293 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-uid-skip
+  namespace: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-uid-skip-op
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-uid-pass
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-uid-container-pass
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-uid-init-pass
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-uid-fail
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1002
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-uid-container-fail
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-uid-init-fail
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-gid-skip
+  namespace: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-gid-skip-op
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-gid-pass
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-gid-container-pass
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-gid-init-pass
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-gid-fail
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1003
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-gid-container-fail
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-gid-init-fail
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fsgroup-require-valid-gid-skip
+  namespace: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fsgroup-require-valid-gid-skip-op
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fsgroup-require-valid-gid-pass
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fsgroup-require-valid-gid-fail
+  namespace: user-test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1003
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12

@@ -1,0 +1,22 @@
+policies:
+  - name: pod-account-validation
+    rules:
+      - name: pods-user-authorized-for-account
+        values:
+          userGroupMap.data.user-test: '["PZS0001","PZS0003","oscall"]'
+    resources:
+      - name: test-skip
+        values:
+          request.operation: CREATE
+      - name: test-skip-op
+        values:
+          request.operation: DELETE
+      - name: test-pass
+        values:
+          request.operation: CREATE
+      - name: test-fail
+        values:
+          request.operation: CREATE
+      - name: test-fail-prefix
+        values:
+          request.operation: CREATE

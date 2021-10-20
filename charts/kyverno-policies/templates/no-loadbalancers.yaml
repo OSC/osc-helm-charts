@@ -1,0 +1,24 @@
+# https://github.com/kyverno/policies/blob/main/other/restrict_loadbalancer.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: no-loadbalancers
+  namespace: kyverno
+spec:
+  background: true
+  validationFailureAction: enforce
+  rules:
+  - name: no-loadbalancers
+    match:
+      resources:
+        kinds:
+        - Service
+    exclude:
+      resources:
+        namespaces:
+          - ingress-nginx
+    validate:
+      message: "Service of type LoadBalancer is not allowed."
+      pattern:
+        spec:
+          type: "!LoadBalancer"

@@ -1,0 +1,17 @@
+---
+name: imagepullpolicy-always
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: imagepullpolicy-always
+    rule: imagepullpolicy-always
+    resource: test-pass
+    kind: Pod
+    result: pass
+  - policy: imagepullpolicy-always
+    rule: imagepullpolicy-always
+    resource: test-fail
+    kind: Pod
+    result: fail

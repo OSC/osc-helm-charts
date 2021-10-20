@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-fail
+  namespace: test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:latest
+  volumes:
+    - name: containerd-socket
+      hostPath:
+        path: /var/run/containerd.sock
+        type: Socket

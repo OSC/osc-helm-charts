@@ -1,0 +1,29 @@
+policies:
+  - name: pod-groups-validation
+    rules:
+      - name: pods-user-authorized-for-groups
+        values:
+          userGIDMap.data.user-test: '["1000", "1001"]'
+    resources:
+      - name: test-skip
+        values:
+          #request.object.metadata.namespace: test
+          request.operation: CREATE
+      - name: test-skip-op
+        values:
+          #request.object.metadata.namespace: user-test
+          request.operation: DELETE
+      - name: test-skip-len
+        values:
+          #request.object.metadata.namespace: test
+          request.operation: CREATE
+      - name: test-pass
+        values:
+          #request.object.metadata.namespace: user-test
+          #'request.object.spec.securityContext.supplementalGroups[*].to_string(@)': '["1000", "1001"]'
+          request.operation: CREATE
+      - name: test-fail
+        values:
+          #request.object.metadata.namespace: user-test
+          #'request.object.spec.securityContext.supplementalGroups[*].to_string(@)': '["1002"]'
+          request.operation: CREATE

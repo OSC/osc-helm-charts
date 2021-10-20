@@ -1,0 +1,24 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: authorized-registries
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+  - name: authorized-registries-users
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - "user-?*"
+    validate:
+      message: >-
+        Images must come from docker.io/ohiosupercomputer or docker-registry.osc.edu
+      pattern:
+        spec:
+          containers:
+            - image: "docker.io/ohiosupercomputer/* | docker-registry.osc.edu/*"
+          =(initContainers):
+            - image: "docker.io/ohiosupercomputer/* | docker-registry.osc.edu/*"

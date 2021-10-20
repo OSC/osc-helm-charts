@@ -1,0 +1,12 @@
+---
+name: disallow-container-sock-mounts
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: disallow-container-sock-mounts
+    rule: validate-containerd-sock-mount
+    resource: test-fail
+    kind: Pod
+    result: fail
