@@ -3,9 +3,9 @@ entries:
   external-dns:
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2021-09-10T16:43:43.154785613Z"
+    created: "2021-10-20T19:56:34.419827919Z"
     description: A Helm chart for Kubernetes External DNS
-    digest: 80bafed2879a5d83ba532a1862f2b8db02f302a37e3c808ba850d696d86d509e
+    digest: f553f130c60bfd07f6284bd21c72b1c55cfb95b07039eb5cae8ba6f6e9f1d34d
     maintainers:
     - name: treydock
     name: external-dns
@@ -64,13 +64,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2021-09-10T16:43:43.157396527Z"
+    created: "2021-10-20T19:56:34.423459121Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 4.0.3
     description: Kubernetes Dashboard Proxy
-    digest: 50e00cdc2d95d0c8d5bce112fdb83ab2209ab6c910e40cba39a0cc1d6af7a87f
+    digest: 68dd4134cc98802db8f669af347b00b5c183e8d5a5333f84e9b693856f68f60b
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -142,10 +142,27 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
+  kyverno-policies:
+  - apiVersion: v2
+    appVersion: v2.1.0
+    created: "2021-10-20T19:56:34.425122122Z"
+    dependencies:
+    - name: kyverno-policies
+      repository: https://kyverno.github.io/kyverno/
+      version: v2.1.0
+    description: OSC Kyverno policies deployment
+    digest: 0e0f64bb03601de2669ac52211bb16e455b36dbd2f5f23f0528a475bcbe06297
+    maintainers:
+    - name: treydock
+    name: kyverno-policies
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/kyverno-policies-0.0.1.tgz
+    version: 0.0.1
   prometheus:
   - apiVersion: v2
     appVersion: v2.29.2
-    created: "2021-09-10T16:43:43.160549243Z"
+    created: "2021-10-20T19:56:34.428461625Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts/
@@ -154,7 +171,7 @@ entries:
       repository: https://nvidia.github.io/dcgm-exporter/helm-charts
       version: 2.4.1
     description: OSC Prometheus deployment
-    digest: 1c2ae54417e515fceef0002110d1e905ccfc03d77ae61e8dbf377a77cdba443d
+    digest: e9324097fd884d572a708564fd8ffcd95a09a2a910b646234872f3fdd20bb296
     maintainers:
     - name: treydock
     name: prometheus
@@ -549,4 +566,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-09-10T16:43:43.154060209Z"
+generated: "2021-10-20T19:56:34.419181418Z"
