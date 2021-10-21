@@ -1,4 +1,5 @@
-dockerHub: docker.io/ohiosupercomputer
+authorizedRegistries:
+  - docker.io/ohiosupercomputer
 # siteRegistry:
 users:
   allowHostPaths:

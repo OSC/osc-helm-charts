@@ -26,4 +26,6 @@ jobs:
         with:
           version: v3.5.0
       - name: Test Kyverno policies
-        run: make kyverno-test
+        run: |
+          helm dependency update charts/kyverno-policies
+          make kyverno-test

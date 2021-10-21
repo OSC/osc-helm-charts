@@ -1,3 +1,7 @@
+{{- $var := dict "registries" (list) -}}
+{{- range .Values.authorizedRegistries -}}
+{{- $noop := printf "%s/*" . | append $var.registries | set $var "registries" -}}
+{{- end }}
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -15,17 +19,10 @@ spec:
         - "user-?*"
     validate:
       message: >-
-        Images must come from {{ .Values.dockerHub }} {{ if .Values.siteRegistry }}or {{ .Values.siteRegistry }}{{ end }}
+        Images must come from {{ join " or " $var.registries }}
       pattern:
         spec:
-        {{- if .Values.siteRegistry }}
           containers:
-            - image: "{{ .Values.dockerHub }}/* | {{ .Values.siteRegistry }}/*"
+            - image: "{{ join " | " $var.registries }}"
           =(initContainers):
-            - image: "{{ .Values.dockerHub }}/* | {{ .Values.siteRegistry }}/*"
-        {{- else }}
-          containers:
-            - image: "{{ .Values.dockerHub }}/*"
-          =(initContainers):
-            - image: "{{ .Values.dockerHub }}/*"
-        {{- end }}
+            - image: "{{ join " | " $var.registries }}"
