@@ -1,5 +1,17 @@
 dockerHub: docker.io/ohiosupercomputer
 # siteRegistry:
+users:
+  allowHostPaths:
+    - /var/lib/sss/pipes
+    - /etc/sssd
+    - /etc/nsswitch.conf
+    - /etc/pam.d
+    - /etc/slurm
+    - /var/run/munge/munge.socket.2
+    - /users/?*
+    - /fs/?*
+    - /apps/?*
+    - /nfsroot/?*
 
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom

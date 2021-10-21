@@ -6,7 +6,7 @@ KYVERNO_POLICIES_DIR := $(ROOT_DIR)/charts/kyverno-policies/templates
 KYVERNO_POLICIES := $(shell git ls-files $(KYVERNO_POLICIES_DIR))
 KYVERNO_POLICY_TESTS_DIR := $(ROOT_DIR)/tests/kyverno-policies
 
-.PHONY: kyverno-cli kyverno-test
+.PHONY: kyverno-cli kyverno-copy-policies kyverno-test
 
 kyverno-cli:
 	[ -d $(KYVERNO_DIR) ] || git clone -b $(KYVERNO_VERSION) https://github.com/kyverno/kyverno.git $(KYVERNO_DIR) && \
