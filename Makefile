@@ -17,6 +17,7 @@ kyverno-cli:
 		fi
 	cd $(KYVERNO_DIR) && make cli
 
+# Needed to strip escape characters from policies needed for Helm
 kyverno-copy-policies: $(KYVERNO_POLICIES)
 	for f in $(notdir $^); do \
 		testdir="`echo $$f | sed 's|.yaml||g'`"; \
