@@ -28,4 +28,4 @@ spec:
         spec:
           =(volumes):
           - =(hostPath):
-              path: "/var/lib/sss/pipes | /etc/sssd | /etc/nsswitch.conf | /etc/pam.d | /etc/slurm | /var/run/munge/munge.socket.2 | /users/?* | /fs/?* | /apps/?* | /nfsroot/?*"
+              path: "{{ join " | " .Values.users.allowHostPaths }}"

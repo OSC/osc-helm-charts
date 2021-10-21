@@ -17,6 +17,11 @@ results:
     result: pass
   - policy: authorized-registries
     rule: authorized-registries-users
+    resource: test-pass-site
+    kind: Pod
+    result: pass
+  - policy: authorized-registries
+    rule: authorized-registries-users
     resource: test-fail
     kind: Pod
     result: fail

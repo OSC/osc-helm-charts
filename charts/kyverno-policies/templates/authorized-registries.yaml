@@ -1,3 +1,7 @@
+{{- $var := dict "registries" (list) -}}
+{{- range .Values.authorizedRegistries -}}
+{{- $noop := printf "%s/*" . | append $var.registries | set $var "registries" -}}
+{{- end }}
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -15,10 +19,10 @@ spec:
         - "user-?*"
     validate:
       message: >-
-        Images must come from docker.io/ohiosupercomputer or docker-registry.osc.edu
+        Images must come from {{ join " or " $var.registries }}
       pattern:
         spec:
           containers:
-            - image: "docker.io/ohiosupercomputer/* | docker-registry.osc.edu/*"
+            - image: "{{ join " | " $var.registries }}"
           =(initContainers):
-            - image: "docker.io/ohiosupercomputer/* | docker-registry.osc.edu/*"
+            - image: "{{ join " | " $var.registries }}"
