@@ -21,7 +21,7 @@ kyverno-cli:
 kyverno-copy-policies: $(KYVERNO_POLICIES)
 	for f in $(notdir $^); do \
 		testdir="`echo $$f | sed 's|.yaml||g'`"; \
-		sed -e 's|{{`||g' -e 's|`}}||g' $(KYVERNO_POLICIES_DIR)/$${f} > $(KYVERNO_POLICY_TESTS_DIR)/$$testdir/policy.yaml ; \
+		helm template kyverno-policies charts/kyverno-policies -f $(KYVERNO_POLICIES_DIR)/tests/test.yaml -s templates/$${f} > $(KYVERNO_POLICY_TESTS_DIR)/$$testdir/policy.yaml ; \
 	done
 
 kyverno-test: kyverno-cli kyverno-copy-policies

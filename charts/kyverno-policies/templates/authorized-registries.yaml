@@ -15,10 +15,17 @@ spec:
         - "user-?*"
     validate:
       message: >-
-        Images must come from docker.io/ohiosupercomputer or docker-registry.osc.edu
+        Images must come from {{ .Values.dockerHub }} {{ if .Values.siteRegistry }}or {{ .Values.siteRegistry }}{{ end }}
       pattern:
         spec:
+        {{- if .Values.siteRegistry }}
           containers:
-            - image: "docker.io/ohiosupercomputer/* | docker-registry.osc.edu/*"
+            - image: "{{ .Values.dockerHub }}/* | {{ .Values.siteRegistry }}/*"
           =(initContainers):
-            - image: "docker.io/ohiosupercomputer/* | docker-registry.osc.edu/*"
+            - image: "{{ .Values.dockerHub }}/* | {{ .Values.siteRegistry }}/*"
+        {{- else }}
+          containers:
+            - image: "{{ .Values.dockerHub }}/*"
+          =(initContainers):
+            - image: "{{ .Values.dockerHub }}/*"
+        {{- end }}
