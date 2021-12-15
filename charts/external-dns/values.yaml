@@ -1,54 +1,33 @@
-config:
-  ownerID:
-  dnsMaster:
-  domain:
-  excludeDomain:
-  dnsSecret:
-  keyname:
+dnsSecret: changeme
 
-image:
-  repository: k8s.gcr.io/external-dns/external-dns
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-serviceAccount:
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-service:
-  type: ClusterIP
-  port: 7979
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/path: /metrics
-    prometheus.io/probe_module: http-healthz
-    prometheus.io/probe_path: /healthz
-
-podAnnotations: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext:
-  capabilities:
-    drop:
-      - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1000
-resources:
-  limits:
-    cpu: 1
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
-nodeSelector: {}
+external-dns:
+  provider: rfc2136
+  sources:
+    - service
+    - ingress
+  extraArgs:
+    - --rfc2136-port=53
+    - --rfc2136-tsig-secret=$(DNS_SECRET)
+    - --rfc2136-tsig-secret-alg=hmac-sha256
+    - --rfc2136-tsig-axfr
+    - --metrics-address=:7979
+  env:
+    - name: DNS_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: external-dns
+          key: secret
+  service:
+    port: 7979
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
+      prometheus.io/probe_module: http-healthz
+      prometheus.io/probe_path: /healthz
+  resources:
+    limits:
+      cpu: 1
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
