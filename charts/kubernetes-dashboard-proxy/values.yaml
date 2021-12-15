@@ -17,6 +17,10 @@ kubernetes-dashboard:
   metrics-server:
     enabled: true
     fullnameOverride: metrics-server
+    # Unable to pass new value to --kubelet-preferred-address-types
+    # due to being array in Helm values.yaml upstream
+    args:
+      - --kubelet-insecure-tls
 
 image:
   repository: quay.io/oauth2-proxy/oauth2-proxy
