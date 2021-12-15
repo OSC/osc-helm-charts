@@ -10,11 +10,12 @@ spec:
   rules:
   - name: user-no-ingress
     match:
-      resources:
-        kinds:
-        - Ingress
-        namespaces:
-        - "user-?*"
+      any:
+      - resources:
+          kinds:
+            - Ingress
+          namespaces:
+            - "user-?*"
     validate:
       message: "Ingress is not allowed."
       deny: {}
