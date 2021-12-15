@@ -80,6 +80,22 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
+    created: "2021-12-15T21:02:42.625870662Z"
+    dependencies:
+    - name: kubernetes-dashboard
+      repository: https://kubernetes.github.io/dashboard/
+      version: 5.0.5
+    description: Kubernetes Dashboard Proxy
+    digest: 2b2e45a9b0cc2488ef434ef9d350bf3ccf6061f031c0b33b8c0023ce56ec0b6c
+    maintainers:
+    - name: treydock
+    name: kubernetes-dashboard-proxy
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v2
+    appVersion: v7.1.3
     created: "2021-12-15T20:12:00.069816465Z"
     dependencies:
     - name: kubernetes-dashboard
@@ -177,13 +193,13 @@ entries:
   kyverno-policies:
   - apiVersion: v2
     appVersion: v1.5.0
-    created: "2021-12-15T20:12:00.071180261Z"
+    created: "2021-12-15T21:02:42.626985477Z"
     dependencies:
     - name: kyverno-policies
       repository: https://kyverno.github.io/kyverno/
       version: v2.1.1
     description: OSC Kyverno policies deployment
-    digest: de78182bd6b5ba67cfd1840dc8f3515a732a70aa70b36950179c9c365a3821fe
+    digest: e364e22fc7495c93343a3c49de8c3fef29397917c22ca8d9992babec04db33fa
     maintainers:
     - name: treydock
     name: kyverno-policies
@@ -226,7 +242,7 @@ entries:
   prometheus:
   - apiVersion: v2
     appVersion: v2.29.2
-    created: "2021-12-15T20:12:00.0745551Z"
+    created: "2021-12-15T21:02:42.629771614Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts/
@@ -235,7 +251,7 @@ entries:
       repository: https://nvidia.github.io/dcgm-exporter/helm-charts
       version: 2.4.1
     description: OSC Prometheus deployment
-    digest: b4e170759ce108e90d9d725aca0d5de6af424f3a9245159688048bb300816a50
+    digest: 24baabd892ee0e4db0380c17f3f85e389058d5533d2f7d0c3bb5f02930f6dcf1
     maintainers:
     - name: treydock
     name: prometheus
@@ -630,4 +646,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/prometheus-0.1.0.tgz
     version: 0.1.0
-generated: "2021-12-15T20:12:00.064490388Z"
+generated: "2021-12-15T21:02:42.622949922Z"
