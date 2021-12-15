@@ -17,6 +17,13 @@ kubernetes-dashboard:
   metrics-server:
     enabled: true
     fullnameOverride: metrics-server
+    # Not used with chart 3.5.0, but will be used when newer dashboard chart depends on newer
+    # metric-server chart
+    defaultArgs:
+      - --cert-dir=/tmp
+      - --kubelet-preferred-address-types=Hostname,InternalDNS,InternalIP,ExternalDNS,ExternalIP
+      - --kubelet-use-node-status-port
+      - --metric-resolution=15s
     # Unable to pass new value to --kubelet-preferred-address-types
     # due to being array in Helm values.yaml upstream
     args:
