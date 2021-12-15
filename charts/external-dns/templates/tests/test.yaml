@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['-O-','-S','{{ include "external-dns.fullname" . }}:{{ .Values.service.port }}/healthz']
+      args: ['-O-','-S','{{ include "external-dns.fullname" . }}:{{ index .Values "external-dns" "service" "port" }}/healthz']
   restartPolicy: Never
