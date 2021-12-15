@@ -2,7 +2,7 @@ apiVersion: v2
 name: kubernetes-dashboard-proxy
 description: Kubernetes Dashboard Proxy
 type: application
-version: 0.6.0
+version: 0.6.1
 appVersion: "v7.1.3"
 maintainers:
   - name: treydock
