@@ -9,11 +9,12 @@ spec:
   rules:
   - name: pods-require-valid-uid
     match:
-      resources:
-        kinds:
-        - Pod
-        namespaces:
-        - "user-?*"
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
     preconditions:
     - key: "{{`{{ request.operation }}`}}"
       operator: In
@@ -47,11 +48,12 @@ spec:
                 runAsUser: "{{`{{ uidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
   - name: pods-require-valid-gid
     match:
-      resources:
-        kinds:
-        - Pod
-        namespaces:
-        - "user-?*"
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
     preconditions:
     - key: "{{`{{ request.operation }}`}}"
       operator: In
@@ -85,11 +87,12 @@ spec:
                 runAsGroup: "{{`{{ gidMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
   - name: fsgroup-require-valid-gid
     match:
-      resources:
-        kinds:
-        - Pod
-        namespaces:
-        - "user-?*"
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
     preconditions:
     - key: "{{`{{ request.operation }}`}}"
       operator: In

@@ -14,11 +14,12 @@ spec:
   rules:
   - name: nfs-volume
     match:
-      resources:
-        kinds:
-        - Pod
-        namespaces:
-        - "user-?*"
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
     validate:
       message: >-
         NFS volumes are forbidden. The fields spec.volumes[*].nfs must not be set.

@@ -13,9 +13,10 @@ spec:
   rules:
   - name: imagepullpolicy-always
     match:
-      resources:
-        kinds:
-        - Pod
+      any:
+        - resources:
+            kinds:
+            - Pod
     validate:
       message: >-
         The imagePullPolicy must be set to `Always` when the tag `latest` is used.

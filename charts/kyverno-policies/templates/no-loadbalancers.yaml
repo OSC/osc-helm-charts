@@ -10,13 +10,15 @@ spec:
   rules:
   - name: no-loadbalancers
     match:
-      resources:
-        kinds:
-        - Service
+      any:
+        - resources:
+            kinds:
+            - Service
     exclude:
-      resources:
-        namespaces:
-          - ingress-nginx
+      any:
+        - resources:
+            namespaces:
+              - ingress-nginx
     validate:
       message: "Service of type LoadBalancer is not allowed."
       pattern:

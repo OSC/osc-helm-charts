@@ -12,9 +12,10 @@ spec:
   rules:
     - name: check-runasgroup
       match:
-        resources:
-          kinds:
-            - Pod
+        any:
+          - resources:
+              kinds:
+                - Pod
       validate:
         message: >-
           Running with root group IDs is disallowed. The fields	
@@ -33,13 +34,15 @@ spec:
                   =(runAsGroup): ">0"
     - name: check-supplementalGroups
       match:
-        resources:
-          kinds:
-            - Pod
+        any:
+          - resources:
+              kinds:
+                - Pod
       exclude:
-        resources:
-          namespaces:
-          - "user-?*"
+        any:
+          - resources:
+              namespaces:
+              - "user-?*"
       validate:
         message: >-
           Adding of supplemental group IDs is not allowed. The field	
@@ -50,9 +53,10 @@ spec:
               =(supplementalGroups): ">0"
     - name: check-fsGroup
       match:
-        resources:
-          kinds:
-            - Pod
+        any:
+          - resources:
+              kinds:
+                - Pod
       validate:
         message: >-
           Changing to root group ID is disallowed. The field

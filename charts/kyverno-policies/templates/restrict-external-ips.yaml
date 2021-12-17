@@ -9,9 +9,10 @@ spec:
   rules:
   - name: check-ips
     match:
-      resources:
-        kinds:
-        - Service
+      any:
+        - resources:
+            kinds:
+            - Service
     validate:
       message: "externalIPs are not allowed"
       pattern:

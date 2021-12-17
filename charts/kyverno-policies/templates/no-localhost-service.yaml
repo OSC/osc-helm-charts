@@ -15,9 +15,10 @@ spec:
   rules:
   - name: no-localhost-service
     match:
-      resources:
-        kinds:
-        - Service
+      any:
+        - resources:
+            kinds:
+            - Service
     validate:
       message: "Service of type ExternalName cannot point to localhost."
       pattern:

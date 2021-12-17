@@ -9,11 +9,12 @@ spec:
   rules:
   - name: pods-user-authorized-for-account
     match:
-      resources:
-        kinds:
-        - Pod
-        namespaces:
-        - "user-?*"
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
     preconditions:
     - key: "{{`{{ request.operation }}`}}"
       operator: In
@@ -32,11 +33,12 @@ spec:
           value: "{{`{{ userGroupMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
   - name: pods-user-account-prefix
     match:
-      resources:
-        kinds:
-        - Pod
-        namespaces:
-        - "user-?*"
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
     validate:
       message: "{{`{{ request.object.metadata.namespace }}`}} account {{`{{ request.object.metadata.labels.account }}`}} is not a valid project"
       pattern:

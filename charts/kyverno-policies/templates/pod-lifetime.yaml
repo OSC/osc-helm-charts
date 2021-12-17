@@ -9,11 +9,12 @@ spec:
   rules:
   - name: pods-require-lifetime
     match:
-      resources:
-        kinds:
-        - Pod
-        namespaces:
-        - "user-?*"
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
     validate:
       message: "User pods must include an lifetime"
       pattern:
@@ -22,11 +23,12 @@ spec:
             pod.kubernetes.io/lifetime: "*?"
   - name: pods-max-lifetime
     match:
-      resources:
-        kinds:
-        - Pod
-        namespaces:
-        - "user-?*"
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
     preconditions:
     - key: "{{`{{ request.object.metadata.annotations.\"pod.kubernetes.io/lifetime\" }}`}}"
       operator: NotEquals
@@ -36,5 +38,5 @@ spec:
       deny:
         conditions:
         - key: "{{`{{ request.object.metadata.annotations.\"pod.kubernetes.io/lifetime\" }}`}}"
-          operator: DurationGreaterThan
+          operator: GreaterThan
           value: "24h"

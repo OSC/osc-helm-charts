@@ -9,12 +9,14 @@ spec:
   rules:
   - name: require-tls
     match:
-      resources:
-        kinds:
-        - Ingress
+      any:
+        - resources:
+            kinds:
+            - Ingress
     exclude:
-      resources:
-        name: "cm-acme-http-solver-*"
+      any:
+        - resources:
+            name: "cm-acme-http-solver-*"
     validate:
       message: "Ingress is required to have TLS."
       pattern:
