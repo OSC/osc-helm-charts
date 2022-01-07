@@ -1,0 +1,13 @@
+---
+name: ondemand
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: add-nodeselector
+    rule: ondemand-nodeselector
+    resource: test-ondemand-nodeselector
+    patchedResource: ondemand-nodeselector-mutated.yaml
+    kind: Pod
+    result: pass
