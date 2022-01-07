@@ -1,5 +1,5 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-KYVERNO_VERSION := "v1.5.2"
+KYVERNO_VERSION := "v1.5.3"
 KYVERNO_DIR := /tmp/kyverno-$$USER
 KYVENOR_CLI := $(KYVERNO_DIR)/cmd/cli/kubectl-kyverno/kyverno
 KYVERNO_POLICIES_DIR := $(ROOT_DIR)/charts/kyverno-policies/templates
