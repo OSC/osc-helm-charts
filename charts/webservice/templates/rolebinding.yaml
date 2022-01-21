@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "webservice.name" . }}
+  labels:
+    {{- include "webservice.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "webservice.roleName" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "webservice.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace | quote }}
