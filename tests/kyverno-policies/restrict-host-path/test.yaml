@@ -4,24 +4,47 @@ policies:
   - policy.yaml
 resources:
   - resources.yaml
+variables: variables.yaml
 results:
   - policy: restrict-host-path
-    rule: host-path
+    rule: users-host-path
     resource: test-skip
     kind: Pod
     result: skip
   - policy: restrict-host-path
-    rule: host-path
+    rule: users-host-path
     resource: test-pass
     kind: Pod
     result: pass
   - policy: restrict-host-path
-    rule: host-path
+    rule: users-host-path
     resource: test-no-hostpath-pass
     kind: Pod
     result: pass
   - policy: restrict-host-path
-    rule: host-path
+    rule: users-host-path
     resource: test-fail
     kind: Pod
+    result: fail
+  - policy: restrict-host-path
+    rule: webservices-host-path
+    resource: test-skip-webservice
+    kind: Pod
+    result: skip
+  - policy: restrict-host-path
+    rule: webservices-host-path
+    resource: test-pass-webservice
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: restrict-host-path
+    rule: webservices-host-path
+    resource: test-no-hostpath-pass-webservice
+    kind: Pod
+    result: pass
+  - policy: restrict-host-path
+    rule: webservices-host-path
+    resource: test-fail-webservice
+    kind: Pod
+    namespace: webservice
     result: fail

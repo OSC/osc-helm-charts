@@ -4,6 +4,7 @@ policies:
   - policy.yaml
 resources:
   - resources.yaml
+variables: variables.yaml
 results:
   - policy: authorized-registries
     rule: authorized-registries-users
@@ -24,4 +25,22 @@ results:
     rule: authorized-registries-users
     resource: test-fail
     kind: Pod
+    result: fail
+  - policy: authorized-registries
+    rule: authorized-registries-users
+    resource: test-pass-webservice
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: authorized-registries
+    rule: authorized-registries-users
+    resource: test-pass-site-webservice
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: authorized-registries
+    rule: authorized-registries-users
+    resource: test-fail-webservice
+    kind: Pod
+    namespace: webservice
     result: fail

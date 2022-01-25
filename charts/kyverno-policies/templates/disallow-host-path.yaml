@@ -25,6 +25,15 @@ spec:
         - resources:
             namespaces:
             - "user-?*"
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
     validate:
       message: >-
         HostPath volumes are forbidden. The fields spec.volumes[*].hostPath must not be set.

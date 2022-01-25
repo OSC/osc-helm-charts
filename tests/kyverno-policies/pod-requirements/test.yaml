@@ -4,6 +4,7 @@ policies:
   - policy.yaml
 resources:
   - resources.yaml
+variables: variables.yaml
 results:
   - policy: pod-requirements
     rule: pods-require-account
@@ -49,4 +50,16 @@ results:
     rule: pods-require-limits
     resource: test-limits-memory-requests-fail
     kind: Pod
+    result: fail
+  - policy: pod-requirements
+    rule: pods-require-limits
+    resource: test-limits-pass-webservice
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: pod-requirements
+    rule: pods-require-limits
+    resource: test-limits-memory-requests-fail-webservice
+    kind: Pod
+    namespace: webservice
     result: fail

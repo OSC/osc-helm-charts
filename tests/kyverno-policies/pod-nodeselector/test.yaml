@@ -1,0 +1,58 @@
+---
+name: pod-nodeselector
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-user
+    resource: test-user-skip
+    kind: Pod
+    result: skip
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-user
+    resource: test-user-pass
+    kind: Pod
+    result: pass
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-user
+    resource: test-user-fail-omit
+    kind: Pod
+    result: fail
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-user
+    resource: test-user-fail-mismatch
+    kind: Pod
+    result: fail
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-webservice
+    resource: test-webservice-skip
+    kind: Pod
+    namespace: webservice
+    result: skip
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-webservice
+    resource: test-webservice-pass
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-webservice
+    resource: test-webservice-pass-infra
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-webservice
+    resource: test-webservice-fail-omit
+    kind: Pod
+    namespace: webservice
+    result: fail
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-webservice
+    resource: test-webservice-fail-mismatch
+    kind: Pod
+    namespace: webservice
+    result: fail

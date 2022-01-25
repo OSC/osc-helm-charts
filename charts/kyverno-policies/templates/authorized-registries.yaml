@@ -18,6 +18,15 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
     validate:
       message: >-
         Images must come from {{ join " or " $var.registries }}
