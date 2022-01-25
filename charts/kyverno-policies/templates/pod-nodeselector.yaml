@@ -33,6 +33,10 @@ spec:
                 operator: In
                 values:
                 - webservice
+    exclude:
+      any:
+        - resources:
+            name: "cm-acme-http-solver-*"
     validate:
       message: "Node selector must be set"
       pattern:

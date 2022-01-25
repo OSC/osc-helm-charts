@@ -43,6 +43,10 @@ spec:
                 operator: In
                 values:
                 - webservice
+    exclude:
+      any:
+        - resources:
+            name: "cm-acme-http-solver-*"
     validate:
       message: >-
         Images must come from {{ join " or " $webservicesVar.registries }}
