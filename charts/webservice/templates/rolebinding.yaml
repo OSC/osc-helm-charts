@@ -11,5 +11,5 @@ roleRef:
   name: {{ include "webservice.roleName" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "webservice.serviceAccountName" . }}
+    name: {{ include "webservice.name" . }}
     namespace: {{ .Release.Namespace | quote }}
