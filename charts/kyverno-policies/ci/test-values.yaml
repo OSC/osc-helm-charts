@@ -1,0 +1,8 @@
+users:
+  authorizedRegistries:
+    - docker.io/ohiosupercomputer
+    - example.com
+webservices:
+  authorizedRegistries:
+    - docker.io/ohiosupercomputer
+    - example.com
