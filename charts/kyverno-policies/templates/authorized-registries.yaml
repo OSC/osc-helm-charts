@@ -1,6 +1,10 @@
-{{- $var := dict "registries" (list) -}}
-{{- range .Values.authorizedRegistries -}}
-{{- $noop := printf "%s/*" . | append $var.registries | set $var "registries" -}}
+{{- $usersVar := dict "registries" (list) -}}
+{{- range .Values.users.authorizedRegistries -}}
+{{- $noop := printf "%s/*" . | append $usersVar.registries | set $usersVar "registries" -}}
+{{- end }}
+{{- $webservicesVar := dict "registries" (list) -}}
+{{- range .Values.webservices.authorizedRegistries -}}
+{{- $noop := printf "%s/*" . | append $webservicesVar.registries | set $webservicesVar "registries" -}}
 {{- end }}
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
@@ -18,6 +22,18 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
+    validate:
+      message: >-
+        Images must come from {{ join " or " $usersVar.registries }}
+      pattern:
+        spec:
+          containers:
+            - image: "{{ join " | " $usersVar.registries }}"
+          =(initContainers):
+            - image: "{{ join " | " $usersVar.registries }}"
+  - name: authorized-registries-webservices
+    match:
+      any:
         - resources:
             kinds:
             - Pod
@@ -29,10 +45,10 @@ spec:
                 - webservice
     validate:
       message: >-
-        Images must come from {{ join " or " $var.registries }}
+        Images must come from {{ join " or " $webservicesVar.registries }}
       pattern:
         spec:
           containers:
-            - image: "{{ join " | " $var.registries }}"
+            - image: "{{ join " | " $webservicesVar.registries }}"
           =(initContainers):
-            - image: "{{ join " | " $var.registries }}"
+            - image: "{{ join " | " $webservicesVar.registries }}"

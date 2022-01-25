@@ -27,19 +27,24 @@ results:
     kind: Pod
     result: fail
   - policy: authorized-registries
-    rule: authorized-registries-users
+    rule: authorized-registries-webservices
+    resource: test-skip-webservice
+    kind: Pod
+    result: skip
+  - policy: authorized-registries
+    rule: authorized-registries-webservices
     resource: test-pass-webservice
     kind: Pod
     namespace: webservice
     result: pass
   - policy: authorized-registries
-    rule: authorized-registries-users
+    rule: authorized-registries-webservices
     resource: test-pass-site-webservice
     kind: Pod
     namespace: webservice
     result: pass
   - policy: authorized-registries
-    rule: authorized-registries-users
+    rule: authorized-registries-webservices
     resource: test-fail-webservice
     kind: Pod
     namespace: webservice

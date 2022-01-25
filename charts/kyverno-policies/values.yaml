@@ -1,6 +1,3 @@
-authorizedRegistries:
-  - docker.io/ohiosupercomputer
-# siteRegistry:
 users:
   allowHostPaths:
     - /var/lib/sss/pipes
@@ -13,13 +10,16 @@ users:
     - /fs/?*
     - /apps/?*
     - /nfsroot/?*
+  authorizedRegistries:
+    - docker.io/ohiosupercomputer
 webservices:
   allowHostPaths:
     - /etc/slurm
     - /var/run/munge/munge.socket.2
     - /users/?*
     - /fs/?*
-
+  authorizedRegistries:
+    - docker.io/ohiosupercomputer
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom
   # For more info- https://kyverno.io/policies/pod-security
