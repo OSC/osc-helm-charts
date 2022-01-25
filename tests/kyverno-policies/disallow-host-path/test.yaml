@@ -4,11 +4,18 @@ policies:
   - policy.yaml
 resources:
   - resources.yaml
+variables: variables.yaml
 results:
   - policy: disallow-host-path
     rule: host-path
     resource: test-skip
     kind: Pod
+    result: skip
+  - policy: disallow-host-path
+    rule: host-path
+    resource: test-skip-webservice
+    kind: Pod
+    namespace: webservice
     result: skip
   - policy: disallow-host-path
     rule: host-path

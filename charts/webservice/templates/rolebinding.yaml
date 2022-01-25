@@ -7,9 +7,9 @@ metadata:
     {{- include "webservice.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: {{ include "webservice.roleName" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "webservice.serviceAccountName" . }}
+    name: {{ include "webservice.name" . }}
     namespace: {{ .Release.Namespace | quote }}

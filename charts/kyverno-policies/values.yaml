@@ -13,6 +13,12 @@ users:
     - /fs/?*
     - /apps/?*
     - /nfsroot/?*
+webservices:
+  allowHostPaths:
+    - /etc/slurm
+    - /var/run/munge/munge.socket.2
+    - /users/?*
+    - /fs/?*
 
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom

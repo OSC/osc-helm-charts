@@ -1,0 +1,99 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-user-skip
+  namespace: test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-user-pass
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    osc.edu/role: ondemand
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-user-fail-omit
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-user-fail-mismatch
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    osc.edu/role: webservices
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-skip
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-pass
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    osc.edu/role: webservices
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-pass-infra
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    osc.edu/role: infrastructure
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-fail-omit
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-fail-mismatch
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    osc.edu/role: ondemand

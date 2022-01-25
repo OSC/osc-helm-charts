@@ -60,6 +60,23 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-limits-pass-webservice
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-limits-cpu-limits-fail
   namespace: user-test
 spec: 
@@ -110,6 +127,22 @@ kind: Pod
 metadata:
   name: test-limits-memory-requests-fail
   namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-memory-requests-fail-webservice
+  namespace: webservice
 spec: 
   containers:
   - name: nginx

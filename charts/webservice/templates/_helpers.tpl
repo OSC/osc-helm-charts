@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "webservice.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default .Release.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -57,9 +57,8 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "webservice.name" . }}
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "webservice.serviceAccountName" -}}
-{{- default "default" .Values.serviceAccount.name }}
+{{- define "imagePullSecret" }}
+{{- with .Values.imagePullSecret }}
+{{- printf "{\"auths\":{\"%s\":{\"auth\":\"%s\"}}}" .registry (printf "%s:%s" .username .password | b64enc) | b64enc }}
+{{- end }}
 {{- end }}

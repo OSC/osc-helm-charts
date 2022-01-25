@@ -1,0 +1,41 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-nodeselector
+  namespace: kyverno
+spec:
+  background: true
+  validationFailureAction: enforce
+  rules:
+  - name: pod-nodeselector-user
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
+    validate:
+      message: "Node selector must be set to ondemand"
+      pattern:
+        spec:
+          nodeSelector:
+            osc.edu/role: "ondemand"
+  - name: pod-nodeselector-webservice
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
+    validate:
+      message: "Node selector must be set"
+      pattern:
+        spec:
+          nodeSelector:
+            osc.edu/role: "infrastructure | webservices"

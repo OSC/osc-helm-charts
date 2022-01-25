@@ -29,6 +29,15 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
     validate:
       message: "CPU and memory resource requests and limits are required for user pods"
       pattern:

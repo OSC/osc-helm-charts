@@ -1,0 +1,10 @@
+namespaceSelector:
+  - name: test
+    labels:
+      foo: bar
+  - name: user-test
+    labels:
+      foo: bar
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
