@@ -1,0 +1,6 @@
+auth:
+  clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
+  cookieSecret: ZDJWaGF5UU1abmg0aWRUanRhRkU5Z2kzSHdXNjd3b1UK
+
+imagePullSecret:
+  password: foobar
