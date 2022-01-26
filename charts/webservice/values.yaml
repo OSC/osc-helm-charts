@@ -1,3 +1,7 @@
+auth:
+  clientSecret:
+  cookieSecret:
+
 imagePullSecret:
   name: osc-registry
   registry: docker-registry.osc.edu

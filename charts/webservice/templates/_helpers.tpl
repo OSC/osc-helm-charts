@@ -57,8 +57,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "webservice.name" . }}
 {{- end }}
 
-{{- define "imagePullSecret" }}
+{{- define "webservice.imagePullSecret" }}
 {{- with .Values.imagePullSecret }}
 {{- printf "{\"auths\":{\"%s\":{\"auth\":\"%s\"}}}" .registry (printf "%s:%s" .username .password | b64enc) | b64enc }}
 {{- end }}
+{{- end }}
+
+{{- define "webservice.authSecretName" }}
+{{- printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
