@@ -1,0 +1,25 @@
+---
+name: ondemand
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: add-service-account
+    rule: webservice-service-account-run-as
+    resource: test-webservice-service-account
+    patchedResource: webservice-service-account-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: add-service-account
+    rule: webservice-service-account-run-as
+    resource: test-webservice-service-account-partial
+    patchedResource: webservice-service-account-mutated-partial.yaml
+    kind: Pod
+    result: pass
+  - policy: add-service-account
+    rule: webservice-service-account-run-as
+    resource: test-webservice-service-account-skip
+    kind: Pod
+    result: skip
