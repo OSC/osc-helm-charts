@@ -1,0 +1,98 @@
+policies:
+  - name: pod-service-account-validation
+    rules:
+      - name: pods-require-valid-service-account-uid
+        values:
+          uidMap.data.user-test: '1000'
+      - name: pods-require-valid-service-account-gid
+        values:
+          gidMap.data.user-test: '1001'
+      - name: fsgroup-require-valid-service-account-gid
+        values:
+          gidMap.data.user-test: '1001'
+      - name: pods-service-account-authorized-for-groups
+        values:
+          userGIDMap.data.user-test: '["1000", "1001"]'
+    resources:
+      - name: pods-require-valid-service-account-uid-skip
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-uid-skip-op
+        values:
+          request.operation: DELETE
+      - name: pods-require-valid-service-account-uid-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-uid-container-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-uid-init-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-uid-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-uid-container-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-uid-init-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-gid-skip
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-gid-skip-op
+        values:
+          request.operation: DELETE
+      - name: pods-require-valid-service-account-gid-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-gid-container-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-gid-init-pass
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-gid-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-gid-container-fail
+        values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-gid-init-fail
+        values:
+          request.operation: CREATE
+      - name: fsgroup-require-valid-service-account-gid-skip
+        values:
+          request.operation: CREATE
+      - name: fsgroup-require-valid-service-account-gid-skip-op
+        values:
+          request.operation: DELETE
+      - name: fsgroup-require-valid-service-account-gid-pass
+        values:
+          request.operation: CREATE
+      - name: fsgroup-require-valid-service-account-gid-fail
+        values:
+          request.operation: CREATE
+      - name: test-groups-skip
+        values:
+          request.operation: CREATE
+      - name: test-groups-skip-op
+        values:
+          request.operation: DELETE
+      - name: test-groups-skip-len
+        values:
+          request.operation: CREATE
+      - name: test-groups-pass
+        values:
+          request.operation: CREATE
+      - name: test-groups-fail
+        values:
+          request.operation: CREATE
+namespaceSelector:
+  - name: user-test
+    labels:
+      foo: bar
+  - name: webservice
+    labels:
+      osc.edu/role: webservice

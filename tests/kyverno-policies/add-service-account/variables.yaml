@@ -1,0 +1,19 @@
+policies:
+  - name: add-service-account
+    rules:
+      - name: webservice-service-account-run-as
+        values:
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+          gidsMap.data.user-test: '["1001","1002"]'
+    resources:
+      - name: test-webservice-service-account
+        values:
+          request.operation: CREATE
+namespaceSelector:
+  - name: user-test
+    labels:
+      foo: bar
+  - name: webservice
+    labels:
+      osc.edu/role: webservice

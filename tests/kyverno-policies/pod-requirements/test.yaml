@@ -22,6 +22,21 @@ results:
     kind: Pod
     result: fail
   - policy: pod-requirements
+    rule: pods-require-service-account
+    resource: test-service-account-skip
+    kind: Pod
+    result: skip
+  - policy: pod-requirements
+    rule: pods-require-service-account
+    resource: test-service-account-pass
+    kind: Pod
+    result: pass
+  - policy: pod-requirements
+    rule: pods-require-service-account
+    resource: test-service-account-fail
+    kind: Pod
+    result: fail
+  - policy: pod-requirements
     rule: pods-require-limits
     resource: test-limits-skip
     kind: Pod

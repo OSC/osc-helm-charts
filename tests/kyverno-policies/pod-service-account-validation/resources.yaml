@@ -1,0 +1,397 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-uid-skip
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-uid-skip-op
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-uid-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-uid-container-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-uid-init-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-uid-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1002
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-uid-container-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-uid-init-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-gid-skip
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-gid-skip-op
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-gid-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-gid-container-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-gid-init-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-gid-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1003
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-gid-container-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-gid-init-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fsgroup-require-valid-service-account-gid-skip
+  namespace: user-test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fsgroup-require-valid-service-account-gid-skip-op
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fsgroup-require-valid-service-account-gid-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fsgroup-require-valid-service-account-gid-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1003
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-groups-skip
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-groups-skip-op
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    supplementalGroups:
+      - 1002
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-groups-skip-len
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-groups-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    supplementalGroups:
+      - 1000
+      - 1001
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-groups-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    supplementalGroups:
+      - 1002
+  containers:
+  - name: nginx
+    image: nginx:1.12

@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-service-account
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-service-account-partial
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+  securityContext:
+    fsGroup: 2000
+    runAsGroup: 2000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-service-account-skip
+  namespace: user-test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
