@@ -5,7 +5,7 @@ database:
   host:
   user:
   name:
-  url: mysql2://{{ .Values.database.user }}:$(DATABASE_PASSWORD)@{{ .Values.database.host }}:3306/{{ .Values.database.name }}
+  url: mysql2://{{ tpl .Values.database.user . }}:$(DATABASE_PASSWORD)@{{ .Values.database.host }}:3306/{{ tpl .Values.database.name . }}
 
 command: []
 args: []

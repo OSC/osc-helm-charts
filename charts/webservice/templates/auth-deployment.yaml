@@ -55,7 +55,7 @@ spec:
           - --upstream=http://{{ include "webservice.name" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
           - --metrics-address=:{{ .Values.auth.metricsService.port }}
           {{- if .Values.auth.idpHost }}
-          - --whitelist-domain={{ .Values.auth.idpHost }}
+          - --whitelist-domain={{ tpl .Values.auth.idpHost . }}
           {{- end }}
           {{- range .Values.auth.allowGroups }}
           - --allowed-group={{ . }}
