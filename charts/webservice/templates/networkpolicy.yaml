@@ -1,0 +1,24 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "webservice.name" . }}
+  labels:
+    {{- include "webservice.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "webservice.selectorLabels" . | nindent 6 }}
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          {{- include "webservice.auth.selectorLabels" . | nindent 10 }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.ingressName }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.prometheusName }}
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.blackboxExporterName }}

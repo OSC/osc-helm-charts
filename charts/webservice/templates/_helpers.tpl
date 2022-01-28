@@ -6,6 +6,13 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
+Auth resource name
+*/}}
+{{- define "webservice.auth.name" -}}
+{{- printf "%s-auth" (include "webservice.name" .) }}
+{{- end }}
+
+{{/*
 Chart role name
 */}}
 {{- define "webservice.roleName" -}}
@@ -50,11 +57,31 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
+Auth labels
+*/}}
+{{- define "webservice.auth.labels" -}}
+helm.sh/chart: {{ include "webservice.chart" . }}
+{{ include "webservice.auth.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
 Selector labels
 */}}
 {{- define "webservice.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "webservice.name" . }}
+{{- end }}
+
+{{/*
+Auth Selector labels
+*/}}
+{{- define "webservice.auth.selectorLabels" -}}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
 {{- define "webservice.imagePullSecret" }}
@@ -63,6 +90,6 @@ app.kubernetes.io/name: {{ include "webservice.name" . }}
 {{- end }}
 {{- end }}
 
-{{- define "webservice.authSecretName" }}
+{{- define "webservice.auth.secretName" }}
 {{- printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
