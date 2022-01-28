@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ include "webservice.auth.name" . }}
   labels:
-    osc.edu/service-account: {{ .Values.serviceAccount }}
+    osc.edu/service-account: {{ tpl .Values.serviceAccount . }}
     {{- include "webservice.auth.labels" . | nindent 4 }}
 spec:
   selector:
@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        osc.edu/service-account: {{ .Values.serviceAccount }}
+        osc.edu/service-account: {{ tpl .Values.serviceAccount . }}
         {{- include "webservice.auth.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "webservice.name" . }}

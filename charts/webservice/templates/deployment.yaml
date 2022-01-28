@@ -1,9 +1,10 @@
+{{ $null := required "Must provide serviceAccount" (tpl .Values.serviceAccount .) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "webservice.name" . }}
   labels:
-    osc.edu/service-account: {{ required "Must provide serviceAccount" .Values.serviceAccount }}
+    osc.edu/service-account: {{ tpl .Values.serviceAccount . }}
     {{- include "webservice.labels" . | nindent 4 }}
 spec:
   selector:
@@ -18,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        osc.edu/service-account: phylogatrdev
+        osc.edu/service-account: {{ tpl .Values.serviceAccount . }}
         {{- include "webservice.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "webservice.name" . }}
@@ -63,7 +64,7 @@ spec:
         volumeMounts:
         {{- if .Values.mounts.home }}
           - name: home
-            mountPath: {{ .Values.mounts.home }}
+            mountPath: {{ tpl .Values.mounts.home . }}
         {{- end }}
         {{- range $name, $path := .Values.mounts.roDir }}
           - name: {{ $name }}
@@ -90,7 +91,7 @@ spec:
         {{- if .Values.mounts.home }}
         - name: home
           hostPath:
-            path: {{ .Values.mounts.home }}
+            path: {{ tpl .Values.mounts.home . }}
             type: Directory
         {{- end }}
         {{- range $name, $path := .Values.mounts.roDir }}
