@@ -23,3 +23,10 @@ podSecurityContext:
   fsGroup: 1000
 nodeSelector:
   osc.edu/role: null
+podResources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
