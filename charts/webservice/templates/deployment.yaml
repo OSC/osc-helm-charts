@@ -49,10 +49,6 @@ spec:
               name: {{ include "webservice.name" . }}
               key: database-password
         {{- end }}
-        {{- if .Values.database.host }}
-        - name: DATABASE_HOST
-          value: {{ .Values.database.host }}
-        {{- end }}
         {{- if .Values.database.url }}
         - name: DATABASE_URL
           value: {{ tpl .Values.database.url . }}

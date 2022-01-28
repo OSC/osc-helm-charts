@@ -3,7 +3,9 @@ database:
   enable: false
   password:
   host:
-  url:
+  user:
+  name:
+  url: mysql2://{{ .Values.database.user }}:$(DATABASE_PASSWORD)@{{ .Values.database.host }}:3306/{{ .Values.database.name }}
 
 command: []
 args: []
