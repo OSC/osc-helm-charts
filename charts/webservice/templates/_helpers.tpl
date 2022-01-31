@@ -90,25 +90,52 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 {{- end }}
 
+{{- define "webservice.environment" }}
+{{- if .Values.global }}
+{{- default "production" .Values.global.environment }}
+{{- else }}
+{{- "production" }}
+{{- end }}
+{{- end }}
+
 {{- define "webservice.auth.secretName" }}
 {{- printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
 {{- define "webservice.serviceAccount" }}
-{{- or .Values.serviceAccount (index .Values.global.env .Values.global.environment "serviceAccount") }}
+{{- if .Values.global }}
+{{- index .Values.global.env (include "webservice.environment" .) "serviceAccount" }}
+{{- else }}
+{{- .Values.serviceAccount }}
+{{- end }}
 {{- end }}
 
 {{- define "webservice.idpHost" }}
-{{- or .Values.auth.idpHost (index .Values.global.env .Values.global.environment "auth" "idpHost") }}
+{{- if .Values.global }}
+{{- index .Values.global.env (include "webservice.environment" .) "auth" "idpHost" }}
+{{- else }}
+{{- .Values.auth.idpHost }}
+{{- end }}
 {{- end }}
 
 {{- define "webservice.accessGroup" }}
-{{- index .Values.global.env .Values.global.environment "auth" "accessGroup" }}
+{{- if .Values.global }}
+{{- index .Values.global.env (include "webservice.environment" .) "auth" "accessGroup" }}
+{{- end }}
 {{- end }}
 
 {{- define "webservice.ingressHost" }}
-{{- or .Values.ingress.host (index .Values.global.env .Values.global.environment "ingress" "host") }}
+{{- if .Values.global }}
+{{- index .Values.global.env (include "webservice.environment" .) "ingress" "host" }}
+{{- else }}
+{{- .Values.ingress.host }}
 {{- end }}
+{{- end }}
+
 {{- define "webservice.ingressHostAlias" }}
-{{- or .Values.ingress.hostAlias (index .Values.global.env .Values.global.environment "ingress" "hostAlias") }}
+{{- if .Values.global }}
+{{- index .Values.global.env (include "webservice.environment" .) "ingress" "hostAlias" }}
+{{- else }}
+{{- .Values.ingress.hostAlias }}
+{{- end }}
 {{- end }}

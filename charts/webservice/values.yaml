@@ -1,3 +1,4 @@
+# Also pulled from global.env.$environment.serviceAccount
 serviceAccount: ""
 database:
   enable: false
@@ -75,7 +76,9 @@ readinessProbe:
   periodSeconds: 30
 
 ingress:
+  # Also pulled from global.env.$environment.ingress.host
   host: ""
+  # Also pulled from global.env.$environment.ingress.hostAlias
   hostAlias: ""
   annotations:
     kubernetes.io/ingress.class: "nginx"
@@ -88,8 +91,10 @@ auth:
   clientSecret:
   cookieSecret:
   cookieName: _{{ include "webservice.serviceAccount" . }}
+  # Also pulled from global.env.$environment.auth.idpHost
   idpHost:
   oidcIssuerURL: https://$(IDP_HOST)/auth/realms/osc
+  # First group also pulled from global.env.$environment.auth.accessGroup
   allowGroups:
   image:
     repository: quay.io/oauth2-proxy/oauth2-proxy
