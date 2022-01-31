@@ -12,19 +12,19 @@ metadata:
     {{- with .Values.auth.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
-    {{- if .Values.ingress.hostAlias }}
-    nginx.ingress.kubernetes.io/server-alias: {{ tpl .Values.ingress.hostAlias . }}
+    {{- if (include "webservice.ingressHostAlias" .) }}
+    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "webservice.ingressHostAlias" .) . }}
     {{- end }}
 spec:
   tls:
   - hosts:
-    - {{ tpl .Values.ingress.host . | quote }}
-  {{- if .Values.ingress.hostAlias }}
-    - {{ tpl .Values.ingress.hostAlias . | quote }}
+    - {{ tpl (include "webservice.ingressHost" .) . | quote }}
+  {{- if (include "webservice.ingressHostAlias" .) }}
+    - {{ tpl (include "webservice.ingressHostAlias" .) . | quote }}
   {{- end }}
     secretName: {{ include "webservice.name" . }}-cert
   rules:
-  - host: {{ tpl .Values.ingress.host . | quote }}
+  - host: {{ tpl (include "webservice.ingressHost" .) . | quote }}
     http:
       paths:
       - path: /oauth2

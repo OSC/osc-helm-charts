@@ -1,10 +1,10 @@
-{{ $null := required "Must provide serviceAccount" (tpl .Values.serviceAccount .) }}
+{{ $null := required "Must provide serviceAccount" (include "webservice.serviceAccount" .) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "webservice.name" . }}
   labels:
-    osc.edu/service-account: {{ tpl .Values.serviceAccount . }}
+    osc.edu/service-account: {{ include "webservice.serviceAccount" . }}
     {{- include "webservice.labels" . | nindent 4 }}
 spec:
   selector:
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        osc.edu/service-account: {{ tpl .Values.serviceAccount . }}
+        osc.edu/service-account: {{ include "webservice.serviceAccount" . }}
         {{- include "webservice.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "webservice.name" . }}

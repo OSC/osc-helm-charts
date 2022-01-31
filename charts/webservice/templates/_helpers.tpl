@@ -93,3 +93,22 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- define "webservice.auth.secretName" }}
 {{- printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
+
+{{- define "webservice.serviceAccount" }}
+{{- or .Values.serviceAccount (index .Values.global.env .Values.global.environment "serviceAccount") }}
+{{- end }}
+
+{{- define "webservice.idpHost" }}
+{{- or .Values.auth.idpHost (index .Values.global.env .Values.global.environment "auth" "idpHost") }}
+{{- end }}
+
+{{- define "webservice.accessGroup" }}
+{{- index .Values.global.env .Values.global.environment "auth" "accessGroup" }}
+{{- end }}
+
+{{- define "webservice.ingressHost" }}
+{{- or .Values.ingress.host (index .Values.global.env .Values.global.environment "ingress" "host") }}
+{{- end }}
+{{- define "webservice.ingressHostAlias" }}
+{{- or .Values.ingress.hostAlias (index .Values.global.env .Values.global.environment "ingress" "hostAlias") }}
+{{- end }}

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ include "webservice.auth.name" . }}
   labels:
-    osc.edu/service-account: {{ tpl .Values.serviceAccount . }}
+    osc.edu/service-account: {{ include "webservice.serviceAccount" . }}
     {{- include "webservice.auth.labels" . | nindent 4 }}
 spec:
   selector:
@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        osc.edu/service-account: {{ tpl .Values.serviceAccount . }}
+        osc.edu/service-account: {{ include "webservice.serviceAccount" . }}
         {{- include "webservice.auth.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "webservice.name" . }}
@@ -37,11 +37,13 @@ spec:
             secretKeyRef:
               name: {{ include "webservice.auth.secretName" . }}
               key: cookie-secret
+        - name: IDP_HOST
+          value: {{ include "webservice.idpHost" . }}
         args:
           - --provider=oidc
           - --http-address=0.0.0.0:{{ .Values.auth.service.port }}
           - --reverse-proxy=true
-          - --oidc-issuer-url={{ tpl .Values.auth.oidcIssuerURL . }}
+          - --oidc-issuer-url={{ .Values.auth.oidcIssuerURL }}
           - --client-id={{ tpl .Values.auth.clientID . }}
           - --cookie-httponly=false
           - --cookie-secure=true
@@ -54,11 +56,14 @@ spec:
           - --silence-ping-logging
           - --upstream=http://{{ include "webservice.name" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
           - --metrics-address=:{{ .Values.auth.metricsService.port }}
-          {{- if .Values.auth.idpHost }}
-          - --whitelist-domain={{ tpl .Values.auth.idpHost . }}
+          {{- if (include "webservice.idpHost" .) }}
+          - --whitelist-domain=$(IDP_HOST)
+          {{- end }}
+          {{- if (include "webservice.accessGroup" .) }}
+          - --allowed-group={{ include "webservice.accessGroup" . }}
           {{- end }}
           {{- range .Values.auth.allowGroups }}
-          - --allowed-group={{ . }}
+          - --allowed-group={{ tpl . $ }}
           {{- end }}
         ports:
         - containerPort: {{ .Values.auth.service.port }}

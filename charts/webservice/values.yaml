@@ -87,9 +87,9 @@ auth:
   clientID: kubernetes-{{ include "webservice.name" . }}
   clientSecret:
   cookieSecret:
-  cookieName: _{{ .Values.serviceAccount }}
+  cookieName: _{{ include "webservice.serviceAccount" . }}
   idpHost:
-  oidcIssuerURL: https://{{ .Values.auth.idpHost }}/auth/realms/osc
+  oidcIssuerURL: https://$(IDP_HOST)/auth/realms/osc
   allowGroups:
   image:
     repository: quay.io/oauth2-proxy/oauth2-proxy
