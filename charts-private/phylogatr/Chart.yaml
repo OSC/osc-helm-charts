@@ -1,0 +1,12 @@
+apiVersion: v2
+name: phylogatr
+description: OSC phylogatr web service
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+maintainers:
+  - name: treydock
+dependencies:
+  - name: webservice
+    version: 0.4.0
+    repository: "file://../../charts/webservice"
