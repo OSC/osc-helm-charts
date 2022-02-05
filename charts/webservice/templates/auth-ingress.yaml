@@ -1,0 +1,44 @@
+{{ if .Values.auth.enable }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "webservice.auth.name" . }}
+  labels:
+    {{- include "webservice.auth.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.auth.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if (include "webservice.ingressHostAlias" .) }}
+    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "webservice.ingressHostAlias" .) . }}
+    {{- end }}
+spec:
+  tls:
+  - hosts:
+    - {{ tpl (include "webservice.ingressHost" .) . | quote }}
+  {{- if (include "webservice.ingressHostAlias" .) }}
+    - {{ tpl (include "webservice.ingressHostAlias" .) . | quote }}
+  {{- end }}
+    secretName: {{ include "webservice.name" . }}-cert
+  rules:
+  - host: {{ tpl (include "webservice.ingressHost" .) . | quote }}
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "webservice.auth.name" . }}
+            port:
+              number: {{ .Values.auth.service.port }}
+      - path: /ping
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "webservice.auth.name" . }}
+            port:
+              number: {{ .Values.auth.service.port }}
+{{ end }}

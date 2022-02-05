@@ -1,6 +1,32 @@
+serviceAccount: nobody
 auth:
   clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
-  cookieSecret: ZDJWaGF5UU1abmg0aWRUanRhRkU5Z2kzSHdXNjd3b1UK
-
+  cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
+  oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
+command: ['/http-echo']
+args:
+  - "-listen=:{{ .Values.service.port }}"
+  - "-text=Hello World"
+defaultArgs:
+  type: none
+image:
+  repository: hashicorp/http-echo
+  tag: latest
+  pullPolicy: Always
 imagePullSecret:
   password: foobar
+ingress:
+  host: webservice.example.com
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+nodeSelector:
+  osc.edu/role: null
+podResources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

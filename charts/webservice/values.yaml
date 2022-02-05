@@ -1,9 +1,128 @@
-auth:
-  clientSecret:
-  cookieSecret:
+# Also pulled from global.env.$environment.serviceAccount
+serviceAccount: ""
+database:
+  enable: false
+  password:
+  host:
+  user:
+  name:
+  url: mysql2://{{ tpl .Values.database.user . }}:$(DATABASE_PASSWORD)@{{ .Values.database.host }}:3306/{{ tpl .Values.database.name . }}
 
+command: []
+args: []
+env: []
+defaultArgs:
+  type: passenger
+  passenger:
+    - "--port={{ .Values.service.port }}"
+    - "--min-instances=1"
+    - "--sticky-sessions"
+    - "--start-timeout=180"
+    - "--environment=production"
+    - "--disable-security-update-check"
+    - "--disable-anonymous-telemetry"
+    - "--log-file=/dev/stdout"
+    - "--pid-file=/tmp/passenger.pid"
+  none: []
+
+image:
+  repository:
+  tag:
+  pullPolicy: IfNotPresent
 imagePullSecret:
   name: osc-registry
   registry: docker-registry.osc.edu
   username: robot$webservices-read
   password:
+
+mounts:
+  home: ''
+  roDir: {}
+  socket: {}
+
+nodeSelector:
+  osc.edu/role: infrastructure
+
+podSecurityContext:
+  runAsNonRoot: true
+
+podResources:
+  limits:
+    cpu: 4
+    memory: 4Gi
+  requests:
+    cpu: 1
+    memory: 256Mi
+
+replicas: 1
+
+secrets: {}
+
+service:
+  port: 3000
+  annotations: {}
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 30
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 30
+
+ingress:
+  # Also pulled from global.env.$environment.ingress.host
+  host: ""
+  # Also pulled from global.env.$environment.ingress.hostAlias
+  hostAlias: ""
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    cert-manager.io/cluster-issuer: letsencrypt
+
+auth:
+  enable: true
+  clientID: kubernetes-{{ include "webservice.name" . }}
+  clientSecret:
+  cookieSecret:
+  cookieName: _{{ include "webservice.serviceAccount" . }}
+  # Also pulled from global.env.$environment.auth.idpHost
+  idpHost:
+  oidcIssuerURL: https://$(IDP_HOST)/auth/realms/osc
+  # First group also pulled from global.env.$environment.auth.accessGroup
+  allowGroups:
+  image:
+    repository: quay.io/oauth2-proxy/oauth2-proxy
+    tag: v7.1.3
+    pullPolicy: IfNotPresent
+  service:
+    port: 4180
+    annotations:
+      prometheus.io/probe_module: http-healthz
+      prometheus.io/probe_path: /ping
+  metricsService:
+    type: ClusterIP
+    port: 8080
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
+  podResources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  ingress:
+    annotations:
+      prometheus.io/probe_path: /ping
+
+# Used for network policies
+ingressName: ingress-nginx
+prometheusName: prometheus
+blackboxExporterName: blackbox-exporter

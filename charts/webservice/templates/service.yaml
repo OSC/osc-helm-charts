@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "webservice.name" . }}
+  labels:
+    {{- include "webservice.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.service.annotations | nindent 4 }}
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.service.port }}
+    protocol: TCP
+    targetPort: http
+  selector:
+    {{- include "webservice.selectorLabels" . | nindent 4 }}
+  type: ClusterIP
