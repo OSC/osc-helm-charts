@@ -17,7 +17,7 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
-          version: v3.5.0
+          version: v3.8.0
       - name: Publish Helm charts
         uses: stefanprodan/helm-gh-pages@master
         with:
