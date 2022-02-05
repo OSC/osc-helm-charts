@@ -6,6 +6,9 @@ KYVENOR_CLI := $(KYVERNO_DIR)/cmd/cli/kubectl-kyverno/kyverno
 KYVERNO_POLICIES_DIR := $(ROOT_DIR)/charts/kyverno-policies/templates
 KYVERNO_POLICIES := $(shell git ls-files $(KYVERNO_POLICIES_DIR))
 KYVERNO_POLICY_TESTS_DIR := $(ROOT_DIR)/tests/kyverno-policies
+PRIVATE_CHARTS := $(shell git ls-files charts-private/*/Chart.yaml)
+PRIVATE_CHARTS_VALUES := $(shell git ls-files charts-private/*/values.yaml.gpg)
+PRIVATE_CHARTS_PASSPHRASE := "$(OSC_PRIVATE_CHARTS_GPG_PASSPHRASE)"
 
 .PHONY: kyverno-cli kyverno-copy-policies kyverno-test
 
@@ -27,3 +30,14 @@ kyverno-copy-policies: $(KYVERNO_POLICIES)
 
 kyverno-test: kyverno-cli kyverno-copy-policies
 	$(KYVENOR_CLI) test $(KYVERNO_POLICY_TESTS_DIR)
+
+encrypt-private-values: $(PRIVATE_CHARTS)
+	@for d in $(dir $^); do \
+		values="$$d/values.yaml"; \
+		echo -n "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --passphrase-fd=0 --batch --yes -c $$values ; \
+	done
+
+decrypt-private-values: $(PRIVATE_CHARTS_VALUES)
+	@for f in $^; do \
+		echo -n "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --passphrase-fd=0 --batch --yes $$f ; \
+	done
