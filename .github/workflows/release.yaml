@@ -24,28 +24,14 @@ jobs:
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Wait for gh-pages to deploy
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-deploy
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: deploy
-      - name: Do something with a failing build
-        if: steps.wait-for-deploy.outputs.conclusion == 'failure'
-        run: |
-          echo "gh-pages failed to deploy"
-          exit 1
       - name: Decrypt private values
-        if: steps.wait-for-deploy.outputs.conclusion == 'success'
         run: make decrypt-private-values
         env:
           OSC_PRIVATE_CHARTS_GPG_PASSPHRASE: ${{ secrets.OSC_PRIVATE_CHARTS_GPG_PASSPHRASE }}
       - name: Helm login
-        if: steps.wait-for-deploy.outputs.conclusion == 'success'
         run: |
           echo -n '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}' --password-stdin
       - name: Publish private Helm charts
-        if: steps.wait-for-deploy.outputs.conclusion == 'success'
         run: |
           for chart in $(find charts-private -maxdepth 1 -mindepth 1 -type d); do
             name=$(basename $chart)
