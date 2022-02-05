@@ -34,10 +34,11 @@ kyverno-test: kyverno-cli kyverno-copy-policies
 encrypt-private-values: $(PRIVATE_CHARTS)
 	@for d in $(dir $^); do \
 		values="$$d/values.yaml"; \
-		echo -n "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --passphrase-fd=0 --batch --yes -c $$values ; \
+		echo "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --symmetric --cipher-algo AES256 --passphrase-fd=0 --batch --yes $$values ; \
 	done
 
 decrypt-private-values: $(PRIVATE_CHARTS_VALUES)
 	@for f in $^; do \
-		echo -n "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --passphrase-fd=0 --batch --yes $$f ; \
+		values=$${f%.gpg}; \
+		echo "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --pinentry-mode loopback --no-tty --passphrase-fd=0 --batch --yes --decrypt --output $values $$f ; \
 	done
