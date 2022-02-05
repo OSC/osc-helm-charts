@@ -18,7 +18,34 @@ jobs:
         uses: azure/setup-helm@v1
         with:
           version: v3.5.0
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.0.1
       - name: Publish Helm charts
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed --config .github/config/cf.yaml --chart-dirs charts-private)
+          if [[ -n "$changed" ]]; then
+            echo "::set-output name=changed::true"
+          fi
+      - name: Decrypt private values
+        if: steps.list-changed.outputs.changed == 'true'
+        run: make decrypt-private-values
+        env:
+          OSC_PRIVATE_CHARTS_GPG_PASSPHRASE: ${{ secrets.OSC_PRIVATE_CHARTS_GPG_PASSPHRASE }}
+      - name: Helm login
+        if: steps.list-changed.outputs.changed == 'true'
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}' --password-stdin
+      - name: Publish private Helm charts
+        if: steps.list-changed.outputs.changed == 'true'
+        run: |
+          for chart in $(ct list-changed --config .github/config/cf.yaml --chart-dirs charts-private); do
+            name=$(basename $chart)
+            helm package $chart -u
+            package=${name}*.tgz
+            helm push $package oci://docker-registry.osc.edu/gateways
+          done

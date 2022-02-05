@@ -21,8 +21,12 @@ jobs:
           python-version: 3.7
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.0.1
+      - name: Decrypt private values
+        run: make decrypt-private-values
+        env:
+          OSC_PRIVATE_CHARTS_GPG_PASSPHRASE: ${{ secrets.OSC_PRIVATE_CHARTS_GPG_PASSPHRASE }}
       - name: Run chart-testing (lint)
-        run: ct lint --config .github/config/cf.yaml
+        run: ct lint --config .github/config/cf.yaml --chart-dirs charts,charts-private
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
