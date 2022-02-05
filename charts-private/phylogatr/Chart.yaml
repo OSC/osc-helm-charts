@@ -9,4 +9,4 @@ maintainers:
 dependencies:
   - name: webservice
     version: 0.4.0
-    repository: "file://../../charts/webservice"
+    repository: https://osc.github.io/osc-helm-charts/
