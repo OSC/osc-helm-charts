@@ -40,5 +40,5 @@ encrypt-private-values: $(PRIVATE_CHARTS)
 decrypt-private-values: $(PRIVATE_CHARTS_VALUES)
 	@for f in $^; do \
 		values=$${f%.gpg}; \
-		echo "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --pinentry-mode loopback --no-tty --passphrase-fd=0 --batch --yes --decrypt --output $values $$f ; \
+		echo "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --pinentry-mode loopback --no-tty --passphrase-fd=0 --batch --yes --decrypt --output $$values $$f ; \
 	done
