@@ -111,10 +111,10 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
 {{- define "webservice.idpHost" }}
-{{- if .Values.global }}
-{{- index .Values.global.env (include "webservice.environment" .) "auth" "idpHost" }}
-{{- else }}
+{{- if .Values.auth.idpHost }}
 {{- .Values.auth.idpHost }}
+{{- else if .Values.global }}
+{{- index .Values.global.env (include "webservice.environment" .) "auth" "idpHost" }}
 {{- end }}
 {{- end }}
 
