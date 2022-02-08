@@ -17,8 +17,23 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
-          version: v3.5.0
+          version: v3.8.0
       - name: Publish Helm charts
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Decrypt private values
+        run: make decrypt-private-values
+        env:
+          OSC_PRIVATE_CHARTS_GPG_PASSPHRASE: ${{ secrets.OSC_PRIVATE_CHARTS_GPG_PASSPHRASE }}
+      - name: Helm login
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}' --password-stdin
+      - name: Publish private Helm charts
+        run: |
+          for chart in $(find charts-private -maxdepth 1 -mindepth 1 -type d); do
+            name=$(basename $chart)
+            helm package $chart -u
+            package=${name}*.tgz
+            helm push $package oci://docker-registry.osc.edu/gateways
+          done
