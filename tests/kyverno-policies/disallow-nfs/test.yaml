@@ -7,11 +7,6 @@ resources:
 results:
   - policy: disallow-nfs
     rule: nfs-volume
-    resource: test-skip
-    kind: Pod
-    result: skip
-  - policy: disallow-nfs
-    rule: nfs-volume
     resource: test-pass
     kind: Pod
     result: pass
