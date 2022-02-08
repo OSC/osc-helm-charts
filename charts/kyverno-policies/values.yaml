@@ -32,6 +32,10 @@ kyverno-policies:
   # For more info- https://kyverno.io/docs/writing-policies/validate/
   validationFailureAction: enforce
   policyExclude:
+    disallow-capabilities:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
     disallow-host-path:
       any:
         - resources:
@@ -46,6 +50,16 @@ kyverno-policies:
                 operator: In
                 values:
                 - webservice
+        - resources:
+            name: "dcgm-exporter*"
+    require-run-as-non-root-user:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
+    require-run-as-nonroot:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
     restrict-volume-types:
       any:
         - resources:
@@ -60,6 +74,8 @@ kyverno-policies:
                 operator: In
                 values:
                 - webservice
+        - resources:
+            name: "dcgm-exporter*"
 
   nameOverride:
   # -- Additional labels
