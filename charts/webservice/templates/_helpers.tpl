@@ -13,13 +13,6 @@ Auth resource name
 {{- end }}
 
 {{/*
-Chart role name
-*/}}
-{{- define "webservice.roleName" -}}
-{{ include "webservice.fullname" . }}-deploy
-{{- end }}
-
-{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -100,6 +93,14 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 
 {{- define "webservice.auth.secretName" }}
 {{- printf "%s-auth" (include "webservice.name" .) }}
+{{- end }}
+
+{{- define "webservice.imageTag" }}
+{{- if .Values.image.tag }}
+{{- .Values.image.tag }}
+{{- else if .Values.global }}
+{{- index .Values.global.env (include "webservice.environment" .) "image" "tag" }}
+{{- end }}
 {{- end }}
 
 {{- define "webservice.serviceAccount" }}

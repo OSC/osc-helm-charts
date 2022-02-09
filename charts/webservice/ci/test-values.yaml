@@ -12,7 +12,6 @@ defaultArgs:
 image:
   repository: hashicorp/http-echo
   tag: latest
-  pullPolicy: Always
 imagePullSecret:
   password: foobar
 ingress:
