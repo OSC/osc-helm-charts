@@ -29,8 +29,12 @@ spec:
       hostPID: false
       containers:
       - name: {{ include "webservice.name" . }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.repository }}:{{ tpl (include "webservice.imageTag" .) . }}"
+        {{- if eq (tpl (include "webservice.imageTag" .) .) "latest" }}
+        imagePullPolicy: Always
+        {{- else }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- end }}
         {{- with .Values.command }}
         command: {{ toYaml . | nindent 10 }}
         {{- end }}
