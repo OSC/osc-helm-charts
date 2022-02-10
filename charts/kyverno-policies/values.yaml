@@ -66,6 +66,10 @@ kyverno-policies:
       any:
         - resources:
             name: "dcgm-exporter*"
+    check-runasgroup:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
     restrict-volume-types:
       any:
         - resources:
