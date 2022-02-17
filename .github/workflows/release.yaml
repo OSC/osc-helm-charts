@@ -35,5 +35,5 @@ jobs:
             name=$(basename $chart)
             helm package $chart -u
             package=${name}*.tgz
-            helm push $package oci://docker-registry.osc.edu/gateways
+            helm push $package oci://docker-registry.osc.edu/webservices
           done
