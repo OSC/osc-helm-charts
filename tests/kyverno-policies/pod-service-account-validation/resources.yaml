@@ -5,6 +5,8 @@ metadata:
   name: pods-require-valid-service-account-uid-skip
   namespace: user-test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -21,6 +23,7 @@ spec:
     runAsUser: 1000
     runAsGroup: 1001
     fsGroup: 1001
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx
@@ -38,6 +41,7 @@ spec:
     runAsUser: 1000
     runAsGroup: 1001
     fsGroup: 1001
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx
@@ -51,6 +55,8 @@ metadata:
   labels:
     osc.edu/service-account: test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -66,6 +72,8 @@ metadata:
   labels:
     osc.edu/service-account: test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -91,6 +99,7 @@ spec:
     runAsUser: 1002
     runAsGroup: 1001
     fsGroup: 1001
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx
@@ -104,6 +113,8 @@ metadata:
   labels:
     osc.edu/service-account: test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -119,6 +130,8 @@ metadata:
   labels:
     osc.edu/service-account: test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -138,6 +151,8 @@ metadata:
   name: pods-require-valid-service-account-gid-skip
   namespace: user-test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -154,6 +169,7 @@ spec:
     runAsUser: 1000
     runAsGroup: 1001
     fsGroup: 1001
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx
@@ -171,6 +187,7 @@ spec:
     runAsUser: 1000
     runAsGroup: 1001
     fsGroup: 1001
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx
@@ -184,6 +201,8 @@ metadata:
   labels:
     osc.edu/service-account: test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -199,6 +218,8 @@ metadata:
   labels:
     osc.edu/service-account: test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -224,6 +245,7 @@ spec:
     runAsUser: 1000
     runAsGroup: 1003
     fsGroup: 1001
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx
@@ -237,6 +259,8 @@ metadata:
   labels:
     osc.edu/service-account: test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -252,6 +276,8 @@ metadata:
   labels:
     osc.edu/service-account: test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -271,6 +297,8 @@ metadata:
   name: fsgroup-require-valid-service-account-gid-skip
   namespace: user-test
 spec:
+  securityContext:
+    supplementalGroups: []
   containers:
   - name: nginx
     image: nginx:1.12
@@ -287,6 +315,7 @@ spec:
     runAsUser: 1000
     runAsGroup: 1001
     fsGroup: 1001
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx
@@ -304,6 +333,7 @@ spec:
     runAsUser: 1000
     runAsGroup: 1001
     fsGroup: 1001
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx
@@ -321,6 +351,7 @@ spec:
     runAsUser: 1000
     runAsGroup: 1001
     fsGroup: 1003
+    supplementalGroups: []
     runAsNonRoot: true
   containers:
   - name: nginx

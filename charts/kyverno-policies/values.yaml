@@ -23,31 +23,69 @@ webservices:
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom
   # For more info- https://kyverno.io/policies/pod-security
-  podSecurityStandard: custom
-  # Policies to include when podSecurityStandard is custom
-  podSecurityPolicies:
-    - disallow-add-capabilities
-    - disallow-host-namespaces
-    - disallow-host-ports
-    - disallow-privileged-containers
-    - require-default-proc-mount
-    - disallow-selinux
-    - restrict-apparmor-profiles
-    - deny-privilege-escalation
-    - require-run-as-non-root
-    - restrict-seccomp
-    - restrict-sysctls
-    # Can not use as OnDemand uses HostPath, custom policy in this repo
-    # - disallow-host-path
-    # Need to allow supplementalGroups for OnDemand
-    # - require-non-root-groups
-    # Omit for now
-    # - restrict-volume-types
+  podSecurityStandard: restricted
+  includeOtherPolicies:
+    - require-non-root-groups
   # Supported- low/medium/high
   podSecuritySeverity: medium
   # Supported values- `audit`, `enforce`
   # For more info- https://kyverno.io/docs/writing-policies/validate/
   validationFailureAction: enforce
+  validationFailureActionOverrides:
+    all:
+      - action: audit
+        namespaces:
+          - external-dns
+          - prometheus
+  policyExclude:
+    disallow-capabilities:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
+    disallow-host-path:
+      any:
+        - resources:
+            namespaces:
+            - "user-?*"
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
+        - resources:
+            name: "dcgm-exporter*"
+    require-run-as-non-root-user:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
+    require-run-as-nonroot:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
+    check-runasgroup:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
+    restrict-volume-types:
+      any:
+        - resources:
+            namespaces:
+            - "user-?*"
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
+        - resources:
+            name: "dcgm-exporter*"
 
   nameOverride:
   # -- Additional labels
