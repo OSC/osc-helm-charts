@@ -19,6 +19,3 @@ spec:
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.prometheusName }}
-      podSelector:
-        matchLabels:
-          app.kubernetes.io/name: {{ .Values.blackboxExporterName }}
