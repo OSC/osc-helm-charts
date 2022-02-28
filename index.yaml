@@ -80,13 +80,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2022-02-28T17:58:32.913943028Z"
+    created: "2022-02-28T21:04:57.137722904Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 5.0.5
     description: Kubernetes Dashboard Proxy
-    digest: 5ac8c8c91f3be670628c90ce9fbf2c338764912d9d23e05eb23ee6423ee117b5
+    digest: cee99bd5eb11c153e71f89b31ff718170a8741d31df13ea573550460804cdfae
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -191,6 +191,22 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
   kyverno-policies:
+  - apiVersion: v2
+    appVersion: v1.6.0
+    created: "2022-02-28T21:04:57.139184484Z"
+    dependencies:
+    - name: kyverno-policies
+      repository: https://kyverno.github.io/kyverno/
+      version: v2.2.1
+    description: OSC Kyverno policies deployment
+    digest: c1d0eddaf85f63e92f8a29e01aa3a669b033f4032ac5a33305041a9198e96c7d
+    maintainers:
+    - name: treydock
+    name: kyverno-policies
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/kyverno-policies-0.10.0.tgz
+    version: 0.10.0
   - apiVersion: v2
     appVersion: v1.6.0
     created: "2022-02-28T17:58:32.915994888Z"
@@ -368,6 +384,25 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kyverno-policies-0.0.1.tgz
     version: 0.0.1
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.29.2
+    created: "2022-02-28T21:04:57.141766748Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 3.5.0
+    - name: dcgm-exporter
+      repository: https://nvidia.github.io/dcgm-exporter/helm-charts
+      version: 2.4.1
+    description: OSC Prometheus deployment
+    digest: e0526584b8b07a6b907dc92bc8e723eca54386c20276509e4cb55c7627cdce91
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.13.0.tgz
+    version: 0.13.0
   - apiVersion: v2
     appVersion: v2.29.2
     created: "2022-02-28T17:58:32.920060007Z"
@@ -796,6 +831,18 @@ entries:
   webservice:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2022-02-28T21:04:57.142592037Z"
+    description: OSC webservice bootstrap Helm Chart
+    digest: 464e5010cd73927eb765f40a0039073af68167393c1124e39d7e2c76c07c9f70
+    maintainers:
+    - name: treydock
+    name: webservice
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/webservice-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2022-02-28T17:58:32.921386346Z"
     description: OSC webservice bootstrap Helm Chart
     digest: b935ad1468fc6be7e28d9e3cda7b0d0bed54c0c63b339f78d325591837b334c2
@@ -878,4 +925,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/webservice-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-28T17:58:32.909168888Z"
+generated: "2022-02-28T21:04:57.133788459Z"
