@@ -28,11 +28,14 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - all
+    - ALL
+  seccompProfile:
+    type: RuntimeDefault
   privileged: false
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 65534
+  runAsGroup: 65534
 
 service:
   type: ClusterIP
@@ -69,11 +72,14 @@ watch:
     allowPrivilegeEscalation: false
     capabilities:
       drop:
-      - all
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
     privileged: false
     readOnlyRootFilesystem: true
     runAsNonRoot: true
     runAsUser: 65534
+    runAsGroup: 65534
   resources:
     limits:
       memory: 128Mi
@@ -129,14 +135,17 @@ blackboxExporter:
     allowPrivilegeEscalation: false
     capabilities:
       drop:
-      - all
+      - ALL
       # Need the following if enable ICMP module
       # add:
       # - NET_RAW
+    seccompProfile:
+      type: RuntimeDefault
     privileged: false
     readOnlyRootFilesystem: true
     runAsNonRoot: true
     runAsUser: 65534
+    runAsGroup: 65534
   resources:
     limits:
       memory: 128Mi
@@ -163,11 +172,14 @@ sslExporter:
     allowPrivilegeEscalation: false
     capabilities:
       drop:
-      - all
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
     privileged: false
     readOnlyRootFilesystem: true
     runAsNonRoot: true
     runAsUser: 65534
+    runAsGroup: 65534
   resources:
     limits:
       memory: 128Mi
@@ -196,6 +208,13 @@ kube-state-metrics:
     enabled: true
     telemetryPort: 8081
   containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
     runAsNonRoot: true
 
 dcgm-exporter:
