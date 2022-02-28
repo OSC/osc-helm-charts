@@ -87,7 +87,9 @@ spec:
           allowPrivilegeEscalation: false
           capabilities:
             drop:
-            - all
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
           privileged: false
           readOnlyRootFilesystem: true
       {{- with .Values.nodeSelector }}
