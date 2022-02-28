@@ -31,14 +31,22 @@ kyverno-policies:
   # Supported values- `audit`, `enforce`
   # For more info- https://kyverno.io/docs/writing-policies/validate/
   validationFailureAction: enforce
-  validationFailureActionOverrides:
-    all:
-      - action: audit
-        namespaces:
-          - external-dns
-          - prometheus
+#  validationFailureActionOverrides:
+#    all:
+#      - action: audit
+#        namespaces:
+#          - external-dns
+#          - prometheus
   policyExclude:
     disallow-capabilities:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
+    disallow-capabilities-strict:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
+    disallow-privilege-escalation:
       any:
         - resources:
             name: "dcgm-exporter*"
@@ -67,6 +75,10 @@ kyverno-policies:
         - resources:
             name: "dcgm-exporter*"
     check-runasgroup:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
+    restrict-seccomp-strict:
       any:
         - resources:
             name: "dcgm-exporter*"
