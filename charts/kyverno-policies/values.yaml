@@ -46,15 +46,15 @@ kyverno-policies:
       any:
         - resources:
             name: "dcgm-exporter*"
-    disallow-privilege-escalation:
-      any:
-        - resources:
-            name: "dcgm-exporter*"
         # TODO: Remove once ood_core updated
         # https://github.com/OSC/ood_core/pull/748
         - resources:
             namespaces:
             - "user-?*"
+    disallow-privilege-escalation:
+      any:
+        - resources:
+            name: "dcgm-exporter*"
     disallow-host-path:
       any:
         - resources:
