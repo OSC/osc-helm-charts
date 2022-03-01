@@ -63,6 +63,8 @@ dnsDomain: cluster.local
 config:
   name: prometheus.yaml
 
+storageClassName:
+
 watch:
   image:
     repository: weaveworks/watch

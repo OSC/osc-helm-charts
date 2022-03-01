@@ -1,0 +1,15 @@
+{{ if .Values.storageClassName }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "prometheus.fullname" . }}
+  labels:
+    {{- include "prometheus.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.storageClassName }}
+  accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Gi
+{{ end }}
