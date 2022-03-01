@@ -1,6 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 KYVERNO_GIT = https://github.com/kyverno/kyverno.git
-KYVERNO_VERSION := "v1.6.0"
+KYVERNO_VERSION := "v1.6.1"
 KYVERNO_DIR := /tmp/kyverno-$$USER
 KYVENOR_CLI := $(KYVERNO_DIR)/cmd/cli/kubectl-kyverno/kyverno
 KYVERNO_POLICIES_DIR := $(ROOT_DIR)/charts/kyverno-policies/templates
