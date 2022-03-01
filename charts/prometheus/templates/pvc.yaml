@@ -9,7 +9,7 @@ spec:
   storageClassName: {{ .Values.storageClassName }}
   accessModes:
       - ReadWriteOnce
-    resources:
-      requests:
-        storage: 100Gi
+  resources:
+    requests:
+      storage: 100Gi
 {{ end }}
