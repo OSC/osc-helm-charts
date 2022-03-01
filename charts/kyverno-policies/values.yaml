@@ -50,6 +50,11 @@ kyverno-policies:
       any:
         - resources:
             name: "dcgm-exporter*"
+        # TODO: Remove once ood_core updated
+        # https://github.com/OSC/ood_core/pull/748
+        - resources:
+            namespaces:
+            - "user-?*"
     disallow-host-path:
       any:
         - resources:
@@ -82,6 +87,11 @@ kyverno-policies:
       any:
         - resources:
             name: "dcgm-exporter*"
+        # TODO: Remove once ood_core updated
+        # https://github.com/OSC/ood_core/pull/748
+        - resources:
+            namespaces:
+            - "user-?*"
     restrict-volume-types:
       any:
         - resources:
