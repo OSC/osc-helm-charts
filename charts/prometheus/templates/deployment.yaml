@@ -85,7 +85,12 @@ spec:
             - key: {{ .Values.config.name }}
               path: {{ .Values.config.name }}
         - name: data-dir
+        {{- if .Values.storageClassName }}
+          persistentVolumeClaim:
+            claimName: {{ include "prometheus.fullname" . }}
+        {{- else }}
           emptyDir: {}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

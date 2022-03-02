@@ -21,8 +21,8 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+podSecurityContext:
+  fsGroup: 94
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -34,8 +34,8 @@ securityContext:
   privileged: false
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  runAsUser: 65534
-  runAsGroup: 65534
+  runAsUser: 94
+  runAsGroup: 94
 
 service:
   type: ClusterIP
@@ -63,6 +63,8 @@ dnsDomain: cluster.local
 config:
   name: prometheus.yaml
 
+storageClassName:
+
 watch:
   image:
     repository: weaveworks/watch
@@ -78,8 +80,8 @@ watch:
     privileged: false
     readOnlyRootFilesystem: true
     runAsNonRoot: true
-    runAsUser: 65534
-    runAsGroup: 65534
+    runAsUser: 94
+    runAsGroup: 94
   resources:
     limits:
       memory: 128Mi
