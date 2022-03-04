@@ -1,4 +1,5 @@
-serviceAccount: nobody
+global:
+  oscServiceAccount: nobody
 auth:
   clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
   cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
@@ -29,3 +30,17 @@ podResources:
   requests:
     cpu: 100m
     memory: 128Mi
+database:
+  mariadb:
+    enable: true
+    primary:
+      persistence:
+        storageClass: standard
+        size: 50Mi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi

@@ -46,6 +46,8 @@ jobs:
         run: |
           make -f docker-images/mariadb/Makefile build
           make -f docker-images/mariadb/Makefile kind-load
+      - name: Label kind node
+        run: kubectl label node kind-control-plane osc.edu/role=infrastructure
       - name: Install Keycloak
         if: steps.list-changed.outputs.changed == 'true'
         run: |
