@@ -14,12 +14,25 @@ results:
     result: pass
   - policy: add-service-account
     rule: webservice-service-account-run-as
-    resource: test-webservice-service-account-partial
-    patchedResource: webservice-service-account-mutated-partial.yaml
+    resource: test-webservice-service-account-mariadb
+    patchedResource: webservice-service-account-mariadb-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-service-account
     rule: webservice-service-account-run-as
     resource: test-webservice-service-account-skip
+    patchedResource: skip.yaml
     kind: Pod
     result: skip
+  - policy: add-service-account
+    rule: webservice-service-account-run-as-containers
+    resource: test-webservice-service-account
+    patchedResource: webservice-service-account-mutated-containers.yaml
+    kind: Pod
+    result: pass
+  - policy: add-service-account
+    rule: webservice-service-account-run-as-containers
+    resource: test-webservice-service-account-mariadb
+    patchedResource: webservice-service-account-mariadb-mutated-containers.yaml
+    kind: Pod
+    result: pass

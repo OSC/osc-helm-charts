@@ -1,10 +1,10 @@
 {{- $usersVar := dict "registries" (list) -}}
 {{- range .Values.users.authorizedRegistries -}}
-{{- $noop := printf "%s/*" . | append $usersVar.registries | set $usersVar "registries" -}}
+{{- $noop := printf "%s/* | %s:*" . . | append $usersVar.registries | set $usersVar "registries" -}}
 {{- end }}
 {{- $webservicesVar := dict "registries" (list) -}}
 {{- range .Values.webservices.authorizedRegistries -}}
-{{- $noop := printf "%s/*" . | append $webservicesVar.registries | set $webservicesVar "registries" -}}
+{{- $noop := printf "%s/* | %s:*" . . | append $webservicesVar.registries | set $webservicesVar "registries" -}}
 {{- end }}
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy

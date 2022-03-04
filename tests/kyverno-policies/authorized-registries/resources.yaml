@@ -61,6 +61,26 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-pass2-webservice
+  namespace: webservice
+spec: 
+  containers:
+  - name: oauth2
+    image: quay.io/oauth2-proxy/oauth2-proxy:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pass3-webservice
+  namespace: webservice
+spec: 
+  containers:
+  - name: mysqld-exporter
+    image: docker.io/bitnami/mysqld-exporter:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-pass-site-webservice
   namespace: webservice
 spec:

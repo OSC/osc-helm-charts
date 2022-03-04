@@ -10,21 +10,9 @@ spec:
   containers:
     - name: nginx
       image: nginx:latest
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-webservice-service-account-partial
-  namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  containers:
-    - name: nginx
-      image: nginx:latest
-  securityContext:
-    fsGroup: 2000
-    runAsGroup: 2000
+  initContainers:
+    - name: init
+      image: busybox
 ---
 apiVersion: v1
 kind: Pod
@@ -35,3 +23,24 @@ spec:
   containers:
     - name: nginx
       image: nginx:latest
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice-service-account-mariadb
+  namespace: webservice
+  labels:
+    app.kubernetes.io/name: mariadb
+    osc.edu/service-account: test
+spec:
+  containers:
+    - name: mariadb
+      image: mariadb:latest
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 0
+  initContainers:
+    - name: init
+      image: busybox
+      securityContext:
+        runAsUser: 65534

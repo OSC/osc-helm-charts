@@ -39,6 +39,18 @@ results:
     result: pass
   - policy: authorized-registries
     rule: authorized-registries-webservices
+    resource: test-pass2-webservice
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: authorized-registries
+    rule: authorized-registries-webservices
+    resource: test-pass3-webservice
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: authorized-registries
+    rule: authorized-registries-webservices
     resource: test-pass-site-webservice
     kind: Pod
     namespace: webservice

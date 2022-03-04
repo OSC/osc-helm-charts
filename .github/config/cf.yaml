@@ -5,3 +5,4 @@ chart-repos:
   - kubernetes-dashboard=https://kubernetes.github.io/dashboard/
   - kyverno=https://kyverno.github.io/kyverno/
   - external-dns=https://kubernetes-sigs.github.io/external-dns/
+  - bitnami=https://charts.bitnami.com/bitnami
