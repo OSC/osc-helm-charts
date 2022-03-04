@@ -18,8 +18,9 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
-          username: oscrobot
-          password: ${{ secrets.OSC_ROBOT_DOCKERHUB_TOKEN }}
+          registry: docker-registry.osc.edu
+          username: ${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}
+          password: ${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}
       - name: Build and Push mariadb image
         run: |
           make -f docker-images/mariadb/Makefile build
