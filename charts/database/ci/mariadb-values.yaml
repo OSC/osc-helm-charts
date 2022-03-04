@@ -8,3 +8,10 @@ mariadb:
       size: 50Mi
     nodeSelector:
       osc.edu/role: null
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
