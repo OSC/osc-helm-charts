@@ -6,10 +6,12 @@ policies:
           uidMap.data.user-test: '1000'
           gidMap.data.user-test: '1001'
           gidsMap.data.user-test: '["1001","1002"]'
-    resources:
-      - name: test-webservice-service-account
+      - name: webservice-service-account-run-as-user-containers
         values:
-          request.operation: CREATE
+          uidMap.data.user-test: '1000'
+      - name: webservice-service-account-run-as-group-containers
+        values:
+          gidMap.data.user-test: '1001'
 namespaceSelector:
   - name: user-test
     labels:
