@@ -42,7 +42,10 @@ jobs:
           version: v0.11.1
           cluster_name: kind
           node_image: kindest/node:v1.22.0@sha256:b8bda84bb3a190e6e028b1760d277454a72267a5454b57db34437c34a588d047
-        if: steps.list-changed.outputs.changed == 'true'
+      - name: Build and Load mariadb image
+        run: |
+          make -f docker-images/mariadb/Makefile build
+          make -f docker-images/mariadb/Makefile kind-load
       - name: Install Keycloak
         if: steps.list-changed.outputs.changed == 'true'
         run: |

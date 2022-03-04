@@ -1,0 +1,26 @@
+name: Release Docker
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docker-images
+      - .github/workflows/release_docker.yaml
+
+jobs:
+  release-docker:
+    runs-on: ubuntu-latest
+    name: Release Docker images
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: oscrobot
+          password: ${{ secrets.OSC_ROBOT_DOCKERHUB_TOKEN }}
+      - name: Build and Push mariadb image
+        run: |
+          make -f docker-images/mariadb/Makefile build
+          make -f docker-images/mariadb/Makefile push
