@@ -1,5 +1,5 @@
 global:
-  databaseServiceAccount: nobody
+  oscServiceAccount: nobody
 mariadb:
   enable: true
   primary:

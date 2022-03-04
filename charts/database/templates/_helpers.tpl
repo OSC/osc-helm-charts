@@ -6,7 +6,7 @@ Expand the name of the chart.
 {{- end }}
 
 {{- define "database.serviceAccount" }}
-{{- required "Must provide global.databaseServiceAccount" .Values.global.databaseServiceAccount }}
+{{- required "Must provide global.oscServiceAccount" .Values.global.oscServiceAccount }}
 {{- end }}
 
 {{/*
