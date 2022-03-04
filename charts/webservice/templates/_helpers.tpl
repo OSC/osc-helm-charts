@@ -98,35 +98,35 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- define "webservice.imageTag" }}
 {{- if .Values.image.tag }}
 {{- .Values.image.tag }}
-{{- else if .Values.global }}
+{{- else if .Values.global.env }}
 {{- index .Values.global.env (include "webservice.environment" .) "image" "tag" }}
 {{- end }}
 {{- end }}
 
 {{- define "webservice.serviceAccount" }}
-{{- if .Values.global }}
+{{- if .Values.global.env }}
 {{- index .Values.global.env (include "webservice.environment" .) "serviceAccount" }}
 {{- else }}
-{{- .Values.serviceAccount }}
+{{- .Values.global.oscServiceAccount }}
 {{- end }}
 {{- end }}
 
 {{- define "webservice.idpHost" }}
 {{- if .Values.auth.idpHost }}
 {{- .Values.auth.idpHost }}
-{{- else if .Values.global }}
+{{- else if .Values.global.env }}
 {{- index .Values.global.env (include "webservice.environment" .) "auth" "idpHost" }}
 {{- end }}
 {{- end }}
 
 {{- define "webservice.accessGroup" }}
-{{- if .Values.global }}
+{{- if .Values.global.env }}
 {{- index .Values.global.env (include "webservice.environment" .) "auth" "accessGroup" }}
 {{- end }}
 {{- end }}
 
 {{- define "webservice.ingressHost" }}
-{{- if .Values.global }}
+{{- if .Values.global.env }}
 {{- index .Values.global.env (include "webservice.environment" .) "ingress" "host" }}
 {{- else }}
 {{- .Values.ingress.host }}
@@ -134,7 +134,7 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
 {{- define "webservice.ingressHostAlias" }}
-{{- if .Values.global }}
+{{- if .Values.global.env }}
 {{- index .Values.global.env (include "webservice.environment" .) "ingress" "hostAlias" }}
 {{- else }}
 {{- .Values.ingress.hostAlias }}

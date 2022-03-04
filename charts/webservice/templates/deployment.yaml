@@ -45,7 +45,7 @@ spec:
         - {{ tpl . $ }}
         {{- end }}
         {{- end }}
-        {{- if or .Values.env .Values.database.enable }}
+        {{- if or .Values.env .Values.database.mariadb.enable }}
         env:
         {{- if .Values.database.password }}
         - name: DATABASE_PASSWORD
@@ -65,6 +65,7 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
           name: http
+        {{- if or .Values.mounts.home .Values.mounts.roDir .Values.mounts.socket }}
         volumeMounts:
         {{- if .Values.mounts.home }}
           - name: home
@@ -79,6 +80,7 @@ spec:
           - name: {{ $name }}
             mountPath: {{ $path }}
         {{- end }}
+        {{- end }}
         livenessProbe: {{ toYaml .Values.livenessProbe | nindent 10 }}
         readinessProbe: {{ toYaml .Values.readinessProbe | nindent 10 }}
         resources: {{ toYaml .Values.podResources | nindent 10 }}
@@ -90,9 +92,83 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           privileged: false
+    {{- if .Values.initContainers }}
+      initContainers:
+    {{- range $initName := (keys .Values.initContainers | uniq | sortAlpha) }}
+      {{- $init := index $.Values "initContainers" $initName }}
+      - name: {{ $initName }}
+        {{- $initImage := "" }}
+        {{- if $init.image }}
+        {{- $initImage = printf "%s:%s" $init.image.repository $init.image.tag -}}
+        {{- else }}
+        {{- $initImage = printf "%s:%s" $.Values.image.repository (tpl (include "webservice.imageTag" $) $) -}}
+        {{- end }}
+        image: {{ $initImage }}
+        {{- if contains ":latest" $initImage }}
+        imagePullPolicy: Always
+        {{- else if $init.image }}
+        imagePullPolicy: {{ $init.image.pullPolicy }}
+        {{- else }}
+        imagePullPolicy: IfNotPresent
+        {{- end }}
+        command:
+        {{- range $init.command }}
+        - {{ tpl . $ }}
+        {{- end }}
+        {{- if $init.args }}
+        args:
+        {{- range $init.args }}
+        - {{ tpl . $ }}
+        {{- end }}
+        {{- end }}
+        {{- if or $init.env $.Values.mariadb.enable }}
+        env:
+        {{- if $.Values.database.password }}
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "webservice.name" $ }}
+              key: database-password
+        {{- end }}
+        {{- if $.Values.database.url }}
+        - name: DATABASE_URL
+          value: {{ tpl $.Values.database.url $ }}
+        {{- end }}
+        {{- with $init.env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- if or $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.socket }}
+        volumeMounts:
+        {{- if $.Values.mounts.home }}
+          - name: home
+            mountPath: {{ tpl $.Values.mounts.home $ }}
+        {{- end }}
+        {{- range $name, $path := $.Values.mounts.roDir }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+            readOnly: true
+        {{- end }}
+        {{- range $name, $path := $.Values.mounts.socket }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+        {{- end }}
+        {{- end }}
+        resources: {{ toYaml (default $.Values.init.podResources $init.podResources) | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
+    {{- end }}
+    {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector: {{ toYaml . | nindent 8 }}
       {{- end }}
+      {{- if or .Values.mounts.home .Values.mounts.roDir .Values.mounts.socket }}
       volumes:
         {{- if .Values.mounts.home }}
         - name: home
@@ -112,6 +188,7 @@ spec:
             path: {{ $path }}
             type: Socket
         {{- end }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
