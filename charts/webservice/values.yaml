@@ -1,6 +1,7 @@
 # Also pulled from global.env.$environment.serviceAccount
 global:
   oscServiceAccount: '{{ include "webservice.serviceAccount" . }}'
+serviceAccount: ""
 command: []
 args: []
 env: []

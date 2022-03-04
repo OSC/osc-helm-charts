@@ -107,7 +107,7 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- if .Values.global.env }}
 {{- index .Values.global.env (include "webservice.environment" .) "serviceAccount" }}
 {{- else }}
-{{- .Values.global.oscServiceAccount }}
+{{- .Values.serviceAccount }}
 {{- end }}
 {{- end }}
 
