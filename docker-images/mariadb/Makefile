@@ -1,6 +1,6 @@
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 VERSION = 10.5.13-debian-10-r58
-TAG = docker.io/ohiosupercomputer/mariadb:$(VERSION)
+TAG = docker-registry.osc.edu/webservices/mariadb:$(VERSION)
 
 build:
 	docker build -t $(TAG) $(ROOT_DIR)
