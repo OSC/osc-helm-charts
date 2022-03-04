@@ -6,3 +6,4 @@ chart-repos:
   - kyverno=https://kyverno.github.io/kyverno/
   - external-dns=https://kubernetes-sigs.github.io/external-dns/
   - bitnami=https://charts.bitnami.com/bitnami
+  - osc=https://osc.github.io/osc-helm-charts/
