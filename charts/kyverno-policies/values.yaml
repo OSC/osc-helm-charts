@@ -71,20 +71,6 @@ kyverno-policies:
                 - webservice
         - resources:
             name: "dcgm-exporter*"
-    disallow-privilege-escalation:
-      any:
-        - resources:
-            kinds:
-            - Pod
-            selector:
-              matchLabels:
-                app.kubernetes.io/name: mariadb
-            namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - webservice
     require-run-as-non-root-user:
       any:
         - resources:
@@ -97,18 +83,6 @@ kyverno-policies:
       any:
         - resources:
             name: "dcgm-exporter*"
-        - resources:
-            kinds:
-            - Pod
-            selector:
-              matchLabels:
-                app.kubernetes.io/name: mariadb
-            namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - webservice
     restrict-seccomp-strict:
       any:
         - resources:
