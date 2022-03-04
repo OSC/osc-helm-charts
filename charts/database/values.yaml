@@ -1,5 +1,5 @@
 global:
-  databaseServiceAccount: ""
+  oscServiceAccount: ""
 imagePullSecret:
   name: osc-database-registry
   registry: docker-registry.osc.edu
