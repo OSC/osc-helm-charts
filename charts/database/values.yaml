@@ -1,0 +1,69 @@
+global:
+  databaseServiceAccount: ""
+imagePullSecret:
+  name: osc-database-registry
+  registry: docker-registry.osc.edu
+  username: robot$webservices-read
+  password:
+mariadb:
+  enable: false
+  image:
+    registry: docker-registry.osc.edu
+    repository: webservices/mariadb
+    tag: 10.5.13-debian-10-r58
+    pullSecrets:
+      - osc-database-registry
+  primary:
+    podLabels:
+      osc.edu/service-account: '{{ tpl (include "database.serviceAccount" .) . }}'
+    containerSecurityContext:
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    resources:
+      limits:
+        cpu: 4
+        memory: 4Gi
+      requests:
+        cpu: 1
+        memory: 256Mi
+    nodeSelector:
+      osc.edu/role: infrastructure
+  metrics:
+    enabled: true
+    containerSecurityContext:
+      enabled: true
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
+      prometheus.io/match_metrics: 'true'
+    resources:
+      limits:
+        cpu: 2
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  networkPolicy:
+    enabled: true
+    ingressRules:
+      primaryAccessOnlyFrom:
+        enabled: true
+        podSelector: {}
+    metrics:
+      enabled: true
+      namespaceSelector:
+        app.kubernetes.io/name: prometheus

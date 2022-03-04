@@ -1,0 +1,4 @@
+global:
+  databaseServiceAccount: nobody
+mariadb:
+  enable: true
