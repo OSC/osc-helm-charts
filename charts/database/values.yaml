@@ -1,10 +1,11 @@
 global:
-  oscServiceAccount: ""
+  imagePullSecret:
+    name: osc-registry
+    registry: docker-registry.osc.edu
+    username: robot$webservices-read
+    password:
 imagePullSecret:
-  name: osc-database-registry
-  registry: docker-registry.osc.edu
-  username: robot$webservices-read
-  password:
+  enable: true
 mariadb:
   enable: false
   image:
@@ -12,10 +13,10 @@ mariadb:
     repository: webservices/mariadb
     tag: 10.5.13-debian-10-r58
     pullSecrets:
-      - osc-database-registry
+      - osc-registry
   primary:
     podLabels:
-      osc.edu/service-account: '{{ tpl (include "database.serviceAccount" .) . }}'
+      '{{ include "osc.common.serviceAccountLabel" . }}': '{{ include "osc.common.serviceAccount" . }}'
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false

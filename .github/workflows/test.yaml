@@ -48,6 +48,9 @@ jobs:
           make -f docker-images/mariadb/Makefile kind-load
       - name: Label kind node
         run: kubectl label node kind-control-plane osc.edu/role=infrastructure
+      - name: Set image pull secret
+        run: |
+          sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts/*/ci/*.yaml
       - name: Install Keycloak
         if: steps.list-changed.outputs.changed == 'true'
         run: |

@@ -1,5 +1,7 @@
 global:
   oscServiceAccount: nobody
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
 mariadb:
   enable: true
   primary:
