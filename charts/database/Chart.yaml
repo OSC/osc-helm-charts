@@ -2,7 +2,7 @@ apiVersion: v2
 name: database
 description: OSC database service Helm Chart
 type: application
-version: 0.2.0
+version: 0.3.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
@@ -11,3 +11,7 @@ dependencies:
     version: 10.3.7
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enable
+  - name: common
+    version: 0.2.0
+    repository: https://osc.github.io/osc-helm-charts/
+    # repository: file://../common
