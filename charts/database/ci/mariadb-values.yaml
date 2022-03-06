@@ -9,7 +9,7 @@ mariadb:
       storageClass: standard
       size: 50Mi
     nodeSelector:
-      osc.edu/role: null
+      osc.edu/role: test
     resources:
       limits:
         cpu: 500m
