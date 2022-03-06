@@ -1,0 +1,54 @@
+global:
+  environment: dev
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+webservice:
+  mounts:
+    home: false
+    roDir:
+      data: /data
+      project: null
+      scratch: null
+      slurm-conf: null
+    socket: null
+  image:
+    repository: phylogatr-web
+    tag: '0.0.1'
+  podResources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+#  podSecurityContext:
+#    runAsUser: 33253
+#    runAsGroup: 6314
+#    fsGroup: 6314
+  auth:
+    oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
+    cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
+  mariadb:
+    primary:
+#      podSecurityContext:
+#        runAsUser: 33253
+#        runAsGroup: 6314
+#        fsGroup: 33253
+#      containerSecurityContext:
+#        runAsUser: 33253
+#        runAsGroup: 6314
+      persistence:
+        storageClass: standard
+        size: 500Mi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+    image:
+      debug: true
+    # diagnosticMode:
+    #  enabled: true

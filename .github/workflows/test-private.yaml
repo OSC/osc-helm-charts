@@ -1,10 +1,10 @@
-name: Test Helm
+name: Test Private Helm
 
 on:
   pull_request:
     paths:
-      - charts
-      - .github/workflows/test.yaml
+      - charts-private
+      - .github/workflows/test-private.yaml
 
 jobs:
   test-helm:
@@ -24,23 +24,25 @@ jobs:
           python-version: 3.7
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.0.1
+      - name: Decrypt private values
+        run: |
+          gpg --version
+          make decrypt-private-values
+        env:
+          OSC_PRIVATE_CHARTS_GPG_PASSPHRASE: ${{ secrets.OSC_PRIVATE_CHARTS_GPG_PASSPHRASE }}
       - name: Run chart-testing (lint)
-        run: ct lint --config .github/config/cf.yaml --chart-dirs charts
+        run: ct lint --config .github/config/cf.yaml --chart-dirs charts-private
       - name: Create kind cluster
         uses: helm/kind-action@v1.2.0
         with:
           version: v0.11.1
           cluster_name: kind
           node_image: kindest/node:v1.22.0@sha256:b8bda84bb3a190e6e028b1760d277454a72267a5454b57db34437c34a588d047
-      - name: Build and Load mariadb image
-        run: |
-          make -f docker-images/mariadb/Makefile build
-          make -f docker-images/mariadb/Makefile kind-load
       - name: Label kind node
         run: kubectl label node kind-control-plane osc.edu/role=test
       - name: Set image pull secret
         run: |
-          sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts/*/ci/*.yaml
+          sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts-private/*/ci/*.yaml
       - name: Install Keycloak
         run: |
           helm repo add codecentric https://codecentric.github.io/helm-charts
@@ -48,9 +50,10 @@ jobs:
       - name: Install Kyverno
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
-          helm install kyverno kyverno/kyverno -n kyverno --create-namespace
+          helm install kyverno kyverno/kyverno -n kyverno --create-namespace -f .github/config/kyverno-values.yaml
+          helm install kyverno-policies kyverno/kyverno-policies -n kyverno -f .github/config/kyverno-policies-values.yaml
       - name: Run chart-testing (install)
-        run: ct install --config .github/config/cf.yaml
+        run: ct install --config .github/config/cf.yaml --chart-dirs charts-private
       - name: Debug failure
         if: failure()
         run: |
