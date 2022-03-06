@@ -1,10 +1,9 @@
-{{ $null := required "Must provide serviceAccount" (include "webservice.serviceAccount" .) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "webservice.name" . }}
   labels:
-    osc.edu/service-account: {{ include "webservice.serviceAccount" . }}
+    {{ include "osc.common.serviceAccountLabel" . }}: {{ include "osc.common.serviceAccount" . }}
     {{- include "webservice.labels" . | nindent 4 }}
 spec:
   selector:
@@ -19,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        osc.edu/service-account: {{ include "webservice.serviceAccount" . }}
+        {{ include "osc.common.serviceAccountLabel" . }}: {{ include "osc.common.serviceAccount" . }}
         {{- include "webservice.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "webservice.name" . }}
@@ -94,9 +93,8 @@ spec:
           privileged: false
     {{- if .Values.initContainers }}
       initContainers:
-    {{- range $initName := (keys .Values.initContainers | uniq | sortAlpha) }}
-      {{- $init := index $.Values "initContainers" $initName }}
-      - name: {{ $initName }}
+    {{- range $init := .Values.initContainers }}
+      - name: {{ $init.name }}
         {{- $initImage := "" }}
         {{- if $init.image }}
         {{- $initImage = printf "%s:%s" $init.image.repository $init.image.tag -}}
@@ -121,7 +119,7 @@ spec:
         - {{ tpl . $ }}
         {{- end }}
         {{- end }}
-        {{- if or $init.env $.Values.mariadb.enable }}
+        {{- if or $init.env $.Values.database.mariadb.enable }}
         env:
         {{- if $.Values.database.password }}
         - name: DATABASE_PASSWORD
