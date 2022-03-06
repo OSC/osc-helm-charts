@@ -1,7 +1,11 @@
 # Also pulled from global.env.$environment.serviceAccount
 global:
-  oscServiceAccount: '{{ include "webservice.serviceAccount" . }}'
-serviceAccount: ""
+  oscServiceAccount: '{{ tpl (include "osc.common.serviceAccount" .) . }}'
+  imagePullSecret:
+    name: osc-registry
+    registry: docker-registry.osc.edu
+    username: robot$webservices-read
+    password:
 command: []
 args: []
 env: []
@@ -23,11 +27,6 @@ image:
   repository:
   tag:
   pullPolicy: IfNotPresent
-imagePullSecret:
-  name: osc-registry
-  registry: docker-registry.osc.edu
-  username: robot$webservices-read
-  password:
 
 mounts:
   home: ''
@@ -94,7 +93,7 @@ auth:
   clientID: kubernetes-{{ include "webservice.name" . }}
   clientSecret:
   cookieSecret:
-  cookieName: _{{ include "webservice.serviceAccount" . }}
+  cookieName: _{{ include "osc.common.serviceAccount" . }}{{ include "osc.common.environment" . }}
   # Also pulled from global.env.$environment.auth.idpHost
   idpHost:
   oidcIssuerURL: https://$(IDP_HOST)/auth/realms/osc
@@ -127,6 +126,8 @@ auth:
       prometheus.io/probe_path: /ping
 
 database:
+  imagePullSecret:
+    enable: false
   host: '{{ include "webservice.name" . }}-mariadb'
   user: '{{ .Values.database.mariadb.auth.username }}'
   password: '{{ .Values.database.mariadb.auth.password }}'

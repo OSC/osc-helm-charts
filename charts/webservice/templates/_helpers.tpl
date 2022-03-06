@@ -77,20 +77,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
-{{- define "webservice.imagePullSecret" }}
-{{- with .Values.imagePullSecret }}
-{{- printf "{\"auths\":{\"%s\":{\"auth\":\"%s\"}}}" .registry (printf "%s:%s" .username .password | b64enc) | b64enc }}
-{{- end }}
-{{- end }}
-
-{{- define "webservice.environment" }}
-{{- if .Values.global }}
-{{- default "production" .Values.global.environment }}
-{{- else }}
-{{- "production" }}
-{{- end }}
-{{- end }}
-
 {{- define "webservice.auth.secretName" }}
 {{- printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
@@ -99,15 +85,7 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- if .Values.image.tag }}
 {{- .Values.image.tag }}
 {{- else if .Values.global.env }}
-{{- index .Values.global.env (include "webservice.environment" .) "image" "tag" }}
-{{- end }}
-{{- end }}
-
-{{- define "webservice.serviceAccount" }}
-{{- if .Values.global.env }}
-{{- index .Values.global.env (include "webservice.environment" .) "serviceAccount" }}
-{{- else }}
-{{- .Values.serviceAccount }}
+{{- index .Values.global.env (include "osc.common.environment" .) "image" "tag" }}
 {{- end }}
 {{- end }}
 
@@ -115,19 +93,19 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- if .Values.auth.idpHost }}
 {{- .Values.auth.idpHost }}
 {{- else if .Values.global.env }}
-{{- index .Values.global.env (include "webservice.environment" .) "auth" "idpHost" }}
+{{- index .Values.global.env (include "osc.common.environment" .) "auth" "idpHost" }}
 {{- end }}
 {{- end }}
 
 {{- define "webservice.accessGroup" }}
 {{- if .Values.global.env }}
-{{- index .Values.global.env (include "webservice.environment" .) "auth" "accessGroup" }}
+{{- index .Values.global.env (include "osc.common.environment" .) "auth" "accessGroup" }}
 {{- end }}
 {{- end }}
 
 {{- define "webservice.ingressHost" }}
 {{- if .Values.global.env }}
-{{- index .Values.global.env (include "webservice.environment" .) "ingress" "host" }}
+{{- index .Values.global.env (include "osc.common.environment" .) "ingress" "host" }}
 {{- else }}
 {{- .Values.ingress.host }}
 {{- end }}
@@ -135,7 +113,7 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 
 {{- define "webservice.ingressHostAlias" }}
 {{- if .Values.global.env }}
-{{- index .Values.global.env (include "webservice.environment" .) "ingress" "hostAlias" }}
+{{- index .Values.global.env (include "osc.common.environment" .) "ingress" "hostAlias" }}
 {{- else }}
 {{- .Values.ingress.hostAlias }}
 {{- end }}
