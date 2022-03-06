@@ -1,6 +1,5 @@
 # Also pulled from global.env.$environment.serviceAccount
 global:
-  oscServiceAccount: '{{ tpl (include "osc.common.serviceAccount" .) . }}'
   imagePullSecret:
     name: osc-registry
     registry: docker-registry.osc.edu
