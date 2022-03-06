@@ -24,7 +24,7 @@ podSecurityContext:
   runAsGroup: 1000
   fsGroup: 1000
 nodeSelector:
-  osc.edu/role: null
+  osc.edu/role: test
 podResources:
   limits:
     cpu: 200m
@@ -39,6 +39,8 @@ database:
       persistence:
         storageClass: standard
         size: 50Mi
+      nodeSelector:
+        osc.edu/role: test
       resources:
         limits:
           cpu: 500m
