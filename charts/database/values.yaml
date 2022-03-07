@@ -4,6 +4,7 @@ global:
     registry: docker-registry.osc.edu
     username: robot$webservices-read
     password:
+  nodeSelectorRole: infrastructure
 imagePullSecret:
   enable: true
 mariadb:
@@ -16,7 +17,7 @@ mariadb:
       - osc-registry
   primary:
     podLabels:
-      '{{ include "osc.common.serviceAccountLabel" . }}': '{{ include "osc.common.serviceAccount" . }}'
+      '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
@@ -34,7 +35,7 @@ mariadb:
         cpu: 1
         memory: 256Mi
     nodeSelector:
-      osc.edu/role: infrastructure
+      '{{ include "osc.common.nodeSelectorRoleKey" . }}': '{{ include "osc.common.nodeSelectorRoleValue" . }}'
   metrics:
     enabled: true
     containerSecurityContext:
