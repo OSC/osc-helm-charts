@@ -3,13 +3,12 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
+  #Local test
+  #dbPath: /data/phylogatr.sqlite3
 webservice:
   mounts:
     home: false
     roDir:
-      data: /data
-      project: null
-      scratch: null
       slurm-conf: null
     socket: null
   image:
@@ -22,6 +21,20 @@ webservice:
     requests:
       cpu: 100m
       memory: 128Mi
+  initContainers:
+    #Local test
+#    - name: db-copy
+#      command:
+#        - /bin/bash
+#        - '-c'
+#        - "test -f {{ .Values.global.dbPath }} || exit 0 && cp -f {{ .Values.global.dbPath }} {{ tpl .Values.database.url . }}"
+#      mounts:
+#        roDir:
+#          localdata: /data
+    - name: db-create
+      command: ['bundle', 'exec', 'rake', 'db:create']
+    - name: db-migrate
+      command: ['bundle', 'exec', 'rake', 'db:migrate']
 #  podSecurityContext:
 #    runAsUser: 33253
 #    runAsGroup: 6314
@@ -29,8 +42,15 @@ webservice:
   auth:
     oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
     cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
-  mariadb:
-    primary:
+  data:
+    enable: true
+    storageClass: standard
+    size: 10Mi
+    #Local test
+#    size: 2Gi
+#    path: /input
+#  mariadb:
+#    primary:
 #      podSecurityContext:
 #        runAsUser: 33253
 #        runAsGroup: 6314
@@ -38,17 +58,17 @@ webservice:
 #      containerSecurityContext:
 #        runAsUser: 33253
 #        runAsGroup: 6314
-      persistence:
-        storageClass: standard
-        size: 500Mi
-      resources:
-        limits:
-          cpu: 500m
-          memory: 512Mi
-        requests:
-          cpu: 200m
-          memory: 256Mi
-    image:
-      debug: true
+#      persistence:
+#        storageClass: standard
+#        size: 500Mi
+#      resources:
+#        limits:
+#          cpu: 500m
+#          memory: 512Mi
+#        requests:
+#          cpu: 200m
+#          memory: 256Mi
+#    image:
+#      debug: true
     # diagnosticMode:
     #  enabled: true

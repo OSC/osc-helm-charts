@@ -8,6 +8,6 @@ maintainers:
   - name: treydock
 dependencies:
   - name: webservice
-    version: 0.8.0
-    repository: https://osc.github.io/osc-helm-charts/
-    # repository: file://../../charts/webservice
+    version: 0.9.0
+    # repository: https://osc.github.io/osc-helm-charts/
+    repository: file://../../charts/webservice
