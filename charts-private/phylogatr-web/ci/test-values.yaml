@@ -3,6 +3,7 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
+  storageClass: standard
   #Local test
   #dbPath: /data/phylogatr.sqlite3
 webservice:
@@ -43,8 +44,6 @@ webservice:
     oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
     cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
   data:
-    enable: true
-    storageClass: standard
     size: 10Mi
     #Local test
 #    size: 2Gi
@@ -59,7 +58,6 @@ webservice:
 #        runAsUser: 33253
 #        runAsGroup: 6314
 #      persistence:
-#        storageClass: standard
 #        size: 500Mi
 #      resources:
 #        limits:
