@@ -3,11 +3,11 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
+  storageClass: standard
 mariadb:
   enable: true
   primary:
     persistence:
-      storageClass: standard
       size: 50Mi
     resources:
       limits:

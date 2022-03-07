@@ -5,6 +5,7 @@ global:
     username: robot$webservices-read
     password:
   nodeSelectorRole: infrastructure
+  storageClass: webservices-nfs-client
 imagePullSecret:
   enable: true
 mariadb:
