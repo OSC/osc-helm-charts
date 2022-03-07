@@ -13,7 +13,11 @@ Expand the name of the chart.
 {{- end }}
 {{- end }}
 
-{{- define "osc.common.serviceAccount" }}
+{{- define "osc.common.serviceAccountKey" -}}
+osc.edu/service-account
+{{- end -}}
+
+{{- define "osc.common.serviceAccountValue" }}
 {{- $sa := "" }}
 {{- if .Values.global.env }}
 {{- $sa = (index .Values.global.env (include "osc.common.environment" .) "serviceAccount") }}
@@ -24,8 +28,20 @@ Expand the name of the chart.
 {{- required "Must provide oscServiceAccount" $sa }}
 {{- end }}
 
-{{- define "osc.common.serviceAccountLabel" -}}
-osc.edu/service-account
+{{- define "osc.common.serviceAccount" }}
+{{- printf "%s: %s" (include "osc.common.serviceAccountKey" . ) (include "osc.common.serviceAccountValue" .) }}
+{{- end }}
+
+{{- define "osc.common.nodeSelectorRoleKey" -}}
+osc.edu/role
+{{- end -}}
+
+{{- define "osc.common.nodeSelectorRoleValue" -}}
+{{- .Values.global.nodeSelectorRole }}
+{{- end -}}
+
+{{- define "osc.common.nodeSelectorRole" -}}
+{{- printf "%s: %s" (include "osc.common.nodeSelectorRoleKey" . ) (include "osc.common.nodeSelectorRoleValue" .) }}
 {{- end -}}
 
 {{- define "osc.common.imagePullSecret.name" }}
