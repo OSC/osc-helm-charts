@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "webservice.name" . }}
   labels:
-    {{ include "osc.common.serviceAccountLabel" . }}: {{ include "osc.common.serviceAccount" . }}
+    {{ include "osc.common.serviceAccount" . }}
     {{- include "webservice.labels" . | nindent 4 }}
 spec:
   selector:
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        {{ include "osc.common.serviceAccountLabel" . }}: {{ include "osc.common.serviceAccount" . }}
+        {{ include "osc.common.serviceAccount" . }}
         {{- include "webservice.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "webservice.name" . }}
@@ -44,7 +44,7 @@ spec:
         - {{ tpl . $ }}
         {{- end }}
         {{- end }}
-        {{- if or .Values.env .Values.database.mariadb.enable }}
+        {{- if or .Values.env .Values.database.enable .Values.database.mariadb.enable }}
         env:
         {{- if .Values.database.password }}
         - name: DATABASE_PASSWORD
@@ -64,8 +64,12 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
           name: http
-        {{- if or .Values.mounts.home .Values.mounts.roDir .Values.mounts.socket }}
+        {{- if or .Values.data.enable .Values.mounts.home .Values.mounts.roDir .Values.mounts.socket }}
         volumeMounts:
+        {{- if .Values.data.enable }}
+          - name: data
+            mountPath: {{ $.Values.data.path }}
+        {{- end }}
         {{- if .Values.mounts.home }}
           - name: home
             mountPath: {{ tpl .Values.mounts.home . }}
@@ -119,7 +123,7 @@ spec:
         - {{ tpl . $ }}
         {{- end }}
         {{- end }}
-        {{- if or $init.env $.Values.database.mariadb.enable }}
+        {{- if or $init.env $.Values.database.enable $.Values.database.mariadb.enable }}
         env:
         {{- if $.Values.database.password }}
         - name: DATABASE_PASSWORD
@@ -136,8 +140,12 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- end }}
-        {{- if or $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.socket }}
+        {{- if or $.Values.data.enable $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.socket }}
         volumeMounts:
+        {{- if $.Values.data.enable }}
+          - name: data
+            mountPath: {{ $.Values.data.path }}
+        {{- end }}
         {{- if $.Values.mounts.home }}
           - name: home
             mountPath: {{ tpl $.Values.mounts.home $ }}
@@ -152,6 +160,23 @@ spec:
             mountPath: {{ $path }}
         {{- end }}
         {{- end }}
+        {{- if $init.mounts }}
+        {{- if or $init.mounts.home $init.mounts.roDir $init.mounts.socket }}
+        {{- if $init.mounts.home }}
+          - name: home
+            mountPath: {{ tpl $init.mounts.home $ }}
+        {{- end }}
+        {{- range $name, $path := $init.mounts.roDir }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+            readOnly: true
+        {{- end }}
+        {{- range $name, $path := $init.mounts.socket }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
         resources: {{ toYaml (default $.Values.init.podResources $init.podResources) | nindent 10 }}
         securityContext:
           allowPrivilegeEscalation: false
@@ -163,11 +188,18 @@ spec:
           privileged: false
     {{- end }}
     {{- end }}
+      nodeSelector:
+        {{ include "osc.common.nodeSelectorRole" . }}
       {{- with .Values.nodeSelector }}
-      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or .Values.mounts.home .Values.mounts.roDir .Values.mounts.socket }}
+      {{- if or .Values.data.enable .Values.mounts.home .Values.mounts.roDir .Values.mounts.socket }}
       volumes:
+        {{- if .Values.data.enable }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "webservice.data.name" . }}
+        {{- end }}
         {{- if .Values.mounts.home }}
         - name: home
           hostPath:
@@ -186,6 +218,28 @@ spec:
             path: {{ $path }}
             type: Socket
         {{- end }}
+      {{- end }}
+      {{- range $init := .Values.initContainers }}
+      {{- if $init.mounts }}
+        {{- if $init.mounts.home }}
+        - name: home
+          hostPath:
+            path: {{ tpl $init.mounts.home . }}
+            type: Directory
+        {{- end }}
+        {{- range $name, $path := $init.mounts.roDir }}
+        - name: {{ $name }}
+          hostPath:
+            path: {{ $path }}
+            type: Directory
+        {{- end }}
+        {{- range $name, $path := $init.mounts.socket }}
+        - name: {{ $name }}
+          hostPath:
+            path: {{ $path }}
+            type: Socket
+        {{- end }}
+      {{- end }}
       {{- end }}
       affinity:
         podAntiAffinity:

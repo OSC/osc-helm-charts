@@ -118,3 +118,7 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- .Values.ingress.hostAlias }}
 {{- end }}
 {{- end }}
+
+{{- define "webservice.data.name" }}
+{{- printf "%s-data" (include "webservice.name" .) }}
+{{- end }}
