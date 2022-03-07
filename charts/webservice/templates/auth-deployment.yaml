@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ include "webservice.auth.name" . }}
   labels:
-    {{ include "osc.common.serviceAccountLabel" . }}: {{ include "osc.common.serviceAccount" . }}
+    {{ include "osc.common.serviceAccount" . }}
     {{- include "webservice.auth.labels" . | nindent 4 }}
 spec:
   selector:
@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        {{ include "osc.common.serviceAccountLabel" . }}: {{ include "osc.common.serviceAccount" . }}
+        {{ include "osc.common.serviceAccount" . }}
         {{- include "webservice.auth.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "webservice.name" . }}
@@ -92,7 +92,9 @@ spec:
             type: RuntimeDefault
           privileged: false
           readOnlyRootFilesystem: true
+      nodeSelector:
+        {{ include "osc.common.nodeSelectorRole" . }}
       {{- with .Values.nodeSelector }}
-      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
 {{ end }}

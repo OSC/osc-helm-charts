@@ -5,6 +5,7 @@ global:
     registry: docker-registry.osc.edu
     username: robot$webservices-read
     password:
+  nodeSelectorRole: infrastructure
 command: []
 args: []
 env: []
@@ -32,8 +33,7 @@ mounts:
   roDir: {}
   socket: {}
 
-nodeSelector:
-  osc.edu/role: infrastructure
+nodeSelector: {}
 
 podSecurityContext:
   runAsNonRoot: true
@@ -92,7 +92,7 @@ auth:
   clientID: kubernetes-{{ include "webservice.name" . }}
   clientSecret:
   cookieSecret:
-  cookieName: _{{ include "osc.common.serviceAccount" . }}{{ include "osc.common.environment" . }}
+  cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
   # Also pulled from global.env.$environment.auth.idpHost
   idpHost:
   oidcIssuerURL: https://$(IDP_HOST)/auth/realms/osc
@@ -124,7 +124,14 @@ auth:
     annotations:
       prometheus.io/probe_path: /ping
 
+data:
+  enable: false
+  storageClass: webservices-nfs-client
+  storageSize: 10Gi
+  path: /data
+
 database:
+  enable: false
   imagePullSecret:
     enable: false
   host: '{{ include "webservice.name" . }}-mariadb'

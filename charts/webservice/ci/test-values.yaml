@@ -2,6 +2,9 @@ global:
   oscServiceAccount: nobody
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+nodeSelector:
+  kubernetes.io/os: linux
 auth:
   clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
   cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
@@ -15,16 +18,12 @@ defaultArgs:
 image:
   repository: hashicorp/http-echo
   tag: latest
-imagePullSecret:
-  password: foobar
 ingress:
   host: webservice.example.com
 podSecurityContext:
   runAsUser: 1000
   runAsGroup: 1000
   fsGroup: 1000
-nodeSelector:
-  osc.edu/role: test
 podResources:
   limits:
     cpu: 200m
@@ -32,6 +31,10 @@ podResources:
   requests:
     cpu: 100m
     memory: 128Mi
+data:
+  enable: true
+  storageClass: standard
+  size: 50Mi
 database:
   mariadb:
     enable: true
@@ -39,8 +42,6 @@ database:
       persistence:
         storageClass: standard
         size: 50Mi
-      nodeSelector:
-        osc.edu/role: test
       resources:
         limits:
           cpu: 500m
