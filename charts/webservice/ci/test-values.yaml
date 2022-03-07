@@ -3,6 +3,7 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
+  storageClass: standard
 nodeSelector:
   kubernetes.io/os: linux
 auth:
@@ -33,14 +34,12 @@ podResources:
     memory: 128Mi
 data:
   enable: true
-  storageClass: standard
   size: 50Mi
 database:
   mariadb:
     enable: true
     primary:
       persistence:
-        storageClass: standard
         size: 50Mi
       resources:
         limits:

@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "webservice.labels" . | nindent 4 }}
 spec:
-  storageClassName: {{ .Values.data.storageClass }}
+  storageClassName: {{ tpl .Values.data.storageClass . }}
   accessModes:
     - ReadWriteOnce
   resources:

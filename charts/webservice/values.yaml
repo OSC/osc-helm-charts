@@ -6,6 +6,7 @@ global:
     username: robot$webservices-read
     password:
   nodeSelectorRole: infrastructure
+  storageClass: webservices-nfs-client
 command: []
 args: []
 env: []
@@ -126,7 +127,7 @@ auth:
 
 data:
   enable: false
-  storageClass: webservices-nfs-client
+  storageClass: '{{ .Values.global.storageClass }}'
   storageSize: 10Gi
   path: /data
 
