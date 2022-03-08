@@ -4,8 +4,8 @@ global:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
   storageClass: standard
-  #Local test
-  #dbPath: /data/phylogatr.sqlite3
+  # Local test
+  # dbPath: /data/phylogatr.sqlite3
 webservice:
   mounts:
     home: false
@@ -20,15 +20,18 @@ webservice:
       cpu: 100m
       memory: 128Mi
   initContainers:
-    #Local test
-#    - name: db-copy
-#      command:
-#        - /bin/bash
-#        - '-c'
-#        - "test -f {{ .Values.global.dbPath }} || exit 0 && cp -f {{ .Values.global.dbPath }} {{ tpl .Values.database.url . }}"
-#      mounts:
-#        roDir:
-#          localdata: /data
+    # Local test
+    # - name: db-copy
+    #   command:
+    #     - /bin/bash
+    #     - '-c'
+    #     - 'test -f $(DB) || exit 0 && cp -f $(DB) {{ .Values.data.path }}/phylogatr.sqlite3'
+    #   env:
+    #   - name: DB
+    #     value: '{{ .Values.global.dbPath }}'
+    #   mounts:
+    #     roDir:
+    #      localdata: /data
     - name: db-create
       command: ['bundle', 'exec', 'rake', 'db:create']
     - name: db-migrate
@@ -42,9 +45,9 @@ webservice:
     cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
   data:
     size: 10Mi
-    #Local test
-#    size: 2Gi
-#    path: /input
+    # Local test
+    # size: 2Gi
+    # path: /input
 #  mariadb:
 #    primary:
 #      podSecurityContext:
