@@ -2,9 +2,7 @@ config:
   webhooks:
   - namespaceSelector:
       matchExpressions:
-        - key: kubernetes.io/metadata.name
-          operator: NotIn
+        - key: osc.edu/role
+          operator: In
           values:
-            - kube-system
-            - local-path-storage
-            - kyverno
+            - webservice
