@@ -64,3 +64,4 @@ jobs:
           kubectl describe pod -A
           kubectl describe service -A
           kubectl describe daemonset -A
+          kubectl logs $(kubectl get pods -n kyverno -o jsonpath="{.items[0].metadata.name}") -n kyverno
