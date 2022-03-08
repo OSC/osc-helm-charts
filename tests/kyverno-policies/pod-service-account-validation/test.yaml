@@ -7,6 +7,21 @@ resources:
 variables: variables.yaml
 results:
   - policy: pod-service-account-validation
+    rule: pods-require-service-account
+    resource: test-service-account-skip
+    kind: Pod
+    result: skip
+  - policy: pod-service-account-validation
+    rule: pods-require-service-account
+    resource: test-service-account-pass
+    kind: Pod
+    result: pass
+  - policy: pod-service-account-validation
+    rule: pods-require-service-account
+    resource: test-service-account-fail
+    kind: Pod
+    result: fail
+  - policy: pod-service-account-validation
     rule: pods-require-valid-service-account-uid
     resource: pods-require-valid-service-account-uid-pass
     kind: Pod

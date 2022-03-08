@@ -7,30 +7,6 @@ spec:
   background: false
   validationFailureAction: enforce
   rules:
-  - name: pods-user-authorized-for-account
-    match:
-      any:
-        - resources:
-            kinds:
-            - Pod
-            namespaces:
-            - "user-?*"
-    preconditions:
-    - key: "{{`{{ request.operation }}`}}"
-      operator: In
-      value: ["CREATE","UPDATE"]
-    context:
-    - name: userGroupMap
-      configMap:
-        name: user-groups-map
-        namespace: k8-ldap-configmap
-    validate:
-      message: "{{`{{ request.object.metadata.namespace }}`}} not authorized to charge against account {{`{{ request.object.metadata.labels.account }}`}}"
-      deny:
-        conditions:
-        - key: "{{`{{ request.object.metadata.labels.account }}`}}"
-          operator: NotIn
-          value: "{{`{{ userGroupMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
   - name: pods-user-account-prefix
     match:
       any:
@@ -45,3 +21,30 @@ spec:
         metadata:
           labels:
             account: "P?*"
+  - name: pods-user-authorized-for-account
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    - key: "{{`{{ request.object.metadata.labels.account }}`}}"
+      operator: NotEquals
+      value: ""
+    context:
+    - name: userGroupMap
+      configMap:
+        name: user-groups-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: "{{`{{ request.object.metadata.namespace }}`}} not authorized to charge against account {{`{{ request.object.metadata.labels.account }}`}}"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.metadata.labels.account }}`}}"
+          operator: NotIn
+          value: "{{`{{ userGroupMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
