@@ -19,6 +19,14 @@ webservice:
     requests:
       cpu: 100m
       memory: 128Mi
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 5
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 5
   initContainers:
     # Local test
     # - name: db-copy
