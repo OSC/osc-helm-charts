@@ -12,9 +12,6 @@ webservice:
     roDir:
       slurm-conf: null
     socket: null
-  image:
-    repository: phylogatr-web
-    tag: '0.0.1'
   podResources:
     limits:
       cpu: 200m
