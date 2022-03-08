@@ -57,8 +57,9 @@ spec:
         - name: DATABASE_URL
           value: {{ tpl .Values.database.url . }}
         {{- end }}
-        {{- with .Values.env }}
-        {{- toYaml . | nindent 8 }}
+        {{- range $env := .Values.env }}
+        - name: {{ $env.name }}
+          value: {{ tpl $env.value $ | quote }}
         {{- end }}
         {{- end }}
         ports:
@@ -134,10 +135,11 @@ spec:
         {{- end }}
         {{- if $.Values.database.url }}
         - name: DATABASE_URL
-          value: {{ tpl $.Values.database.url $ }}
+          value: {{ tpl $.Values.database.url $ | quote }}
         {{- end }}
-        {{- with $init.env }}
-        {{- toYaml . | nindent 8 }}
+        {{- range $initEnv := $init.env }}
+        - name: {{ $initEnv.name }}
+          value: {{ tpl $initEnv.value $ | quote }}
         {{- end }}
         {{- end }}
         {{- if or $.Values.data.enable $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.socket }}
