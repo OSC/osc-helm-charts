@@ -1,0 +1,418 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-skip
+  namespace: test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-pass
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-with-init-pass
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+  initContainers:
+  - name: busybox
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-pass-webservice
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-memory-limits-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-with-init-memory-limits-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 50Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+  initContainers:
+  - name: busybox
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-cpu-limits-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-cpu-requests-missing
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-memory-requests-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-memory-requests-fail-webservice
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-pass-cpu-limits1
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-pass-cpu-limits2
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 4
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-webservice-pass-limits
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-with-init-pass-cpu-limits2
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 4
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+  initContainers:
+  - name: init
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 4
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-fail-cpu-limits1
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 10
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-webservice-fail-cpu-limits
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 10
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-with-init-fail-cpu-limits1
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 4
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+  initContainers:
+  - name: init
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 10
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-fail-cpu-limits2
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 8
+        memory: 128Mi
+      requests:
+        cpu: 10
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-pass-mem-limits1
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 32Gi
+      requests:
+        cpu: 100m
+        memory: 4Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-pass-mem-limits2
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 4
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 32Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-fail-mem-limits1
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 8
+        memory: 64Gi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-fail-mem-limits2
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 8
+        memory: 128Mi
+      requests:
+        cpu: 8
+        memory: 64Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-webservice-fail-mem-limits
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 8
+        memory: 64Gi
+      requests:
+        cpu: 500m
+        memory: 4Gi

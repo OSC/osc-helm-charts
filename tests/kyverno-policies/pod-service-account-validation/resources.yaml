@@ -2,6 +2,38 @@
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-service-account-skip
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-service-account-pass
+  namespace: webservice
+  labels:
+    osc.edu/service-account: user
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-service-account-fail
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: pods-require-valid-service-account-uid-skip
   namespace: user-test
 spec:

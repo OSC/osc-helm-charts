@@ -1,0 +1,85 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-resources
+  namespace: kyverno
+spec:
+  background: true
+  validationFailureAction: enforce
+  rules:
+  - name: pods-require-resources
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
+    validate:
+      message: "CPU and memory resource requests and limits are required for pods"
+      pattern:
+        spec:
+          containers:
+          - resources:
+              requests:
+                memory: "?*"
+                cpu: "?*"
+              limits:
+                memory: "?*"
+                cpu: "?*"
+          =(initContainers):
+          - resources:
+              requests:
+                memory: "?*"
+                cpu: "?*"
+              limits:
+                memory: "?*"
+                cpu: "?*"
+  - name: pods-max-user-resources
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
+    validate:
+      message: "CPU and memory limits exceed max 8 CPUs and 32GB of memory"
+      pattern:
+        spec:
+          containers:
+          - name: '*'
+            resources:
+              requests:
+                cpu: '<=8000m'
+                memory: '<=32Gi'
+              limits:
+                cpu: '<=8000m'
+                memory: '<=32Gi'
+          =(initContainers):
+          - name: '*'
+            resources:
+              requests:
+                cpu: '<=8000m'
+                memory: '<=32Gi'
+              limits:
+                cpu: '<=8000m'
+                memory: '<=32Gi'
