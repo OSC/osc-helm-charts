@@ -42,4 +42,4 @@ spec:
       pattern:
         spec:
           nodeSelector:
-            osc.edu/role: "infrastructure | webservices"
+            osc.edu/role: "{{ join " | " .Values.webservices.validNodeSelector }}"

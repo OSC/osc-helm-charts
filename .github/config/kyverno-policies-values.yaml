@@ -24,3 +24,5 @@ webservices:
     - docker-registry.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
     - docker.io/bitnami/*-exporter
+  validNodeSelector:
+    - test
