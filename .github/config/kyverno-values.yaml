@@ -1,4 +1,22 @@
 config:
+  # TODO: Remove once fixed: https://github.com/kyverno/kyverno/issues/3190
+  resourceFilters:
+  - "[ConfigMap,*,*]"
+  - "[*,local-path-storage,*]"
+  - "[Event,*,*]"
+  - "[*,kube-system,*]"
+  - "[*,kube-public,*]"
+  - "[*,kube-node-lease,*]"
+  - "[Node,*,*]"
+  - "[APIService,*,*]"
+  - "[TokenReview,*,*]"
+  - "[SubjectAccessReview,*,*]"
+  - "[SelfSubjectAccessReview,*,*]"
+  - "[*,kyverno,*]"
+  - "[Binding,*,*]"
+  - "[ReplicaSet,*,*]"
+  - "[ReportChangeRequest,*,*]"
+  - "[ClusterReportChangeRequest,*,*]"
   webhooks:
   - namespaceSelector:
       matchExpressions:
