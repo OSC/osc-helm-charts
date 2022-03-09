@@ -10,6 +10,7 @@ webservice:
   mounts:
     home: false
     roDir:
+      scratch: null
       slurm-conf: null
     socket: null
   podResources:
