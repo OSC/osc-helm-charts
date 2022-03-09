@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "webservice.name" . }}-test-connection"
+  labels:
+    {{ include "osc.common.serviceAccount" . }}
+    {{- include "webservice.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  securityContext:
+    runAsNonRoot: true
+  containers:
+    - name: wget
+      image: busybox:latest
+      imagePullPolicy: Always
+      command: ['wget']
+      args: ['-O-','-S','{{ include "webservice.name" . }}:{{ .Values.service.port }}']
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+  restartPolicy: Never
