@@ -33,12 +33,13 @@ jobs:
         run: |
           for chart in $(find charts-private -maxdepth 1 -mindepth 1 -type d); do
             name=$(basename $chart)
-            helm package $chart -u
-            package=${name}*.tgz
-            helm pull oci://docker-registry.osc.edu/webservices/${name}
-            if [ -e $package ]; then
+            version=$(helm show chart $chart | grep "^version:" | awk '{ print $2 }')
+            released_version=$(helm show chart oci://docker-registry.osc.edu/webservices/${name} 2>&1 | grep "^version:" | awk '{ print $2 }')
+            if [ "$version" == "$released_version" ]; then
               echo "Chart ${name} already pushed, skipping"
               break
             fi
+            helm package $chart -u
+            package=${name}-${version}.tgz
             helm push $package oci://docker-registry.osc.edu/webservices
           done
