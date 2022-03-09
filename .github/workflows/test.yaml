@@ -3,7 +3,7 @@ name: Test Helm
 on:
   pull_request:
     paths:
-      - charts
+      - charts/**
       - .github/workflows/test.yaml
 
 jobs:

@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - docker-images
+      - docker-images/**
       - .github/workflows/release_docker.yaml
 
 jobs:

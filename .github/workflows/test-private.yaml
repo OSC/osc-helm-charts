@@ -3,7 +3,7 @@ name: Test Private Helm
 on:
   pull_request:
     paths:
-      - charts-private
+      - charts-private/**
       - .github/workflows/test-private.yaml
 
 jobs:

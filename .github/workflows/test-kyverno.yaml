@@ -4,8 +4,8 @@ on:
   pull_request:
     paths:
       - Makefile
-      - charts/kyverno-policies
-      - tests/kyverno-policies
+      - charts/kyverno-policies/**
+      - tests/kyverno-policies/**
       - .github/workflows/test-kyverno.yaml
 
 jobs:
