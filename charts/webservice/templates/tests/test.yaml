@@ -8,8 +8,7 @@ metadata:
   annotations:
     "helm.sh/hook": test
 spec:
-  securityContext:
-    runAsNonRoot: true
+  securityContext: {{ toYaml .Values.podSecurityContext | nindent 4 }}
   containers:
     - name: wget
       image: busybox:latest
