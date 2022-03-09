@@ -1,0 +1,28 @@
+users:
+  allowHostPaths:
+    - /var/lib/sss/pipes
+    - /etc/sssd
+    - /etc/nsswitch.conf
+    - /etc/pam.d
+    - /etc/slurm
+    - /var/run/munge/munge.socket.2
+    - /users/?*
+    - /fs/?*
+    - /apps/?*
+    - /nfsroot/?*
+  authorizedRegistries:
+    - docker.io/ohiosupercomputer
+    - docker-registry.osc.edu
+webservices:
+  allowHostPaths:
+    - /etc/slurm
+    - /var/run/munge/munge.socket.2
+    - /users/?*
+    - /fs/?*
+  authorizedRegistries:
+    - docker.io/ohiosupercomputer
+    - docker-registry.osc.edu
+    - quay.io/oauth2-proxy/oauth2-proxy
+    - docker.io/bitnami/*-exporter
+  validNodeSelector:
+    - test

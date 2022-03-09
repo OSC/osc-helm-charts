@@ -3,6 +3,8 @@ kind: ClusterPolicy
 metadata:
   name: add-nodeselector
 spec:
+  validationFailureAction: enforce
+  background: true
   rules:
     - name: ondemand-nodeselector
       match:

@@ -1,0 +1,80 @@
+global:
+  environment: dev
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  storageClass: standard
+  # Local test
+  # dbPath: /data/phylogatr.sqlite3
+webservice:
+  mounts:
+    home: false
+    roDir:
+      slurm-conf: null
+    socket: null
+  podResources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 5
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 5
+  initContainers:
+    # Local test
+    # - name: db-copy
+    #   command:
+    #     - /bin/bash
+    #     - '-c'
+    #     - 'test -f $(DB) || exit 0 && cp -f $(DB) {{ .Values.data.path }}/phylogatr.sqlite3'
+    #   env:
+    #   - name: DB
+    #     value: '{{ .Values.global.dbPath }}'
+    #   mounts:
+    #     roDir:
+    #      localdata: /data
+    - name: db-create
+      command: ['bundle', 'exec', 'rake', 'db:create']
+    - name: db-migrate
+      command: ['bundle', 'exec', 'rake', 'db:migrate']
+#  podSecurityContext:
+#    runAsUser: 33253
+#    runAsGroup: 6314
+#    fsGroup: 6314
+  auth:
+    oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
+    cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
+  data:
+    size: 10Mi
+    # Local test
+    # size: 2Gi
+    # path: /input
+#  mariadb:
+#    primary:
+#      podSecurityContext:
+#        runAsUser: 33253
+#        runAsGroup: 6314
+#        fsGroup: 33253
+#      containerSecurityContext:
+#        runAsUser: 33253
+#        runAsGroup: 6314
+#      persistence:
+#        size: 500Mi
+#      resources:
+#        limits:
+#          cpu: 500m
+#          memory: 512Mi
+#        requests:
+#          cpu: 200m
+#          memory: 256Mi
+#    image:
+#      debug: true
+    # diagnosticMode:
+    #  enabled: true
