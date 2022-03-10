@@ -24,5 +24,6 @@ webservices:
     - docker-registry.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
     - docker.io/bitnami/*-exporter
+    - busybox
   validNodeSelector:
     - test

@@ -23,4 +23,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         privileged: false
+      resources: {{ toYaml .Values.podResources | nindent 8 }}
   restartPolicy: Never
+  nodeSelector:
+    {{ include "osc.common.nodeSelectorRole" . }}
