@@ -15,17 +15,13 @@ global:
       image:
         tag: latest
 webservice:
-  rShiny: true
+  appType: rshiny
   auth:
     enable: true
     accessGroup: PDE0006
     idpHost: EXTERNAL-DATA
     clientSecret: EXTERNAL-SECRET
     cookieSecret: EXTERNAL-SECRET
-  command: ['/bin/passenger', 'start']
-  args:
-  - "--app-start-command"
-  - 'R --no-save --slave -f /app/entrypoint.R --args $$PORT'
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/focalmap
