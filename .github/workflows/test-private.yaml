@@ -50,9 +50,10 @@ jobs:
           kubectl apply -f .github/config/k8-ldap-configmaps.yaml
           timeout 60 /bin/bash -c 'until kubectl get pods -n kyverno -o jsonpath="{.items[0].status.phase}" | grep Running ; do echo "Waiting for Kyverno" ; sleep 10 ; done'
           sleep 60
+      - name: Add namespaces
+        run: kubectl apply -f .github/config/namespaces.yaml
       - name: Run chart-testing phylogatr-web
         run: |
-          kubectl apply -f .github/config/phylogatr-web.yaml
           ct install --config .github/config/cf.yaml --charts charts-private/phylogatr-web --namespace phylogatr-web
       - name: Debug failure
         if: failure()
