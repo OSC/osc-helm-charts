@@ -15,7 +15,7 @@ metadata:
     {{- if (include "webservice.ingressHostAlias" .) }}
     nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "webservice.ingressHostAlias" .) . }}
     {{- end }}
-    {{- if .Values.rShiny }}
+    {{- if eq .Values.appType "rshiny" }}
       {{- toYaml .Values.ingress.rShinyAnnotations | nindent 4 }}
     {{- end }}
 spec:
