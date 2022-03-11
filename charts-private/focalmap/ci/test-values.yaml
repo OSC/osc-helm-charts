@@ -1,0 +1,29 @@
+global:
+  environment: dev
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+webservice:
+  ingress:
+    host: test.local
+  mounts:
+    roDir:
+      project: null
+  podResources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 5
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 5
+  auth:
+    oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
+    cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
