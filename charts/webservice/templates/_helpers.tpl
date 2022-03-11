@@ -98,25 +98,25 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
 {{- define "webservice.accessGroup" }}
-{{- if .Values.global.env }}
+{{- if .Values.auth.accessGroup }}
+{{- .Values.auth.accessGroup }}
+{{- else if .Values.global.env }}
 {{- index .Values.global.env (include "osc.common.environment" .) "auth" "accessGroup" }}
 {{- end }}
 {{- end }}
 
 {{- define "webservice.ingressHost" }}
-{{- if .Values.global.env }}
-{{- index .Values.global.env (include "osc.common.environment" .) "ingress" "host" }}
-{{- else }}
+{{- if .Values.ingress.host }}
 {{- .Values.ingress.host }}
-{{- end }}
+{{- else if .Values.global.env }}
+{{- index .Values.global.env (include "osc.common.environment" .) "ingress" "host" }}
 {{- end }}
 
 {{- define "webservice.ingressHostAlias" }}
-{{- if .Values.global.env }}
-{{- index .Values.global.env (include "osc.common.environment" .) "ingress" "hostAlias" }}
-{{- else }}
+{{- if .Values.ingress.hostAlias }}
 {{- .Values.ingress.hostAlias }}
-{{- end }}
+{{- else if .Values.global.env }}
+{{- index .Values.global.env (include "osc.common.environment" .) "ingress" "hostAlias" }}
 {{- end }}
 
 {{- define "webservice.data.name" }}
