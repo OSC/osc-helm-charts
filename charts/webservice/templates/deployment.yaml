@@ -37,12 +37,15 @@ spec:
         {{- with .Values.command }}
         command: {{ toYaml . | nindent 10 }}
         {{- end }}
-        {{- $args := concat .Values.args (index .Values "defaultArgs" .Values.defaultArgs.type) }}
+        {{- $args := concat (index .Values "defaultArgs" .Values.defaultArgs.type) .Values.args }}
         {{- if $args }}
         args:
         {{- range $args }}
         - {{ tpl . $ }}
         {{- end }}
+        {{- end }}
+        {{- if .Values.workingDir }}
+        workingDir: {{ .Values.workingDir }}
         {{- end }}
         {{- if or .Values.env .Values.database.enable .Values.database.mariadb.enable }}
         env:
