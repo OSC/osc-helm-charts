@@ -111,12 +111,14 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- else if .Values.global.env }}
 {{- index .Values.global.env (include "osc.common.environment" .) "ingress" "host" }}
 {{- end }}
+{{- end }}
 
 {{- define "webservice.ingressHostAlias" }}
 {{- if .Values.ingress.hostAlias }}
 {{- .Values.ingress.hostAlias }}
 {{- else if .Values.global.env }}
 {{- index .Values.global.env (include "osc.common.environment" .) "ingress" "hostAlias" }}
+{{- end }}
 {{- end }}
 
 {{- define "webservice.data.name" }}
