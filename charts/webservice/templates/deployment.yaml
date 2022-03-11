@@ -34,13 +34,19 @@ spec:
         {{- else }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         {{- end }}
-        {{- with .Values.command }}
-        command: {{ toYaml . | nindent 10 }}
+        {{- if .Values.command }}
+        command: {{ toYaml .Values.command | nindent 10 }}
+        {{- else }}
+        command: {{ index .Values "defaultCommand" .Values.appType | toYaml | nindent 10 }}
         {{- end }}
-        {{- $args := concat (index .Values "defaultArgs" .Values.defaultArgs.type) .Values.args }}
-        {{- if $args }}
+        {{- if .Values.args }}
         args:
-        {{- range $args }}
+        {{- range .Values.args }}
+        - {{ tpl . $ }}
+        {{- end }}
+        {{- else }}
+        args:
+        {{- range (index .Values "defaultArgs" .Values.appType) }}
         - {{ tpl . $ }}
         {{- end }}
         {{- end }}

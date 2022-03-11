@@ -6,14 +6,16 @@ global:
     password:
   nodeSelectorRole: infrastructure
   storageClass: webservices-nfs-client
+appType: rails
 command: []
 args: []
 workingDir:
 env: []
-rShiny: false
+defaultCommand:
+  rails: ['bundle', 'exec', 'passenger', 'start']
+  rshiny: ['/bin/passenger', 'start']
 defaultArgs:
-  type: passenger
-  passenger:
+  rails:
     - "--port={{ .Values.service.port }}"
     - "--min-instances=1"
     - "--sticky-sessions"
@@ -23,6 +25,18 @@ defaultArgs:
     - "--disable-anonymous-telemetry"
     - "--log-file=/dev/stdout"
     - "--pid-file=/tmp/passenger.pid"
+  rshiny:
+    - "--port={{ .Values.service.port }}"
+    - "--min-instances=1"
+    - "--sticky-sessions"
+    - "--start-timeout=180"
+    - "--environment=production"
+    - "--disable-security-update-check"
+    - "--disable-anonymous-telemetry"
+    - "--log-file=/dev/stdout"
+    - "--pid-file=/tmp/passenger.pid"
+    - "--app-start-command"
+    - 'R --no-save --slave -f /app/entrypoint.R --args $$PORT'
   none: []
 
 image:
