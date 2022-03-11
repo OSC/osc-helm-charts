@@ -22,10 +22,6 @@ jobs:
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Decrypt private values
-        run: make decrypt-private-values
-        env:
-          OSC_PRIVATE_CHARTS_GPG_PASSPHRASE: ${{ secrets.OSC_PRIVATE_CHARTS_GPG_PASSPHRASE }}
       - name: Helm login
         run: |
           echo -n '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}' --password-stdin

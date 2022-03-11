@@ -1,0 +1,88 @@
+global:
+  environment: ""
+#  dbImport: /fs/project/PAS1604/db/phylogatr.mysql
+  imageTag: v2.3.0
+  env:
+    production:
+      serviceAccount: phylogatr
+      dbPath: /fs/project/PAS1604/db/production/phylogatr.sqlite3
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+      auth:
+        accessGroup: accessphylogatr
+    test:
+      serviceAccount: phylogatr
+      dbPath: /fs/project/PAS1604/db/production/phylogatr.sqlite3
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+      auth:
+        accessGroup: accessphylogatr
+    dev:
+      serviceAccount: phylogatrdev
+      dbPath: /fs/project/PAS1604/db/dev/phylogatr.sqlite3
+      image:
+        tag: latest
+      auth:
+        accessGroup: accessphylogatrdev
+webservice:
+  database:
+    enable: true
+    url: 'sqlite3://{{ .Values.data.path }}/phylogatr.sqlite3'
+    mariadb:
+      primary:
+        persistence:
+          size: 10Gi
+  data:
+    enable: true
+    size: 10Gi
+  auth:
+    enable: true
+    idpHost: EXTERNAL-DATA
+    clientSecret: EXTERNAL-SECRET
+    cookieSecret: EXTERNAL-SECRET
+  command: ['bundle', 'exec', 'passenger', 'start']
+  env:
+  - name: BATCH_MODE
+    value: '1'
+  - name: OOD_DATAROOT
+    value: /fs/project/PAS1604/pipeline/latest
+  - name: GENES_TARBALL_PATH
+    value: /fs/project/PAS1604/pipeline/latest/genes.tar.gz
+  - name: SIF_PATH
+    value: /fs/project/PAS1604/pipeline/latest/phylogatr.sif
+  - name: REAL_DATABASE_URL
+    value: 'sqlite3://{{ index .Values.global.env (include "osc.common.environment" .) "dbPath" }}'
+  image:
+    repository: docker-registry.osc.edu/webservices/phylogatr-web
+  mounts:
+    roDir:
+      scratch: /fs/scratch/PAS1604
+      slurm-conf: /etc/slurm
+    socket:
+      munge-socket: /var/run/munge/munge.socket.2
+  initContainers:
+    - name: db-copy
+      command:
+        - /bin/bash
+        - '-c'
+        - 'test -f $(DB) || exit 0 && cp -f $(DB) {{ .Values.data.path }}/phylogatr.sqlite3'
+      env:
+      - name: DB
+        value: '{{ index .Values.global.env (include "osc.common.environment" .) "dbPath" }}'
+      mounts:
+        roDir:
+          project: /fs/project/PAS1604
+#    - name: db-wait
+#      command:
+#        - /usr/bin/timeout
+#        - '"30"'
+#        - /bin/bash
+#        - '-c'
+#        - "set -x ; until mysql --host={{ tpl .Values.database.host . }} --user={{ tpl .Values.database.user . }} --password='$(DATABASE_PASSWORD)' --execute='SELECT 1;'; do echo 'waiting for mariadb' ; sleep 2 ; done"
+#    - name: migrate
+#      command: ['bundle', 'exec', 'rake', 'db:migrate']
+#    - name: db-import
+#      command:
+#        - /bin/bash
+#        - '-c'
+#        - "test -f {{ .Values.global.dbImport }} || exit 0 && mysql -h {{ tpl .Values.database.host . }} -u {{ tpl .Values.database.user . }} --password='$(DATABASE_PASSWORD)' {{ tpl .Values.database.name . }} < {{ .Values.global.dbImport }}"

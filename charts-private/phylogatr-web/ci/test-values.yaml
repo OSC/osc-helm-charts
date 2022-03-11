@@ -7,6 +7,8 @@ global:
   # Local test
   # dbPath: /data/phylogatr.sqlite3
 webservice:
+  ingress:
+    host: test.local
   mounts:
     home: false
     roDir:
