@@ -93,7 +93,9 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- if .Values.auth.idpHost }}
 {{- .Values.auth.idpHost }}
 {{- else if .Values.global.env }}
-{{- index .Values.global.env (include "osc.common.environment" .) "auth" "idpHost" }}
+  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
+    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "idpHost" }}
+  {{- end }}
 {{- end }}
 {{- end }}
 
@@ -101,15 +103,21 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- if .Values.auth.accessGroup }}
 {{- .Values.auth.accessGroup }}
 {{- else if .Values.global.env }}
-{{- index .Values.global.env (include "osc.common.environment" .) "auth" "accessGroup" }}
+  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
+    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "accessGroup" }}
+  {{- end }}
 {{- end }}
 {{- end }}
 
 {{- define "webservice.ingressHost" }}
 {{- if .Values.ingress.host }}
 {{- .Values.ingress.host }}
-{{- else if .Values.global.env }}
-{{- index .Values.global.env (include "osc.common.environment" .) "ingress" "host" }}
+{{- else if and .Values.global.env }}
+  {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
+    {{- if (index .Values.global.env (include "osc.common.environment" .) "ingress") }}
+      {{- index .Values.global.env (include "osc.common.environment" .) "ingress" "host" }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 {{- end }}
 
