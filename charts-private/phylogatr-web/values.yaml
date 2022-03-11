@@ -25,6 +25,7 @@ global:
       auth:
         accessGroup: accessphylogatrdev
 webservice:
+  appType: rails
   database:
     enable: true
     url: 'sqlite3://{{ .Values.data.path }}/phylogatr.sqlite3'
@@ -40,7 +41,6 @@ webservice:
     idpHost: EXTERNAL-DATA
     clientSecret: EXTERNAL-SECRET
     cookieSecret: EXTERNAL-SECRET
-  command: ['bundle', 'exec', 'passenger', 'start']
   env:
   - name: BATCH_MODE
     value: '1'

@@ -1,0 +1,30 @@
+global:
+  environment: ""
+  imageTag: v1.2.0
+  env:
+    production:
+      serviceAccount: focalmap
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    test:
+      serviceAccount: focalmap
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    dev:
+      serviceAccount: focalmapdev
+      image:
+        tag: latest
+webservice:
+  appType: rshiny
+  auth:
+    enable: true
+    accessGroup: PDE0006
+    idpHost: EXTERNAL-DATA
+    clientSecret: EXTERNAL-SECRET
+    cookieSecret: EXTERNAL-SECRET
+  workingDir: /app
+  image:
+    repository: docker-registry.osc.edu/webservices/focalmap
+  mounts:
+    roDir:
+      project: /fs/ess/PDE0001

@@ -1,8 +1,8 @@
 apiVersion: v2
-name: phylogatr-web
-description: OSC phylogatr web service
+name: focalmap
+description: OSC focalmap web service
 type: application
-version: 0.12.0
+version: 0.1.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock

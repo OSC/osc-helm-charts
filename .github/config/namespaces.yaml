@@ -5,3 +5,10 @@ metadata:
   name: phylogatr-web
   labels:
     osc.edu/role: webservice
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: focalmap
+  labels:
+    osc.edu/role: webservice
