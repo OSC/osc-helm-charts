@@ -4,6 +4,9 @@ metadata:
   name: {{ include "webservice.name" . }}
   labels:
     {{- include "webservice.labels" . | nindent 4 }}
+  {{- if (include "webservice.alert.receiver" .) }}
+    receiver: {{ include "webservice.alert.receiver" . }}
+  {{- end }}
   annotations:
     {{- toYaml .Values.service.annotations | nindent 4 }}
 spec:

@@ -136,3 +136,17 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- define "webservice.data.name" }}
 {{- printf "%s-data" (include "webservice.name" .) }}
 {{- end }}
+
+{{- define "webservice.alert.receiver" }}
+{{- if .Values.service.alert.receiver }}
+  {{- .Values.service.alert.receiver }}
+{{- else if and .Values.global.env }}
+  {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
+    {{- if (index .Values.global.env (include "osc.common.environment" .) "service") }}
+      {{- if (index .Values.global.env (include "osc.common.environment" .) "service" "alert") }}
+        {{- index .Values.global.env (include "osc.common.environment" .) "service" "alert" "receiver" }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
