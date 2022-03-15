@@ -6,14 +6,23 @@ global:
       serviceAccount: focalmap
       image:
         tag: '{{ .Values.global.imageTag }}'
+      service:
+        alert:
+          receiver: covidsim
     test:
       serviceAccount: focalmap
       image:
         tag: '{{ .Values.global.imageTag }}'
+      service:
+        alert:
+          receiver: gateways
     dev:
       serviceAccount: focalmapdev
       image:
         tag: latest
+      service:
+        alert:
+          receiver: gateways
 webservice:
   appType: rshiny
   auth:
