@@ -41,6 +41,9 @@ webservice:
     idpHost: EXTERNAL-DATA
     clientSecret: EXTERNAL-SECRET
     cookieSecret: EXTERNAL-SECRET
+  service:
+    alert:
+      receiver: gateways
   env:
   - name: BATCH_MODE
     value: '1'
