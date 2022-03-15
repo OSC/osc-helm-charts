@@ -69,6 +69,9 @@ secrets: {}
 service:
   port: 3000
   annotations: {}
+  alert:
+    # Also pulled from global.env.$environment.service.alert.receiver
+    receiver:
 
 livenessProbe:
   tcpSocket:
