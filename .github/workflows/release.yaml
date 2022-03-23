@@ -33,7 +33,7 @@ jobs:
             released_version=$(helm show chart oci://docker-registry.osc.edu/webservices/${name} 2>&1 | grep "^version:" | awk '{ print $2 }')
             if [ "$version" == "$released_version" ]; then
               echo "Chart ${name} already pushed, skipping"
-              break
+              continue
             fi
             helm package $chart -u
             package=${name}-${version}.tgz
