@@ -1,6 +1,6 @@
 global:
   environment: ""
-  imageTag: v1.2.0
+  imageTag: v0.1.1
   env:
     production:
       serviceAccount: focalmap
