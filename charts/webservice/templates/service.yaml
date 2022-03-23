@@ -7,8 +7,15 @@ metadata:
   {{- if (include "webservice.alert.receiver" .) }}
     receiver: {{ include "webservice.alert.receiver" . }}
   {{- end }}
+  {{- if or .Values.service.annotations (index .Values.service.typeAnnotations .Values.appType) }}
   annotations:
-    {{- toYaml .Values.service.annotations | nindent 4 }}
+    {{- with .Values.service.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with index .Values.service.typeAnnotations .Values.appType }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
 spec:
   ports:
   - name: http
