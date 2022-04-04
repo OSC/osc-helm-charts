@@ -6,6 +6,7 @@ global:
     production:
       serviceAccount: phylogatr
       dbPath: /fs/project/PAS1604/db/production/phylogatr.sqlite3
+      dataroot: /fs/project/PAS1604/pipeline/latest
       image:
         tag: '{{ .Values.global.imageTag }}'
       auth:
@@ -13,6 +14,7 @@ global:
     test:
       serviceAccount: phylogatr
       dbPath: /fs/project/PAS1604/db/production/phylogatr.sqlite3
+      dataroot: /fs/project/PAS1604/pipeline/latest
       image:
         tag: '{{ .Values.global.imageTag }}'
       auth:
@@ -20,6 +22,7 @@ global:
     dev:
       serviceAccount: phylogatrdev
       dbPath: /fs/project/PAS1604/db/dev/phylogatr.sqlite3
+      dataroot: /fs/project/PAS1604/pipeline/dev
       image:
         tag: latest
       auth:
@@ -48,11 +51,11 @@ webservice:
   - name: BATCH_MODE
     value: '1'
   - name: OOD_DATAROOT
-    value: /fs/project/PAS1604/pipeline/latest
+    value: '{{ index .Values.global.env (include "osc.common.environment" .) "dataroot" }}'
   - name: GENES_TARBALL_PATH
-    value: /fs/project/PAS1604/pipeline/latest/genes.tar.gz
+    value: '{{ index .Values.global.env (include "osc.common.environment" .) "dataroot" }}/genes.tar.gz'
   - name: SIF_PATH
-    value: /fs/project/PAS1604/pipeline/latest/phylogatr.sif
+    value: '{{ index .Values.global.env (include "osc.common.environment" .) "dataroot" }}/phylogatr.sif'
   - name: REAL_DATABASE_URL
     value: 'sqlite3://{{ index .Values.global.env (include "osc.common.environment" .) "dbPath" }}'
   image:
