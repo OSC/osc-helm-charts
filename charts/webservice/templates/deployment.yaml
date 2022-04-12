@@ -94,8 +94,20 @@ spec:
             mountPath: {{ $path }}
         {{- end }}
         {{- end }}
-        livenessProbe: {{ toYaml .Values.livenessProbe | nindent 10 }}
-        readinessProbe: {{ toYaml .Values.readinessProbe | nindent 10 }}
+        livenessProbe:
+          {{- if .Values.livenessProbe.httpGet }}
+          httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
+          {{- else }}
+          tcpSocket: {{ toYaml .Values.livenessProbe.tcpSocket | nindent 12 }}
+          {{- end -}}
+          {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
+        readinessProbe:
+          {{- if .Values.livenessProbe.httpGet }}
+          httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
+          {{- else }}
+          tcpSocket: {{ toYaml .Values.livenessProbe.tcpSocket | nindent 12 }}
+          {{- end -}}
+          {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         resources: {{ toYaml .Values.podResources | nindent 10 }}
         securityContext:
           allowPrivilegeEscalation: false
