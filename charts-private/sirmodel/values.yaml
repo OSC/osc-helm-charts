@@ -1,0 +1,32 @@
+global:
+  environment: ""
+  imageTag: v1.0.0
+  env:
+    production:
+      serviceAccount: covid
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+      service:
+        alert:
+          receiver: shiny-sir
+    test:
+      serviceAccount: covid
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+      service:
+        alert:
+          receiver: shiny-sir
+    dev:
+      serviceAccount: coviddev
+      image:
+        tag: latest
+      service:
+        alert:
+          receiver: shiny-sir
+webservice:
+  appType: rshiny
+  auth:
+    enable: false
+  workingDir: /app
+  image:
+    repository: docker-registry.osc.edu/webservices/sirmodel
