@@ -1,7 +1,7 @@
 global:
   environment: ""
 #  dbImport: /fs/project/PAS1604/db/phylogatr.mysql
-  imageTag: v2.3.0
+  imageTag: v2.3.3
   env:
     production:
       serviceAccount: phylogatr
