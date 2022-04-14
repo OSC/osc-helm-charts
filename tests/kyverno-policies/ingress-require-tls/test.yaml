@@ -12,6 +12,11 @@ results:
     result: skip
   - policy: ingress-require-tls
     rule: require-tls
+    resource: skip-oauth2
+    kind: Ingress
+    result: skip
+  - policy: ingress-require-tls
+    rule: require-tls
     resource: test-pass
     kind: Ingress
     result: pass

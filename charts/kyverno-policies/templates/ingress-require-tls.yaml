@@ -17,6 +17,13 @@ spec:
       any:
         - resources:
             name: "cm-acme-http-solver-*"
+      all:
+        - resources:
+            annotations:
+              nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+        - resources:
+            annotations:
+              nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
     validate:
       message: "Ingress is required to have TLS."
       pattern:
