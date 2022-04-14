@@ -16,6 +16,13 @@ global:
       service:
         alert:
           receiver: gateways
+      podResources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
     dev:
       serviceAccount: focalmapdev
       image:
@@ -23,6 +30,13 @@ global:
       service:
         alert:
           receiver: gateways
+      podResources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
 webservice:
   appType: rshiny
   auth:

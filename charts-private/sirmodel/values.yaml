@@ -16,6 +16,13 @@ global:
       service:
         alert:
           receiver: shiny-sir
+      podResources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
     dev:
       serviceAccount: coviddev
       image:
@@ -23,6 +30,13 @@ global:
       service:
         alert:
           receiver: shiny-sir
+      podResources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
 webservice:
   appType: rshiny
   auth:

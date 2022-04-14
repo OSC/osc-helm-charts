@@ -19,6 +19,13 @@ global:
         tag: '{{ .Values.global.imageTag }}'
       auth:
         accessGroup: accessphylogatr
+      podResources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
     dev:
       serviceAccount: phylogatrdev
       dbPath: /fs/project/PAS1604/db/dev/phylogatr.sqlite3
@@ -27,6 +34,13 @@ global:
         tag: latest
       auth:
         accessGroup: accessphylogatrdev
+      podResources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
 webservice:
   appType: rails
   livenessProbe:
