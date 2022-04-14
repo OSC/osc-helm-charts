@@ -13,7 +13,8 @@ workingDir:
 env: []
 defaultCommand:
   rails: ['bundle', 'exec', 'passenger', 'start']
-  rshiny: ['/bin/passenger', 'start']
+  rshiny-passenger: ['/bin/passenger', 'start']
+  rshiny: ['R']
 defaultArgs:
   rails:
     - "--port={{ .Values.service.port }}"
@@ -25,7 +26,7 @@ defaultArgs:
     - "--disable-anonymous-telemetry"
     - "--log-file=/dev/stdout"
     - "--pid-file=/tmp/passenger.pid"
-  rshiny:
+  rshiny-passenger:
     - "--port={{ .Values.service.port }}"
     - "--min-instances=1"
     - "--sticky-sessions"
@@ -37,6 +38,7 @@ defaultArgs:
     - "--pid-file=/tmp/passenger.pid"
     - "--app-start-command"
     - 'R --no-save --slave -f /app/entrypoint.R --args $$PORT'
+  rshiny: ['--no-save', '--slave', '-f', 'entry.R']
   none: []
 
 image:

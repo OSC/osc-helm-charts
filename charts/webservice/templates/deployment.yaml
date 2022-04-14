@@ -53,8 +53,10 @@ spec:
         {{- if .Values.workingDir }}
         workingDir: {{ .Values.workingDir }}
         {{- end }}
-        {{- if or .Values.env .Values.database.enable .Values.database.mariadb.enable }}
         env:
+        - name: PORT
+          value: {{ .Values.service.port | quote }}
+        {{- if or .Values.database.enable .Values.database.mariadb.enable }}
         {{- if .Values.database.password }}
         - name: DATABASE_PASSWORD
           valueFrom:
@@ -66,10 +68,10 @@ spec:
         - name: DATABASE_URL
           value: {{ tpl .Values.database.url . }}
         {{- end }}
+        {{- end }}
         {{- range $env := .Values.env }}
         - name: {{ $env.name }}
           value: {{ tpl $env.value $ | quote }}
-        {{- end }}
         {{- end }}
         ports:
         - containerPort: {{ .Values.service.port }}
