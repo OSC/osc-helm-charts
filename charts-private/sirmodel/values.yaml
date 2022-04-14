@@ -3,14 +3,14 @@ global:
   imageTag: v1.0.0
   env:
     production:
-      serviceAccount: covid
+      serviceAccount: nfsnobody
       image:
         tag: '{{ .Values.global.imageTag }}'
       service:
         alert:
           receiver: shiny-sir
     test:
-      serviceAccount: covid
+      serviceAccount: nfsnobody
       image:
         tag: '{{ .Values.global.imageTag }}'
       service:
@@ -24,7 +24,7 @@ global:
           cpu: 100m
           memory: 128Mi
     dev:
-      serviceAccount: coviddev
+      serviceAccount: nfsnobody
       image:
         tag: latest
       service:
