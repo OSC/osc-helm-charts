@@ -1,24 +1,18 @@
 global:
   environment: ""
-  imageTag: v1.0.0
+  imageTag: v1.1.0
   env:
     production:
       serviceAccount: nfsnobody
       image:
         tag: '{{ .Values.global.imageTag }}'
-      service:
-        alert:
-          receiver: shiny-sir
     test:
       serviceAccount: nfsnobody
       image:
         tag: '{{ .Values.global.imageTag }}'
-      service:
-        alert:
-          receiver: shiny-sir
       podResources:
         limits:
-          cpu: 200m
+          cpu: 500m
           memory: 256Mi
         requests:
           cpu: 100m
@@ -27,12 +21,9 @@ global:
       serviceAccount: nfsnobody
       image:
         tag: latest
-      service:
-        alert:
-          receiver: shiny-sir
       podResources:
         limits:
-          cpu: 200m
+          cpu: 500m
           memory: 256Mi
         requests:
           cpu: 100m
@@ -44,3 +35,6 @@ webservice:
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/sirmodel
+  service:
+    alert:
+      receiver: shiny-sir

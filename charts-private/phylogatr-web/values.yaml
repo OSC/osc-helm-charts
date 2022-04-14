@@ -21,7 +21,7 @@ global:
         accessGroup: accessphylogatr
       podResources:
         limits:
-          cpu: 200m
+          cpu: 500m
           memory: 256Mi
         requests:
           cpu: 100m
@@ -36,7 +36,7 @@ global:
         accessGroup: accessphylogatrdev
       podResources:
         limits:
-          cpu: 200m
+          cpu: 500m
           memory: 256Mi
         requests:
           cpu: 100m
