@@ -108,7 +108,15 @@ spec:
           httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
           {{- end -}}
           {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
-        resources: {{ toYaml .Values.podResources | nindent 10 }}
+  {{- $podResources := .Values.podResources}}
+  {{- if .Values.global.env }}
+    {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
+      {{- if (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+        {{- $podResources = (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+        resources: {{ toYaml $podResources | nindent 10 }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
