@@ -78,12 +78,14 @@ service:
     receiver:
 
 livenessProbe:
-  tcpSocket:
+  httpGet:
+    path: /
     port: http
   initialDelaySeconds: 10
   periodSeconds: 30
 readinessProbe:
-  tcpSocket:
+  httpGet:
+    path: /
     port: http
   initialDelaySeconds: 10
   periodSeconds: 30
