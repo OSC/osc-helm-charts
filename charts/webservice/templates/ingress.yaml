@@ -5,6 +5,9 @@ metadata:
   labels:
     {{- include "webservice.labels" . | nindent 4 }}
   annotations:
+    {{- if not .Values.auth.enable }}
+    cert-manager.io/cluster-issuer: letsencrypt
+    {{- end }}
     {{- with .Values.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -19,6 +22,7 @@ metadata:
       {{- toYaml .Values.ingress.rShinyAnnotations | nindent 4 }}
     {{- end }}
 spec:
+{{- if not .Values.auth.enable }}
   tls:
   - hosts:
     - {{ required "Must provide ingress host" (tpl (include "webservice.ingressHost" .) .) | quote }}
@@ -26,6 +30,7 @@ spec:
     - {{ tpl (include "webservice.ingressHostAlias" .) . | quote }}
   {{- end }}
     secretName: {{ include "webservice.name" . }}-cert
+{{- end }}
   rules:
   - host: {{ tpl (include "webservice.ingressHost" .) . | quote }}
     http:
