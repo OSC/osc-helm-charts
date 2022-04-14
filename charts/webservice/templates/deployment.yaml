@@ -95,17 +95,17 @@ spec:
         {{- end }}
         {{- end }}
         livenessProbe:
-          {{- if .Values.livenessProbe.httpGet }}
-          httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
-          {{- else }}
+          {{- if .Values.livenessProbe.tcpSocket }}
           tcpSocket: {{ toYaml .Values.livenessProbe.tcpSocket | nindent 12 }}
+          {{- else }}
+          httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
           {{- end -}}
           {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         readinessProbe:
-          {{- if .Values.livenessProbe.httpGet }}
-          httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
-          {{- else }}
+          {{- if .Values.livenessProbe.tcpSocket }}
           tcpSocket: {{ toYaml .Values.livenessProbe.tcpSocket | nindent 12 }}
+          {{- else }}
+          httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
           {{- end -}}
           {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         resources: {{ toYaml .Values.podResources | nindent 10 }}
