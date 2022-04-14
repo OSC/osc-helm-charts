@@ -23,7 +23,15 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         privileged: false
-      resources: {{ toYaml .Values.podResources | nindent 8 }}
+  {{- $podResources := .Values.podResources }}
+  {{- if .Values.global.env }}
+    {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
+      {{- if (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+        {{- $podResources = (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+      resources: {{ toYaml $podResources | nindent 8 }}
   restartPolicy: Never
   nodeSelector:
     {{ include "osc.common.nodeSelectorRole" . }}
