@@ -24,6 +24,30 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: skip-oauth2
+  namespace: test
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+  labels:
+    app: web
+spec:
+  rules:
+  - host: web.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
   name: test-pass
   namespace: test
   annotations:
