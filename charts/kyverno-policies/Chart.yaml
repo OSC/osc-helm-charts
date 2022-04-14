@@ -2,7 +2,7 @@ apiVersion: v2
 name: kyverno-policies
 description: OSC Kyverno policies deployment
 type: application
-version: 0.13.1
+version: 0.14.0
 appVersion: "v1.6.1"
 maintainers:
   - name: treydock
