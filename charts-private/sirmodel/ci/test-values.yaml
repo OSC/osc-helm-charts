@@ -6,9 +6,6 @@ global:
 webservice:
   ingress:
     host: test.local
-  mounts:
-    roDir:
-      project: null
   livenessProbe:
     initialDelaySeconds: 30
     periodSeconds: 30
@@ -17,6 +14,3 @@ webservice:
     initialDelaySeconds: 30
     periodSeconds: 30
     failureThreshold: 5
-  auth:
-    oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
-    cookieSecret: KMdIWJeLDNssdLoaXxiLBw==

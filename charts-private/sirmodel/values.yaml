@@ -1,21 +1,15 @@
 global:
   environment: ""
-  imageTag: v0.6.0
+  imageTag: v1.1.0
   env:
     production:
-      serviceAccount: focalmap
+      serviceAccount: nfsnobody
       image:
         tag: '{{ .Values.global.imageTag }}'
-      service:
-        alert:
-          receiver: covidsim
     test:
-      serviceAccount: focalmap
+      serviceAccount: nfsnobody
       image:
         tag: '{{ .Values.global.imageTag }}'
-      service:
-        alert:
-          receiver: gateways
       podResources:
         limits:
           cpu: 500m
@@ -24,12 +18,9 @@ global:
           cpu: 100m
           memory: 128Mi
     dev:
-      serviceAccount: focalmapdev
+      serviceAccount: nfsnobody
       image:
         tag: latest
-      service:
-        alert:
-          receiver: gateways
       podResources:
         limits:
           cpu: 500m
@@ -40,14 +31,10 @@ global:
 webservice:
   appType: rshiny
   auth:
-    enable: true
-    accessGroup: PDE0006
-    idpHost: EXTERNAL-DATA
-    clientSecret: EXTERNAL-SECRET
-    cookieSecret: EXTERNAL-SECRET
+    enable: false
   workingDir: /app
   image:
-    repository: docker-registry.osc.edu/webservices/focalmap
-  mounts:
-    roDir:
-      project: /fs/ess/PDE0001
+    repository: docker-registry.osc.edu/webservices/sirmodel
+  service:
+    alert:
+      receiver: shiny-sir

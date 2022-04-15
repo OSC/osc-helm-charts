@@ -15,6 +15,7 @@ jobs:
         chart:
           - "phylogatr-web"
           - "focalmap"
+          - "sirmodel"
     name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout

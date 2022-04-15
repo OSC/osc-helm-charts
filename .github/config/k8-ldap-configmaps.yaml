@@ -9,6 +9,7 @@ metadata:
   name: user-uid-map
   namespace: k8-ldap-configmap
 data:
+  user-nfsnobody: "65534"
   user-focalmapdev: "36971"
   user-phylogatrdev: "33253"
   user-test: "1000"
@@ -19,6 +20,7 @@ metadata:
   name: user-gid-map
   namespace: k8-ldap-configmap
 data:
+  user-nfsnobody: "65534"
   user-focalmapdev: "2925"
   user-phylogatrdev: "6314"
   user-test: "1001"
@@ -29,6 +31,7 @@ metadata:
   name: user-gids-map
   namespace: k8-ldap-configmap
 data:
+  user-nfsnobody: '["65534"]'
   user-focalmapdev: '["2925","6393","7175"]'
   user-phylogatrdev: '["6314","6557","6558"]'
   user-test: '["1001","1002"]'
