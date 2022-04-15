@@ -3,11 +3,11 @@ global:
   imageTag: v1.1.0
   env:
     production:
-      serviceAccount: nfsnobody
+      serviceAccount: k8spublic
       image:
         tag: '{{ .Values.global.imageTag }}'
     test:
-      serviceAccount: nfsnobody
+      serviceAccount: k8spublic
       image:
         tag: '{{ .Values.global.imageTag }}'
       podResources:
@@ -18,7 +18,7 @@ global:
           cpu: 100m
           memory: 128Mi
     dev:
-      serviceAccount: nfsnobody
+      serviceAccount: k8spublic
       image:
         tag: latest
       podResources:
