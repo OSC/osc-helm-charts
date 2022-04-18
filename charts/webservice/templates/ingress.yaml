@@ -5,6 +5,9 @@ metadata:
   labels:
     {{- include "webservice.labels" . | nindent 4 }}
   annotations:
+    {{- if .Values.auth.enable }}
+    prometheus.io/probe_scheme: 'https'
+    {{- end }}
     {{- if not .Values.auth.enable }}
     cert-manager.io/cluster-issuer: letsencrypt
     {{- end }}
