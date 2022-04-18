@@ -15,14 +15,6 @@ webservice:
       scratch: null
       slurm-conf: null
     socket: null
-  livenessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 5
-  readinessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 5
   initContainers:
     # Local test
     # - name: db-copy

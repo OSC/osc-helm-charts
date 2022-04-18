@@ -6,11 +6,3 @@ global:
 webservice:
   ingress:
     host: test.local
-  livenessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 5
-  readinessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 5

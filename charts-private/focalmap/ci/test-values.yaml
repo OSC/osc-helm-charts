@@ -9,14 +9,6 @@ webservice:
   mounts:
     roDir:
       project: null
-  livenessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 5
-  readinessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    failureThreshold: 5
   auth:
     oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
     cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
