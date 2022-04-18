@@ -233,6 +233,10 @@ data:
       - source_labels: [__meta_kubernetes_ingress_annotation_prometheus_io_probe_skip]
         action: drop
         regex: 'true'
+      - source_labels: [__meta_kubernetes_ingress_annotation_prometheus_io_probe_scheme]
+        regex: (.+)
+        replacement: ${1}
+        target_label: __meta_kubernetes_ingress_scheme
       - source_labels: [__meta_kubernetes_ingress_scheme,__address__,__meta_kubernetes_ingress_path]
         regex: (.+);(.+);(.+)
         replacement: ${1}://${2}${3}
