@@ -43,14 +43,15 @@ global:
           memory: 128Mi
 webservice:
   appType: rails
+  startupProbe:
+    httpGet:
+      path: /ping
   livenessProbe:
     httpGet:
       path: /ping
-      port: http
   readinessProbe:
     httpGet:
       path: /ping
-      port: http
   database:
     enable: true
     url: 'sqlite3://{{ .Values.data.path }}/phylogatr.sqlite3'
