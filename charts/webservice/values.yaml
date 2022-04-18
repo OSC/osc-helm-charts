@@ -77,18 +77,24 @@ service:
     # Also pulled from global.env.$environment.service.alert.receiver
     receiver:
 
+startupProbe:
+  httpGet:
+    path: /
+    port: http
+  failureThreshold: 12
+  periodSeconds: 10
 livenessProbe:
   httpGet:
     path: /
     port: http
-  initialDelaySeconds: 10
-  periodSeconds: 30
+  failureThreshold: 6
+  periodSeconds: 10
 readinessProbe:
   httpGet:
     path: /
     port: http
-  initialDelaySeconds: 10
-  periodSeconds: 30
+  failureThreshold: 6
+  periodSeconds: 10
 
 initContainers: {}
 init:

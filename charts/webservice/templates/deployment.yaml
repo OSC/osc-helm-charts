@@ -94,6 +94,13 @@ spec:
             mountPath: {{ $path }}
         {{- end }}
         {{- end }}
+        startupProbe:
+          {{- if .Values.startupProbe.tcpSocket }}
+          tcpSocket: {{ toYaml .Values.startupProbe.tcpSocket | nindent 12 }}
+          {{- else }}
+          httpGet: {{ toYaml .Values.startupProbe.httpGet | nindent 12 }}
+          {{- end -}}
+          {{- omit .Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         livenessProbe:
           {{- if .Values.livenessProbe.tcpSocket }}
           tcpSocket: {{ toYaml .Values.livenessProbe.tcpSocket | nindent 12 }}
