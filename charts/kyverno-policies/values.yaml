@@ -1,7 +1,3 @@
-imagePullSecrets:
-  registry: docker-registry.osc.edu
-  username: robot$osc-read
-  password:
 users:
   allowHostPaths:
     - /var/lib/sss/pipes
