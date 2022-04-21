@@ -26,10 +26,10 @@ spec:
           kinds:
           - Pod
     preconditions:
-      all:
-      - key: "{{`{{request.operation}}`}}"
-        operator: NotEquals
-        value: DELETE
+      any:
+        - key: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}`}}"
+          operator: NotEquals
+          value: "prometheus"
     validate:
       message: "Images containing built-in volumes are prohibited."
       foreach:
