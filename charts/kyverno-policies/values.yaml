@@ -47,23 +47,13 @@ kyverno-policies:
 #          - external-dns
 #          - prometheus
   policyExclude:
-    disallow-capabilities:
-      any:
-        - resources:
-            name: "dcgm-exporter*"
     disallow-capabilities-strict:
       any:
-        - resources:
-            name: "dcgm-exporter*"
         # TODO: Remove once ood_core updated
         # https://github.com/OSC/ood_core/pull/748
         - resources:
             namespaces:
             - "user-?*"
-    disallow-privilege-escalation:
-      any:
-        - resources:
-            name: "dcgm-exporter*"
     disallow-host-path:
       any:
         - resources:
@@ -78,24 +68,8 @@ kyverno-policies:
                 operator: In
                 values:
                 - webservice
-        - resources:
-            name: "dcgm-exporter*"
-    require-run-as-non-root-user:
-      any:
-        - resources:
-            name: "dcgm-exporter*"
-    require-run-as-nonroot:
-      any:
-        - resources:
-            name: "dcgm-exporter*"
-    check-runasgroup:
-      any:
-        - resources:
-            name: "dcgm-exporter*"
     restrict-seccomp-strict:
       any:
-        - resources:
-            name: "dcgm-exporter*"
         # TODO: Remove once ood_core updated
         # https://github.com/OSC/ood_core/pull/748
         - resources:
@@ -115,9 +89,52 @@ kyverno-policies:
                 operator: In
                 values:
                 - webservice
-        - resources:
-            name: "dcgm-exporter*"
-
+  policyPreconditions:
+    disallow-capabilities:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
+    disallow-capabilities-strict:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
+    disallow-privilege-escalation:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
+    disallow-host-path:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
+    require-run-as-non-root-user:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
+    require-run-as-nonroot:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
+    check-runasgroup:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
+    restrict-seccomp-strict:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
+    restrict-volume-types:
+      any:
+        - key: "{{ request.object.metadata.name }}"
+          operator: NotEquals
+          value: "dcgm-exporter*"
   nameOverride:
   # -- Additional labels
   customLabels: {}
