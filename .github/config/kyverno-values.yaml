@@ -1,3 +1,8 @@
+imagePullSecrets:
+  osc-registry:
+    registry: docker-registry.osc.edu
+    username: robot$webservices-read
+    password: IMAGE-PULL-PASSWORD
 config:
   # TODO: Remove once fixed: https://github.com/kyverno/kyverno/issues/3190
   resourceFilters:
