@@ -77,9 +77,15 @@ service:
     # Also pulled from global.env.$environment.service.alert.receiver
     receiver:
 
+probes:
+  type: ~
+  typeDefaults:
+    rshiny: tcpSocket
 startupProbe:
   httpGet:
     path: /
+    port: http
+  tcpSocket:
     port: http
   failureThreshold: 12
   periodSeconds: 10
@@ -88,12 +94,16 @@ livenessProbe:
   httpGet:
     path: /
     port: http
+  tcpSocket:
+    port: http
   failureThreshold: 6
   periodSeconds: 10
   timeoutSeconds: 5
 readinessProbe:
   httpGet:
     path: /
+    port: http
+  tcpSocket:
     port: http
   failureThreshold: 6
   periodSeconds: 10
