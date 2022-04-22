@@ -16,13 +16,6 @@ global:
       service:
         alert:
           receiver: gateways
-      podResources:
-        limits:
-          cpu: 2
-          memory: 2Gi
-        requests:
-          cpu: 500m
-          memory: 512Mi
     dev:
       serviceAccount: focalmapdev
       image:

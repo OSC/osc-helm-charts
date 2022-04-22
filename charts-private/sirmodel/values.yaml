@@ -10,13 +10,6 @@ global:
       serviceAccount: k8spublic
       image:
         tag: '{{ .Values.global.imageTag }}'
-      podResources:
-        limits:
-          cpu: 500m
-          memory: 256Mi
-        requests:
-          cpu: 100m
-          memory: 128Mi
     dev:
       serviceAccount: k8spublic
       image:
