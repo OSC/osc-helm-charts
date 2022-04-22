@@ -94,27 +94,21 @@ spec:
             mountPath: {{ $path }}
         {{- end }}
         {{- end }}
+        {{- $probeType := "httpGet" }}
+        {{- if index .Values.probes.typeDefaults .Values.appType }}
+          {{- $probeType = (index .Values.probes.typeDefaults .Values.appType) }}
+        {{- else if .Values.probes.type }}
+          {{- $probeType = .Values.probes.type }}
+        {{- end }}
         startupProbe:
-          {{- if .Values.startupProbe.tcpSocket }}
-          tcpSocket: {{ toYaml .Values.startupProbe.tcpSocket | nindent 12 }}
-          {{- else }}
-          httpGet: {{ toYaml .Values.startupProbe.httpGet | nindent 12 }}
-          {{- end -}}
+          {{ $probeType }}: {{ toYaml (index .Values.startupProbe $probeType) | nindent 12 }}
           {{- omit .Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         livenessProbe:
-          {{- if .Values.livenessProbe.tcpSocket }}
-          tcpSocket: {{ toYaml .Values.livenessProbe.tcpSocket | nindent 12 }}
-          {{- else }}
-          httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
-          {{- end -}}
-          {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
+          {{ $probeType }}: {{ toYaml (index .Values.startupProbe $probeType) | nindent 12 }}
+          {{- omit .Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         readinessProbe:
-          {{- if .Values.livenessProbe.tcpSocket }}
-          tcpSocket: {{ toYaml .Values.livenessProbe.tcpSocket | nindent 12 }}
-          {{- else }}
-          httpGet: {{ toYaml .Values.livenessProbe.httpGet | nindent 12 }}
-          {{- end -}}
-          {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
+          {{ $probeType }}: {{ toYaml (index .Values.startupProbe $probeType) | nindent 12 }}
+          {{- omit .Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
   {{- $podResources := .Values.podResources}}
   {{- if .Values.global.env }}
     {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
