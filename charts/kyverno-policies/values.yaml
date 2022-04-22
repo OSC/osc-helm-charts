@@ -87,47 +87,50 @@ kyverno-policies:
                 - webservice
   policyPreconditions:
     disallow-capabilities:
-      any:
+      all:
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"
     disallow-capabilities-strict:
-      any:
+      all:
+        - key: "{{ request.operation }}"
+          operator: NotEquals
+          value: DELETE
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"
     disallow-privilege-escalation:
-      any:
+      all:
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"
     disallow-host-path:
-      any:
+      all:
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"
     require-run-as-non-root-user:
-      any:
+      all:
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"
     require-run-as-nonroot:
-      any:
+      all:
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"
     check-runasgroup:
-      any:
+      all:
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"
     restrict-seccomp-strict:
-      any:
+      all:
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"
     restrict-volume-types:
-      any:
+      all:
         - key: "{{ request.object.metadata.name }}"
           operator: NotEquals
           value: "dcgm-exporter*"

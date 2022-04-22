@@ -83,18 +83,21 @@ startupProbe:
     port: http
   failureThreshold: 12
   periodSeconds: 10
+  timeoutSeconds: 5
 livenessProbe:
   httpGet:
     path: /
     port: http
   failureThreshold: 6
   periodSeconds: 10
+  timeoutSeconds: 5
 readinessProbe:
   httpGet:
     path: /
     port: http
   failureThreshold: 6
   periodSeconds: 10
+  timeoutSeconds: 5
 
 initContainers: {}
 init:

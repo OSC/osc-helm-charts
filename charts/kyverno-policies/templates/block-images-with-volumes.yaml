@@ -26,7 +26,10 @@ spec:
           kinds:
           - Pod
     preconditions:
-      any:
+      all:
+        - key: "{{`{{ request.operation }}`}}"
+          operator: NotEquals
+          value: DELETE
         - key: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}`}}"
           operator: NotEquals
           value: "prometheus"
