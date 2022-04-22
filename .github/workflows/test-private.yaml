@@ -39,8 +39,7 @@ jobs:
           version: v0.11.1
           cluster_name: kind
           node_image: kindest/node:v1.22.0@sha256:b8bda84bb3a190e6e028b1760d277454a72267a5454b57db34437c34a588d047
-      - name: Label kind node
-        run: kubectl label node kind-control-plane osc.edu/role=test
+          config: .github/config/kind.yaml
       - name: Set image pull secret
         run: |
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts-private/${{ matrix.chart }}/ci/*.yaml
@@ -66,6 +65,7 @@ jobs:
       - name: Debug failure
         if: failure()
         run: |
+          kubectl describe node -A
           kubectl describe pod -A
           kubectl describe service -A
           kubectl describe daemonset -A
