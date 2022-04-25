@@ -66,6 +66,8 @@ replicas: 1
 
 secrets: {}
 
+debugGroups: []
+
 service:
   port: 3000
   annotations: {}

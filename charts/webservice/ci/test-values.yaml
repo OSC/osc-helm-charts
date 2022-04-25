@@ -16,6 +16,8 @@ args:
   - "-text=Hello World"
 defaultArgs:
   type: none
+debugGroups:
+  - foobar
 image:
   repository: hashicorp/http-echo
   tag: latest
