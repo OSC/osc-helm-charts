@@ -2,8 +2,8 @@ apiVersion: v2
 name: focalmap
 description: OSC focalmap web service
 type: application
-version: 0.6.0
-appVersion: v0.6.0
+version: 0.6.1
+appVersion: v0.8.0
 maintainers:
   - name: treydock
 dependencies:

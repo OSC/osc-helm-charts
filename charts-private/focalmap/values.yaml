@@ -46,3 +46,4 @@ webservice:
       project: /fs/ess/PDE0001
   debugGroups:
     - focalmap_developer
+    - wiagstf
