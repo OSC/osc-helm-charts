@@ -31,3 +31,5 @@ webservice:
   service:
     alert:
       receiver: shiny-sir
+  debugGroups:
+    - wiagstf

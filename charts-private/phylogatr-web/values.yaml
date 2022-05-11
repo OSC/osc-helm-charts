@@ -82,6 +82,8 @@ webservice:
       slurm-conf: /etc/slurm
     socket:
       munge-socket: /var/run/munge/munge.socket.2
+  debugGroups:
+    - wiagstf
   initContainers:
     - name: db-copy
       command:

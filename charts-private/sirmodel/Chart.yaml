@@ -2,8 +2,8 @@ apiVersion: v2
 name: sirmodel
 description: OSC sirmodel web service
 type: application
-version: 0.3.0
-appVersion: v1.0.0
+version: 0.3.1
+appVersion: v1.1.0
 maintainers:
   - name: treydock
 dependencies:
