@@ -17,7 +17,7 @@ metadata:
       container image and inspects them for such VOLUME statements, then blocks if found.      
 spec:
   validationFailureAction: enforce
-  failurePolicy: ignore
+  failurePolicy: Ignore
   background: true
   rules:
   - name: block-images-with-vols
