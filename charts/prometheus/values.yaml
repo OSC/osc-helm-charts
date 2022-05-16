@@ -169,7 +169,7 @@ sslExporter:
   image:
     repository: docker.io/ribbybibby/ssl-exporter
     pullPolicy: IfNotPresent
-    tag: "v2.4.1"
+    tag: "2.4.1"
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
