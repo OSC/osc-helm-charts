@@ -88,49 +88,49 @@ kyverno-policies:
   policyPreconditions:
     disallow-capabilities:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
     disallow-capabilities-strict:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
     disallow-privilege-escalation:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
     disallow-host-path:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
     require-run-as-non-root-user:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
     require-run-as-nonroot:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
     check-runasgroup:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
     restrict-seccomp-strict:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
     restrict-volume-types:
       all:
-        - key: "{{ request.object.metadata.name }}"
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}"
           operator: NotEquals
-          value: "dcgm-exporter*"
+          value: "dcgm-exporter"
   nameOverride:
   # -- Additional labels
   customLabels: {}
