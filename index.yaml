@@ -3,9 +3,9 @@ entries:
   common:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2022-05-11T14:53:23.665929394Z"
+    created: "2022-05-17T12:53:15.424428059Z"
     description: OSC common Helm Chart
-    digest: 4519d03e176c38c4fa41a1f904825c8bb2b076fa7dc07a5976630efde370f09b
+    digest: 8ca893d1caadd24e7c47fbbf23afd67d13ddffc171429f2b6161ac556ea23fd2
     maintainers:
     - name: treydock
     name: common
@@ -40,7 +40,7 @@ entries:
   database:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2022-05-11T14:53:23.672053874Z"
+    created: "2022-05-17T12:53:15.430267435Z"
     dependencies:
     - condition: mariadb.enable
       name: mariadb
@@ -50,7 +50,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.3.0
     description: OSC database service Helm Chart
-    digest: 6baf84808c4a00767bceb14e14376605e881c0c51c90cb5b58f1b75052194cd8
+    digest: 63f5e345685d7aa8bb9014619427fa1f8eca58b853899804fae50bf7d75494f7
     maintainers:
     - name: treydock
     name: database
@@ -232,13 +232,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2022-05-11T14:53:23.674533828Z"
+    created: "2022-05-17T12:53:15.432637125Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 5.0.5
     description: Kubernetes Dashboard Proxy
-    digest: a434f55dbf2db6851dc611042129646649440de7540da4c533e09b1245b91127
+    digest: d5b509b90d1bd5996502b19b7c04ac699b93f919c622442badd679e5f7962983
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -343,6 +343,22 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kubernetes-dashboard-proxy-0.1.0.tgz
     version: 0.1.0
   kyverno-policies:
+  - apiVersion: v2
+    appVersion: v1.6.2
+    created: "2022-05-17T12:53:15.434229618Z"
+    dependencies:
+    - name: kyverno-policies
+      repository: https://kyverno.github.io/kyverno/
+      version: v2.3.4
+    description: OSC Kyverno policies deployment
+    digest: e91c73883bdb23413c4a0c116bc3065dd38fddc2ee18b2e8217d96002993fbe9
+    maintainers:
+    - name: treydock
+    name: kyverno-policies
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/kyverno-policies-0.17.3.tgz
+    version: 0.17.3
   - apiVersion: v2
     appVersion: v1.6.2
     created: "2022-05-11T14:53:23.676245435Z"
@@ -744,6 +760,25 @@ entries:
     - https://OSC.github.io/osc-helm-charts/kyverno-policies-0.0.1.tgz
     version: 0.0.1
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.35.0
+    created: "2022-05-17T12:53:15.437309706Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 4.7.0
+    - name: dcgm-exporter
+      repository: https://nvidia.github.io/dcgm-exporter/helm-charts
+      version: 2.6.5
+    description: OSC Prometheus deployment
+    digest: e77c7979f10ada11f2224f04c4f63dcc46c4ac80649e7c69a1c546fd8893d92c
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.15.0.tgz
+    version: 0.15.0
   - apiVersion: v2
     appVersion: v2.29.2
     created: "2022-05-11T14:53:23.679664847Z"
@@ -1267,7 +1302,7 @@ entries:
   webservice:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2022-05-11T14:53:23.6869456Z"
+    created: "2022-05-17T12:53:15.444242577Z"
     dependencies:
     - condition: database.mariadb.enable
       name: database
@@ -1277,7 +1312,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.3.0
     description: OSC webservice bootstrap Helm Chart
-    digest: c4890676c25bf94b732e290a6900c9786417b54f0e846dac0fc7b2cbc65d9c06
+    digest: ec857f5278b2d6dc376243f31b0d12be15fb9f0373a68c30ae576e975618d57e
     maintainers:
     - name: treydock
     name: webservice
@@ -1798,4 +1833,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/webservice-0.1.0.tgz
     version: 0.1.0
-generated: "2022-05-11T14:53:23.665503167Z"
+generated: "2022-05-17T12:53:15.42403386Z"
