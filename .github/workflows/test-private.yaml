@@ -46,8 +46,8 @@ jobs:
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' .github/config/*.yaml
       - name: Install Keycloak
         run: |
-          helm repo add codecentric https://codecentric.github.io/helm-charts
-          helm install keycloak codecentric/keycloak -n keycloak --create-namespace --version 9.9.2 --values .github/config/keycloak-values.yaml
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 9.2.2
       - name: Install Kyverno
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/

@@ -19,5 +19,5 @@ webservice:
     roDir:
       project: null
   auth:
-    oidcIssuerURL: http://keycloak-http.keycloak.svc.cluster.local/auth/realms/master
+    oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
     cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
