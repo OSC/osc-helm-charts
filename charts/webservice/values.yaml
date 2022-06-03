@@ -148,7 +148,7 @@ auth:
   cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
   # Also pulled from global.env.$environment.auth.idpHost
   idpHost:
-  oidcIssuerURL: https://$(IDP_HOST)/auth/realms/osc
+  oidcIssuerURL: https://$(IDP_HOST)/realms/osc
   # Also pulled from global.env.$environment.auth.accessGroup
   allowGroups:
   image:

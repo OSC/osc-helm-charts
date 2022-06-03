@@ -32,6 +32,7 @@ jobs:
           version: v0.11.1
           cluster_name: kind
           node_image: kindest/node:v1.22.0@sha256:b8bda84bb3a190e6e028b1760d277454a72267a5454b57db34437c34a588d047
+          config: .github/config/kind.yaml
       - name: Build and Load mariadb image
         run: |
           make -f docker-images/mariadb/Makefile build
@@ -43,8 +44,8 @@ jobs:
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts/*/ci/*.yaml
       - name: Install Keycloak
         run: |
-          helm repo add codecentric https://codecentric.github.io/helm-charts
-          helm install keycloak codecentric/keycloak -n keycloak --create-namespace --version 9.9.2 --values .github/config/keycloak-values.yaml
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 9.2.2
       - name: Install Kyverno
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
