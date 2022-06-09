@@ -4,7 +4,7 @@ global:
     registry: docker-registry.osc.edu
     username: robot$webservices-read
     password:
-  nodeSelectorRole: infrastructure
+  nodeSelectorRole: webservices
   storageClass: webservices-nfs-client
 appType: rails
 command: []
