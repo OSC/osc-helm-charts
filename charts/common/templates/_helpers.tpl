@@ -33,15 +33,11 @@ osc.edu/service-account
 {{- end }}
 
 {{- define "osc.common.nodeSelectorRoleKey" -}}
-osc.edu/role
-{{- end -}}
-
-{{- define "osc.common.nodeSelectorRoleValue" -}}
-{{- .Values.global.nodeSelectorRole }}
+node-role.kubernetes.io/{{- .Values.global.nodeSelectorRole }}
 {{- end -}}
 
 {{- define "osc.common.nodeSelectorRole" -}}
-{{- printf "%s: %s" (include "osc.common.nodeSelectorRoleKey" . ) (include "osc.common.nodeSelectorRoleValue" .) }}
+{{- printf "%s: ''" (include "osc.common.nodeSelectorRoleKey" . ) }}
 {{- end -}}
 
 {{- define "osc.common.imagePullSecret.name" }}
