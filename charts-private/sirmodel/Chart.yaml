@@ -2,12 +2,12 @@ apiVersion: v2
 name: sirmodel
 description: OSC sirmodel web service
 type: application
-version: 0.4.0
+version: 0.5.0
 appVersion: v1.1.0
 maintainers:
   - name: treydock
 dependencies:
   - name: webservice
-    version: 0.22.0
+    version: 0.23.0
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../../charts/webservice
