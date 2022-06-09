@@ -17,10 +17,13 @@ spec:
             - "user-?*"
     validate:
       message: "Node selector must be set to ondemand"
-      pattern:
-        spec:
-          nodeSelector:
-            osc.edu/role: "ondemand"
+      anyPattern:
+        - spec:
+            nodeSelector:
+              osc.edu/role: "ondemand"
+        - spec:
+            nodeSelector:
+              node-role.kubernetes.io/ondemand: ''
   - name: pod-nodeselector-webservice
     match:
       any:
@@ -39,7 +42,12 @@ spec:
             name: "cm-acme-http-solver-*"
     validate:
       message: "Node selector must be set"
-      pattern:
-        spec:
-          nodeSelector:
-            osc.edu/role: "{{ join " | " .Values.webservices.validNodeSelector }}"
+      anyPattern:
+        - spec:
+            nodeSelector:
+              osc.edu/role: "{{ join " | " .Values.webservices.validNodeSelector }}"
+      {{- range .Values.webservices.validNodeSelector }}
+        - spec:
+            nodeSelector:
+              node-role.kubernetes.io/{{ . }}: ''
+      {{- end }}
