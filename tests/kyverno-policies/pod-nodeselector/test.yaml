@@ -18,6 +18,11 @@ results:
     result: pass
   - policy: pod-nodeselector
     rule: pod-nodeselector-user
+    resource: test-user-pass2
+    kind: Pod
+    result: pass
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-user
     resource: test-user-fail-omit
     kind: Pod
     result: fail
@@ -35,6 +40,18 @@ results:
   - policy: pod-nodeselector
     rule: pod-nodeselector-webservice
     resource: test-webservice-pass
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-webservice
+    resource: test-webservice-pass2
+    kind: Pod
+    namespace: webservice
+    result: pass
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-webservice
+    resource: test-webservice-pass3
     kind: Pod
     namespace: webservice
     result: pass

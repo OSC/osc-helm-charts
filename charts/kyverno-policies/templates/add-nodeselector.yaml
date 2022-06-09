@@ -18,4 +18,4 @@ spec:
         patchStrategicMerge:
           spec:
             nodeSelector:
-              osc.edu/role: ondemand
+              node-role.kubernetes.io/ondemand: ''
