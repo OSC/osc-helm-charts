@@ -25,6 +25,7 @@ webservices:
   validNodeSelector:
     - infrastructure
     - webservices
+validationFailureAction: {}
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom
   # For more info- https://kyverno.io/policies/pod-security
