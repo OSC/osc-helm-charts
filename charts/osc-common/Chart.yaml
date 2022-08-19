@@ -1,8 +1,8 @@
 apiVersion: v2
-name: common
+name: osc-common
 description: OSC common Helm Chart
 type: application
-version: 0.4.0
+version: 0.5.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
