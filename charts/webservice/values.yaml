@@ -199,6 +199,13 @@ database:
         primaryAccessOnlyFrom:
           podSelector:
             app.kubernetes.io/name: '{{ include "webservice.name" . }}'
+  postgresql:
+    enable: false
+    networkPolicy:
+      ingressRules:
+        primaryAccessOnlyFrom:
+          podSelector:
+            app.kubernetes.io/name: '{{ include "webservice.name" . }}'
 
 # Used for network policies
 ingressName: ingress-nginx

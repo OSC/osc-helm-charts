@@ -50,3 +50,15 @@ database:
         requests:
           cpu: 200m
           memory: 256Mi
+  postgresql:
+    enable: true
+    primary:
+      persistence:
+        size: 50Mi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi

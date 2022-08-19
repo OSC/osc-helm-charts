@@ -11,6 +11,7 @@ metadata:
 data:
   user-k8spublic: "38635"
   user-focalmapdev: "36971"
+  user-nominatim: "39237"
   user-phylogatrdev: "33253"
   user-test: "1000"
 ---
@@ -22,6 +23,7 @@ metadata:
 data:
   user-k8spublic: "4097"
   user-focalmapdev: "2925"
+  user-nominatim: "4097"
   user-phylogatrdev: "6314"
   user-test: "1001"
 ---
@@ -33,5 +35,6 @@ metadata:
 data:
   user-k8spublic: '["4097"]'
   user-focalmapdev: '["2925","6393","7175"]'
+  user-nominatim: '["4097"]'
   user-phylogatrdev: '["6314","6557","6558"]'
   user-test: '["1001","1002"]'
