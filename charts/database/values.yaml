@@ -18,7 +18,7 @@ mariadb:
       - osc-registry
   primary:
     podLabels:
-      '{{ include "osc.common.serviceAccountKey" . }}': ''
+      '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
@@ -56,6 +56,99 @@ mariadb:
     resources:
       limits:
         cpu: 2
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  networkPolicy:
+    enabled: true
+    ingressRules:
+      primaryAccessOnlyFrom:
+        enabled: true
+        podSelector: {}
+    metrics:
+      enabled: true
+      namespaceSelector:
+        app.kubernetes.io/name: prometheus
+postgresql:
+  enabled: false
+  image:
+    registry: docker-registry.osc.edu
+    repository: webservices/postgresql
+    tag: 14.4.0-debian-11-r18
+    pullSecrets:
+      - osc-registry
+  primary:
+    podLabels:
+      '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    containerSecurityContext:
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    resources:
+      limits:
+        cpu: '4'
+        memory: 4Gi
+      requests:
+        cpu: '1'
+        memory: 256Mi
+    nodeSelector:
+      '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+    initContainers:
+    - name: init-data
+      image: '{{ include "postgresql.image" . }}'
+      imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+      resources:
+        limits:
+          cpu: '1'
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+      command:
+        - /bin/sh
+        - -ec
+        - |
+          mkdir -p {{ .Values.primary.persistence.mountPath }}/data
+          chmod 700 {{ .Values.primary.persistence.mountPath }}/data
+      securityContext:
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      volumeMounts:
+        - name: data
+          mountPath: '{{ .Values.primary.persistence.mountPath }}'
+        - name: dshm
+          mountPath: /dev/shm
+  metrics:
+    enabled: true
+    containerSecurityContext:
+      enabled: true
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
+      prometheus.io/match_metrics: 'true'
+    resources:
+      limits:
+        cpu: '2'
         memory: 512Mi
       requests:
         cpu: 250m

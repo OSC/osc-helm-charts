@@ -32,8 +32,10 @@ spec:
           operator: NotEquals
           value: DELETE
         - key: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/name\" }}`}}"
-          operator: NotEquals
-          value: "prometheus"
+          operator: AllNotIn
+          value:
+            - prometheus
+            - postgresql
     validate:
       message: "Images containing built-in volumes are prohibited."
       foreach:
