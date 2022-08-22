@@ -5,8 +5,12 @@ global:
   storageClass: standard
 nominatim:
   nominatimInitialize:
-    enabled: true
+    enabled: false
+    # enabled: true
     importStyle: admin
+  nominatimReplications:
+    enabled: false
+    # enabled: true
   resources:
     limits:
       cpu: 2
