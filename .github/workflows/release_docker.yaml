@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        chart:
+        image:
           - mariadb
           - postgresql
     name: Release ${{ matrix.image }} Docker image
