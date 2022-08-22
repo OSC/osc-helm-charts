@@ -11,7 +11,13 @@ on:
 jobs:
   release-docker:
     runs-on: ubuntu-latest
-    name: Release Docker images
+    strategy:
+      fail-fast: false
+      matrix:
+        chart:
+          - mariadb
+          - postgresql
+    name: Release ${{ matrix.image }} Docker image
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,7 +27,7 @@ jobs:
           registry: docker-registry.osc.edu
           username: ${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}
           password: ${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}
-      - name: Build and Push mariadb image
+      - name: Build and Push ${{ matrix.image }} image
         run: |
-          make -f docker-images/mariadb/Makefile build
-          make -f docker-images/mariadb/Makefile push
+          make -f docker-images/${{ matrix.image }}/Makefile build
+          make -f docker-images/${{ matrix.image }}/Makefile push
