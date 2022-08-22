@@ -89,8 +89,8 @@ nominatim:
   postgresql:
     image:
       registry: docker-registry.osc.edu
-      #repository: webservices/postgresql-nominatim
-      #tag: 14.4.0-4.0.1
+      # repository: webservices/postgresql-nominatim
+      # tag: 14.4.0-4.0.1
       repository: webservices/postgresql
       tag: 14.4.0-debian-11-r18
       pullSecrets:

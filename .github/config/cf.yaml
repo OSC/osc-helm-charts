@@ -7,3 +7,4 @@ chart-repos:
   - external-dns=https://kubernetes-sigs.github.io/external-dns/
   - bitnami=https://charts.bitnami.com/bitnami
   - osc=https://osc.github.io/osc-helm-charts/
+  - robjuz-helm-charts=https://treydock.github.io/robjuz-helm-charts/
