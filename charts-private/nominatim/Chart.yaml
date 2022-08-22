@@ -16,5 +16,6 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
   - name: nominatim
     version: 2.0.0-rc2
+    repository: https://treydock.github.io/robjuz-helm-charts/
     # repository: https://robjuz.github.io/helm-charts/
-    repository: file://../../../robjuz-helm-charts/charts/nominatim
+    # repository: file://../../../robjuz-helm-charts/charts/nominatim
