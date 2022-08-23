@@ -187,8 +187,10 @@ nominatim:
       ingressRules:
         primaryAccessOnlyFrom:
           enabled: true
+          podSelector:
+            app.kubernetes.io/instance: '{{ .Release.Name }}'
           namespaceSelector:
-            kubernetes.io/metadata.name: '{{ .Release.Namespace }}'
+            app.kubernetes.io/name: prometheus
       metrics:
         enabled: true
         namespaceSelector:
