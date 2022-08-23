@@ -56,11 +56,11 @@ nominatim:
     readOnlyRootFilesystem: true
   initResources:
     limits:
-      cpu: 1
-      memory: 512Mi
+      cpu: 2
+      memory: 2Gi
     requests:
-      cpu: 250m
-      memory: 128Mi
+      cpu: 500m
+      memory: 256Mi
   nodeSelector:
     '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   resources:
@@ -68,8 +68,8 @@ nominatim:
       cpu: 4
       memory: 4Gi
     requests:
-      cpu: 1
-      memory: 256Mi
+      cpu: 2
+      memory: 2Gi
   service:
     annotations:
       prometheus.io/probe_path: /status
@@ -96,6 +96,18 @@ nominatim:
       pullSecrets:
         - osc-registry
     primary:
+      persistence:
+        size: 20Gi
+      extendedConfiguration: |
+        shared_buffers = 2GB
+        maintenance_work_mem = 1GB
+        autovacuum_work_mem = 2GB
+        work_mem = 50MB
+        effective_cache_size = 2GB
+        synchronous_commit = off
+        max_wal_size = 1GB
+        checkpoint_timeout = 10min
+        checkpoint_completion_target = 0.9
       podLabels:
         '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
       containerSecurityContext:
@@ -110,10 +122,10 @@ nominatim:
       resources:
         limits:
           cpu: '4'
-          memory: 4Gi
+          memory: 8Gi
         requests:
           cpu: '1'
-          memory: 256Mi
+          memory: 1Gi
       nodeSelector:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
       initContainers:
