@@ -187,7 +187,8 @@ nominatim:
       ingressRules:
         primaryAccessOnlyFrom:
           enabled: true
-          podSelector: {}
+          namespaceSelector:
+            kubernetes.io/metadata.name: '{{ .Release.Namespace }}'
       metrics:
         enabled: true
         namespaceSelector:
