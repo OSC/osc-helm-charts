@@ -19,9 +19,9 @@ nominatim:
     enabled: true
     pbfUrl: http://download.geofabrik.de/north-america/us/ohio-latest.osm.pbf
     importUS_Postcode: true
-    extraEnv:
-      NOMINATIM_TOKENIZER: icu
-      #NOMINATIM_TOKENIZER_CONFIG: /usr/local/etc/nominatim/icu_tokenizer.yaml
+    # extraEnv:
+      # NOMINATIM_TOKENIZER: icu
+      # NOMINATIM_TOKENIZER_CONFIG: /usr/local/etc/nominatim/icu_tokenizer.yaml
   nominatimReplications:
     enabled: true
     replicationUrl: http://download.geofabrik.de/north-america/us/ohio-updates
@@ -32,9 +32,9 @@ nominatim:
       requests:
         cpu: 1
         memory: 256Mi
-    extraEnv:
-      NOMINATIM_TOKENIZER: icu
-      #NOMINATIM_TOKENIZER_CONFIG: /usr/local/etc/nominatim/icu_tokenizer.yaml
+    # extraEnv:
+      # NOMINATIM_TOKENIZER: icu
+      # NOMINATIM_TOKENIZER_CONFIG: /usr/local/etc/nominatim/icu_tokenizer.yaml
   nominatimUi:
     enabled: false
   podLabels:
