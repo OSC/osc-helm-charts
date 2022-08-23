@@ -8,9 +8,7 @@ nominatim:
     enabled: false
     # enabled: true
     importStyle: admin
-  nominatimReplications:
-    enabled: false
-    # enabled: true
+    # pbfUrl: https://FQDN/internal/nominatim/ohio-latest.osm.pbf
   resources:
     limits:
       cpu: 2
@@ -19,6 +17,8 @@ nominatim:
       cpu: 1
       memory: 256Mi
   nominatimReplications:
+    enabled: false
+    # enabled: true
     resources:
       limits:
         cpu: 1
@@ -29,13 +29,13 @@ nominatim:
   ingress:
     hostname: test.local
   projectDir:
-    size: 500Mi
+    size: 5Gi
   postgresql:
     # diagnosticMode:
     #   enabled: true
     primary:
       persistence:
-        size: 500Mi
+        size: 2Gi
       resources:
         limits:
           cpu: '1'
