@@ -73,6 +73,8 @@ jobs:
         run: |
           make -f docker-images/nominatim/Makefile build
           make -f docker-images/nominatim/Makefile kind-load
+          make -f docker-images/postgresql-nominatim/Makefile build
+          make -f docker-images/postgresql-nominatim/Makefile kind-load
       - name: Set image pull secret
         run: |
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts-private/${{ matrix.chart }}/ci/*.yaml
