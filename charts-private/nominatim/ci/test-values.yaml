@@ -1,0 +1,45 @@
+global:
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  storageClass: standard
+nominatim:
+  nominatimInitialize:
+    enabled: false
+    # enabled: true
+    importStyle: admin
+    # pbfUrl: https://FQDN/internal/nominatim/ohio-latest.osm.pbf
+  resources:
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 1
+      memory: 256Mi
+  nominatimReplications:
+    enabled: false
+    # enabled: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 1
+        memory: 256Mi
+  ingress:
+    hostname: test.local
+  projectDir:
+    size: 5Gi
+  postgresql:
+    # diagnosticMode:
+    #   enabled: true
+    primary:
+      persistence:
+        size: 2Gi
+      resources:
+        limits:
+          cpu: '1'
+          memory: 1Gi
+        requests:
+          cpu: '1'
+          memory: 256Mi

@@ -1,0 +1,208 @@
+global:
+  oscServiceAccount: nominatim
+  imagePullSecret:
+    name: osc-registry
+    registry: docker-registry.osc.edu
+    username: robot$webservices-read
+    password:
+  nodeSelectorRole: webservices
+  storageClass: webservices-nfs-client
+imagePullSecret:
+  enable: true
+nominatim:
+  image:
+    repository: docker-registry.osc.edu/webservices/nominatim
+    tag: '4.0'
+  imagePullSecrets:
+    - name: osc-registry
+  nominatimInitialize:
+    enabled: true
+    pbfUrl: http://download.geofabrik.de/north-america/us/ohio-latest.osm.pbf
+    importUS_Postcode: true
+    # extraEnv:
+      # NOMINATIM_TOKENIZER: icu
+      # NOMINATIM_TOKENIZER_CONFIG: /usr/local/etc/nominatim/icu_tokenizer.yaml
+  nominatimReplications:
+    enabled: true
+    replicationUrl: http://download.geofabrik.de/north-america/us/ohio-updates
+    resources:
+      limits:
+        cpu: 2
+        memory: 2Gi
+      requests:
+        cpu: 1
+        memory: 256Mi
+    # extraEnv:
+      # NOMINATIM_TOKENIZER: icu
+      # NOMINATIM_TOKENIZER_CONFIG: /usr/local/etc/nominatim/icu_tokenizer.yaml
+  nominatimUi:
+    enabled: false
+  podLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+  initSecurityContext:
+    runAsUser: ~
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+    readOnlyRootFilesystem: true
+  initResources:
+    limits:
+      cpu: 2
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+  resources:
+    limits:
+      cpu: 4
+      memory: 4Gi
+    requests:
+      cpu: 2
+      memory: 2Gi
+  service:
+    annotations:
+      prometheus.io/probe_module: http-healthz
+      prometheus.io/probe_path: /status
+  ingress:
+    enabled: true
+    tls: true
+    annotations:
+      prometheus.io/probe_scheme: https
+      prometheus.io/probe_path: /status
+      cert-manager.io/cluster-issuer: letsencrypt
+      kubernetes.io/ingress.class: nginx
+  projectDir:
+    enabled: true
+    size: 20Gi
+    accessModes:
+      - ReadWriteOnce
+  postgresql:
+    image:
+      registry: docker-registry.osc.edu
+      repository: webservices/postgresql-nominatim
+      tag: 14.4.0-4.0.1
+      # Used when not using legacy tokenizer
+      # repository: webservices/postgresql
+      # tag: 14.4.0-debian-11-r18
+      pullSecrets:
+        - osc-registry
+    primary:
+      persistence:
+        size: 20Gi
+      extendedConfiguration: |
+        shared_buffers = 2GB
+        maintenance_work_mem = 1GB
+        autovacuum_work_mem = 2GB
+        work_mem = 50MB
+        effective_cache_size = 2GB
+        synchronous_commit = off
+        max_wal_size = 1GB
+        checkpoint_timeout = 10min
+        checkpoint_completion_target = 0.9
+      podLabels:
+        '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+      containerSecurityContext:
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      resources:
+        limits:
+          cpu: '4'
+          memory: 8Gi
+        requests:
+          cpu: '1'
+          memory: 1Gi
+      nodeSelector:
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+      initContainers:
+      - name: init-data
+        image: '{{ include "postgresql.image" . }}'
+        imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+        resources:
+          limits:
+            cpu: '1'
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 128Mi
+        command:
+          - /bin/sh
+          - -ec
+          - |
+            mkdir -p {{ .Values.primary.persistence.mountPath }}/data
+            chmod 700 {{ .Values.primary.persistence.mountPath }}/data
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
+        volumeMounts:
+          - name: data
+            mountPath: '{{ .Values.primary.persistence.mountPath }}'
+          - name: dshm
+            mountPath: /dev/shm
+    metrics:
+      enabled: true
+      containerSecurityContext:
+        enabled: true
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: /metrics
+        prometheus.io/match_metrics: 'true'
+      resources:
+        limits:
+          cpu: '2'
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+    networkPolicy:
+      enabled: true
+      ingressRules:
+        primaryAccessOnlyFrom:
+          enabled: true
+          podSelector:
+            app.kubernetes.io/instance: '{{ .Release.Name }}'
+          namespaceSelector:
+            app.kubernetes.io/name: prometheus
+      metrics:
+        enabled: true
+        namespaceSelector:
+          app.kubernetes.io/name: prometheus
+
+# Used for network policies
+ingressName: ingress-nginx
+prometheusName: prometheus

@@ -17,6 +17,8 @@ jobs:
         image:
           - mariadb
           - postgresql
+          - nominatim
+          - postgresql-nominatim
     name: Release ${{ matrix.image }} Docker image
     steps:
       - name: Checkout
