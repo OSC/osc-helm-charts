@@ -45,7 +45,7 @@ jobs:
           - "phylogatr-web"
           - "focalmap"
           - "sirmodel"
-          #- nominatim
+          - nominatim
     name: Test Install Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout

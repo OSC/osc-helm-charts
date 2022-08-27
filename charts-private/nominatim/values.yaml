@@ -19,6 +19,7 @@ nominatim:
     enabled: true
     pbfUrl: http://download.geofabrik.de/north-america/us/ohio-latest.osm.pbf
     importUS_Postcode: true
+    importStyle: admin
     # extraEnv:
       # NOMINATIM_TOKENIZER: icu
       # NOMINATIM_TOKENIZER_CONFIG: /usr/local/etc/nominatim/icu_tokenizer.yaml
