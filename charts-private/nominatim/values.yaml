@@ -67,6 +67,8 @@ nominatim:
     requests:
       cpu: 500m
       memory: 256Mi
+  updateStrategy:
+    type: RollingUpdate
   nodeSelector:
     '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   resources:
