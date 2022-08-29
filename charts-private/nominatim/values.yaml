@@ -38,6 +38,7 @@ nominatim:
   nominatimUi:
     enabled: true
     install: false
+    rewrite: false
   podLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
   securityContext:
