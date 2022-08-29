@@ -98,6 +98,8 @@ jobs:
         run: kubectl apply -f .github/config/namespaces.yaml
       - name: Run chart-testing (install)
         run: |
+          helm dependency build charts-private/${{ matrix.chart }}
+          helm template ${{ matrix.chart }} charts-private/${{ matrix.chart }} -n ${{ matrix.chart }} --values charts-private/${{ matrix.chart }}/ci/test-values.yaml
           ct install --config .github/config/cf.yaml --charts charts-private/${{ matrix.chart }} --namespace ${{ matrix.chart }}
       - name: Debug failure
         if: failure()
