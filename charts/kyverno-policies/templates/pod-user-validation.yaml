@@ -2,7 +2,6 @@ apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
   name: pod-user-validation
-  namespace: kyverno
 spec:
   background: false
   validationFailureAction: enforce

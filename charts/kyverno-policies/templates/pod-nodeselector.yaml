@@ -2,7 +2,6 @@ apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
   name: pod-nodeselector
-  namespace: kyverno
 spec:
   background: true
   validationFailureAction: enforce
