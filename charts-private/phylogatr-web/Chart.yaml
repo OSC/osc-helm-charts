@@ -2,8 +2,8 @@ apiVersion: v2
 name: phylogatr-web
 description: OSC phylogatr web service
 type: application
-version: 0.20.0
-appVersion: "v2.3.3"
+version: 0.20.1
+appVersion: "v2.3.4"
 maintainers:
   - name: treydock
 dependencies:
