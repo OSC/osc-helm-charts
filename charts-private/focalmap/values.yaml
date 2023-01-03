@@ -1,6 +1,6 @@
 global:
   environment: ""
-  imageTag: v0.6.0
+  imageTag: v2.4.0
   env:
     production:
       serviceAccount: focalmap
@@ -9,6 +9,13 @@ global:
       service:
         alert:
           receiver: covidsim
+      podResources:
+        limits:
+          cpu: 4
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
     test:
       serviceAccount: focalmap
       image:
@@ -16,6 +23,13 @@ global:
       service:
         alert:
           receiver: gateways
+      podResources:
+        limits:
+          cpu: 4
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
     dev:
       serviceAccount: focalmapdev
       image:
@@ -25,11 +39,11 @@ global:
           receiver: gateways
       podResources:
         limits:
-          cpu: 2
-          memory: 2Gi
+          cpu: 4
+          memory: 4Gi
         requests:
-          cpu: 500m
-          memory: 512Mi
+          cpu: 1
+          memory: 256Mi
 webservice:
   appType: rshiny
   auth:
