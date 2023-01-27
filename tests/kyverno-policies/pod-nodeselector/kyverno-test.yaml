@@ -8,68 +8,49 @@ variables: variables.yaml
 results:
   - policy: pod-nodeselector
     rule: pod-nodeselector-user
-    resource: test-user-skip
+    resources:
+      - test-user-skip
     kind: Pod
+    namespace: test
     result: skip
   - policy: pod-nodeselector
     rule: pod-nodeselector-user
-    resource: test-user-pass
+    resources:
+      - test-user-pass
+      - test-user-pass2
     kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-nodeselector
     rule: pod-nodeselector-user
-    resource: test-user-pass2
+    resources:
+      - test-user-fail-omit
+      - test-user-fail-mismatch
     kind: Pod
-    result: pass
-  - policy: pod-nodeselector
-    rule: pod-nodeselector-user
-    resource: test-user-fail-omit
-    kind: Pod
-    result: fail
-  - policy: pod-nodeselector
-    rule: pod-nodeselector-user
-    resource: test-user-fail-mismatch
-    kind: Pod
+    namespace: user-test
     result: fail
   - policy: pod-nodeselector
     rule: pod-nodeselector-webservice
-    resource: test-webservice-skip
+    resources:
+      - test-webservice-skip
     kind: Pod
     namespace: webservice
     result: skip
   - policy: pod-nodeselector
     rule: pod-nodeselector-webservice
-    resource: test-webservice-pass
+    resources:
+      - test-webservice-pass
+      - test-webservice-pass2
+      - test-webservice-pass3
+      - test-webservice-pass-infra
     kind: Pod
     namespace: webservice
     result: pass
   - policy: pod-nodeselector
     rule: pod-nodeselector-webservice
-    resource: test-webservice-pass2
-    kind: Pod
-    namespace: webservice
-    result: pass
-  - policy: pod-nodeselector
-    rule: pod-nodeselector-webservice
-    resource: test-webservice-pass3
-    kind: Pod
-    namespace: webservice
-    result: pass
-  - policy: pod-nodeselector
-    rule: pod-nodeselector-webservice
-    resource: test-webservice-pass-infra
-    kind: Pod
-    namespace: webservice
-    result: pass
-  - policy: pod-nodeselector
-    rule: pod-nodeselector-webservice
-    resource: test-webservice-fail-omit
-    kind: Pod
-    namespace: webservice
-    result: fail
-  - policy: pod-nodeselector
-    rule: pod-nodeselector-webservice
-    resource: test-webservice-fail-mismatch
+    resources:
+      - test-webservice-fail-omit
+      - test-webservice-fail-mismatch
     kind: Pod
     namespace: webservice
     result: fail

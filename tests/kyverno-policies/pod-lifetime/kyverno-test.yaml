@@ -7,31 +7,43 @@ resources:
 results:
   - policy: pod-lifetime
     rule: pods-require-lifetime
-    resource: test-lifetime-skip
+    resources:
+      - test-lifetime-skip
     kind: Pod
+    namespace: test
     result: skip
   - policy: pod-lifetime
     rule: pods-require-lifetime
-    resource: test-lifetime-pass
+    resources:
+      - test-lifetime-pass
     kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-lifetime
     rule: pods-require-lifetime
-    resource: test-lifetime-fail
+    resources:
+      - test-lifetime-fail
     kind: Pod
+    namespace: user-test
     result: fail
   - policy: pod-lifetime
     rule: pods-max-lifetime
-    resource: test-lifetime-skip
+    resources:
+      - test-lifetime-skip
     kind: Pod
+    namespace: test
     result: skip
   - policy: pod-lifetime
     rule: pods-max-lifetime
-    resource: test-lifetime-max-pass
+    resources:
+      - test-lifetime-max-pass
     kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-lifetime
     rule: pods-max-lifetime
-    resource: test-lifetime-max-fail
+    resources:
+      - test-lifetime-max-fail
     kind: Pod
+    namespace: user-test
     result: fail

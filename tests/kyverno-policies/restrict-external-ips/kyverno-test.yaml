@@ -7,11 +7,13 @@ resources:
 results:
   - policy: restrict-external-ips
     rule: check-ips
-    resource: test-pass
+    resources:
+      - test-pass
     kind: Service
     result: pass
   - policy: restrict-external-ips
     rule: check-ips
-    resource: test-fail
+    resources:
+      - test-fail
     kind: Service
     result: fail

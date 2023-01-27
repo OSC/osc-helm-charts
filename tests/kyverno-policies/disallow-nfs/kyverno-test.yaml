@@ -7,11 +7,13 @@ resources:
 results:
   - policy: disallow-nfs
     rule: nfs-volume
-    resource: test-pass
+    resources:
+      - test-pass
     kind: Pod
     result: pass
   - policy: disallow-nfs
     rule: nfs-volume
-    resource: test-fail
+    resources:
+      - test-fail
     kind: Pod
     result: fail

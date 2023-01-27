@@ -7,6 +7,7 @@ resources:
 results:
   - policy: disallow-container-sock-mounts
     rule: validate-containerd-sock-mount
-    resource: test-fail
+    resources:
+      - test-fail
     kind: Pod
     result: fail
