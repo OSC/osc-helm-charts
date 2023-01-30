@@ -7,11 +7,13 @@ resources:
 results:
   - policy: no-localhost-service
     rule: no-localhost-service
-    resource: test-pass
+    resources:
+      - test-pass
     kind: Service
     result: skip
   - policy: no-localhost-service
     rule: no-localhost-service
-    resource: test-fail
+    resources:
+      - test-fail
     kind: Service
     result: fail

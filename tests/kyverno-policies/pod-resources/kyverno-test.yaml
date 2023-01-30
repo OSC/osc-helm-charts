@@ -8,123 +8,103 @@ variables: variables.yaml
 results:
   - policy: pod-resources
     rule: pods-require-resources
-    resource: test-limits-skip
+    resources:
+      - test-limits-skip
     kind: Pod
+    namespace: test
     result: skip
   - policy: pod-resources
     rule: pods-require-resources
-    resource: test-limits-pass
+    resources:
+      - test-limits-pass
+      - test-limits-with-init-pass
     kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-resources
     rule: pods-require-resources
-    resource: test-limits-with-init-pass
+    resources:
+      - test-limits-memory-limits-fail
+      - test-limits-with-init-memory-limits-fail
+      - test-limits-cpu-limits-fail
+      - test-limits-cpu-requests-missing
+      - test-limits-memory-requests-fail
     kind: Pod
-    result: pass
-  - policy: pod-resources
-    rule: pods-require-resources
-    resource: test-limits-memory-limits-fail
-    kind: Pod
+    namespace: user-test
     result: fail
   - policy: pod-resources
     rule: pods-require-resources
-    resource: test-limits-with-init-memory-limits-fail
-    kind: Pod
-    result: fail
-  - policy: pod-resources
-    rule: pods-require-resources
-    resource: test-limits-cpu-limits-fail
-    kind: Pod
-    result: fail
-  - policy: pod-resources
-    rule: pods-require-resources
-    resource: test-limits-cpu-requests-missing
-    kind: Pod
-    result: fail
-  - policy: pod-resources
-    rule: pods-require-resources
-    resource: test-limits-memory-requests-fail
-    kind: Pod
-    result: fail
-  - policy: pod-resources
-    rule: pods-require-resources
-    resource: test-limits-pass-webservice
+    resources:
+      - test-limits-pass-webservice
     kind: Pod
     namespace: webservice
     result: pass
   - policy: pod-resources
     rule: pods-require-resources
-    resource: test-limits-memory-requests-fail-webservice
+    resources:
+      - test-limits-memory-requests-fail-webservice
     kind: Pod
     namespace: webservice
     result: fail
   - policy: pod-resources
     rule: pods-max-user-resources
-    resource: test-limits-pass-cpu-limits1
+    resources:
+      - test-limits-pass-cpu-limits1
+      - test-limits-pass-cpu-limits2
     kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-resources
     rule: pods-max-user-resources
-    resource: test-limits-pass-cpu-limits2
+    resources:
+      - test-limits-webservice-pass-limits
     kind: Pod
+    namespace: webservice
     result: pass
   - policy: pod-resources
     rule: pods-max-user-resources
-    resource: test-limits-webservice-pass-limits
+    resources:
+      - test-limits-with-init-pass-cpu-limits2
     kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-resources
     rule: pods-max-user-resources
-    resource: test-limits-with-init-pass-cpu-limits2
+    resources:
+      - test-limits-fail-cpu-limits1
+      - test-limits-fail-cpu-limits2
+      - test-limits-with-init-fail-cpu-limits1
     kind: Pod
-    result: pass
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resource: test-limits-fail-cpu-limits1
-    kind: Pod
+    namespace: user-test
     result: fail
   - policy: pod-resources
     rule: pods-max-user-resources
-    resource: test-limits-webservice-fail-cpu-limits
+    resources:
+      - test-limits-webservice-fail-cpu-limits
     kind: Pod
+    namespace: webservice
     result: fail
   - policy: pod-resources
     rule: pods-max-user-resources
-    resource: test-limits-with-init-fail-cpu-limits1
+    resources:
+      - test-limits-pass-mem-limits1
+      - test-limits-pass-mem-limits2
+      - test-limits-cpu-requests-missing
     kind: Pod
-    result: fail
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resource: test-limits-fail-cpu-limits2
-    kind: Pod
-    result: fail
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resource: test-limits-pass-mem-limits1
-    kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-resources
     rule: pods-max-user-resources
-    resource: test-limits-pass-mem-limits2
+    resources:
+      - test-limits-fail-mem-limits1
+      - test-limits-fail-mem-limits2
     kind: Pod
-    result: pass
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resource: test-limits-cpu-requests-missing
-    kind: Pod
-    result: pass
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resource: test-limits-fail-mem-limits1
-    kind: Pod
+    namespace: user-test
     result: fail
   - policy: pod-resources
     rule: pods-max-user-resources
-    resource: test-limits-fail-mem-limits2
+    resources:
+      - test-limits-webservice-fail-mem-limits
     kind: Pod
-    result: fail
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resource: test-limits-webservice-fail-mem-limits
-    kind: Pod
+    namespace: webservice
     result: fail

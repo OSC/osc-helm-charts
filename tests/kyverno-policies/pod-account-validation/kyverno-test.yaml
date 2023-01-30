@@ -8,26 +8,29 @@ variables: variables.yaml
 results:
   - policy: pod-account-validation
     rule: pods-user-authorized-for-account
-    resource: test-skip
+    resources:
+      - test-skip
+      - test-skip-op
     kind: Pod
     result: skip
   - policy: pod-account-validation
     rule: pods-user-authorized-for-account
-    resource: test-skip-op
+    resources:
+      - test-pass
     kind: Pod
-    result: skip
-  - policy: pod-account-validation
-    rule: pods-user-authorized-for-account
-    resource: test-pass
-    kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-account-validation
     rule: pods-user-authorized-for-account
-    resource: test-fail
+    resources:
+      - test-fail
     kind: Pod
+    namespace: user-test
     result: fail
   - policy: pod-account-validation
     rule: pods-user-account-prefix
-    resource: test-fail-prefix
+    resources:
+      - test-fail-prefix
     kind: Pod
+    namespace: user-test
     result: fail

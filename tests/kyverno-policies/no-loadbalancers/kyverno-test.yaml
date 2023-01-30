@@ -7,16 +7,22 @@ resources:
 results:
   - policy: no-loadbalancers
     rule: no-loadbalancers
-    resource: test-skip
+    resources:
+      - test-skip
     kind: Service
+    namespace: ingress-nginx
     result: skip
   - policy: no-loadbalancers
     rule: no-loadbalancers
-    resource: test-pass
+    resources:
+      - test-pass
     kind: Service
+    namespace: test
     result: pass
   - policy: no-loadbalancers
     rule: no-loadbalancers
-    resource: test-fail
+    resources:
+      - test-fail
     kind: Service
+    namespace: test
     result: fail

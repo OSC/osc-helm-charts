@@ -7,11 +7,15 @@ resources:
 results:
   - policy: no-ingress
     rule: user-no-ingress
-    resource: test-pass
+    resources:
+      - test-pass
     kind: Ingress
+    namespace: test
     result: skip
   - policy: no-ingress
     rule: user-no-ingress
-    resource: test-fail
+    resources:
+      - test-fail
     kind: Ingress
+    namespace: user-test
     result: fail

@@ -8,26 +8,29 @@ variables: variables.yaml
 results:
   - policy: pod-groups-validation
     rule: pods-user-authorized-for-groups
-    resource: test-skip
+    resources:
+      - test-skip
     kind: Pod
     result: skip
   - policy: pod-groups-validation
     rule: pods-user-authorized-for-groups
-    resource: test-skip-op
+    resources:
+      - test-skip-op
+      - test-skip-len
     kind: Pod
+    namespace: user-test
     result: skip
   - policy: pod-groups-validation
     rule: pods-user-authorized-for-groups
-    resource: test-skip-len
+    resources:
+      - test-pass
     kind: Pod
-    result: skip
-  - policy: pod-groups-validation
-    rule: pods-user-authorized-for-groups
-    resource: test-pass
-    kind: Pod
+    namespace: user-test
     result: pass
   - policy: pod-groups-validation
     rule: pods-user-authorized-for-groups
-    resource: test-fail
+    resources:
+      - test-fail
     kind: Pod
+    namespace: user-test
     result: fail
