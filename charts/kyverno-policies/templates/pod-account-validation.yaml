@@ -32,7 +32,7 @@ spec:
     - key: "{{`{{ request.operation }}`}}"
       operator: In
       value: ["CREATE","UPDATE"]
-    - key: "{{`{{ request.object.metadata.labels.account }}`}}"
+    - key: "{{`{{ request.object.metadata.labels.account || '' }}`}}"
       operator: NotEquals
       value: ""
     context:
