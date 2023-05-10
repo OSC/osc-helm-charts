@@ -17,6 +17,7 @@ jobs:
           - "focalmap"
           - "sirmodel"
           - nominatim
+          - "rigatoni"
     name: Lint Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
@@ -46,6 +47,7 @@ jobs:
           - "focalmap"
           - "sirmodel"
           #- nominatim
+          - "rigatoni"
     name: Test Install Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout

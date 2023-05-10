@@ -9,6 +9,7 @@ metadata:
   name: user-uid-map
   namespace: k8-ldap-configmap
 data:
+  user-immunegenetics: "41773"
   user-k8spublic: "38635"
   user-focalmapdev: "36971"
   user-nominatim: "39237"
@@ -21,6 +22,7 @@ metadata:
   name: user-gid-map
   namespace: k8-ldap-configmap
 data:
+  user-immunegenetics: "4215"
   user-k8spublic: "4097"
   user-focalmapdev: "2925"
   user-nominatim: "4097"
@@ -33,6 +35,7 @@ metadata:
   name: user-gids-map
   namespace: k8-ldap-configmap
 data:
+  user-immunegenetics: '["4215"]'
   user-k8spublic: '["4097"]'
   user-focalmapdev: '["2925","6393","7175"]'
   user-nominatim: '["4097"]'
