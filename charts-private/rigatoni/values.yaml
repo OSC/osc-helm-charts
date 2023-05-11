@@ -1,6 +1,6 @@
 global:
   environment: ""
-  imageTag: v0.1.0
+  imageTag: v0.2.0
   env:
     production:
       serviceAccount: immunegenetics
@@ -20,7 +20,7 @@ webservice:
     enable: false
   workingDir: /app
   image:
-    repository: docker-registry.osc.edu/webservices/immune-genomics
+    repository: docker-registry.osc.edu/webservices/rigatoni
   mounts:
     roDir:
       project: /fs/ess/PAS0854

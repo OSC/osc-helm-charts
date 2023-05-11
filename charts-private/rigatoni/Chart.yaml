@@ -2,8 +2,8 @@ apiVersion: v2
 name: rigatoni
 description: OSC rigatoni web service
 type: application
-version: 0.1.2
-appVersion: v0.1.0
+version: 0.2.0
+appVersion: v0.2.0
 maintainers:
   - name: treydock
 dependencies:
