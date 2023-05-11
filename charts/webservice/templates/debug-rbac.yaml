@@ -10,7 +10,7 @@ rules:
   resources: ["namespaces"]
   verbs: ["get", "list"]
 - apiGroups: [""]
-  resources: ["pods", "pods/log"]
+  resources: ["pods", "pods/log", "pods/exec"]
   verbs: ["get", "list"]
 ---
 kind: RoleBinding
