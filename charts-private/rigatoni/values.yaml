@@ -33,3 +33,4 @@ webservice:
       project: /fs/ess/PAS0854
   debugGroups:
     - wiagstf
+    - PAS0854
