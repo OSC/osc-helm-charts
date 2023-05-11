@@ -1,0 +1,35 @@
+global:
+  environment: ""
+  imageTag: v0.1.0
+  env:
+    production:
+      serviceAccount: immunegenetics
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    test:
+      serviceAccount: immunegenetics
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    dev:
+      serviceAccount: immunegenetics
+      image:
+        tag: latest
+      podResources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+webservice:
+  appType: rshiny
+  auth:
+    enable: false
+  workingDir: /app
+  image:
+    repository: docker-registry.osc.edu/webservices/immune-genomics
+  mounts:
+    roDir:
+      project: /fs/ess/PAS0854
+  debugGroups:
+    - wiagstf
