@@ -11,6 +11,11 @@ spec:
     matchLabels:
       {{- include "webservice.auth.selectorLabels" . | nindent 6 }}
   replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 40%
+    type: RollingUpdate
   template:
     metadata:
       labels:

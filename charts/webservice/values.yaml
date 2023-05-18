@@ -64,6 +64,9 @@ podResources:
 
 replicas: 1
 
+podDistributionBudget:
+  minAvailable: 1
+
 secrets: {}
 
 debugGroups: []
@@ -176,6 +179,8 @@ auth:
   ingress:
     annotations:
       prometheus.io/probe_path: /ping
+  podDistributionBudget:
+    minAvailable: 1
 
 data:
   enable: false
