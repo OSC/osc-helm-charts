@@ -4,14 +4,17 @@ global:
   env:
     production:
       serviceAccount: k8spublic
+      replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
     test:
       serviceAccount: k8spublic
+      replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
     dev:
       serviceAccount: k8spublic
+      replicas: 1
       image:
         tag: latest
       podResources:
