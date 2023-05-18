@@ -5,28 +5,34 @@ global:
   env:
     production:
       serviceAccount: phylogatr
+      replicas: 2
       dbPath: /fs/project/PAS1604/db/production/phylogatr.sqlite3
       dataroot: /fs/project/PAS1604/pipeline/latest
       image:
         tag: '{{ .Values.global.imageTag }}'
       auth:
         accessGroup: accessphylogatr
+        replicas: 2
     test:
       serviceAccount: phylogatr
+      replicas: 2
       dbPath: /fs/project/PAS1604/db/production/phylogatr.sqlite3
       dataroot: /fs/project/PAS1604/pipeline/latest
       image:
         tag: '{{ .Values.global.imageTag }}'
       auth:
         accessGroup: accessphylogatr
+        replicas: 2
     dev:
       serviceAccount: phylogatrdev
+      replicas: 1
       dbPath: /fs/project/PAS1604/db/dev/phylogatr.sqlite3
       dataroot: /fs/project/PAS1604/pipeline/dev
       image:
         tag: latest
       auth:
         accessGroup: accessphylogatrdev
+        replicas: 1
       podResources:
         limits:
           cpu: 1

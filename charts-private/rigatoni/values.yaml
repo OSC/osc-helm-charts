@@ -4,14 +4,17 @@ global:
   env:
     production:
       serviceAccount: immunegenetics
+      replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
     test:
       serviceAccount: immunegenetics
+      replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
     dev:
       serviceAccount: immunegenetics
+      replicas: 1
       image:
         tag: latest
 webservice:
