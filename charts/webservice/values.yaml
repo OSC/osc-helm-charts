@@ -62,7 +62,8 @@ podResources:
     cpu: 1
     memory: 256Mi
 
-replicas: 1
+# Also pulled from global.env.$environment.replicas
+# replicas: 1
 
 podDistributionBudget:
   minAvailable: 1
@@ -179,6 +180,8 @@ auth:
   ingress:
     annotations:
       prometheus.io/probe_path: /ping
+  # Also pulled from global.env.$environment.auth.replicas
+  # replicas: 1
   podDistributionBudget:
     minAvailable: 1
 

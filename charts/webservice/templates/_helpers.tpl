@@ -89,6 +89,26 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 {{- end }}
 
+{{- define "webservice.replicas" }}
+{{- if .Values.replicas }}
+{{- .Values.replicas }}
+{{- else if .Values.global.env }}
+  {{- if (index .Values.global.env (include "osc.common.environment" .) "replicas") }}
+    {{- index .Values.global.env (include "osc.common.environment" .) "replicas" }}
+  {{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "webservice.auth.replicas" }}
+{{- if .Values.auth.replicas }}
+{{- .Values.auth.replicas }}
+{{- else if .Values.global.env }}
+  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
+    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "replicas" }}
+  {{- end }}
+{{- end }}
+{{- end }}
+
 {{- define "webservice.idpHost" }}
 {{- if .Values.auth.idpHost }}
 {{- .Values.auth.idpHost }}

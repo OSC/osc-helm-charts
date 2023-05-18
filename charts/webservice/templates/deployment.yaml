@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       {{- include "webservice.selectorLabels" . | nindent 6 }}
-  replicas: {{ .Values.replicas }}
+  replicas: {{ include "webservice.replicas" . | default 1 }}
   strategy:
     rollingUpdate:
       maxSurge: 1
