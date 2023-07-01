@@ -7,6 +7,7 @@ global:
     password:
   nodeSelectorRole: webservices
   storageClass: webservices-nfs-client
+  imageRegistry: docker-registry.osc.edu
 imagePullSecret:
   enable: true
 nominatim:
@@ -98,7 +99,6 @@ nominatim:
       - ReadWriteOnce
   postgresql:
     image:
-      registry: docker-registry.osc.edu
       repository: webservices/postgresql-nominatim
       tag: 14.4.0-4.0.1
       # Used when not using legacy tokenizer
@@ -172,6 +172,11 @@ nominatim:
             mountPath: /dev/shm
     metrics:
       enabled: true
+      image:
+        repository: kubernetes/bitnami/postgres-exporter
+        tag: 0.10.1-debian-11-r20
+        pullSecrets:
+        - osc-registry
       containerSecurityContext:
         enabled: true
         runAsNonRoot: true
