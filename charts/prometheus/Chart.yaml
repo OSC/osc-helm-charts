@@ -2,7 +2,7 @@ apiVersion: v2
 name: prometheus
 description: OSC Prometheus deployment
 type: application
-version: 0.16.0
+version: 0.17.0
 appVersion: "v2.44.0"
 maintainers:
   - name: treydock
@@ -13,3 +13,7 @@ dependencies:
   - name: dcgm-exporter
     version: 2.6.5
     repository: https://nvidia.github.io/dcgm-exporter/helm-charts
+  - name: osc-common
+    version: 0.5.0
+    repository: https://osc.github.io/osc-helm-charts/
+    # repository: file://../common

@@ -13,6 +13,8 @@ spec:
       labels:
         {{- include "blackbox-exporter.selectorLabels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+      - name: {{ include "osc.common.imagePullSecret.name" . }}
       containers:
         - name: {{ .Values.blackboxExporter.name }}
           {{- with .Values.blackboxExporter.securityContext }}

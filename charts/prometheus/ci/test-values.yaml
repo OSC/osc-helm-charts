@@ -1,3 +1,6 @@
+global:
+  imagePullSecret:
+    password: OSC-IMAGE-PULL-PASSWORD
 proxy:
   oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
   clientID: f4db7edc-7f3c-4570-a574-92d78ba8bb9e

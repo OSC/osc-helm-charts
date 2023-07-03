@@ -9,7 +9,17 @@ on:
 jobs:
   test-helm:
     runs-on: ubuntu-latest
-    name: Test Helm Charts
+    strategy:
+      fail-fast: false
+      matrix:
+        chart:
+          - osc-common
+          - database
+          - webservice
+          - prometheus
+          - kubernetes-dashboard-proxy
+          - kyverno-policies
+    name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,7 +35,7 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.4.0
       - name: Run chart-testing (lint)
-        run: ct lint --config .github/config/cf.yaml --chart-dirs charts
+        run: ct lint --config .github/config/cf.yaml --charts charts/${{ matrix.chart }}
       - name: Create kind cluster
         uses: helm/kind-action@v1.4.0
         with:
@@ -45,6 +55,7 @@ jobs:
           kubectl label node kind-worker2 node-role.kubernetes.io/test=''
       - name: Set image pull secret
         run: |
+          sed -i 's|OSC-IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_READ_TOKEN}}|g' charts/*/ci/*.yaml
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts/*/ci/*.yaml
       - name: Install Keycloak
         run: |
@@ -54,8 +65,11 @@ jobs:
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
           helm install kyverno kyverno/kyverno -n kyverno --create-namespace --version 2.6.5
+      - name: Add namespaces
+        run: kubectl create namespace ${{ matrix.chart }}
       - name: Run chart-testing (install)
-        run: ct install --config .github/config/cf.yaml
+        run: |
+          ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }}
       - name: Debug failure
         if: failure()
         run: |
