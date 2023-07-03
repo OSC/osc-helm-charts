@@ -16,7 +16,7 @@ spec:
         checksum/config: {{ .Files.Get "configs/ssl-exporter.yaml" | sha256sum }}
     spec:
       imagePullSecrets:
-      - {{ include "osc.common.imagePullSecret.name" . }}
+      - name: {{ include "osc.common.imagePullSecret.name" . }}
       containers:
         - name: {{ .Values.sslExporter.name }}
           {{- with .Values.sslExporter.securityContext }}

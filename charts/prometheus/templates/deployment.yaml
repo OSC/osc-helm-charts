@@ -21,7 +21,7 @@ spec:
         {{- include "prometheus.selectorLabels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-      - {{ include "osc.common.imagePullSecret.name" . }}
+      - name: {{ include "osc.common.imagePullSecret.name" . }}
       serviceAccountName: {{ include "prometheus.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
       securityContext:
