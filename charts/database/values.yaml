@@ -6,16 +6,16 @@ global:
     password:
   nodeSelectorRole: webservices
   storageClass: webservices-nfs-client
+  imageRegistry: docker-registry.osc.edu
+  imagePullSecrets:
+    - osc-registry
 imagePullSecret:
   enable: true
 mariadb:
   enable: false
   image:
-    registry: docker-registry.osc.edu
-    repository: webservices/mariadb
+    repository: kubernetes/bitnami/mariadb
     tag: 10.5.13-debian-10-r58
-    pullSecrets:
-      - osc-registry
   primary:
     podLabels:
       '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
@@ -37,8 +37,15 @@ mariadb:
         memory: 256Mi
     nodeSelector:
       '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+  volumePermissions:
+    image:
+      repository: kubernetes/bitnami/bitnami-shell
+      tag: 11-debian-11-r61
   metrics:
     enabled: true
+    image:
+      repository: kubernetes/bitnami/mysqld-exporter
+      tag: 0.14.0-debian-11-r67
     containerSecurityContext:
       enabled: true
       runAsNonRoot: true
@@ -73,11 +80,8 @@ mariadb:
 postgresql:
   enabled: false
   image:
-    registry: docker-registry.osc.edu
-    repository: webservices/postgresql
+    repository: kubernetes/bitnami/postgresql
     tag: 14.4.0-debian-11-r18
-    pullSecrets:
-      - osc-registry
   primary:
     podLabels:
       '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
@@ -101,7 +105,7 @@ postgresql:
       '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
     initContainers:
     - name: init-data
-      image: '{{ include "postgresql.image" . }}'
+      image: '{{ include "postgresql.volumePermissions.image" . }}'
       imagePullPolicy: '{{ .Values.image.pullPolicy }}'
       resources:
         limits:
@@ -130,8 +134,15 @@ postgresql:
           mountPath: '{{ .Values.primary.persistence.mountPath }}'
         - name: dshm
           mountPath: /dev/shm
+  volumePermissions:
+    image:
+      repository: kubernetes/bitnami/bitnami-shell
+      tag: 11-debian-11-r20
   metrics:
     enabled: true
+    image:
+      repository: kubernetes/bitnami/postgres-exporter
+      tag: 0.10.1-debian-11-r20
     containerSecurityContext:
       enabled: true
       runAsNonRoot: true
