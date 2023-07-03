@@ -9,7 +9,7 @@ global:
     password:
 
 image:
-  repository: docker-registry.osc.edu/kubernetes/prom/prometheus
+  repository: quay.io/prometheus/prometheus
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -135,7 +135,7 @@ blackboxExporter:
   name: blackbox-exporter
   configName: blackbox-exporter-config
   image:
-    repository: docker-registry.osc.edu/kubernetes/prom/blackbox-exporter
+    repository: quay.io/prometheus/blackbox-exporter
     pullPolicy: IfNotPresent
     tag: "v0.24.0"
   securityContext:
