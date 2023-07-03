@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '1.18'
+          cache: false
       - name: Set up Helm
         uses: azure/setup-helm@v3
         with:
