@@ -1,0 +1,50 @@
+---
+name: mutate-calico-registry
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: mutate-calico-registry
+    rule: calico-container-registry
+    resources:
+      - test-calico-container-registry
+    patchedResource: calico-container-registry-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: mutate-calico-registry
+    rule: calico-container-registry
+    resources:
+      - test-calico-container-registry-skip
+    patchedResource: calico-container-registry-skip.yaml
+    kind: Pod
+    result: skip
+  - policy: mutate-calico-registry
+    rule: calico-initcontainer-registry
+    resources:
+      - test-calico-initcontainer-registry
+    patchedResource: calico-initcontainer-registry-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: mutate-calico-registry
+    rule: calico-initcontainer-registry
+    resources:
+      - test-calico-initcontainer-registry-skip
+    patchedResource: calico-initcontainer-registry-skip.yaml
+    kind: Pod
+    result: skip
+  - policy: mutate-calico-registry
+    rule: calico-imagepullsecret
+    resources:
+      - test-calico-imagepullsecret
+    patchedResource: calico-imagepullsecret-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: mutate-calico-registry
+    rule: calico-imagepullsecret
+    resources:
+      - test-calico-imagepullsecret-skip
+    patchedResource: calico-imagepullsecret-skip.yaml
+    kind: Pod
+    result: skip

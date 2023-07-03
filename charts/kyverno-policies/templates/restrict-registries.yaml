@@ -1,0 +1,34 @@
+# Source: https://kyverno.io/policies/other/restrict-deprecated-registry/restrict-deprecated-registry/
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-registries
+  annotations:
+    policies.kyverno.io/title: Restrict Registies
+    policies.kyverno.io/category: Best Practices, EKS Best Practices
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/minversion: 1.8.0
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Disallow docker.io registry   
+spec:
+  # validationFailureAction: Enforce
+  validationFailureAction: audit
+  background: true
+  rules:
+  - name: restrict-registry-docker.io
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    validate:
+        message: "The \"docker.io\" image registry is not allowed."
+        foreach:
+          - list: "request.object.spec.[initContainers, ephemeralContainers, containers][]"
+            deny:
+              conditions:
+                all:
+                  - key: "{{`{{ element.image }}`}}"
+                    operator: Equals
+                    value: "docker.io/*"
