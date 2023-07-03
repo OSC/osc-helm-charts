@@ -11,7 +11,8 @@ users:
     - /apps/?*
     - /nfsroot/?*
   authorizedRegistries:
-    - docker.io/ohiosupercomputer
+    - docker-registry.osc.edu
+    - docker-registry-test.osc.edu
 webservices:
   allowHostPaths:
     - /etc/slurm
@@ -19,9 +20,9 @@ webservices:
     - /users/?*
     - /fs/?*
   authorizedRegistries:
-    - docker.io/ohiosupercomputer
+    - docker-registry.osc.edu
+    - docker-registry-test.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
-    - docker.io/bitnami/*-exporter
   validNodeSelector:
     - infrastructure
     - webservices

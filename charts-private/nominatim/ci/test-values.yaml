@@ -5,10 +5,10 @@ global:
   storageClass: standard
 nominatim:
   nominatimInitialize:
-    enabled: false
-    # enabled: true
+    enabled: true
     importStyle: admin
-    # pbfUrl: https://FQDN/internal/nominatim/ohio-latest.osm.pbf
+    # Use small dataset to fit into Kind testing setup
+    pbfUrl: https://download.geofabrik.de/north-america/us/district-of-columbia-latest.osm.pbf
   resources:
     limits:
       cpu: 2

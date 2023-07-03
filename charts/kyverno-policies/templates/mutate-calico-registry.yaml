@@ -1,0 +1,94 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-calico-registry
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+    - name: calico-container-registry
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - kube-system
+      preconditions:
+        all:
+        - key: "{{`{{request.operation || 'BACKGROUND'}}`}}"
+          operator: AnyIn
+          value:
+          - CREATE
+          - UPDATE
+        - key: "docker.io"
+          operator: AnyIn
+          value: "{{`{{ images.containers.*.registry }}`}}"
+        - key: "{{`{{request.object.metadata.labels.\"k8s-app\" || ''}}`}}"
+          operator: Equals
+          value: "calico-*"
+      mutate:
+        foreach:
+        - list: "request.object.spec.containers"
+          patchStrategicMerge:
+            spec:
+              containers:
+              - name: "{{`{{ element.name }}`}}"
+                image: docker-registry.osc.edu/kubernetes/{{`{{ images.containers."{{element.name}}".path }}`}}:{{`{{images.containers."{{element.name}}".tag }}`}}
+    - name: calico-initcontainer-registry
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - kube-system
+      preconditions:
+        all:
+        - key: "{{`{{request.operation || 'BACKGROUND'}}`}}"
+          operator: AnyIn
+          value:
+          - CREATE
+          - UPDATE
+        - key: "{{`{{ request.object.spec.initContainers[] || '' | length(@) }}`}}"
+          operator: GreaterThanOrEquals
+          value: 1
+        - key: "docker.io"
+          operator: AnyIn
+          value: "{{`{{ images.initContainers.*.registry }}`}}"
+        - key: "{{`{{request.object.metadata.labels.\"k8s-app\" || ''}}`}}"
+          operator: Equals
+          value: "calico-*"
+      mutate:
+        foreach:
+        - list: "request.object.spec.initContainers"
+          patchStrategicMerge:
+            spec:
+              initContainers:
+              - name: "{{`{{ element.name }}`}}"
+                image: docker-registry.osc.edu/kubernetes/{{`{{ images.initContainers."{{element.name}}".path}}`}}:{{`{{images.initContainers."{{element.name}}".tag}}`}}
+    - name: calico-imagepullsecret
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - kube-system
+      preconditions:
+        all:
+        - key: "{{`{{request.operation || 'BACKGROUND'}}`}}"
+          operator: AnyIn
+          value:
+          - CREATE
+          - UPDATE
+        - key: "{{`{{request.object.metadata.labels.\"k8s-app\" || ''}}`}}"
+          operator: Equals
+          value: "calico-*"
+      mutate:
+        patchStrategicMerge:
+          spec:
+            containers:
+            - <(image): "docker-registry.osc.edu/*"
+            imagePullSecrets:
+            - name: calico-osc-read

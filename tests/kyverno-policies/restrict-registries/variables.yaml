@@ -1,0 +1,4 @@
+namespaceSelector:
+  - name: test
+    labels:
+      foo: bar

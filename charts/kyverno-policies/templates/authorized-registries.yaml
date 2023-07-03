@@ -1,11 +1,3 @@
-{{- $usersVar := dict "registries" (list) -}}
-{{- range .Values.users.authorizedRegistries -}}
-{{- $noop := printf "%s/* | %s:*" . . | append $usersVar.registries | set $usersVar "registries" -}}
-{{- end }}
-{{- $webservicesVar := dict "registries" (list) -}}
-{{- range .Values.webservices.authorizedRegistries -}}
-{{- $noop := printf "%s/* | %s:*" . . | append $webservicesVar.registries | set $webservicesVar "registries" -}}
-{{- end }}
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -24,13 +16,15 @@ spec:
             - "user-?*"
     validate:
       message: >-
-        Images must come from {{ join " or " $usersVar.registries }}
-      pattern:
-        spec:
+        Images must come from {{ join " or " .Values.users.authorizedRegistries }}
+      anyPattern:
+      {{- range .Values.users.authorizedRegistries }}
+      - spec:
           containers:
-            - image: "{{ join " | " $usersVar.registries }}"
+            - image: "{{ . }}/* | {{ . }}:*"
           =(initContainers):
-            - image: "{{ join " | " $usersVar.registries }}"
+            - image: "{{ . }}/* | {{ . }}:*"
+      {{- end }}
   - name: authorized-registries-webservices
     match:
       any:
@@ -49,10 +43,12 @@ spec:
             name: "cm-acme-http-solver-*"
     validate:
       message: >-
-        Images must come from {{ join " or " $webservicesVar.registries }}
-      pattern:
-        spec:
+        Images must come from {{ join " or " .Values.webservices.authorizedRegistries }}
+      anyPattern:
+      {{- range .Values.webservices.authorizedRegistries }}
+      - spec:
           containers:
-            - image: "{{ join " | " $webservicesVar.registries }}"
+            - image: "{{ . }}/* | {{ . }}:*"
           =(initContainers):
-            - image: "{{ join " | " $webservicesVar.registries }}"
+            - image: "{{ . }}/* | {{ . }}:*"
+      {{- end }}

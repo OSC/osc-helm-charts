@@ -1,3 +1,4 @@
 Chart.lock
 *.tgz
 tests/kyverno-policies/*/policy.yaml
+kyverno-cli

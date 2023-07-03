@@ -1,0 +1,22 @@
+---
+name: restrict-registries
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: restrict-registries
+    rule: restrict-registry-docker.io
+    resources:
+      - test-pass
+    kind: Pod
+    namespace: test
+    result: pass
+  - policy: restrict-registries
+    rule: restrict-registry-docker.io
+    resources:
+      - test-fail
+    kind: Pod
+    namespace: test
+    result: fail

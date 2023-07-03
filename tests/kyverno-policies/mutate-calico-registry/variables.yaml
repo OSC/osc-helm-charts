@@ -1,0 +1,32 @@
+policies:
+  - name: mutate-calico-registry
+    resources:
+      - name: test-calico-container-registry
+        values:
+          request.operation: CREATE
+      - name: test-calico-container-registry-skip
+        values:
+          request.operation: CREATE
+      - name: test-calico-container-registry-skip-op
+        values:
+          request.operation: DELETE
+      - name: test-calico-initcontainer-registry
+        values:
+          request.operation: CREATE
+      - name: test-calico-initcontainer-registry-skip
+        values:
+          request.operation: CREATE
+      - name: test-calico-initcontainer-registry-skip-op
+        values:
+          request.operation: DELETE
+      - name: test-calico-imagepullsecret
+        values:
+          request.operation: CREATE
+      - name: test-calico-imagepullsecret-skip
+        values:
+          request.operation: CREATE
+      - name: test-calico-imagepullsecret-skip-op
+        values:
+          request.operation: DELETE
+namespaceSelector:
+  - name: kube-system

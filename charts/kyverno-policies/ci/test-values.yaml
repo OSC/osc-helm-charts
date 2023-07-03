@@ -1,10 +1,7 @@
 users:
   authorizedRegistries:
-    - docker.io/ohiosupercomputer
-    - example.com
+    - docker-registry.osc.edu
 webservices:
   authorizedRegistries:
-    - docker.io/ohiosupercomputer
-    - example.com
+    - docker-registry.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
-    - docker.io/bitnami/*-exporter
