@@ -141,7 +141,7 @@ nominatim:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
       initContainers:
       - name: init-data
-        image: '{{ include "postgresql.image" . }}'
+        image: '{{ include "postgresql.volumePermissions.image" . }}'
         imagePullPolicy: '{{ .Values.image.pullPolicy }}'
         resources:
           limits:
@@ -170,6 +170,10 @@ nominatim:
             mountPath: '{{ .Values.primary.persistence.mountPath }}'
           - name: dshm
             mountPath: /dev/shm
+    volumePermissions:
+      image:
+        repository: kubernetes/bitnami/bitnami-shell
+        tag: 11-debian-11-r20
     metrics:
       enabled: true
       image:
