@@ -45,6 +45,7 @@ jobs:
           kubectl label node kind-worker2 node-role.kubernetes.io/test=''
       - name: Set image pull secret
         run: |
+          sed -i 's|OSC-IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_READ_TOKEN}}|g' charts/*/ci/*.yaml
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts/*/ci/*.yaml
       - name: Install Keycloak
         run: |
