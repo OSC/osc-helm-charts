@@ -46,7 +46,9 @@ jobs:
           - "phylogatr-web"
           - "focalmap"
           - "sirmodel"
-          - nominatim
+          # TODO: Maybe too few resources with Kind cluster to support init job
+          # Init job is required to bootstrap Nominatim
+          #- nominatim
           - "rigatoni"
     name: Test Install Helm Chart ${{ matrix.chart }}
     steps:
@@ -110,6 +112,6 @@ jobs:
           kubectl describe daemonset -A
           if [ ${{ matrix.chart }} == "nominatim" ]; then
             kubectl describe job -A
-            kubectl logs -n nominatim job.batch/nominatim-init
+            kubectl logs job.batch/$(kubectl get jobs -n nominatim -o jsonpath="{.items[0].metadata.name}") -n nominatim
           fi
           kubectl logs $(kubectl get pods -n kyverno -o jsonpath="{.items[0].metadata.name}") -n kyverno
