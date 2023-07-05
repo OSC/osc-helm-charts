@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+  - name: busybox
+    image: busybox:1.28
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: image-vol
+spec:
+  containers:
+  - name: image-vol
+    image: example.com/clover/volume:passbolt
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: image-vol-skip1
+spec:
+  containers:
+  - name: image-vol
+    image: clover/volume:passbolt
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: image-vol-skip2
+  labels:
+    app.kubernetes.io/name: postgresql
+spec:
+  containers:
+  - name: image-vol
+    image: clover/volume:passbolt
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: image-vol-skip3
+spec:
+  containers:
+  - name: image-vol
+    image: clover/volume:passbolt
