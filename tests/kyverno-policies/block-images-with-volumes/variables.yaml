@@ -1,0 +1,23 @@
+policies:
+  - name: block-images-with-volumes
+    resources:
+      - name: busybox
+        values:
+          imageData.configData.config.Volumes: "0"
+          request.operation: CREATE
+      - name: image-vol
+        values:
+          imageData.configData.config.Volumes: "1"
+          request.operation: CREATE
+      - name: image-vol-skip1
+        values:
+          imageData.configData.config.Volumes: "1"
+          request.operation: CREATE
+      - name: image-vol-skip2
+        values:
+          imageData.configData.config.Volumes: "1"
+          request.operation: CREATE
+      - name: image-vol-skip3
+        values:
+          imageData.configData.config.Volumes: "1"
+          request.operation: DELETE

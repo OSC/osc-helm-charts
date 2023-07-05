@@ -36,6 +36,12 @@ spec:
           value:
             - prometheus
             - postgresql
+        - key: "docker.io"
+          operator: AnyNotIn
+          value: "{{`{{ images.containers.*.registry }}`}}"
+        - key: "docker.io"
+          operator: AnyNotIn
+          value: "{{`{{ images.initContainers.*.registry || '' }}`}}"
     validate:
       message: "Images containing built-in volumes are prohibited."
       foreach:

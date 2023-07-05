@@ -1,0 +1,21 @@
+name: block-images-with-volumes
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: block-images-with-volumes
+    rule: block-images-with-vols
+    resources:
+      - image-vol
+    kind: Pod
+    result: fail
+  - policy: block-images-with-volumes
+    rule: block-images-with-vols
+    resources:
+      - image-vol-skip1
+      - image-vol-skip2
+      - image-vol-skip3
+    kind: Pod
+    result: skip
