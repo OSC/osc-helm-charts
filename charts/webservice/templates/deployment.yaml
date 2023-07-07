@@ -36,7 +36,7 @@ spec:
         {{- end }}
         {{- if .Values.command }}
         command: {{ toYaml .Values.command | nindent 10 }}
-        {{- else }}
+        {{- else if (ne .Values.appType "none") }}
         command: {{ index .Values "defaultCommand" .Values.appType | toYaml | nindent 10 }}
         {{- end }}
         {{- if .Values.args }}
@@ -44,7 +44,7 @@ spec:
         {{- range .Values.args }}
         - {{ tpl . $ }}
         {{- end }}
-        {{- else }}
+        {{- else if (ne .Values.appType "none") }}
         args:
         {{- range (index .Values "defaultArgs" .Values.appType) }}
         - {{ tpl . $ }}
@@ -74,11 +74,15 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
           name: http
-        {{- if or .Values.data.enable .Values.mounts.home .Values.mounts.roDir .Values.mounts.socket }}
+        {{- if or .Values.data.enable .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket }}
         volumeMounts:
         {{- if .Values.data.enable }}
           - name: data
             mountPath: {{ $.Values.data.path }}
+        {{- end }}
+        {{- if .Values.mounts.data }}
+          - name: {{ .Values.mounts.data.name }}
+            mountPath: {{ tpl .Values.mounts.data.mountPath . }}
         {{- end }}
         {{- if .Values.mounts.home }}
           - name: home
@@ -88,6 +92,11 @@ spec:
           - name: {{ $name }}
             mountPath: {{ $path }}
             readOnly: true
+        {{- end }}
+        {{- range $name, $path := .Values.mounts.rwDir }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+            readOnly: false
         {{- end }}
         {{- range $name, $path := .Values.mounts.socket }}
           - name: {{ $name }}
@@ -172,11 +181,15 @@ spec:
           value: {{ tpl $initEnv.value $ | quote }}
         {{- end }}
         {{- end }}
-        {{- if or $.Values.data.enable $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.socket }}
+        {{- if or $.Values.data.enable $.Values.mounts.data $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.rwDir $.Values.mounts.socket }}
         volumeMounts:
         {{- if $.Values.data.enable }}
           - name: data
             mountPath: {{ $.Values.data.path }}
+        {{- end }}
+        {{- if $.Values.mounts.data }}
+          - name: data
+            mountPath: {{ tpl $.Values.mounts.data.mountPath $ }}
         {{- end }}
         {{- if $.Values.mounts.home }}
           - name: home
@@ -187,13 +200,22 @@ spec:
             mountPath: {{ $path }}
             readOnly: true
         {{- end }}
+        {{- range $name, $path := $.Values.mounts.rwDir }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+            readOnly: false
+        {{- end }}
         {{- range $name, $path := $.Values.mounts.socket }}
           - name: {{ $name }}
             mountPath: {{ $path }}
         {{- end }}
         {{- end }}
         {{- if $init.mounts }}
-        {{- if or $init.mounts.home $init.mounts.roDir $init.mounts.socket }}
+        {{- if or $init.mounts.data $init.mounts.home $init.mounts.roDir $init.mounts.rwDir $init.mounts.socket }}
+        {{- if $init.mounts.data }}
+          - name: {{ $init.mounts.data.name }}
+            mountPath: {{ tpl $init.mounts.data.mountPath $ }}
+        {{- end }}
         {{- if $init.mounts.home }}
           - name: home
             mountPath: {{ tpl $init.mounts.home $ }}
@@ -202,6 +224,11 @@ spec:
           - name: {{ $name }}
             mountPath: {{ $path }}
             readOnly: true
+        {{- end }}
+        {{- range $name, $path := $init.mounts.rwDir }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+            readOnly: false
         {{- end }}
         {{- range $name, $path := $init.mounts.socket }}
           - name: {{ $name }}
@@ -225,12 +252,18 @@ spec:
       {{- with .Values.nodeSelector }}
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or .Values.data.enable .Values.mounts.home .Values.mounts.roDir .Values.mounts.socket }}
+      {{- if or .Values.data.enable .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket }}
       volumes:
         {{- if .Values.data.enable }}
         - name: data
           persistentVolumeClaim:
             claimName: {{ include "webservice.data.name" . }}
+        {{- end }}
+        {{- if .Values.mounts.data }}
+        - name: {{ .Values.mounts.data.name }}
+          hostPath:
+            path: {{ tpl .Values.mounts.data.hostPath . }}
+            type: {{ .Values.mounts.data.type | default "Directory" }}
         {{- end }}
         {{- if .Values.mounts.home }}
         - name: home
@@ -239,6 +272,12 @@ spec:
             type: Directory
         {{- end }}
         {{- range $name, $path := .Values.mounts.roDir }}
+        - name: {{ $name }}
+          hostPath:
+            path: {{ $path }}
+            type: Directory
+        {{- end }}
+        {{- range $name, $path := .Values.mounts.rwDir }}
         - name: {{ $name }}
           hostPath:
             path: {{ $path }}
@@ -253,6 +292,12 @@ spec:
       {{- end }}
       {{- range $init := .Values.initContainers }}
       {{- if $init.mounts }}
+        {{- if $init.mounts.data }}
+        - name: {{ $init.mounts.data.name }}
+          hostPath:
+            path: {{ tpl $init.mounts.data.hostPath . }}
+            type: {{ $init.mounts.data.type | default "Directory" }}
+        {{- end }}
         {{- if $init.mounts.home }}
         - name: home
           hostPath:
@@ -260,6 +305,12 @@ spec:
             type: Directory
         {{- end }}
         {{- range $name, $path := $init.mounts.roDir }}
+        - name: {{ $name }}
+          hostPath:
+            path: {{ $path }}
+            type: Directory
+        {{- end }}
+        {{- range $name, $path := $init.mounts.rwDir }}
         - name: {{ $name }}
           hostPath:
             path: {{ $path }}

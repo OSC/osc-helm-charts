@@ -1,3 +1,5 @@
+{{- $replicas := (include "webservice.auth.replicas" .) | default 1 }}
+{{- if (gt (int $replicas) 1 ) }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -13,3 +15,4 @@ spec:
   selector:
     matchLabels:
       {{- include "webservice.auth.selectorLabels" . | nindent 6 }}
+{{- end }}
