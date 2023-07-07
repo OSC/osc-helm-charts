@@ -14,7 +14,7 @@ spec:
       image: busybox:latest
       imagePullPolicy: Always
       command: ['wget']
-      args: ['-O-','-S','{{ include "webservice.name" . }}:{{ .Values.service.port }}']
+      args: ['-O-','-S','{{ include "webservice.name" . }}:{{ .Values.service.port }}{{ .Values.startupProbe.httpGet.path }}']
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
