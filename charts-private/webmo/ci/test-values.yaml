@@ -1,0 +1,25 @@
+global:
+  environment: dev
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  env:
+    dev:
+      podResources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+webservice:
+  ingress:
+    host: test.local
+  mounts:
+    data:
+      name: webmo
+      mountPath: /var/webmo
+      hostPath: /tmp
+    roDir:
+      slurm-conf: null
+    socket: null

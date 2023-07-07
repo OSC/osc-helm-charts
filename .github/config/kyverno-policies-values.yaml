@@ -11,7 +11,6 @@ users:
     - /apps/?*
     - /nfsroot/?*
   authorizedRegistries:
-    - docker.io/ohiosupercomputer
     - docker-registry.osc.edu
 webservices:
   allowHostPaths:
@@ -19,11 +18,10 @@ webservices:
     - /var/run/munge/munge.socket.2
     - /users/?*
     - /fs/?*
+    - /tmp
   authorizedRegistries:
-    - docker.io/ohiosupercomputer
     - docker-registry.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
-    - docker.io/bitnami/*-exporter
     - busybox
   validNodeSelector:
     - test

@@ -1,0 +1,70 @@
+global:
+  environment: ""
+  imageTag: 23.2
+  oscServiceAccount: webmo
+  env:
+    production:
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+      service:
+        alert:
+          receiver: gateways
+      podResources:
+        limits:
+          cpu: 8
+          memory: 16Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+      auth:
+        replicas: 2
+    test:
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+      service:
+        alert:
+          receiver: gateways
+      podResources:
+        limits:
+          cpu: 4
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+      auth:
+        replicas: 2
+    dev:
+      image:
+        tag: latest
+      service:
+        alert:
+          receiver: gateways
+      podResources:
+        limits:
+          cpu: 4
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+      auth:
+        replicas: 1
+webservice:
+  appType: none
+  replicas: 1
+  auth:
+    enable: false
+  image:
+    repository: docker-registry.osc.edu/webservices/webmo
+  mounts:
+    data:
+      name: webmo
+      mountPath: /var/webmo
+      hostPath: /users/PZS0605/webmo/k8s_webmo/{{ include "osc.common.environment" . }}
+    roDir:
+      slurm-conf: /etc/slurm
+    socket:
+      munge-socket: /var/run/munge/munge.socket.2
+  service:
+    port: 8080
+  debugGroups:
+    - wiagstf
