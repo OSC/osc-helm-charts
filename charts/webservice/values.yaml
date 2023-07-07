@@ -14,6 +14,7 @@ env: []
 defaultCommand:
   rails: ['bundle', 'exec', 'passenger', 'start']
   rshiny: ['/bin/passenger', 'start']
+  none: []
 defaultArgs:
   rails:
     - "--port={{ .Values.service.port }}"
