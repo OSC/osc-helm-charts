@@ -66,5 +66,8 @@ webservice:
       munge-socket: /var/run/munge/munge.socket.2
   service:
     port: 8080
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/app-root: /cgi-bin/webmo/login.cgi
   debugGroups:
     - wiagstf
