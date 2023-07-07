@@ -64,6 +64,15 @@ webservice:
       slurm-conf: /etc/slurm
     socket:
       munge-socket: /var/run/munge/munge.socket.2
+  startupProbe:
+    httpGet:
+      path: /status
+  livenessProbe:
+    httpGet:
+      path: /status
+  readinessProbe:
+    httpGet:
+      path: /cgi-bin/webmo/login.cgi
   service:
     port: 8080
   ingress:
