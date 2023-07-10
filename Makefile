@@ -1,6 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 KYVERNO_GIT = https://github.com/kyverno/kyverno.git
-KYVERNO_VERSION := "v1.8.5"
+KYVERNO_VERSION := "v1.9.5"
 KYVERNO_DIR := $(ROOT_DIR)/kyverno-cli
 #KYVENOR_CLI := $(KYVERNO_DIR)/cmd/cli/kubectl-kyverno/kubectl-kyverno
 KYVENOR_CLI := $(KYVERNO_DIR)/kyverno

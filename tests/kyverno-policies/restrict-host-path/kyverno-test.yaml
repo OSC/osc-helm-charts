@@ -67,7 +67,7 @@ results:
   - policy: restrict-host-path
     rule: webservices-host-path-deny
     resources:
-      - test-fail-webservice-mariadb
+      - test-fail-webservice-mariadb2
     kind: Pod
     namespace: webservice
     result: fail

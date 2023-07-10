@@ -157,7 +157,27 @@ metadata:
   namespace: webservice
   labels:
     app.kubernetes.io/name: mariadb
-spec: 
+spec:
+  containers:
+  - name: mariadb
+    image: nginx:1.12
+  volumes:
+    - name: configmap
+      configMap:
+        name: config
+    - name: home
+      hostPath:
+        path: /users/sysp/test
+        type: Directory
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-fail-webservice-mariadb2
+  namespace: webservice
+  labels:
+    app.kubernetes.io/name: mariadb
+spec:
   containers:
   - name: mariadb
     image: nginx:1.12

@@ -29,7 +29,7 @@ results:
   - policy: pod-lifetime
     rule: pods-max-lifetime
     resources:
-      - test-lifetime-skip
+      - test-max-lifetime-skip
     kind: Pod
     namespace: test
     result: skip

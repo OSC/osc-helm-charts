@@ -37,14 +37,14 @@ results:
   - policy: add-service-account
     rule: webservice-service-account-run-as-containers
     resources:
-      - test-webservice-service-account
+      - test-webservice-service-account-containers
     patchedResource: webservice-service-account-mutated-containers.yaml
     kind: Pod
     result: pass
   - policy: add-service-account
     rule: webservice-service-account-run-as-containers
     resources:
-      - test-webservice-service-account-mariadb
+      - test-webservice-service-account-mariadb-containers
     patchedResource: webservice-service-account-mariadb-mutated-containers.yaml
     kind: Pod
     result: pass
