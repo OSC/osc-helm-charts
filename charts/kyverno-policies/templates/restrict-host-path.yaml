@@ -40,20 +40,6 @@ spec:
                 operator: In
                 values:
                 - webservice
-    exclude:
-      any:
-        - resources:
-            kinds:
-            - Pod
-            selector:
-              matchLabels:
-                app.kubernetes.io/name: mariadb
-            namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - webservice
     validate:
       message: >-
         That HostPath volume is forbidden. The fields spec.volumes[*].hostPath must not be set to allowed paths.
@@ -62,25 +48,3 @@ spec:
           =(volumes):
           - =(hostPath):
               path: "{{ join " | " .Values.webservices.allowHostPaths }}"
-  - name: webservices-host-path-deny
-    match:
-      any:
-        - resources:
-            kinds:
-            - Pod
-            selector:
-              matchLabels:
-                app.kubernetes.io/name: mariadb
-            namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - webservice
-    validate:
-      message: >-
-        That HostPath volume is forbidden. The fields spec.volumes[*].hostPath must not be set.
-      pattern:
-        spec:
-          =(volumes):
-          - X(hostPath): "null"
