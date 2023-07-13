@@ -4,6 +4,10 @@ global:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
   storageClass: standard
+maintenance:
+  groups:
+    - foo
+    - bar
 nodeSelector:
   kubernetes.io/os: linux
 auth:
