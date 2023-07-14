@@ -52,6 +52,9 @@ webservice:
     enable: false
   image:
     repository: docker-registry.osc.edu/webservices/webmo
+  env:
+  - name: SLURM_CONF
+    value: '/etc/slurm/slurm-owens.conf'
   mounts:
     data:
       name: webmo

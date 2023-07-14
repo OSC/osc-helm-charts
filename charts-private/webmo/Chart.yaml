@@ -2,7 +2,7 @@ apiVersion: v2
 name: webmo
 description: OSC webmo web service
 type: application
-version: 0.1.5
+version: 0.1.6
 appVersion: '23.1'
 maintainers:
   - name: treydock
