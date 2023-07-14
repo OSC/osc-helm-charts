@@ -75,7 +75,8 @@ jobs:
         run: |
           kubectl label node kind-worker node-role.kubernetes.io/test=''
           kubectl label node kind-worker2 node-role.kubernetes.io/test=''
-      - name: Build and Load images
+      - name: Build and Load nominatim images
+        if: matrix.chart == 'nominatim'
         run: |
           make -f docker-images/postgresql/Makefile build
           make -f docker-images/postgresql/Makefile kind-load
