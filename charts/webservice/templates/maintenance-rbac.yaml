@@ -13,7 +13,10 @@ rules:
 - apiGroups: [""]
   resources: ["pods", "pods/log"]
   verbs: ["get", "list"]
-- apiGroups: [""]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
   resources: ["deployments/scale"]
   verbs: ["get", "patch"]
 ---
