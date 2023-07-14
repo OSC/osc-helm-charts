@@ -16,8 +16,6 @@ global:
         requests:
           cpu: 1
           memory: 256Mi
-      auth:
-        replicas: 2
     test:
       image:
         tag: '{{ .Values.global.imageTag }}'
@@ -31,8 +29,6 @@ global:
         requests:
           cpu: 1
           memory: 256Mi
-      auth:
-        replicas: 2
     dev:
       image:
         tag: latest
@@ -46,8 +42,9 @@ global:
         requests:
           cpu: 1
           memory: 256Mi
-      auth:
-        replicas: 1
+      maintenance:
+        groups:
+          - wiagstf
 webservice:
   appType: none
   replicas: 1
