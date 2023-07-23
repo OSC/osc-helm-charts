@@ -74,7 +74,7 @@ spec:
         ports:
         - containerPort: {{ .Values.service.port }}
           name: http
-        {{- if or .Values.data.enable .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket }}
+        {{- if or .Values.data.enable .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket .Values.mounts.roFile }}
         volumeMounts:
         {{- if .Values.data.enable }}
           - name: data
@@ -101,6 +101,11 @@ spec:
         {{- range $name, $path := .Values.mounts.socket }}
           - name: {{ $name }}
             mountPath: {{ $path }}
+        {{- end }}
+        {{- range $name, $path := .Values.mounts.roFile }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+            readOnly: true
         {{- end }}
         {{- end }}
         {{- $probeType := "httpGet" }}
@@ -181,7 +186,7 @@ spec:
           value: {{ tpl $initEnv.value $ | quote }}
         {{- end }}
         {{- end }}
-        {{- if or $.Values.data.enable $.Values.mounts.data $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.rwDir $.Values.mounts.socket }}
+        {{- if or $.Values.data.enable $.Values.mounts.data $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.rwDir $.Values.mounts.socket $.Values.mounts.roFile }}
         volumeMounts:
         {{- if $.Values.data.enable }}
           - name: data
@@ -209,9 +214,14 @@ spec:
           - name: {{ $name }}
             mountPath: {{ $path }}
         {{- end }}
+        {{- range $name, $path := $.Values.mounts.roFile }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+            readOnly: true
+        {{- end }}
         {{- end }}
         {{- if $init.mounts }}
-        {{- if or $init.mounts.data $init.mounts.home $init.mounts.roDir $init.mounts.rwDir $init.mounts.socket }}
+        {{- if or $init.mounts.data $init.mounts.home $init.mounts.roDir $init.mounts.rwDir $init.mounts.socket $init.mounts.roFile }}
         {{- if $init.mounts.data }}
           - name: {{ $init.mounts.data.name }}
             mountPath: {{ tpl $init.mounts.data.mountPath $ }}
@@ -234,6 +244,11 @@ spec:
           - name: {{ $name }}
             mountPath: {{ $path }}
         {{- end }}
+        {{- range $name, $path := $init.mounts.roFile }}
+          - name: {{ $name }}
+            mountPath: {{ $path }}
+            readOnly: true
+        {{- end }}
         {{- end }}
         {{- end }}
         resources: {{ toYaml (default $.Values.init.podResources $init.podResources) | nindent 10 }}
@@ -252,7 +267,7 @@ spec:
       {{- with .Values.nodeSelector }}
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or .Values.data.enable .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket }}
+      {{- if or .Values.data.enable .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket .Values.mounts.roFile }}
       volumes:
         {{- if .Values.data.enable }}
         - name: data
@@ -289,6 +304,12 @@ spec:
             path: {{ $path }}
             type: Socket
         {{- end }}
+        {{- range $name, $path := .Values.mounts.roFile }}
+        - name: {{ $name }}
+          hostPath:
+            path: {{ $path }}
+            type: File
+        {{- end }}
       {{- end }}
       {{- range $init := .Values.initContainers }}
       {{- if $init.mounts }}
@@ -321,6 +342,12 @@ spec:
           hostPath:
             path: {{ $path }}
             type: Socket
+        {{- end }}
+        {{- range $name, $path := $init.mounts.roFile }}
+        - name: {{ $name }}
+          hostPath:
+            path: {{ $path }}
+            type: File
         {{- end }}
       {{- end }}
       {{- end }}
