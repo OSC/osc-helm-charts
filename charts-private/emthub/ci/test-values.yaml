@@ -1,0 +1,11 @@
+global:
+  environment: dev
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+webservice:
+  mounts:
+    roDir:
+      project: null
+  ingress:
+    host: test.local

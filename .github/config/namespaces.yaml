@@ -40,3 +40,10 @@ metadata:
   name: webmo
   labels:
     osc.edu/role: webservice
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: emthub
+  labels:
+    osc.edu/role: webservice
