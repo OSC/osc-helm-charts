@@ -16,6 +16,7 @@ data:
   user-phylogatrdev: "33253"
   user-test: "1000"
   user-webmo: "42113"
+  user-emthub: "42168"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -30,6 +31,7 @@ data:
   user-phylogatrdev: "6314"
   user-test: "1001"
   user-webmo: "3608"
+  user-emthub: "8052"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -44,3 +46,4 @@ data:
   user-phylogatrdev: '["6314","6557","6558"]'
   user-test: '["1001","1002"]'
   user-webmo: '["3608","3427"]'
+  user-emthub: '["8052"]'
