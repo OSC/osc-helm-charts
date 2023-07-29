@@ -164,7 +164,7 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
   {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
     {{- if (index .Values.global.env (include "osc.common.environment" .) "service") }}
       {{- if (index .Values.global.env (include "osc.common.environment" .) "service" "alert") }}
-        {{ index .Values.global.env (include "osc.common.environment" .) "service" "alert" "receiver" }}
+        {{- index .Values.global.env (include "osc.common.environment" .) "service" "alert" "receiver" }}
       {{- end }}
     {{- end }}
   {{- end }}
