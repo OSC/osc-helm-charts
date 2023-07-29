@@ -5,6 +5,9 @@ metadata:
   name: {{ include "webservice.auth.name" . }}
   labels:
     {{- include "webservice.auth.labels" . | nindent 4 }}
+  {{- if (include "webservice.alert.receiver" .) }}
+    receiver: {{ include "webservice.alert.receiver" . }}
+  {{- end }}
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     {{- with .Values.ingress.annotations }}

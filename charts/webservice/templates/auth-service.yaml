@@ -5,6 +5,9 @@ metadata:
   name: {{ include "webservice.auth.name" . }}
   labels:
     {{- include "webservice.auth.labels" . | nindent 4 }}
+  {{- if (include "webservice.alert.receiver" .) }}
+    receiver: {{ include "webservice.alert.receiver" . }}
+  {{- end }}
   {{- with .Values.auth.service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
