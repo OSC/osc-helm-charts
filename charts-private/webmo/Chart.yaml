@@ -2,12 +2,12 @@ apiVersion: v2
 name: webmo
 description: OSC webmo web service
 type: application
-version: 0.1.6
+version: 0.2.0
 appVersion: '23.1'
 maintainers:
   - name: treydock
 dependencies:
   - name: webservice
-    version: 0.29.2
+    version: 0.31.1
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../../charts/webservice
