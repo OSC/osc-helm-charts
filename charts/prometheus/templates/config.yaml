@@ -136,7 +136,7 @@ data:
       - action: labelmap
         regex: __meta_kubernetes_service_label_(.+)
       - source_labels: [__meta_kubernetes_namespace]
-        target_label: kubernetes_namespace
+        target_label: namespace
       - source_labels: [__meta_kubernetes_service_name]
         target_label: kubernetes_name
       - regex: "app_kubernetes_io_(managed_by|version)"
@@ -165,7 +165,7 @@ data:
       - action: labelmap
         regex: __meta_kubernetes_service_label_(.+)
       - source_labels: [__meta_kubernetes_namespace]
-        target_label: kubernetes_namespace
+        target_label: namespace
       - source_labels: [__meta_kubernetes_service_name]
         target_label: kubernetes_name
       - source_labels: [kubernetes_name,__meta_kubernetes_service_port_name]
@@ -212,7 +212,7 @@ data:
       - source_labels: [host]
         target_label: node
       - source_labels: [__meta_kubernetes_namespace]
-        target_label: kubernetes_namespace
+        target_label: namespace
       - source_labels: [__meta_kubernetes_pod_name]
         target_label: kubernetes_name
       - source_labels: [kubernetes_name,__meta_kubernetes_pod_annotation_prometheus_io_port]
@@ -256,7 +256,7 @@ data:
       - action: labelmap
         regex: __meta_kubernetes_ingress_label_(.+)
       - source_labels: [__meta_kubernetes_namespace]
-        target_label: kubernetes_namespace
+        target_label: namespace
       - source_labels: [__meta_kubernetes_ingress_name]
         target_label: kubernetes_name
       - regex: "app_kubernetes_io_(managed_by|version)"
@@ -292,7 +292,7 @@ data:
       - action: labelmap
         regex: __meta_kubernetes_ingress_label_(.+)
       - source_labels: [__meta_kubernetes_namespace]
-        target_label: kubernetes_namespace
+        target_label: namespace
       - source_labels: [__meta_kubernetes_ingress_name]
         target_label: kubernetes_name
       - regex: "app_kubernetes_io_(managed_by|version)"

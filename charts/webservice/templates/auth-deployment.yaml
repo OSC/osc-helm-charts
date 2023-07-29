@@ -6,6 +6,9 @@ metadata:
   labels:
     {{ include "osc.common.serviceAccount" . }}
     {{- include "webservice.auth.labels" . | nindent 4 }}
+  {{- if (include "webservice.alert.receiver" .) }}
+    receiver: {{ include "webservice.alert.receiver" . }}
+  {{- end }}
 spec:
   selector:
     matchLabels:
@@ -21,6 +24,9 @@ spec:
       labels:
         {{ include "osc.common.serviceAccount" . }}
         {{- include "webservice.auth.selectorLabels" . | nindent 8 }}
+      {{- if (include "webservice.alert.receiver" .) }}
+        receiver: {{ include "webservice.alert.receiver" . }}
+      {{- end }}
     spec:
       serviceAccountName: {{ include "webservice.name" . }}
       securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
