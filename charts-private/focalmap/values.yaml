@@ -7,9 +7,8 @@ global:
       replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
-      service:
-        alert:
-          receiver: covidsim
+      alert:
+        receiver: covidsim
       podResources:
         limits:
           cpu: 4
@@ -24,9 +23,8 @@ global:
       replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
-      service:
-        alert:
-          receiver: gateways
+      alert:
+        receiver: gateways
       podResources:
         limits:
           cpu: 4
@@ -41,9 +39,8 @@ global:
       replicas: 1
       image:
         tag: latest
-      service:
-        alert:
-          receiver: gateways
+      alert:
+        receiver: gateways
       podResources:
         limits:
           cpu: 4
