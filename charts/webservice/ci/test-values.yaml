@@ -20,6 +20,8 @@ args:
   - "-text=Hello World"
 defaultArgs:
   type: none
+alert:
+  receiver: test
 debugGroups:
   - foobar
 image:

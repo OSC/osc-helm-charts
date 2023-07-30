@@ -73,6 +73,10 @@ secrets: {}
 
 debugGroups: []
 
+alert:
+  # Also pulled from global.env.$environment.alert.receiver
+  receiver:
+
 service:
   port: 3000
   annotations: {}
@@ -80,9 +84,6 @@ service:
     rshiny:
       prometheus.io/probe_module: http
       prometheus.io/probe_scheme: http
-  alert:
-    # Also pulled from global.env.$environment.service.alert.receiver
-    receiver:
 
 probes:
   type: ~
