@@ -17,11 +17,11 @@ global:
         tag: latest
       podResources:
         limits:
-          cpu: 500m
-          memory: 256Mi
+          cpu: 1
+          memory: 512Mi
         requests:
-          cpu: 100m
-          memory: 128Mi
+          cpu: 500m
+          memory: 265Mi
       maintenance:
         groups:
           - wiagstf
