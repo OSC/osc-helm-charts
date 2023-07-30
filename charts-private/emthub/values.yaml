@@ -35,8 +35,7 @@ webservice:
   mounts:
     roDir:
       project: /fs/ess/PAS2531
-  service:
-    alert:
-      receiver: gateways
+  alert:
+    receiver: gateways
   debugGroups:
     - wiagstf

@@ -27,6 +27,8 @@ webservice:
   mounts:
     roDir:
       project: /fs/ess/PAS0854
+  alert:
+    receiver: gateways
   debugGroups:
     - wiagstf
     - PAS0854

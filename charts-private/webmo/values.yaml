@@ -6,9 +6,6 @@ global:
     production:
       image:
         tag: '{{ .Values.global.imageTag }}'
-      service:
-        alert:
-          receiver: gateways
       podResources:
         limits:
           cpu: 8
@@ -19,9 +16,6 @@ global:
     test:
       image:
         tag: '{{ .Values.global.imageTag }}'
-      service:
-        alert:
-          receiver: gateways
       podResources:
         limits:
           cpu: 4
@@ -32,9 +26,6 @@ global:
     dev:
       image:
         tag: latest
-      service:
-        alert:
-          receiver: gateways
       podResources:
         limits:
           cpu: 4
@@ -78,5 +69,7 @@ webservice:
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/app-root: /cgi-bin/webmo/login.cgi
+  alert:
+    receiver: gateways
   debugGroups:
     - wiagstf
