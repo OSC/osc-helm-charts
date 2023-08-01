@@ -89,7 +89,7 @@ results:
     resources:
       - test-limits-pass-mem-limits1
       - test-limits-pass-mem-limits2
-      - test-limits-cpu-requests-missing
+      - test-limits-cpu-requests-missing2
     kind: Pod
     namespace: user-test
     result: pass

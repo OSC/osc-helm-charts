@@ -153,11 +153,11 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-fail-webservice-mariadb
+  name: test-webservice-mariadb
   namespace: webservice
   labels:
     app.kubernetes.io/name: mariadb
-spec: 
+spec:
   containers:
   - name: mariadb
     image: nginx:1.12

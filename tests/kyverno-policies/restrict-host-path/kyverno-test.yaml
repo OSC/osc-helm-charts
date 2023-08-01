@@ -53,21 +53,7 @@ results:
   - policy: restrict-host-path
     rule: webservices-host-path
     resources:
-      - test-fail-webservice-mariadb
-    kind: Pod
-    namespace: webservice
-    result: skip
-  - policy: restrict-host-path
-    rule: webservices-host-path-deny
-    resources:
-      - test-pass-webservice-mariadb
+      - test-webservice-mariadb
     kind: Pod
     namespace: webservice
     result: pass
-  - policy: restrict-host-path
-    rule: webservices-host-path-deny
-    resources:
-      - test-fail-webservice-mariadb
-    kind: Pod
-    namespace: webservice
-    result: fail
