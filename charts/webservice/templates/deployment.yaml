@@ -84,7 +84,7 @@ spec:
         volumeMounts:
         {{- if .Values.data.enable }}
           - name: data
-            mountPath: {{ $.Values.data.path }}
+            mountPath: {{ .Values.data.path }}
         {{- end }}
         {{- if .Values.mounts.data }}
           - name: {{ .Values.mounts.data.name }}
@@ -96,21 +96,21 @@ spec:
         {{- end }}
         {{- range $name, $path := .Values.mounts.roDir }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: true
         {{- end }}
         {{- range $name, $path := .Values.mounts.rwDir }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: false
         {{- end }}
         {{- range $name, $path := .Values.mounts.socket }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
         {{- end }}
         {{- range $name, $path := .Values.mounts.roFile }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: true
         {{- end }}
         {{- end }}
@@ -208,21 +208,21 @@ spec:
         {{- end }}
         {{- range $name, $path := $.Values.mounts.roDir }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: true
         {{- end }}
         {{- range $name, $path := $.Values.mounts.rwDir }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: false
         {{- end }}
         {{- range $name, $path := $.Values.mounts.socket }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
         {{- end }}
         {{- range $name, $path := $.Values.mounts.roFile }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: true
         {{- end }}
         {{- end }}
@@ -238,21 +238,21 @@ spec:
         {{- end }}
         {{- range $name, $path := $init.mounts.roDir }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: true
         {{- end }}
         {{- range $name, $path := $init.mounts.rwDir }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: false
         {{- end }}
         {{- range $name, $path := $init.mounts.socket }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
         {{- end }}
         {{- range $name, $path := $init.mounts.roFile }}
           - name: {{ $name }}
-            mountPath: {{ $path }}
+            mountPath: {{ tpl $path $ }}
             readOnly: true
         {{- end }}
         {{- end }}
@@ -295,25 +295,25 @@ spec:
         {{- range $name, $path := .Values.mounts.roDir }}
         - name: {{ $name }}
           hostPath:
-            path: {{ $path }}
+            path: {{ tpl $path $ }}
             type: Directory
         {{- end }}
         {{- range $name, $path := .Values.mounts.rwDir }}
         - name: {{ $name }}
           hostPath:
-            path: {{ $path }}
+            path: {{ tpl $path $ }}
             type: Directory
         {{- end }}
         {{- range $name, $path := .Values.mounts.socket }}
         - name: {{ $name }}
           hostPath:
-            path: {{ $path }}
+            path: {{ tpl $path $ }}
             type: Socket
         {{- end }}
         {{- range $name, $path := .Values.mounts.roFile }}
         - name: {{ $name }}
           hostPath:
-            path: {{ $path }}
+            path: {{ tpl $path $ }}
             type: File
         {{- end }}
       {{- end }}
@@ -334,25 +334,25 @@ spec:
         {{- range $name, $path := $init.mounts.roDir }}
         - name: {{ $name }}
           hostPath:
-            path: {{ $path }}
+            path: {{ tpl $path $ }}
             type: Directory
         {{- end }}
         {{- range $name, $path := $init.mounts.rwDir }}
         - name: {{ $name }}
           hostPath:
-            path: {{ $path }}
+            path: {{ tpl $path $ }}
             type: Directory
         {{- end }}
         {{- range $name, $path := $init.mounts.socket }}
         - name: {{ $name }}
           hostPath:
-            path: {{ $path }}
+            path: {{ tpl $path $ }}
             type: Socket
         {{- end }}
         {{- range $name, $path := $init.mounts.roFile }}
         - name: {{ $name }}
           hostPath:
-            path: {{ $path }}
+            path: {{ tpl $path $ }}
             type: File
         {{- end }}
       {{- end }}
