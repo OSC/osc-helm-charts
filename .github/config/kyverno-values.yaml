@@ -3,12 +3,18 @@ imagePullSecrets:
     registry: docker-registry.osc.edu
     username: robot$webservices-read
     password: IMAGE-PULL-PASSWORD
+replicaCount: 1
+extraArgs:
+  - --loggingFormat=text
+  - --exceptionNamespace=kyverno
+  - --webhookTimeout=20
 config:
   # TODO: Remove once fixed: https://github.com/kyverno/kyverno/issues/3190
   resourceFilters:
   - "[ConfigMap,*,*]"
   - "[*,local-path-storage,*]"
   - "[Event,*,*]"
+  - "[*,default,*]"
   - "[*,kube-system,*]"
   - "[*,kube-public,*]"
   - "[*,kube-node-lease,*]"
@@ -22,6 +28,7 @@ config:
   - "[ReplicaSet,*,*]"
   - "[ReportChangeRequest,*,*]"
   - "[ClusterReportChangeRequest,*,*]"
+  - "[*,keycloak,*]"
   webhooks:
   - namespaceSelector:
       matchExpressions:
