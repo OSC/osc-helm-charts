@@ -61,14 +61,14 @@ spec:
         {{- end }}
         {{- if or .Values.env .Values.database.enable .Values.database.mariadb.enable }}
         env:
-        {{- if .Values.database.password }}
+        {{- if and .Values.database.enable .Values.database.password }}
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ include "webservice.name" . }}
               key: database-password
         {{- end }}
-        {{- if .Values.database.url }}
+        {{- if and .Values.database.enable .Values.database.url }}
         - name: DATABASE_URL
           value: {{ tpl .Values.database.url . }}
         {{- end }}

@@ -7,7 +7,28 @@ on:
       - .github/workflows/test.yaml
 
 jobs:
+  test-helm-lint:
+    runs-on: ubuntu-latest
+    name: Lint Helm Charts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.4.0
+      - name: Run chart-testing (lint)
+        run: ct lint --config .github/config/cf.yaml --chart-dirs charts
+
   test-helm:
+    needs: [test-helm-lint]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -34,8 +55,6 @@ jobs:
           python-version: 3.9
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.4.0
-      - name: Run chart-testing (lint)
-        run: ct lint --config .github/config/cf.yaml --charts charts/${{ matrix.chart }}
       - name: Create kind cluster
         uses: helm/kind-action@v1.4.0
         with:
