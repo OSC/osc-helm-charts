@@ -16,10 +16,8 @@ webservice:
   ingress:
     host: test.local
   mounts:
-    data:
-      name: webmo
-      mountPath: /var/webmo
-      hostPath: /tmp
+    rwDir:
+      webmo: null
     roDir:
       slurm-conf: null
     socket: null

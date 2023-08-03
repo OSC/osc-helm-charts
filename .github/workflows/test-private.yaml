@@ -9,18 +9,7 @@ on:
 jobs:
   test-helm-lint:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        chart:
-          - "phylogatr-web"
-          - "focalmap"
-          - "sirmodel"
-          - nominatim
-          - "rigatoni"
-          - webmo
-          - emthub
-    name: Lint Helm Chart ${{ matrix.chart }}
+    name: Lint Helm Charts
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,7 +25,7 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.4.0
       - name: Run chart-testing (lint)
-        run: ct lint --config .github/config/cf.yaml --charts charts-private/${{ matrix.chart }}
+        run: ct lint --config .github/config/cf.yaml --chart-dirs charts-private
 
   test-helm-install:
     needs: [test-helm-lint]
