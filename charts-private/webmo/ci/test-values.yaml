@@ -21,3 +21,6 @@ webservice:
     roDir:
       slurm-conf: null
     socket: null
+  readinessProbe:
+    httpGet:
+      path: /status
