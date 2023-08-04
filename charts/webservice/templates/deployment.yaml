@@ -124,11 +124,11 @@ spec:
           {{ $probeType }}: {{ toYaml (index .Values.startupProbe $probeType) | nindent 12 }}
           {{- omit .Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         livenessProbe:
-          {{ $probeType }}: {{ toYaml (index .Values.startupProbe $probeType) | nindent 12 }}
-          {{- omit .Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
+          {{ $probeType }}: {{ toYaml (index .Values.livenessProbe $probeType) | nindent 12 }}
+          {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         readinessProbe:
-          {{ $probeType }}: {{ toYaml (index .Values.startupProbe $probeType) | nindent 12 }}
-          {{- omit .Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
+          {{ $probeType }}: {{ toYaml (index .Values.readinessProbe $probeType) | nindent 12 }}
+          {{- omit .Values.readinessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
   {{- $podResources := .Values.podResources}}
   {{- if .Values.global.env }}
     {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
