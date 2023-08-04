@@ -46,11 +46,11 @@ webservice:
   env:
   - name: SLURM_CONF
     value: '/etc/slurm/slurm-owens.conf'
-  - name: WEBMO_USER_BASE
-    value: /users/PZS0605/webmo/k8s_webmo/{{ include "osc.common.environment" . }}
+  - name: WEBMO_INSTALL
+    value: /users/PZS0605/webmo/k8s_webmo/deployments/{{ include "osc.common.environment" . }}
   mounts:
     rwDir:
-      webmo: /users/PZS0605/webmo/k8s_webmo/{{ include "osc.common.environment" . }}
+      webmo: /users/PZS0605/webmo/k8s_webmo/deployments/{{ include "osc.common.environment" . }}
     roDir:
       slurm-conf: /etc/slurm
     socket:
