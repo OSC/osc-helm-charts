@@ -63,12 +63,12 @@ webservice:
       path: /status
   readinessProbe:
     httpGet:
-      path: /cgi-bin/webmo/login.cgi
+      path: /cgi-bin/login.cgi
   service:
     port: 8080
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/app-root: /cgi-bin/webmo/login.cgi
+      nginx.ingress.kubernetes.io/app-root: /cgi-bin/login.cgi
   alert:
     receiver: gateways
   debugGroups:
