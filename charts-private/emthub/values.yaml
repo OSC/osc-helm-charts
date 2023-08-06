@@ -18,7 +18,7 @@ global:
       podResources:
         limits:
           cpu: 1
-          memory: 512Mi
+          memory: 1Gi
         requests:
           cpu: 500m
           memory: 265Mi
