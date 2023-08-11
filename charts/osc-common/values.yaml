@@ -1,3 +1,17 @@
 global:
+  # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
   oscServiceAccount: ""
+  # -- The OSC node role to use with nodeSelector
   nodeSelectorRole: ""
+  imagePullSecret:
+    # -- imagePullSecret name
+    name: osc-registry
+    # -- imagePullSecret registry
+    registry: docker-registry.osc.edu
+    # -- imagePullSecret username
+    username: robot$webservices-read
+    # -- imagePullSecret password.
+    # This value will be set by OSC's Puppet.
+    # This value must be set to IMAGE-PULL-PASSWORD for CI tests.
+    password:

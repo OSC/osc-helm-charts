@@ -7,6 +7,15 @@ on:
       - .github/workflows/test.yaml
 
 jobs:
+  verify-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Verify Helm docs are up to date
+        run: make verify-docs
   test-helm-lint:
     runs-on: ubuntu-latest
     name: Lint Helm Charts
