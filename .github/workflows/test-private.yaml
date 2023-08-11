@@ -43,6 +43,7 @@ jobs:
           - "rigatoni"
           - webmo
           - emthub
+          - chatsqc
     name: Test Install Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
