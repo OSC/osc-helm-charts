@@ -59,7 +59,7 @@ spec:
         {{- if .Values.workingDir }}
         workingDir: {{ .Values.workingDir }}
         {{- end }}
-        {{- if or .Values.env .Values.database.enable .Values.database.mariadb.enable }}
+        {{- if or .Values.env .Values.database.enable .Values.database.mariadb.enable .Values.envSecrets }}
         env:
         {{- if and .Values.database.enable .Values.database.password }}
         - name: DATABASE_PASSWORD
@@ -67,6 +67,13 @@ spec:
             secretKeyRef:
               name: {{ include "webservice.name" . }}
               key: database-password
+        {{- end }}
+        {{- range $k :=  keys .Values.envSecrets }}
+        - name: {{ $k }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "webservice.name" $ }}
+              key: {{ $k }}
         {{- end }}
         {{- if and .Values.database.enable .Values.database.url }}
         - name: DATABASE_URL

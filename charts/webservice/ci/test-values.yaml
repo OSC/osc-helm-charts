@@ -27,6 +27,8 @@ debugGroups:
 image:
   repository: hashicorp/http-echo
   tag: latest
+envSecrets:
+  TEST: secret
 ingress:
   host: webservice.example.com
 podSecurityContext:
