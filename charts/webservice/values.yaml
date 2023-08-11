@@ -70,6 +70,7 @@ podDistributionBudget:
   minAvailable: 1
 
 secrets: {}
+envSecrets: {}
 
 debugGroups: []
 
