@@ -17,8 +17,8 @@ global:
         tag: latest
       podResources:
         limits:
-          cpu: 500m
-          memory: 256Mi
+          cpu: 1
+          memory: 1Gi
         requests:
           cpu: 100m
           memory: 128Mi
