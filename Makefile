@@ -50,3 +50,16 @@ decrypt-private-values: $(PRIVATE_CHARTS_VALUES)
 		values=$${f%.gpg}; \
 		echo "$(PRIVATE_CHARTS_PASSPHRASE)" | gpg --pinentry-mode loopback --no-tty --passphrase-fd=0 --batch --yes --decrypt --output $$values $$f ; \
 	done
+
+.PHONY: helm-docs
+helm-docs: ## Generate helm docs
+	@echo Generate helm docs... >&2
+	@docker run --rm -v ${PWD}/charts:/helm-docs -w /helm-docs jnorwood/helm-docs:v1.11.0 -s file
+
+.PHONY: verify-docs
+verify-docs: helm-docs ## Check Helm charts docs are up to date
+	@echo Checking helm charts are up to date... >&2
+	@git --no-pager diff charts
+	@echo 'If this test fails, it is because the git diff is non-empty after running "make codegen-helm-all".' >&2
+	@echo 'To correct this, locally run "make verify-charts", commit the changes, and re-run tests.' >&2
+	@git diff --quiet --exit-code charts
