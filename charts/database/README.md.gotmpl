@@ -1,0 +1,64 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+## Usage
+
+### Allow access using Ingress
+
+Enable Ingress access:
+
+```yaml
+global:
+  database:
+    allowIngress: true
+```
+
+### MariaDB
+
+Enable MariaDB:
+
+```yaml
+mariadb:
+  enable: true
+  auth:
+    rootPassword: secret
+    database: name
+    username: name
+    password: secret
+```
+
+### PostgreSQL
+
+Enable PostgreSQL:
+
+```yaml
+postgresql:
+  enable: true
+  auth:
+    postgresPassword: secret
+    database: name
+    username: name
+    password: secret
+```
+
+{{ define "chart.valuesTable" }}
+| Key | Description | Default |
+|-----|-------------|---------|
+{{- range .Values }}
+| {{ .Key }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} |
+{{- end }}
+{{ end }}
+
+{{ template "chart.valuesSection" . }}

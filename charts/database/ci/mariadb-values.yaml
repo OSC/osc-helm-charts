@@ -6,6 +6,11 @@ global:
   storageClass: standard
 mariadb:
   enable: true
+  auth:
+    rootPassword: secret
+    database: name
+    username: name
+    password: secret
   primary:
     persistence:
       size: 50Mi
