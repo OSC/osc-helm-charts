@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.10.1](https://img.shields.io/badge/Version-0.10.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -16,7 +16,7 @@ OSC database service Helm Chart
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | mariadb | 11.4.2 |
 | https://charts.bitnami.com/bitnami | postgresql | 11.6.20 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.6.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.6.1 |
 
 ## Usage
 
@@ -94,4 +94,3 @@ postgresql:
 | postgresql.metrics.enabled |  | `true` |
 | postgresql.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/postgres-exporter"` |
 | postgresql.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.10.1-debian-11-r20"` |
-
