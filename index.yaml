@@ -52,6 +52,30 @@ entries:
   database:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2023-08-15T15:05:56.209550856Z"
+    dependencies:
+    - condition: mariadb.enable
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.4.2
+    - condition: postgresql.enable
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.6.20
+    - name: osc-common
+      repository: https://osc.github.io/osc-helm-charts/
+      version: 0.6.1
+    description: OSC database service Helm Chart
+    digest: 1a0dc97cc4047889c19831730df56dfd9b04d143865e937e27921802e6c901e7
+    maintainers:
+    - name: treydock
+    name: database
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/database-0.10.1.tgz
+    version: 0.10.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2023-08-15T14:04:27.286435321Z"
     dependencies:
     - condition: mariadb.enable
@@ -360,13 +384,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2023-08-15T14:04:27.289766333Z"
+    created: "2023-08-15T15:05:56.21315886Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 6.0.0
     description: Kubernetes Dashboard Proxy
-    digest: cc27ceed836d0d595707fda5d89bca888d9ce392b4997eb3d5ef029f59cad4d3
+    digest: 843c60827c34276f763afe0e58f4028a2f9ab220c90b39b01700102f6f10eeb5
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -489,13 +513,13 @@ entries:
   kyverno-policies:
   - apiVersion: v2
     appVersion: v1.9.5
-    created: "2023-08-15T14:04:27.292900944Z"
+    created: "2023-08-15T15:05:56.214845161Z"
     dependencies:
     - name: kyverno-policies
       repository: https://kyverno.github.io/kyverno/
       version: 2.7.5
     description: OSC Kyverno policies deployment
-    digest: 0843f571f8273ef5dcbdcea6ab7591a17dfb700625480ca5d8052a2f2852fbbe
+    digest: 2c5b591c43c5882701031c29289afad557c519ec126d694be9cce46d5a5fee9c
     maintainers:
     - name: treydock
     name: kyverno-policies
@@ -1114,9 +1138,9 @@ entries:
   osc-common:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2023-08-15T14:04:27.293231546Z"
+    created: "2023-08-15T15:05:56.215088362Z"
     description: OSC common Helm Chart
-    digest: 1f355bc894741df3f5fc6a26ead86b694dbc713fe98b813299e880a5c8c928b7
+    digest: 8eae600ad3e0fad65efc466324623926eeca04ef9a3bb7644e21015cd64a0cce
     maintainers:
     - name: treydock
     name: osc-common
@@ -1151,7 +1175,7 @@ entries:
   prometheus:
   - apiVersion: v2
     appVersion: v2.44.0
-    created: "2023-08-15T14:04:27.296825358Z"
+    created: "2023-08-15T15:05:56.218278065Z"
     dependencies:
     - name: kube-state-metrics
       repository: https://prometheus-community.github.io/helm-charts/
@@ -1163,7 +1187,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.5.0
     description: OSC Prometheus deployment
-    digest: 52ae74593dc766042d3cba1c3c2338a786f9fc3005272c888ab0c3e15e6a3686
+    digest: 78b7eb3d940e714df32fcfddd97a96d6c3fba326c4e4438b4b41fc9db09b5e85
     maintainers:
     - name: treydock
     name: prometheus
@@ -1811,7 +1835,7 @@ entries:
   webservice:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2023-08-15T14:04:27.31134621Z"
+    created: "2023-08-15T15:05:56.229672777Z"
     dependencies:
     - condition: database.mariadb.enable, database.postgresql.enable
       name: database
@@ -1821,7 +1845,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.5.0
     description: OSC webservice bootstrap Helm Chart
-    digest: c7537ae14164f6b8c1edc0769476c54d6de72dab9c6d4ee864ced0d1c253debf
+    digest: 7e878b358beab486012dad649b26b422b2370f2c59a45bb195e0b0bd202e53b5
     maintainers:
     - name: treydock
     name: webservice
@@ -2762,4 +2786,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/webservice-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-15T14:04:27.272957174Z"
+generated: "2023-08-15T15:05:56.197697844Z"
