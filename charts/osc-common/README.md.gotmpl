@@ -15,15 +15,23 @@
 
 ## Helpers
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| osc.common.environment | string | production | The environment|
-| osc.common.serviceAccountKey | string | osc.edu/service-account | The service account label key|
-| osc.common.serviceAccountValue| string | **required** | The global or environment service account|
-| osc.common.serviceAccount| key/value | **required** | The `key: value` of service account that is to be embedded in deployment labels|
-| osc.common.nodeSelectorRoleKey| string | | The nodeSelector role key|
-| osc.common.nodeSelectorRole| string | | The full `key: value` nodeSelector role that should be used to set nodeSelector|
-| osc.common.imagePullSecret.name| string| osc-registry | The imagePullSecret name|
-| osc.common.imagePullSecret | string | | The imagePullSecret base64 encoded to be passed into a Secret|
+| Key | Description| Source |
+|-----|------------|--------|
+| osc.common.environment | The environment | `global.environment` (def: `production`) |
+| osc.common.serviceAccountKey | The service account label key | osc.edu/service-account |
+| osc.common.serviceAccountValue | The global or environment service account | `global.env.<env>.serviceAccount` or `global.oscServiceAccount` |
+| osc.common.serviceAccount | The `key: value` of service account that is to be embedded in deployment labels | `{"osc.common.serviceAccountKey": "osc.common.serviceAccountValue"}` |
+| osc.common.nodeSelectorRoleKey | The nodeSelector role key | `global.nodeSelectorRole` |
+| osc.common.nodeSelectorRole | The full `key: value` nodeSelector role that should be used to set nodeSelector | "osc.common.nodeSelectorRoleKey" |
+| osc.common.imagePullSecret.name | The imagePullSecret name | `global.imagePullSecret.name` (def: `osc-registry`) |
+| osc.common.imagePullSecret | The imagePullSecret base64 encoded to be passed into a Secret | `global.imagePullSecret` |
+
+{{ define "chart.valuesTable" -}}
+| Key | Description | Default |
+|-----|-------------|---------|
+{{- range .Values }}
+| {{ .Key }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} |
+{{- end }}
+{{- end -}}
 
 {{ template "chart.valuesSection" . }}
