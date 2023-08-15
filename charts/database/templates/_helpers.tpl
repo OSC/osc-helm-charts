@@ -29,5 +29,10 @@ Selector labels
 */}}
 {{- define "database.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/name: {{ include "database.name" . }}
+{{- if .Values.mariadb.enable }}
+app.kubernetes.io/name: mariadb
+{{- else if .Values.postgresql.enable }}
+app.kubernetes.io/name: postgresql
+{{- end }}
+app.kubernetes.io/component: primary
 {{- end }}

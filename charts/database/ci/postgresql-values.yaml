@@ -6,6 +6,11 @@ global:
   storageClass: standard
 postgresql:
   enable: true
+  auth:
+    postgresPassword: secret
+    database: name
+    username: name
+    password: secret
   primary:
     persistence:
       size: 50Mi

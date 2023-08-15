@@ -1,24 +1,62 @@
 global:
   imagePullSecret:
+    # -- image pull secret name
     name: osc-registry
+    # -- OSC registry address
     registry: docker-registry.osc.edu
+    # -- OSC registry username
     username: robot$webservices-read
+    # -- The image pull secret password for database images
+    # @default -- **required**
     password:
+  # -- The nodeSelector role
   nodeSelectorRole: webservices
+  # -- The persistent storage class
   storageClass: webservices-nfs-client
+  # -- Global value to pass down to database charts to set registry to pull images from
   imageRegistry: docker-registry.osc.edu
+  # -- The OSC image pull secret name to use to pull images
   imagePullSecrets:
     - osc-registry
+  database:
+    # -- Allow Ingress access
+    allowIngress: false
+    # -- The name of IGNIX Ingress
+    ingressName: ingress-nginx
 imagePullSecret:
+  # -- Manage the image pull secret from osc-common.
+  # Disable if this chart is used as a subchart.
   enable: true
 mariadb:
+  # -- Enable MariaDB subchart by setting to `true`
   enable: false
   image:
+    # -- The OSC registry path to mariadb replicated image.
+    # This value should not need to be changed.
     repository: kubernetes/bitnami/mariadb
+    # -- The version of MariaDB image.
+    # **This version of must replicated to OSC registry**
     tag: 10.5.13-debian-10-r58
+  # @ignored
+  auth:
+    forcePassword: true
+    # -- The root user admin password
+    # @default -- **required**
+    rootPassword:
+    # -- The database name
+    # @default -- **required**
+    database:
+    # -- The database username
+    # @default -- **required**
+    username:
+    # -- The database password
+    # @default -- **required**
+    password:
   primary:
+    # @ignored
     podLabels:
       '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    # @ignored
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
@@ -28,6 +66,7 @@ mariadb:
       seccompProfile:
         type: RuntimeDefault
       privileged: false
+    # -- Set limits for primary MariaDB pod
     resources:
       limits:
         cpu: 4
@@ -35,17 +74,28 @@ mariadb:
       requests:
         cpu: 1
         memory: 256Mi
+    # @ignored
     nodeSelector:
       '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   volumePermissions:
     image:
+      # -- The OSC registry path to replicated image.
+      # This value should not need to be changed.
       repository: kubernetes/bitnami/bitnami-shell
+      # -- The version of replicated image.
+      # **This version of must replicated to OSC registry**
       tag: 11-debian-11-r61
   metrics:
+    # @ignored
     enabled: true
     image:
+      # -- The OSC registry path to replicated image.
+      # This value should not need to be changed.
       repository: kubernetes/bitnami/mysqld-exporter
+      # -- The version of replicated image.
+      # **This version of must replicated to OSC registry**
       tag: 0.14.0-debian-11-r67
+    # @ignored
     containerSecurityContext:
       enabled: true
       runAsNonRoot: true
@@ -56,10 +106,12 @@ mariadb:
       seccompProfile:
         type: RuntimeDefault
       privileged: false
+    # @ignored
     annotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path: /metrics
       prometheus.io/match_metrics: 'true'
+    # @ignored
     resources:
       limits:
         cpu: 2
@@ -67,6 +119,7 @@ mariadb:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
   networkPolicy:
     enabled: true
     ingressRules:
@@ -78,13 +131,33 @@ mariadb:
       namespaceSelector:
         app.kubernetes.io/name: prometheus
 postgresql:
-  enabled: false
+  # -- Enable PostgreSQL subchart by setting to `true`
+  enable: false
   image:
+    # -- The OSC registry path to postgresql replicated image.
+    # This value should not need to be changed.
     repository: kubernetes/bitnami/postgresql
+    # -- The version of MariaDB image.
+    # **This version of must replicated to OSC registry**
     tag: 14.4.0-debian-11-r18
+  auth:
+    # -- The postgres user admin password
+    # @default -- **required**
+    postgresPassword:
+    # -- The database name
+    # @default -- **required**
+    database:
+    # -- The database username
+    # @default -- **required**
+    username:
+    # -- The database password
+    # @default -- **required**
+    password:
   primary:
+    # @ignored
     podLabels:
       '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    # @ignored
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
@@ -94,6 +167,7 @@ postgresql:
       seccompProfile:
         type: RuntimeDefault
       privileged: false
+    # -- Set limits for primary PostgreSQL pod
     resources:
       limits:
         cpu: '4'
@@ -101,8 +175,10 @@ postgresql:
       requests:
         cpu: '1'
         memory: 256Mi
+    # @ignored
     nodeSelector:
       '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+    # @ignored
     initContainers:
     - name: init-data
       image: '{{ include "postgresql.volumePermissions.image" . }}'
@@ -136,13 +212,22 @@ postgresql:
           mountPath: /dev/shm
   volumePermissions:
     image:
+      # -- The OSC registry path to replicated image.
+      # This value should not need to be changed.
       repository: kubernetes/bitnami/bitnami-shell
+      # -- The version of replicated image.
+      # **This version of must replicated to OSC registry**
       tag: 11-debian-11-r20
   metrics:
     enabled: true
     image:
+      # -- The OSC registry path to replicated image.
+      # This value should not need to be changed.
       repository: kubernetes/bitnami/postgres-exporter
+      # -- The version of replicated image.
+      # **This version of must replicated to OSC registry**
       tag: 0.10.1-debian-11-r20
+    # @ignored
     containerSecurityContext:
       enabled: true
       runAsNonRoot: true
@@ -153,10 +238,12 @@ postgresql:
       seccompProfile:
         type: RuntimeDefault
       privileged: false
+    # @ignored
     annotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path: /metrics
       prometheus.io/match_metrics: 'true'
+    # @ignored
     resources:
       limits:
         cpu: '2'
@@ -164,6 +251,7 @@ postgresql:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
   networkPolicy:
     enabled: true
     ingressRules:
