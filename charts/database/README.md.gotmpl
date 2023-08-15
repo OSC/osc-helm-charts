@@ -53,12 +53,12 @@ postgresql:
     password: secret
 ```
 
-{{ define "chart.valuesTable" }}
+{{ define "chart.valuesTable" -}}
 | Key | Description | Default |
 |-----|-------------|---------|
 {{- range .Values }}
 | {{ .Key }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} |
 {{- end }}
-{{ end }}
+{{- end -}}
 
 {{ template "chart.valuesSection" . }}
