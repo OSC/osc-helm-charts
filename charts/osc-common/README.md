@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -20,6 +20,8 @@ OSC common Helm Chart
 | osc.common.serviceAccount | The `key: value` of service account that is to be embedded in deployment labels | `{"osc.common.serviceAccountKey": "osc.common.serviceAccountValue"}` |
 | osc.common.nodeSelectorRoleKey | The nodeSelector role key | `global.nodeSelectorRole` |
 | osc.common.nodeSelectorRole | The full `key: value` nodeSelector role that should be used to set nodeSelector | "osc.common.nodeSelectorRoleKey" |
+| osc.common.roleKey | The label key for role associated with pods | default: `osc.edu/role` |
+| osc.common.role | The full `key: value` role that should be used with pod labels | `{"osc.common.roleKey": "global.nodeSelectorRole"}` |
 | osc.common.imagePullSecret.name | The imagePullSecret name | `global.imagePullSecret.name` (def: `osc-registry`) |
 | osc.common.imagePullSecret | The imagePullSecret base64 encoded to be passed into a Secret | `global.imagePullSecret` |
 

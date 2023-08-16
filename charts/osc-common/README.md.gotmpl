@@ -23,6 +23,8 @@
 | osc.common.serviceAccount | The `key: value` of service account that is to be embedded in deployment labels | `{"osc.common.serviceAccountKey": "osc.common.serviceAccountValue"}` |
 | osc.common.nodeSelectorRoleKey | The nodeSelector role key | `global.nodeSelectorRole` |
 | osc.common.nodeSelectorRole | The full `key: value` nodeSelector role that should be used to set nodeSelector | "osc.common.nodeSelectorRoleKey" |
+| osc.common.roleKey | The label key for role associated with pods | default: `osc.edu/role` |
+| osc.common.role | The full `key: value` role that should be used with pod labels | `{"osc.common.roleKey": "global.nodeSelectorRole"}` |
 | osc.common.imagePullSecret.name | The imagePullSecret name | `global.imagePullSecret.name` (def: `osc-registry`) |
 | osc.common.imagePullSecret | The imagePullSecret base64 encoded to be passed into a Secret | `global.imagePullSecret` |
 
