@@ -13,5 +13,5 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.global.database.ingressName }}
+          app.kubernetes.io/name: {{ .Values.global.ingressName }}
 {{- end }}

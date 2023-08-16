@@ -21,8 +21,8 @@ global:
   database:
     # -- Allow Ingress access
     allowIngress: false
-    # -- The name of IGNIX Ingress
-    ingressName: ingress-nginx
+  # -- The name of IGNIX Ingress
+  ingressName: ingress-nginx
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
   # Disable if this chart is used as a subchart.
