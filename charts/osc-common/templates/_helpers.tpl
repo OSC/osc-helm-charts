@@ -40,6 +40,14 @@ node-role.kubernetes.io/{{- .Values.global.nodeSelectorRole }}
 {{- printf "%s: ''" (include "osc.common.nodeSelectorRoleKey" . ) }}
 {{- end -}}
 
+{{- define "osc.common.roleKey" -}}
+osc.edu/role
+{{- end -}}
+
+{{- define "osc.common.role" -}}
+{{ include "osc.common.roleKey" . }}: {{ .Values.global.nodeSelectorRole }}
+{{- end -}}
+
 {{- define "osc.common.imagePullSecret.name" }}
 {{- .Values.global.imagePullSecret.name }}
 {{- end }}
