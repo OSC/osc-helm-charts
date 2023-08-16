@@ -2,7 +2,7 @@ apiVersion: v2
 name: database
 description: OSC database service Helm Chart
 type: application
-version: 0.10.1
+version: 0.11.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock

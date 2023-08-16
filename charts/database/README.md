@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.10.1](https://img.shields.io/badge/Version-0.10.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -71,7 +71,7 @@ postgresql:
 | global.imageRegistry | Global value to pass down to database charts to set registry to pull images from | `"docker-registry.osc.edu"` |
 | global.imagePullSecrets | The OSC image pull secret name to use to pull images | `["osc-registry"]` |
 | global.database.allowIngress | Allow Ingress access | `false` |
-| global.database.ingressName | The name of IGNIX Ingress | `"ingress-nginx"` |
+| global.ingressName | The name of IGNIX Ingress | `"ingress-nginx"` |
 | imagePullSecret.enable | Manage the image pull secret from osc-common. Disable if this chart is used as a subchart. | `true` |
 | mariadb.enable | Enable MariaDB subchart by setting to `true` | `false` |
 | mariadb.image.repository | The OSC registry path to mariadb replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mariadb"` |
