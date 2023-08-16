@@ -309,7 +309,6 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
-      relabel_configs:
       - source_labels: [label_receiver]
         regex: '(.+)'
         replacement: '$1'
