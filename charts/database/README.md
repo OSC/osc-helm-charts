@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.12.0](https://img.shields.io/badge/Version-0.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -16,7 +16,7 @@ OSC database service Helm Chart
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | mariadb | 11.4.2 |
 | https://charts.bitnami.com/bitnami | postgresql | 11.6.20 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.6.1 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
 
 ## Usage
 

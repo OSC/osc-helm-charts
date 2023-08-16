@@ -35,4 +35,5 @@ app.kubernetes.io/name: mariadb
 app.kubernetes.io/name: postgresql
 {{- end }}
 app.kubernetes.io/component: primary
+{{ include "osc.common.role" . }}
 {{- end }}
