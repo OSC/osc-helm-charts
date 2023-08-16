@@ -13,12 +13,11 @@ global:
     receiver: test
   ingress:
     host: webservice.example.com
+appType: none
 command: ['/http-echo']
 args:
   - "-listen=:{{ .Values.global.service.port }}"
   - "-text=Hello World"
-defaultArgs:
-  type: none
 image:
   repository: hashicorp/http-echo
   tag: latest
@@ -49,8 +48,14 @@ osc-common:
       runAsGroup: 1000
       fsGroup: 1000
 database:
+  enable: true
   mariadb:
     enable: true
+    auth:
+      rootPassword: secret
+      database: name
+      username: name
+      password: secret
     primary:
       persistence:
         size: 50Mi
@@ -63,6 +68,11 @@ database:
           memory: 256Mi
   postgresql:
     enable: true
+    auth:
+      postgresPassword: secret
+      database: name
+      username: name
+      password: secret
     primary:
       persistence:
         size: 50Mi

@@ -37,7 +37,7 @@ spec:
     {{- range $idx, $container := .Values.containers }}
       {{- $values := mergeOverwrite $root $container }}
       - name: {{ tpl $container.name $root }}
-        image: "{{ $root.Values.image.repository }}:{{ tpl (include "webservice.imageTag" $root) $root }}"
+        image: "{{ required "Must provide image repository" $root.Values.image.repository }}:{{ tpl (include "webservice.imageTag" $root) $root }}"
         {{- if eq (tpl (include "webservice.imageTag" $root) $root) "latest" }}
         imagePullPolicy: Always
         {{- else }}
@@ -62,11 +62,11 @@ spec:
         {{- if $root.Values.workingDir }}
         workingDir: {{ $root.Values.workingDir }}
         {{- end }}
-        {{- if or $root.Values.env $root.Values.database.enable $root.Values.database.mariadb.enable $root.Values.envSecrets }}
+        {{- if or $root.Values.env $root.Values.database.mariadb.enable $root.Values.database.postgresql.enable $root.Values.envSecrets }}
         env:
         - name: PASSENGER_PORT
           value: {{ $container.port | default (add $root.Values.global.service.port $idx) | quote }}
-        {{- if and $root.Values.database.enable $root.Values.database.password }}
+        {{- if and $root.Values.database.mariadb.enable $root.Values.database.postgresql.enable }}
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -80,9 +80,9 @@ spec:
               name: {{ include "webservice.name" $root }}
               key: {{ $k }}
         {{- end }}
-        {{- if and $root.Values.database.enable $root.Values.database.url }}
+        {{- if or $root.Values.database.mariadb.enable $root.Values.database.postgresql.enable }}
         - name: DATABASE_URL
-          value: {{ tpl $root.Values.database.url $root }}
+          value: {{ tpl (include "webservice.database.url" $root) $root }}
         {{- end }}
         {{- range $env := $root.Values.env }}
         - name: {{ $env.name }}
@@ -193,18 +193,18 @@ spec:
         - {{ tpl . $ }}
         {{- end }}
         {{- end }}
-        {{- if or $init.env $.Values.database.enable $.Values.database.mariadb.enable }}
+        {{- if or $init.env $.Values.database.mariadb.enable $.Values.database.postgresql.enable }}
         env:
-        {{- if $.Values.database.password }}
+        {{- if or $.Values.database.mariadb.enable $.Values.database.postgresql.enable }}
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ include "webservice.name" $ }}
               key: database-password
         {{- end }}
-        {{- if $.Values.database.url }}
+        {{- if or $.Values.database.mariadb.enable $.Values.database.postgresql.enable }}
         - name: DATABASE_URL
-          value: {{ tpl $.Values.database.url $ | quote }}
+          value: {{ include "webservice.database.url" . }}
         {{- end }}
         {{- range $initEnv := $init.env }}
         - name: {{ $initEnv.name }}
