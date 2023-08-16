@@ -52,7 +52,7 @@ entries:
   database:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2023-08-16T17:42:34.857694707Z"
+    created: "2023-08-16T18:16:09.335851247Z"
     dependencies:
     - condition: mariadb.enable
       name: mariadb
@@ -66,7 +66,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.6.1
     description: OSC database service Helm Chart
-    digest: da760e5e7f7b4ff5192654df173f92b770f0c5823730ac49f38dcc102359eb3f
+    digest: 575b26e7f635b323a076e1717d069b7c8bfc013675812269d0cc616bd321e0c9
     maintainers:
     - name: treydock
     name: database
@@ -408,13 +408,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2023-08-16T17:42:34.861807255Z"
+    created: "2023-08-16T18:16:09.338557765Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes.github.io/dashboard/
       version: 6.0.0
     description: Kubernetes Dashboard Proxy
-    digest: c873fca8823b0c66f4e349adb736bc5228ebb8c4590d15290e99414124e501c9
+    digest: 8cc31239ff47a9c0d5901ba341b5a02805cd403a68874173bf4e4223076c562a
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -537,13 +537,13 @@ entries:
   kyverno-policies:
   - apiVersion: v2
     appVersion: v1.9.5
-    created: "2023-08-16T17:42:34.863738478Z"
+    created: "2023-08-16T18:16:09.340533278Z"
     dependencies:
     - name: kyverno-policies
       repository: https://kyverno.github.io/kyverno/
       version: 2.7.5
     description: OSC Kyverno policies deployment
-    digest: 70b5c375c7dcb80836a82c7619b2ebdf40e54ba3a8c1d9e9d2a611741d8dc94d
+    digest: a1024e1c7bb0ba29956cd136f16b0069580d3f8e1628d009cb9210886d1de440
     maintainers:
     - name: treydock
     name: kyverno-policies
@@ -1162,9 +1162,9 @@ entries:
   osc-common:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2023-08-16T17:42:34.864352385Z"
+    created: "2023-08-16T18:16:09.34087538Z"
     description: OSC common Helm Chart
-    digest: 74ca712fc42af253e1960b19d2116bc730cb4352c1138a73d9b7e9ff0089aa1d
+    digest: a3dbaccf09a7eec1bf9bd1286751b35b5802191f1ca3ae16618dfc5e941ac137
     maintainers:
     - name: treydock
     name: osc-common
@@ -1197,6 +1197,28 @@ entries:
     - https://OSC.github.io/osc-helm-charts/osc-common-0.5.0.tgz
     version: 0.5.0
   prometheus:
+  - apiVersion: v2
+    appVersion: v2.44.0
+    created: "2023-08-16T18:16:09.344599604Z"
+    dependencies:
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 5.6.2
+    - name: dcgm-exporter
+      repository: https://nvidia.github.io/dcgm-exporter/helm-charts
+      version: 2.6.5
+    - name: osc-common
+      repository: https://osc.github.io/osc-helm-charts/
+      version: 0.5.0
+    description: OSC Prometheus deployment
+    digest: b81a59ee6327498d3a727de513c94251d8da9998c2e231444d80982c9d76ce1b
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.18.1.tgz
+    version: 0.18.1
   - apiVersion: v2
     appVersion: v2.44.0
     created: "2023-08-16T17:42:34.868322631Z"
@@ -1859,7 +1881,7 @@ entries:
   webservice:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2023-08-16T17:42:34.882210694Z"
+    created: "2023-08-16T18:16:09.358277194Z"
     dependencies:
     - condition: database.mariadb.enable, database.postgresql.enable
       name: database
@@ -1869,7 +1891,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.5.0
     description: OSC webservice bootstrap Helm Chart
-    digest: e47aab4a55fb87d466ae99192452b439344ce6341183a23c818b624a241d966f
+    digest: 4838d12097e7ce96dc6401c6ef196be401b8f60d52a6fb29011c3097f0bfc2ee
     maintainers:
     - name: treydock
     name: webservice
@@ -2810,4 +2832,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/webservice-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-16T17:42:34.841898222Z"
+generated: "2023-08-16T18:16:09.322638361Z"
