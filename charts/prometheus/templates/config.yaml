@@ -309,6 +309,13 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: host
+      relabel_configs:
+      - source_labels: [label_receiver]
+        regex: '(.+)'
+        replacement: '$1'
+        target_label: receiver
+      - regex: "label_receiver"
+        action: labeldrop
     - job_name: kube-state-metrics-telemetry
       metrics_path: /metrics
       static_configs:
