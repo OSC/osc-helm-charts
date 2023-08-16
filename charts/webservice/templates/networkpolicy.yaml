@@ -15,7 +15,7 @@ spec:
           {{- include "webservice.auth.selectorLabels" . | nindent 10 }}
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.ingressName }}
+          app.kubernetes.io/name: {{ .Values.global.ingressName }}
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.prometheusName }}
+          app.kubernetes.io/name: prometheus

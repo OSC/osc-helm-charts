@@ -34,7 +34,7 @@ spec:
       hostPID: false
       containers:
       - name: {{ include "webservice.name" . }}
-        image: "{{ .Values.image.repository }}:{{ tpl (include "webservice.imageTag" .) . }}"
+        image: "{{ required "Must provide image repository" .Values.image.repository }}:{{ tpl (include "webservice.imageTag" .) . }}"
         {{- if eq (tpl (include "webservice.imageTag" .) .) "latest" }}
         imagePullPolicy: Always
         {{- else }}
@@ -59,9 +59,9 @@ spec:
         {{- if .Values.workingDir }}
         workingDir: {{ .Values.workingDir }}
         {{- end }}
-        {{- if or .Values.env .Values.database.enable .Values.database.mariadb.enable .Values.envSecrets }}
+        {{- if or .Values.env .Values.database.mariadb.enable .Values.database.postgresql.enable .Values.envSecrets }}
         env:
-        {{- if and .Values.database.enable .Values.database.password }}
+        {{- if or .Values.database.mariadb.enable .Values.database.postgresql.enable }}
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -75,9 +75,9 @@ spec:
               name: {{ include "webservice.name" $ }}
               key: {{ $k }}
         {{- end }}
-        {{- if and .Values.database.enable .Values.database.url }}
+        {{- if or .Values.database.mariadb.enable .Values.database.postgresql.enable }}
         - name: DATABASE_URL
-          value: {{ tpl .Values.database.url . }}
+          value: {{ include "webservice.database.url" . }}
         {{- end }}
         {{- range $env := .Values.env }}
         - name: {{ $env.name }}
@@ -121,11 +121,9 @@ spec:
             readOnly: true
         {{- end }}
         {{- end }}
-        {{- $probeType := "httpGet" }}
+        {{- $probeType := .Values.probes.type }}
         {{- if index .Values.probes.typeDefaults .Values.appType }}
           {{- $probeType = (index .Values.probes.typeDefaults .Values.appType) }}
-        {{- else if .Values.probes.type }}
-          {{- $probeType = .Values.probes.type }}
         {{- end }}
         startupProbe:
           {{ $probeType }}: {{ toYaml (index .Values.startupProbe $probeType) | nindent 12 }}
@@ -181,18 +179,18 @@ spec:
         - {{ tpl . $ }}
         {{- end }}
         {{- end }}
-        {{- if or $init.env $.Values.database.enable $.Values.database.mariadb.enable }}
+        {{- if or $init.env $.Values.database.mariadb.enable $.Values.database.postgresql.enable }}
         env:
-        {{- if $.Values.database.password }}
+        {{- if or $.Values.database.mariadb.enable $.Values.database.postgresql.enable }}
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ include "webservice.name" $ }}
               key: database-password
         {{- end }}
-        {{- if $.Values.database.url }}
+        {{- if or $.Values.database.mariadb.enable $.Values.database.postgresql.enable }}
         - name: DATABASE_URL
-          value: {{ tpl $.Values.database.url $ | quote }}
+          value: {{ include "webservice.database.url" . }}
         {{- end }}
         {{- range $initEnv := $init.env }}
         - name: {{ $initEnv.name }}
