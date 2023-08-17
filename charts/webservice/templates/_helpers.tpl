@@ -124,7 +124,7 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- if .Values.global.env }}
 {{- $tag = index .Values.global.env (include "osc.common.environment" .) "image" "tag" }}
 {{- end }}
-{{ required "Must provide image tag" $tag }}
+{{- required "Must provide image tag" $tag }}
 {{- end }}
 
 {{- define "webservice.replicas" }}
