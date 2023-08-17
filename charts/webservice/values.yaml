@@ -27,13 +27,15 @@ args: []
 workingDir:
 # -- List environment variables, eg: `{"name": "<name>", "value": "<value>"}`
 env: []
-# -- Default command based on `appType`
 defaultCommand:
+  # -- Default command when `appType` is `rails`
   rails: ['bundle', 'exec', 'passenger', 'start']
+  # -- Default command when `appType` is `rshiny`
   rshiny: ['/bin/passenger', 'start']
+  # -- Default command when `appType` is `none`
   none: []
-# -- Default args based on `appType`
 defaultArgs:
+  # -- Default args when `appType` is `rails`
   rails:
     - "--port={{ .Values.service.port }}"
     - "--min-instances=1"
@@ -44,6 +46,7 @@ defaultArgs:
     - "--disable-anonymous-telemetry"
     - "--log-file=/dev/stdout"
     - "--pid-file=/tmp/passenger.pid"
+  # -- Default args when `appType` is `rshiny`
   rshiny:
     - "--port={{ .Values.service.port }}"
     - "--min-instances=1"
@@ -56,6 +59,7 @@ defaultArgs:
     - "--pid-file=/tmp/passenger.pid"
     - "--app-start-command"
     - 'R --no-save --slave -f /app/entrypoint.R --args $$PORT'
+  # -- Default args when `appType` is `none`
   none: []
 
 image:
@@ -122,8 +126,8 @@ service:
   port: 3000
   # -- Service annotations
   annotations: {}
-  # -- Default Service annotations set based on `appType`
   typeAnnotations:
+    # -- Default Service annotations when `appType` is `rshiny`
     rshiny:
       prometheus.io/probe_module: http
       prometheus.io/probe_scheme: http
@@ -131,9 +135,9 @@ service:
 probes:
   # -- Type of probes to use, eg `httpGet` or `tcpSocket`
   type: httpGet
-  # -- Type of probes to use based on value for `appType`.
-  # -- This overrides probes.type
   typeDefaults:
+    # -- Type of probes to use when `appType` is `rshiny`.
+    # -- This overrides probes.type
     rshiny: tcpSocket
 startupProbe:
   # -- Config for httpGet startupProbe
@@ -220,7 +224,7 @@ auth:
   # @default -- **required**
   clientSecret:
   # -- Oauth cookie secret
-  # @default -- **required*
+  # @default -- **required**
   cookieSecret:
   # @ignored
   cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}

@@ -35,8 +35,12 @@ OSC webservice bootstrap Helm Chart
 | args | Args to start webservice | `[]` |
 | workingDir | webservice working directory | `nil` |
 | env | List environment variables, eg: `{"name": "<name>", "value": "<value>"}` | `[]` |
-| defaultCommand | Default command based on `appType` | `{"none":[],"rails":["bundle","exec","passenger","start"],"rshiny":["/bin/passenger","start"]}` |
-| defaultArgs | Default args based on `appType` | `{"none":[],"rails":["--port={{ .Values.service.port }}","--min-instances=1","--sticky-sessions","--start-timeout=180","--environment=production","--disable-security-update-check","--disable-anonymous-telemetry","--log-file=/dev/stdout","--pid-file=/tmp/passenger.pid"],"rshiny":["--port={{ .Values.service.port }}","--min-instances=1","--sticky-sessions","--start-timeout=180","--environment=production","--disable-security-update-check","--disable-anonymous-telemetry","--log-file=/dev/stdout","--pid-file=/tmp/passenger.pid","--app-start-command","R --no-save --slave -f /app/entrypoint.R --args $$PORT"]}` |
+| defaultCommand.rails | Default command when `appType` is `rails` | `["bundle","exec","passenger","start"]` |
+| defaultCommand.rshiny | Default command when `appType` is `rshiny` | `["/bin/passenger","start"]` |
+| defaultCommand.none | Default command when `appType` is `none` | `[]` |
+| defaultArgs.rails | Default args when `appType` is `rails` | `["--port={{ .Values.service.port }}","--min-instances=1","--sticky-sessions","--start-timeout=180","--environment=production","--disable-security-update-check","--disable-anonymous-telemetry","--log-file=/dev/stdout","--pid-file=/tmp/passenger.pid"]` |
+| defaultArgs.rshiny | Default args when `appType` is `rshiny` | `["--port={{ .Values.service.port }}","--min-instances=1","--sticky-sessions","--start-timeout=180","--environment=production","--disable-security-update-check","--disable-anonymous-telemetry","--log-file=/dev/stdout","--pid-file=/tmp/passenger.pid","--app-start-command","R --no-save --slave -f /app/entrypoint.R --args $$PORT"]` |
+| defaultArgs.none | Default args when `appType` is `none` | `[]` |
 | image.repository | Image repository. | **required** |
 | image.tag | Image tag. Also pulled from `global.env.<env>.image.tag`. | **required** |
 | mounts.home | webservice home mount that is mounted at same location inside pod | `""` |
@@ -53,9 +57,9 @@ OSC webservice bootstrap Helm Chart
 | alert.receiver | Prometheus alert receiver. Also pulled from `global.env.<env>.alert.receiver` | `nil` |
 | service.port | The port the webservice listens on | `3000` |
 | service.annotations | Service annotations | `{}` |
-| service.typeAnnotations | Default Service annotations set based on `appType` | `{"rshiny":{"prometheus.io/probe_module":"http","prometheus.io/probe_scheme":"http"}}` |
+| service.typeAnnotations.rshiny | Default Service annotations when `appType` is `rshiny` | `{"prometheus.io/probe_module":"http","prometheus.io/probe_scheme":"http"}` |
 | probes.type | Type of probes to use, eg `httpGet` or `tcpSocket` | `"httpGet"` |
-| probes.typeDefaults | This overrides probes.type | `{"rshiny":"tcpSocket"}` |
+| probes.typeDefaults.rshiny | This overrides probes.type | `"tcpSocket"` |
 | startupProbe.httpGet | Config for httpGet startupProbe | `{"path":"/","port":"http"}` |
 | startupProbe.tcpSocket | Config for tcpSocket startupProbe | `{"port":"http"}` |
 | startupProbe.failureThreshold | startupProbe failureThreshold | `12` |
@@ -79,7 +83,7 @@ OSC webservice bootstrap Helm Chart
 | ingress.rShinyAnnotations | ingress annotations used when `appType` is `rshiny` | `{"nginx.ingress.kubernetes.io/proxy-read-timeout":"86400","nginx.ingress.kubernetes.io/proxy-send-timeout":"3600","nginx.ingress.kubernetes.io/server-snippets":"location / {\n  proxy_http_version 1.1;\n  proxy_set_header Upgrade $http_upgrade;\n  proxy_set_header Connection $connection_upgrade;\n  proxy_buffering off;\n }\n"}` |
 | auth.enable | Enable oauth proxy authentication with Keycloak | `true` |
 | auth.clientSecret | Keycloak client secret | **required** |
-| auth.cookieSecret | Oauth cookie secret | **required* |
+| auth.cookieSecret | Oauth cookie secret | **required** |
 | auth.idpHost | The Keycloak IDP host, also pulled from `global.env.<env>.auth.idpHost` | `nil` |
 | auth.accessGroup | Restrict webservice access to this group. Also pulled from `global.env.<env>.auth.accessGroup` | `""` |
 | auth.allowGroups | Additional groups to allow access | `[]` |
