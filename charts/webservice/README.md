@@ -43,6 +43,7 @@ OSC webservice bootstrap Helm Chart
 | defaultArgs.none | Default args when `appType` is `none` | `[]` |
 | image.repository | Image repository. | **required** |
 | image.tag | Image tag. Also pulled from `global.env.<env>.image.tag`. | **required** |
+| image.pullPolicy | imagePullPolicy.  **Forced to `Always` when image tag contains `:latest`**. | `"IfNotPresent"` |
 | mounts.home | webservice home mount that is mounted at same location inside pod | `""` |
 | mounts.roDir | Read-only directory volumes, `name=path`. | `{}` |
 | mounts.rwDir | Read-write directory volumes, `name=path`. | `{}` |

@@ -69,7 +69,7 @@ image:
   # -- Image tag. Also pulled from `global.env.<env>.image.tag`.
   # @default -- **required**
   tag:
-  # @ignored
+  # -- imagePullPolicy.  **Forced to `Always` when image tag contains `:latest`**.
   pullPolicy: IfNotPresent
 
 mounts:
