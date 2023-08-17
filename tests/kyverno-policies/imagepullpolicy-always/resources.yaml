@@ -12,6 +12,17 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-pass2
+  namespace: test
+spec:
+  containers:
+  - name: nginx
+    image: example.com/ondemand-base-rhel7:0.12.0
+    imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-fail
   namespace: test
 spec: 

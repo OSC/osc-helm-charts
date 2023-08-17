@@ -14,6 +14,12 @@ results:
   - policy: imagepullpolicy-always
     rule: imagepullpolicy-always
     resources:
+      - test-pass2
+    kind: Pod
+    result: skip
+  - policy: imagepullpolicy-always
+    rule: imagepullpolicy-always
+    resources:
       - test-fail
     kind: Pod
     result: fail
