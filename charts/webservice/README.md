@@ -54,6 +54,7 @@ OSC webservice bootstrap Helm Chart
 | secrets | Secrets for this webservice, eg `{"name": "value"}` | `{}` |
 | envSecrets | Environment secrets for this webservice, eg `{"NAME": "value"}` | `{}` |
 | debugGroups | List of OSC groups that are authorized to perform debug actions like query pod logs. | `[]` |
+| maintenance.groups | Groups who can perform maintenance operations like deployment scaling. Also pulled from `global.env.<env>.maintenance.groups`. | `[]` |
 | alert.receiver | Prometheus alert receiver. Also pulled from `global.env.<env>.alert.receiver` | `nil` |
 | service.port | The port the webservice listens on | `3000` |
 | service.annotations | Service annotations | `{}` |

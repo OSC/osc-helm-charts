@@ -115,6 +115,10 @@ envSecrets: {}
 
 # -- List of OSC groups that are authorized to perform debug actions like query pod logs.
 debugGroups: []
+maintenance:
+  # -- Groups who can perform maintenance operations like deployment scaling.
+  # Also pulled from `global.env.<env>.maintenance.groups`.
+  groups: []
 
 alert:
   # -- Prometheus alert receiver.
