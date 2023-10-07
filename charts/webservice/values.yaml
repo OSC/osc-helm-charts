@@ -1,21 +1,41 @@
 global:
   imagePullSecret:
+    # -- image pull secret name
     name: osc-registry
+    # -- OSC registry address
     registry: docker-registry.osc.edu
+    # -- OSC registry username
     username: robot$webservices-read
+    # -- The image pull secret password for database images
+    # @default -- **required**
     password:
+  # -- The nodeSelector role
   nodeSelectorRole: webservices
+  # -- The persistent storage class
   storageClass: webservices-nfs-client
+  # -- The name of IGNIX Ingress
+  ingressName: ingress-nginx
+# -- The webservice application type.
+# Choices currently are `rails`, `rshiny` and `none`.
+# This is used to set the default command and args
 appType: rails
+# -- Command to start webservice
 command: []
+# -- Args to start webservice
 args: []
+# -- webservice working directory
 workingDir:
+# -- List environment variables, eg: `{"name": "<name>", "value": "<value>"}`
 env: []
 defaultCommand:
+  # -- Default command when `appType` is `rails`
   rails: ['bundle', 'exec', 'passenger', 'start']
+  # -- Default command when `appType` is `rshiny`
   rshiny: ['/bin/passenger', 'start']
+  # -- Default command when `appType` is `none`
   none: []
 defaultArgs:
+  # -- Default args when `appType` is `rails`
   rails:
     - "--port={{ .Values.service.port }}"
     - "--min-instances=1"
@@ -26,6 +46,7 @@ defaultArgs:
     - "--disable-anonymous-telemetry"
     - "--log-file=/dev/stdout"
     - "--pid-file=/tmp/passenger.pid"
+  # -- Default args when `appType` is `rshiny`
   rshiny:
     - "--port={{ .Values.service.port }}"
     - "--min-instances=1"
@@ -38,23 +59,39 @@ defaultArgs:
     - "--pid-file=/tmp/passenger.pid"
     - "--app-start-command"
     - 'R --no-save --slave -f /app/entrypoint.R --args $$PORT'
+  # -- Default args when `appType` is `none`
   none: []
 
 image:
+  # -- Image repository.
+  # @default -- **required**
   repository:
+  # -- Image tag. Also pulled from `global.env.<env>.image.tag`.
+  # @default -- **required**
   tag:
+  # -- imagePullPolicy.  **Forced to `Always` when image tag contains `:latest`**.
   pullPolicy: IfNotPresent
 
 mounts:
+  # -- webservice home mount that is mounted at same location inside pod
   home: ''
+  # -- Read-only directory volumes, `name=path`.
   roDir: {}
+  # -- Read-write directory volumes, `name=path`.
+  rwDir: {}
+  # -- Socket volumes, `name=path`.
   socket: {}
+  # -- Read-only file volumes, `name=path`.
+  roFile: {}
 
+# -- Additional nodeSelector that is added to existing role selection.
 nodeSelector: {}
 
+# @ignored
 podSecurityContext:
   runAsNonRoot: true
 
+# -- The pod resource limits
 podResources:
   limits:
     cpu: 4
@@ -63,63 +100,96 @@ podResources:
     cpu: 1
     memory: 256Mi
 
-# Also pulled from global.env.$environment.replicas
-# replicas: 1
+# -- Number of replicas. Also pulled from `global.env.<env>.replicas`
+# @default -- 1
+replicas:
 
+# @ignored
 podDistributionBudget:
   minAvailable: 1
 
+# -- Secrets for this webservice, eg `{"name": "value"}`
 secrets: {}
+# -- Environment secrets for this webservice, eg `{"NAME": "value"}`
 envSecrets: {}
 
+# -- List of OSC groups that are authorized to perform debug actions like query pod logs.
 debugGroups: []
+maintenance:
+  # -- Groups who can perform maintenance operations like deployment scaling.
+  # Also pulled from `global.env.<env>.maintenance.groups`.
+  groups: []
 
 alert:
-  # Also pulled from global.env.$environment.alert.receiver
+  # -- Prometheus alert receiver.
+  # Also pulled from `global.env.<env>.alert.receiver`
   receiver:
 
 service:
+  # -- The port the webservice listens on
   port: 3000
+  # -- Service annotations
   annotations: {}
   typeAnnotations:
+    # -- Default Service annotations when `appType` is `rshiny`
     rshiny:
       prometheus.io/probe_module: http
       prometheus.io/probe_scheme: http
 
 probes:
-  type: ~
+  # -- Type of probes to use, eg `httpGet` or `tcpSocket`
+  type: httpGet
   typeDefaults:
+    # -- Type of probes to use when `appType` is `rshiny`.
+    # -- This overrides probes.type
     rshiny: tcpSocket
 startupProbe:
+  # -- Config for httpGet startupProbe
   httpGet:
     path: /
     port: http
+  # -- Config for tcpSocket startupProbe
   tcpSocket:
     port: http
+  # -- startupProbe failureThreshold
   failureThreshold: 12
+  # -- startupProbe periodSeconds
   periodSeconds: 10
+  # -- startupProbe timeoutSeconds
   timeoutSeconds: 5
 livenessProbe:
+  # -- Config for httpGet livenessProbe
   httpGet:
     path: /
     port: http
+  # -- Config for tcpSocket livenessProbe
   tcpSocket:
     port: http
+  # -- livenessProbe failureThreshold
   failureThreshold: 6
+  # -- livenessProbe periodSeconds
   periodSeconds: 10
+  # -- livenessProbe timeoutSeconds
   timeoutSeconds: 5
 readinessProbe:
+  # -- Config for httpGet readinessProbe
   httpGet:
     path: /
     port: http
+  # -- Config for tcpSocket readinessProbe
   tcpSocket:
     port: http
+  # -- readinessProbe failureThreshold
   failureThreshold: 6
+  # -- readinessProbe periodSeconds
   periodSeconds: 10
+  # -- readinessProbe timeoutSeconds
   timeoutSeconds: 5
 
+# -- webservice init containers
 initContainers: {}
 init:
+  # -- init container pod resource limits
   podResources:
     limits:
       cpu: 1
@@ -129,13 +199,15 @@ init:
       memory: 256Mi
 
 ingress:
-  # Also pulled from global.env.$environment.ingress.host
+  # -- ingress host, also pulled from `global.env.<env>.ingress.host`
   host: ""
-  # Also pulled from global.env.$environment.ingress.hostAlias
+  # -- ingress host alias, also pulled from `global.env.<env>.ingress.hostAlias`
   hostAlias: ""
+  # -- ingress annotations
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+  # -- ingress annotations used when `appType` is `rshiny`
   rShinyAnnotations:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
@@ -148,31 +220,46 @@ ingress:
       }
 
 auth:
+  # -- Enable oauth proxy authentication with Keycloak
   enable: true
+  # @ignored
   clientID: kubernetes-{{ include "webservice.name" . }}
+  # -- Keycloak client secret
+  # @default -- **required**
   clientSecret:
+  # -- Oauth cookie secret
+  # @default -- **required**
   cookieSecret:
+  # @ignored
   cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
-  # Also pulled from global.env.$environment.auth.idpHost
+  # -- The Keycloak IDP host, also pulled from `global.env.<env>.auth.idpHost`
   idpHost:
+  # @ignored
   oidcIssuerURL: https://$(IDP_HOST)/realms/osc
-  # Also pulled from global.env.$environment.auth.accessGroup
-  allowGroups:
+  # -- Restrict webservice access to this group.
+  # Also pulled from `global.env.<env>.auth.accessGroup`
+  accessGroup: ""
+  # -- Additional groups to allow access
+  allowGroups: []
+  # @ignored
   image:
     repository: quay.io/oauth2-proxy/oauth2-proxy
     tag: v7.1.3
     pullPolicy: IfNotPresent
+  # @ignored
   service:
     port: 4180
     annotations:
       prometheus.io/probe_module: http-healthz
       prometheus.io/probe_path: /ping
+  # @ignored
   metricsService:
     type: ClusterIP
     port: 8080
     annotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path: /metrics
+  # @ignored
   podResources:
     limits:
       cpu: 200m
@@ -180,44 +267,74 @@ auth:
     requests:
       cpu: 100m
       memory: 64Mi
+  # @ignored
   ingress:
     annotations:
       prometheus.io/probe_path: /ping
-  # Also pulled from global.env.$environment.auth.replicas
-  # replicas: 1
+  # -- Number of auth replicas. Also pulled from `global.env.<env>.auth.replicas`
+  # @default -- 1
+  replicas:
+  # @ignored
   podDistributionBudget:
     minAvailable: 1
 
 data:
+  # -- Enable use of persistent data volume
   enable: false
+  # @ignored
   storageClass: '{{ .Values.global.storageClass }}'
+  # -- Persistent data volume size
   storageSize: 10Gi
+  # -- Persistent data volume mount path
   path: /data
 
 database:
+  # -- Enable database subchart
   enable: false
+  # @ignored
   imagePullSecret:
     enable: false
-  host: '{{ include "webservice.name" . }}-mariadb'
-  user: '{{ .Values.database.mariadb.auth.username }}'
-  password: '{{ .Values.database.mariadb.auth.password }}'
-  name: '{{ .Values.database.mariadb.auth.database }}'
-  url: mysql2://{{ tpl .Values.database.user . }}:$(DATABASE_PASSWORD)@{{ tpl .Values.database.host . }}:3306/{{ tpl .Values.database.name . }}
   mariadb:
+    # -- Enable MariaDB database
     enable: false
+    auth:
+      # -- The root user admin password
+      # @default -- **required**
+      rootPassword:
+      # -- The database name
+      # @default -- **required**
+      database:
+      # -- The database username
+      # @default -- **required**
+      username:
+      # -- The database password
+      # @default -- **required**
+      password:
+    # @ignored
     networkPolicy:
       ingressRules:
         primaryAccessOnlyFrom:
           podSelector:
             app.kubernetes.io/name: '{{ include "webservice.name" . }}'
   postgresql:
+    # -- Enable PostgreSQL database
     enable: false
+    auth:
+      # -- The postgres user admin password
+      # @default -- **required**
+      postgresPassword:
+      # -- The database name
+      # @default -- **required**
+      database:
+      # -- The database username
+      # @default -- **required**
+      username:
+      # -- The database password
+      # @default -- **required**
+      password:
+    # @ignored
     networkPolicy:
       ingressRules:
         primaryAccessOnlyFrom:
           podSelector:
             app.kubernetes.io/name: '{{ include "webservice.name" . }}'
-
-# Used for network policies
-ingressName: ingress-nginx
-prometheusName: prometheus

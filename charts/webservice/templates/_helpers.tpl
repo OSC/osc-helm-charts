@@ -67,6 +67,7 @@ Selector labels
 {{- define "webservice.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "webservice.name" . }}
+{{ include "osc.common.role" . }}
 {{- end }}
 
 {{/*
@@ -75,18 +76,55 @@ Auth Selector labels
 {{- define "webservice.auth.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
+{{ include "osc.common.role" . }}
 {{- end }}
 
 {{- define "webservice.auth.secretName" }}
 {{- printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
+{{- define "webservice.database.databaseName" -}}
+{{- if .Values.database.mariadb.enable -}}
+{{ required "Must provide database name" .Values.database.mariadb.auth.database }}
+{{- else if .Values.database.postgresql.enable -}}
+{{ required "Must provide database name" .Values.database.postgresql.auth.database }}
+{{- end -}}
+{{- end -}}
+
+{{- define "webservice.database.username" -}}
+{{- if .Values.database.mariadb.enable -}}
+{{ required "Must provide database username" .Values.database.mariadb.auth.username }}
+{{- else if .Values.database.postgresql.enable -}}
+{{ required "Must provide database username" .Values.database.postgresql.auth.username }}
+{{- end -}}
+{{- end -}}
+
+{{- define "webservice.database.password" -}}
+{{- if .Values.database.mariadb.enable -}}
+{{ required "Must provide database password" .Values.database.mariadb.auth.password }}
+{{- else if .Values.database.postgresql.enable -}}
+{{ required "Must provide database password" .Values.database.postgresql.auth.password }}
+{{- end -}}
+{{- end -}}
+
+{{- define "webservice.database.url" -}}
+{{- if .Values.database.mariadb.enable -}}
+{{- $mysqlProtocol := "mysql://" -}}
+{{- if eq .Values.appType "rails" -}}
+{{- $mysqlProtocol = "mysql2://" -}}
+{{- end -}}
+{{ printf "%s%s:%s@%s/%s" $mysqlProtocol (include "webservice.database.username" .) (include "webservice.database.password" .) (printf "%s-mariadb" (include "webservice.name" .)) (include "webservice.database.databaseName" .) }}
+{{- else if .Values.database.postgresql.enable -}}
+{{ printf "postgresql://%s:%s@%s/%s" (include "webservice.database.username" .) (include "webservice.database.password" .) (printf "%s-postgresql" (include "webservice.name" .)) (include "webservice.database.databaseName" .) }}
+{{- end -}}
+{{- end -}}
+
 {{- define "webservice.imageTag" }}
-{{- if .Values.image.tag }}
-{{- .Values.image.tag }}
-{{- else if .Values.global.env }}
-{{- index .Values.global.env (include "osc.common.environment" .) "image" "tag" }}
+{{- $tag := .Values.image.tag }}
+{{- if .Values.global.env }}
+{{- $tag = index .Values.global.env (include "osc.common.environment" .) "image" "tag" }}
 {{- end }}
+{{- required "Must provide image tag" $tag }}
 {{- end }}
 
 {{- define "webservice.replicas" }}

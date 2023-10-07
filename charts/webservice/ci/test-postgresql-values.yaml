@@ -46,10 +46,10 @@ data:
   size: 50Mi
 database:
   enable: true
-  mariadb:
+  postgresql:
     enable: true
     auth:
-      rootPassword: secret
+      postgresPassword: secret
       database: name
       username: name
       password: secret

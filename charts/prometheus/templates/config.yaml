@@ -313,6 +313,10 @@ data:
         regex: '(.+)'
         replacement: '$1'
         target_label: receiver
+      - source_labels: [__name__,label_osc_edu_role]
+        regex: 'kube_pod_labels;(.+)'
+        replacement: '$1'
+        target_label: role
       - regex: "label_receiver"
         action: labeldrop
     - job_name: kube-state-metrics-telemetry
