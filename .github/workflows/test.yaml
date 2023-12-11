@@ -32,7 +32,7 @@ jobs:
         with:
           python-version: 3.9
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.4.0
+        uses: helm/chart-testing-action@v2.6.0
       - name: Run chart-testing (lint)
         run: ct lint --config .github/config/cf.yaml --chart-dirs charts
 
@@ -63,7 +63,7 @@ jobs:
         with:
           python-version: 3.9
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.4.0
+        uses: helm/chart-testing-action@v2.6.0
       - name: Create kind cluster
         uses: helm/kind-action@v1.4.0
         with:
