@@ -36,6 +36,6 @@ webservice:
     roDir:
       project: /fs/ess/PAS2531
   alert:
-    receiver: gateways
+    receiver: emthub
   debugGroups:
     - wiagstf
