@@ -7,8 +7,6 @@ global:
       replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
-      alert:
-        receiver: covidsim
       podResources:
         limits:
           cpu: 4
@@ -23,8 +21,6 @@ global:
       replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
-      alert:
-        receiver: gateways
       podResources:
         limits:
           cpu: 4
@@ -39,8 +35,6 @@ global:
       replicas: 1
       image:
         tag: latest
-      alert:
-        receiver: gateways
       podResources:
         limits:
           cpu: 4
@@ -64,6 +58,8 @@ webservice:
   mounts:
     roDir:
       project: /fs/ess/PDE0001
+  alert:
+    receiver: focalmap
   debugGroups:
     - focalmap_developer
     - wiagstf
