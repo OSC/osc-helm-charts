@@ -10,10 +10,10 @@ global:
       podResources:
         limits:
           cpu: 4
-          memory: 4Gi
+          memory: 8Gi
         requests:
           cpu: 1
-          memory: 256Mi
+          memory: 2Gi
       auth:
         replicas: 2
     test:
@@ -24,10 +24,10 @@ global:
       podResources:
         limits:
           cpu: 4
-          memory: 4Gi
+          memory: 8Gi
         requests:
           cpu: 1
-          memory: 256Mi
+          memory: 2Gi
       auth:
         replicas: 2
     dev:
@@ -38,10 +38,10 @@ global:
       podResources:
         limits:
           cpu: 4
-          memory: 4Gi
+          memory: 8Gi
         requests:
           cpu: 1
-          memory: 256Mi
+          memory: 2Gi
       auth:
         replicas: 1
 webservice:
