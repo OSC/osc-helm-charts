@@ -1,0 +1,7 @@
+---
+# -- Define PAAS namespaces
+namespaces: {}
+# Example defining PAAS namespace
+# namespaces:
+# - name: test
+#   groups: [ 'testgroup' ]

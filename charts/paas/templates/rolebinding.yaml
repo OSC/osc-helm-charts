@@ -1,0 +1,20 @@
+{{ range $namespace := .Values.namespaces }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: paas-{{ $namespace.name }}
+  namespace: {{ $namespace.name }}
+{{ if $namespace.groups -}}
+subjects:
+  {{- range $namespace.groups | default list }}
+  - kind: Group
+    name: {{ . }}
+    apiGroup: rbac.authorization.k8s.io
+  {{- end }}
+{{ end -}}
+roleRef:
+  kind: ClusterRole
+  name: paas
+  apiGroup: rbac.authorization.k8s.io
+{{ end }}

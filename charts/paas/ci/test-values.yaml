@@ -1,0 +1,7 @@
+---
+namespaces:
+- name: test
+  groups: ['testgroup']
+- name: foo
+  groups: ['bar']
+- name: baz

@@ -1,0 +1,10 @@
+{{ range $namespace := .Values.namespaces }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ required "Namespace 'name' is required" $namespace.name }}
+  labels:
+    app.kubernetes.io/name: {{ $namespace.name }}
+    osc.edu/role: paas
+{{ end }}
