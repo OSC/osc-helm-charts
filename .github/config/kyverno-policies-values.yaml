@@ -25,3 +25,16 @@ webservices:
     - busybox
   validNodeSelector:
     - test
+paas:
+  allowHostPaths:
+    - /etc/slurm
+    - /var/run/munge/munge.socket.2
+    - /users/?*
+    - /fs/?*
+    - /tmp
+  authorizedRegistries:
+    - docker-registry.osc.edu
+    - quay.io/oauth2-proxy/oauth2-proxy
+    - busybox
+  validNodeSelector:
+    - test

@@ -29,6 +29,23 @@ webservices:
   validNodeSelector:
     - infrastructure
     - webservices
+paas:
+  allowHostPaths:
+    - /var/lib/sss/pipes
+    - /etc/sssd
+    - /etc/nsswitch.conf
+    - /etc/slurm
+    - /var/run/munge/munge.socket.2
+    - /users/?*
+    - /fs/?*
+  authorizedRegistries:
+    - docker-registry.osc.edu
+    - docker-registry-test.osc.edu
+    - quay.io/oauth2-proxy/oauth2-proxy
+  validNodeSelector:
+    - infrastructure
+    - webservices
+    - paas
 validationFailureAction: {}
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom
@@ -69,6 +86,7 @@ kyverno-policies:
                 operator: In
                 values:
                 - webservice
+                - paas
     restrict-seccomp-strict:
       any:
         # TODO: Remove once ood_core updated
@@ -90,6 +108,7 @@ kyverno-policies:
                 operator: In
                 values:
                 - webservice
+                - paas
   policyPreconditions:
     disallow-capabilities:
       all:

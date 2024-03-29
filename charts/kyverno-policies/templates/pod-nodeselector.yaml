@@ -50,3 +50,30 @@ spec:
             nodeSelector:
               node-role.kubernetes.io/{{ . }}: ''
       {{- end }}
+  - name: pod-nodeselector-paas
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    exclude:
+      any:
+        - resources:
+            name: "cm-acme-http-solver-*"
+    validate:
+      message: "Node selector must be set"
+      anyPattern:
+        - spec:
+            nodeSelector:
+              osc.edu/role: "{{ join " | " .Values.paas.validNodeSelector }}"
+      {{- range .Values.paas.validNodeSelector }}
+        - spec:
+            nodeSelector:
+              node-role.kubernetes.io/{{ . }}: ''
+      {{- end }}

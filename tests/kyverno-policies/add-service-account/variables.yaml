@@ -1,12 +1,12 @@
 policies:
   - name: add-service-account
     rules:
-      - name: webservice-service-account-run-as
+      - name: service-account-run-as
         values:
           uidMap.data.user-test: '1000'
           gidMap.data.user-test: '1001'
           gidsMap.data.user-test: '["1001","1002"]'
-      - name: webservice-service-account-run-as-containers
+      - name: service-account-run-as-containers
         values:
           uidMap.data.user-test: '1000'
           gidMap.data.user-test: '1001'
@@ -17,3 +17,6 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas

@@ -27,8 +27,38 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-paas-service-account
+  namespace: paas
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+  initContainers:
+    - name: init
+      image: busybox
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-webservice-service-account-containers
   namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+  initContainers:
+    - name: init
+      image: busybox
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-service-account-containers
+  namespace: paas
   labels:
     osc.edu/service-account: test
 spec:

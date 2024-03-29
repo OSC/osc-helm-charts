@@ -51,3 +51,26 @@ results:
     kind: Pod
     namespace: webservice
     result: fail
+  - policy: authorized-registries
+    rule: authorized-registries-paas
+    resources:
+      - test-skip-paas
+    kind: Pod
+    result: skip
+  - policy: authorized-registries
+    rule: authorized-registries-paas
+    resources:
+      - test-pass-paas
+      - test-pass2-paas
+      - test-pass3-paas
+      - test-pass-site-paas
+    kind: Pod
+    namespace: paas
+    result: pass
+  - policy: authorized-registries
+    rule: authorized-registries-paas
+    resources:
+      - test-fail-paas
+    kind: Pod
+    namespace: paas
+    result: fail

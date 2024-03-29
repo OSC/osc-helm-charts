@@ -133,3 +133,83 @@ spec:
     image: nginx:1.12
   nodeSelector:
     osc.edu/role: ondemand
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-skip
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-pass
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    osc.edu/role: paas
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-pass2
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    node-role.kubernetes.io/paas: ''
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-pass3
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    node-role.kubernetes.io/infrastructure: ''
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-pass-infra
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    osc.edu/role: infrastructure
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-fail-omit
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-fail-mismatch
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  nodeSelector:
+    osc.edu/role: ondemand

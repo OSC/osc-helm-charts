@@ -54,3 +54,28 @@ results:
     kind: Pod
     namespace: webservice
     result: fail
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-paas
+    resources:
+      - test-paas-skip
+    kind: Pod
+    namespace: paas
+    result: skip
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-paas
+    resources:
+      - test-paas-pass
+      - test-paas-pass2
+      - test-paas-pass3
+      - test-paas-pass-infra
+    kind: Pod
+    namespace: paas
+    result: pass
+  - policy: pod-nodeselector
+    rule: pod-nodeselector-paas
+    resources:
+      - test-paas-fail-omit
+      - test-paas-fail-mismatch
+    kind: Pod
+    namespace: paas
+    result: fail

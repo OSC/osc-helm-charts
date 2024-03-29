@@ -73,6 +73,23 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-limits-pass-paas
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-limits-memory-limits-fail
   namespace: user-test
 spec: 
@@ -195,6 +212,22 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-limits-memory-requests-fail-paas
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-limits-pass-cpu-limits1
   namespace: user-test
 spec: 
@@ -231,6 +264,23 @@ kind: Pod
 metadata:
   name: test-limits-webservice-pass-limits
   namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 4
+        memory: 8Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-paas-pass-limits
+  namespace: paas
 spec: 
   containers:
   - name: nginx
@@ -292,6 +342,23 @@ kind: Pod
 metadata:
   name: test-limits-webservice-fail-cpu-limits
   namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 10
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-paas-fail-cpu-limits
+  namespace: paas
 spec: 
   containers:
   - name: nginx
@@ -421,6 +488,23 @@ kind: Pod
 metadata:
   name: test-limits-webservice-fail-mem-limits
   namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    resources:
+      limits:
+        cpu: 8
+        memory: 64Gi
+      requests:
+        cpu: 500m
+        memory: 4Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-limits-paas-fail-mem-limits
+  namespace: paas
 spec: 
   containers:
   - name: nginx
