@@ -20,8 +20,10 @@ Define PAAS namespaces and the groups that can manage the resources:
 ```
 namespaces:
 - name: test
+  serviceAccount: test-account
   groups: ['testgroup']
 - name: foo
+  serviceAccount: foo-account
   groups: ['bar']
 ```
 

@@ -7,4 +7,5 @@ metadata:
   labels:
     app.kubernetes.io/name: {{ $namespace.name }}
     osc.edu/role: paas
+    {{ include "osc.common.serviceAccountKey" . }}: {{ required "Namespace 'serviceAccount' is required" $namespace.serviceAccount}}
 {{ end }}

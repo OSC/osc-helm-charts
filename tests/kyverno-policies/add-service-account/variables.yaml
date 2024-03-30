@@ -1,13 +1,24 @@
 policies:
   - name: add-service-account
     rules:
-      - name: service-account-run-as
+      - name: webservice-service-account-run-as
         values:
           uidMap.data.user-test: '1000'
           gidMap.data.user-test: '1001'
           gidsMap.data.user-test: '["1001","1002"]'
-      - name: service-account-run-as-containers
+      - name: webservice-service-account-run-as-containers
         values:
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+      - name: paas-service-account-run-as
+        values:
+          serviceAccount: test
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+          gidsMap.data.user-test: '["1001","1002"]'
+      - name: paas-service-account-run-as-containers
+        values:
+          serviceAccount: test
           uidMap.data.user-test: '1000'
           gidMap.data.user-test: '1001'
 namespaceSelector:
@@ -17,6 +28,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: paas-invalid
+    labels:
+      osc.edu/role: paas
   - name: paas
     labels:
       osc.edu/role: paas
+      osc.edu/service-account: test

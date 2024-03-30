@@ -1,0 +1,50 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: user-test
+  labels:
+    app.kubernetes.io/name: open-ondemand
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: default
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-ondemand
+  labels:
+    osc.edu/role: ondemand
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-infrastructure
+  labels:
+    osc.edu/role: infrastructure
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-webservice
+  labels:
+    osc.edu/role: webservice
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-paas
+  labels:
+    osc.edu/role: paas
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-fail

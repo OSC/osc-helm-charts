@@ -12,7 +12,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-service-account-webservice-pass
+  name: test-service-account-pass
   namespace: webservice
   labels:
     osc.edu/service-account: user
@@ -24,7 +24,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-service-account-webservice-fail
+  name: test-service-account-fail
   namespace: webservice
 spec: 
   containers:
@@ -46,7 +46,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-uid-skip-op
+  name: pods-require-valid-service-account-uid-skip-op
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -64,7 +64,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-uid-pass
+  name: pods-require-valid-service-account-uid-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -82,7 +82,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-uid-container-pass
+  name: pods-require-valid-service-account-uid-container-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -99,7 +99,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-uid-init-pass
+  name: pods-require-valid-service-account-uid-init-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -122,7 +122,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-uid-fail
+  name: pods-require-valid-service-account-uid-fail
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -140,7 +140,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-uid-container-fail
+  name: pods-require-valid-service-account-uid-container-fail
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -157,7 +157,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-uid-init-fail
+  name: pods-require-valid-service-account-uid-init-fail
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -192,7 +192,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-gid-skip-op
+  name: pods-require-valid-service-account-gid-skip-op
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -210,7 +210,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-gid-pass
+  name: pods-require-valid-service-account-gid-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -228,7 +228,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-gid-container-pass
+  name: pods-require-valid-service-account-gid-container-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -245,7 +245,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-gid-init-pass
+  name: pods-require-valid-service-account-gid-init-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -268,7 +268,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-gid-fail
+  name: pods-require-valid-service-account-gid-fail
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -286,7 +286,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-gid-container-fail
+  name: pods-require-valid-service-account-gid-container-fail
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -303,7 +303,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-webservice-gid-init-fail
+  name: pods-require-valid-service-account-gid-init-fail
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -338,7 +338,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: fsgroup-require-valid-service-account-webservice-gid-skip-op
+  name: fsgroup-require-valid-service-account-gid-skip-op
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -356,7 +356,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: fsgroup-require-valid-service-account-webservice-gid-pass
+  name: fsgroup-require-valid-service-account-gid-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -374,7 +374,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: fsgroup-require-valid-service-account-webservice-gid-fail
+  name: fsgroup-require-valid-service-account-gid-fail
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -402,7 +402,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-groups-webservice-skip-op
+  name: test-groups-skip-op
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -417,7 +417,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-groups-webservice-skip-len
+  name: test-groups-skip-len
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -431,7 +431,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-groups-webservice-pass
+  name: test-groups-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -447,424 +447,8 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-groups-webservice-fail
+  name: test-groups-fail
   namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups:
-      - 1002
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-service-account-paas-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: user
-spec:
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-service-account-paas-fail
-  namespace: paas
-spec: 
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-uid-skip
-  namespace: user-test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-uid-skip-op
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-uid-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-uid-container-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-uid-init-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
-  initContainers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-uid-fail
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1002
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-uid-container-fail
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1002
-      runAsGroup: 1001
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-uid-init-fail
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1002
-      runAsGroup: 1001
-  initContainers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1002
-      runAsGroup: 1001
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-gid-skip-op
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-gid-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-gid-container-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-gid-init-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
-  initContainers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-gid-fail
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1003
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-gid-container-fail
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1003
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-paas-gid-init-fail
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1003
-  initContainers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1003
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: fsgroup-require-valid-service-account-paas-gid-skip-op
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: fsgroup-require-valid-service-account-paas-gid-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: fsgroup-require-valid-service-account-paas-gid-fail
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1003
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-groups-paas-skip-op
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups:
-      - 1002
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-groups-paas-skip-len
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-groups-paas-pass
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups:
-      - 1000
-      - 1001
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-groups-paas-fail
-  namespace: paas
   labels:
     osc.edu/service-account: test
 spec:

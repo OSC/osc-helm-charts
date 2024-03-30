@@ -7,55 +7,63 @@ resources:
 variables: variables.yaml
 results:
   - policy: add-service-account
-    rule: service-account-run-as
+    rule: webservice-service-account-run-as
     resources:
       - test-webservice-service-account
     patchedResource: webservice-service-account-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-service-account
-    rule: service-account-run-as
-    resources:
-      - test-paas-service-account
-    patchedResource: paas-service-account-mutated.yaml
-    kind: Pod
-    result: pass
-  - policy: add-service-account
-    rule: service-account-run-as
+    rule: webservice-service-account-run-as
     resources:
       - test-no-service-account-skip
     kind: Pod
     result: skip
   - policy: add-service-account
-    rule: service-account-run-as
+    rule: webservice-service-account-run-as
     resources:
       - test-webservice-service-account-mariadb
     patchedResource: webservice-service-account-mariadb-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-service-account
-    rule: service-account-run-as
+    rule: webservice-service-account-run-as
     resources:
       - test-webservice-service-account-skip
     kind: Pod
     result: skip
   - policy: add-service-account
-    rule: service-account-run-as-containers
+    rule: webservice-service-account-run-as-containers
     resources:
       - test-webservice-service-account-containers
     kind: Pod
     result: skip
   - policy: add-service-account
-    rule: service-account-run-as-containers
-    resources:
-      - test-paas-service-account-containers
-    patchedResource: paas-service-account-mutated-containers.yaml
-    kind: Pod
-    result: pass
-  - policy: add-service-account
-    rule: service-account-run-as-containers
+    rule: webservice-service-account-run-as-containers
     resources:
       - test-webservice-service-account-mariadb-containers
     patchedResource: webservice-service-account-mariadb-mutated-containers.yaml
     kind: Pod
     result: pass
+  - policy: add-service-account
+    rule: paas-service-account-run-as
+    resources:
+      - test-paas-service-account
+    patchedResource: paas-service-account-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: add-service-account
+    rule: paas-service-account-run-as
+    resources:
+      - test-paas-service-account-mariadb
+    patchedResource: paas-service-account-mariadb-mutated.yaml
+    namespace: paas
+    kind: Pod
+    result: pass
+  - policy: add-service-account
+    rule: paas-service-account-run-as
+    resources:
+      - test-paas-service-account-skip
+    patchedResource: skip.yaml
+    kind: Pod
+    result: skip

@@ -10,6 +10,12 @@ OSC PAAS bootstrap Helm Chart
 | ---- | ------ | --- |
 | treydock |  |  |
 
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
+
 ## Usage
 
 Define PAAS namespaces and the groups that can manage the resources:
@@ -17,8 +23,10 @@ Define PAAS namespaces and the groups that can manage the resources:
 ```
 namespaces:
 - name: test
+  serviceAccount: test-account
   groups: ['testgroup']
 - name: foo
+  serviceAccount: foo-account
   groups: ['bar']
 ```
 

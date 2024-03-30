@@ -1,0 +1,31 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: namespace-role
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+  - name: require-role
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+    exclude:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+          names:
+          - default
+          - user-*
+          - kube-node-lease
+          - kube-public
+          - kube-system
+    validate:
+      message: "Namespaces requires {{ include "osc.common.roleKey" . }} label be set."
+      pattern:
+        metadata:
+          labels:
+            {{ include "osc.common.roleKey" . }}: "ondemand | infrastructure | webservice | paas"

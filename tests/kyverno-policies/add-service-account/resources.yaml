@@ -27,38 +27,8 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-paas-service-account
-  namespace: paas
-  labels:
-    osc.edu/service-account: test
-spec:
-  containers:
-    - name: nginx
-      image: nginx:latest
-  initContainers:
-    - name: init
-      image: busybox
----
-apiVersion: v1
-kind: Pod
-metadata:
   name: test-webservice-service-account-containers
   namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  containers:
-    - name: nginx
-      image: nginx:latest
-  initContainers:
-    - name: init
-      image: busybox
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-paas-service-account-containers
-  namespace: paas
   labels:
     osc.edu/service-account: test
 spec:
@@ -108,6 +78,59 @@ metadata:
   labels:
     app.kubernetes.io/name: mariadb
     osc.edu/service-account: test
+spec:
+  containers:
+    - name: mariadb
+      image: mariadb:latest
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 0
+  initContainers:
+    - name: init
+      image: busybox
+      securityContext:
+        runAsUser: 65534
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-no-service-account-skip
+  namespace: paas-invalid
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-service-account
+  namespace: paas
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+  initContainers:
+    - name: init
+      image: busybox
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-service-account-skip
+  namespace: user-test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-service-account-mariadb
+  namespace: paas
+  labels:
+    app.kubernetes.io/name: mariadb
 spec:
   containers:
     - name: mariadb
