@@ -13,7 +13,7 @@ metadata:
       Disallow docker.io registry   
 spec:
   # validationFailureAction: Enforce
-  validationFailureAction: audit
+  validationFailureAction: Audit
   background: true
   rules:
   - name: restrict-registry-docker.io

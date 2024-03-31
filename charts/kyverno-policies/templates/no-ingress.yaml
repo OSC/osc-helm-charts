@@ -5,7 +5,7 @@ metadata:
   name: no-ingress
 spec:
   background: true
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   rules:
   - name: user-no-ingress
     match:

@@ -9,7 +9,7 @@ metadata:
       Using host resources can be used to access shared data or escalate privileges
       and should be restricted.
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: users-host-path
