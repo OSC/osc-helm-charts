@@ -1,7 +1,22 @@
 ---
+global:
+  imagePullSecret:
+    # -- Image pull secret name for PAAS namespaces
+    name: osc-registry
+    # -- Registry for image pull secret added to all PAAS namespaces
+    registry: docker-registry.osc.edu
 # -- Define PAAS namespaces
 namespaces: {}
 # Example defining PAAS namespace
 # namespaces:
 # - name: test
 #   groups: [ 'testgroup' ]
+default:
+  # -- The default CPU limit for PAAS namespaces
+  cpuLimit: '4'
+  # -- The default CPU request for PAAS namespace pods
+  cpu: '1'
+  # -- The default memory limit for PAAS namespaces
+  memoryLimit: '8Gi'
+  # -- The default memory request for PAAS namespace pods
+  memory: '2Gi'

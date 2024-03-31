@@ -30,10 +30,38 @@ namespaces:
   serviceAccount: foo-account
   account: foo
   groups: ['bar']
+  cpuLimit: '8'
+  cpuDefault: '1'
+  memoryLimit: '16Gi'
+  memoryDefault: '2Gi'
+  imagePullSecret:
+    username: testuser
+    password: password
 ```
+
+## Namespace properties
+
+| Key | Description | Default |
+|-----|-------------|---------|
+| name | Namespace name | **required** |
+| serviceAccount | The user that will run pods | **required** |
+| account | The charge account for this namespace | **required** |
+| groups | The groups that can manage the namespace's resources | `[]` |
+| cpuLimit | The max CPU this namespace can consume | `4` |
+| cpuDefault | The default CPU request for this namespace | `1` |
+| memoryLimit | The max memory this namespace can consume | `8Gi` |
+| memoryDefault | The default memory request for this namespace | `2Gi` |
+| imagePullSecret.username | The username used to access the registry | **required** if `imagePullSecret` defined |
+| imagePullSecret.password | The password used to access the registry | **required** if `imagePullSecret` defined |
 
 ## Values
 
 | Key | Description | Default |
 |-----|-------------|---------|
+| global.imagePullSecret.name | Image pull secret name for PAAS namespaces | `"osc-registry"` |
+| global.imagePullSecret.registry | Registry for image pull secret added to all PAAS namespaces | `"docker-registry.osc.edu"` |
 | namespaces | Define PAAS namespaces | `{}` |
+| default.cpuLimit | The default CPU limit for PAAS namespaces | `"4"` |
+| default.cpu | The default CPU request for PAAS namespace pods | `"1"` |
+| default.memoryLimit | The default memory limit for PAAS namespaces | `"8Gi"` |
+| default.memory | The default memory request for PAAS namespace pods | `"2Gi"` |
