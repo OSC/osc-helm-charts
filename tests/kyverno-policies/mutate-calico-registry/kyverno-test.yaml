@@ -17,7 +17,6 @@ results:
     rule: calico-container-registry
     resources:
       - test-calico-container-registry-skip
-    patchedResource: calico-container-registry-skip.yaml
     kind: Pod
     result: skip
   - policy: mutate-calico-registry
@@ -31,7 +30,6 @@ results:
     rule: calico-initcontainer-registry
     resources:
       - test-calico-initcontainer-registry-skip
-    patchedResource: calico-initcontainer-registry-skip.yaml
     kind: Pod
     result: skip
   - policy: mutate-calico-registry
@@ -45,6 +43,5 @@ results:
     rule: calico-imagepullsecret
     resources:
       - test-calico-imagepullsecret-skip
-    patchedResource: calico-imagepullsecret-skip.yaml
     kind: Pod
     result: skip
