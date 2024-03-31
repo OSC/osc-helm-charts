@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas
+  namespace: paas
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-skip
+  namespace: user-test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest

@@ -1,0 +1,25 @@
+---
+name: namespace-account
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: namespace-account
+    rule: require-account
+    resources:
+      - user-test
+    kind: Namespace
+    result: skip
+  - policy: namespace-account
+    rule: require-account
+    resources:
+      - test-pass
+    kind: Namespace
+    result: pass
+  - policy: namespace-account
+    rule: require-account
+    resources:
+      - test-fail
+    kind: Namespace
+    result: fail

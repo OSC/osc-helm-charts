@@ -2,9 +2,12 @@
 namespaces:
 - name: test
   serviceAccount: test-account
+  account: test
   groups: ['testgroup']
 - name: foo
   serviceAccount: foo-account
+  account: foo
   groups: ['bar']
 - name: baz
   serviceAccount: example
+  account: baz

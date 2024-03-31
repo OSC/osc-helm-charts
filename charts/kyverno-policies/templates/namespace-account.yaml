@@ -1,0 +1,23 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: namespace-account
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+  - name: require-account
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+          selector:
+            matchLabels:
+              {{ include "osc.common.roleKey" . }}: paas
+    validate:
+      message: "Namespaces requires account label be set."
+      pattern:
+        metadata:
+          labels:
+            account: "?*"
