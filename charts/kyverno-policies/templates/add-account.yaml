@@ -25,7 +25,7 @@ spec:
     context:
     - name: account
       apiCall:
-        urlPath: "/api/v1/namespaces/{{`{{ request.object.metadata.namespace }}`}}"
+        urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
         jmesPath: "metadata.labels.account"
     mutate:
       patchStrategicMerge:
