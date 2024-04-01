@@ -17,6 +17,7 @@ data:
   user-test: "1000"
   user-webmo: "42113"
   user-emthub: "42168"
+  user-harvesttest: "44687"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -32,6 +33,7 @@ data:
   user-test: "1001"
   user-webmo: "3608"
   user-emthub: "8052"
+  user-harvesttest: "8377"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -47,3 +49,4 @@ data:
   user-test: '["1001","1002"]'
   user-webmo: '["3608","3427"]'
   user-emthub: '["8052"]'
+  user-harvesttest: '["8377","8388","65533"]'
