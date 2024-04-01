@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: authorized-registries
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: authorized-registries-users

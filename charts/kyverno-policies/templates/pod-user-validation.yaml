@@ -4,7 +4,7 @@ metadata:
   name: pod-user-validation
 spec:
   background: false
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   rules:
   - name: pods-require-valid-uid
     match:

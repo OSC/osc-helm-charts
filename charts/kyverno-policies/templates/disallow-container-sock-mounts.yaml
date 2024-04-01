@@ -11,7 +11,7 @@ metadata:
       outside of Kubernetes, and hence should not be allowed.  
 spec:
   background: true
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   rules:
   - name: validate-docker-sock-mount
     match:

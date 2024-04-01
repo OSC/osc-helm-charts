@@ -11,7 +11,7 @@ metadata:
       vulnerabilities in some Ingress controllers. This sample policy blocks Services of type ExternalName
       if the externalName field refers to localhost.      
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   rules:
   - name: no-localhost-service
     match:

@@ -4,7 +4,7 @@ metadata:
   name: pod-nodeselector
 spec:
   background: true
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   rules:
   - name: pod-nodeselector-user
     match:

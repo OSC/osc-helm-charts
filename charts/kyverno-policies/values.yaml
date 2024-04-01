@@ -38,12 +38,12 @@ kyverno-policies:
     - require-non-root-groups
   # Supported- low/medium/high
   podSecuritySeverity: medium
-  # Supported values- `audit`, `enforce`
+  # Supported values- `Audit`, `Enforce`
   # For more info- https://kyverno.io/docs/writing-policies/validate/
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
 #  validationFailureActionOverrides:
 #    all:
-#      - action: audit
+#      - action: Audit
 #        namespaces:
 #          - external-dns
 #          - prometheus

@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: mutate-calico-registry
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   background: true
   rules:
     - name: calico-container-registry

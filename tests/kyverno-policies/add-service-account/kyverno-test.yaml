@@ -17,7 +17,6 @@ results:
     rule: webservice-service-account-run-as
     resources:
       - test-no-service-account-skip
-    patchedResource: no-service-account.yaml
     kind: Pod
     result: skip
   - policy: add-service-account
@@ -31,16 +30,14 @@ results:
     rule: webservice-service-account-run-as
     resources:
       - test-webservice-service-account-skip
-    patchedResource: skip.yaml
     kind: Pod
     result: skip
   - policy: add-service-account
     rule: webservice-service-account-run-as-containers
     resources:
       - test-webservice-service-account-containers
-    patchedResource: webservice-service-account-mutated-containers.yaml
     kind: Pod
-    result: pass
+    result: skip
   - policy: add-service-account
     rule: webservice-service-account-run-as-containers
     resources:

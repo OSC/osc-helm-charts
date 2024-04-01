@@ -15,3 +15,5 @@ spec:
   - name: "mount-bpffs"
     image: docker-registry.osc.edu/kubernetes/calico/node:v3.26.1
     imagePullPolicy: IfNotPresent
+  imagePullSecrets:
+  - name: calico-osc-read

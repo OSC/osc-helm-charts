@@ -5,7 +5,7 @@ metadata:
   name: restrict-external-ips
 spec:
   background: true
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   rules:
   - name: check-ips
     match:

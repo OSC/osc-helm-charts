@@ -5,7 +5,7 @@ metadata:
   name: no-loadbalancers
 spec:
   background: true
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   rules:
   - name: no-loadbalancers
     match:
