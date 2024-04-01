@@ -1,4 +1,11 @@
 {{/*
+Expand the name of the chart.
+*/}}
+{{- define "paas.name" -}}
+{{- default .Release.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "paas.chart" -}}
@@ -6,9 +13,29 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Selector labels
+*/}}
+{{- define "paas.selectorLabels" -}}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/name: {{ include "paas.name" . }}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "paas.labels" -}}
+helm.sh/chart: {{ include "paas.chart" . }}
+{{ include "paas.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Namespaced Common labels
+*/}}
+{{- define "paas.namespaced.labels" -}}
 {{- $namespace := index . 0 -}}
 {{- $top := index . 1 -}}
 helm.sh/chart: paas

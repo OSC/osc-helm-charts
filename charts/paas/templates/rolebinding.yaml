@@ -5,6 +5,8 @@ kind: RoleBinding
 metadata:
   name: paas-{{ $namespace.name }}
   namespace: {{ $namespace.name }}
+  labels:
+    {{- include "paas.namespaced.labels" (list $namespace $) | nindent 4 }}
 {{ if $namespace.groups -}}
 subjects:
   {{- range $namespace.groups | default list }}

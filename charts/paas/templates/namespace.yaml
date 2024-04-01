@@ -5,6 +5,7 @@ kind: Namespace
 metadata:
   name: {{ required "Namespace 'name' is required" $namespace.name }}
   labels:
+    {{- include "paas.namespaced.labels" (list $namespace $) | nindent 4 }}
     app.kubernetes.io/name: {{ $namespace.name }}
     osc.edu/role: paas
     {{ include "osc.common.serviceAccountKey" . }}: {{ required "Namespace 'serviceAccount' is required" $namespace.serviceAccount}}
