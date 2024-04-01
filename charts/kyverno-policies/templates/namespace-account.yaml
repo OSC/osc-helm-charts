@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: namespace-account
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: require-account

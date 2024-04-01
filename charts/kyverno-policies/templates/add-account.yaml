@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: add-account
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: paas-add-account
