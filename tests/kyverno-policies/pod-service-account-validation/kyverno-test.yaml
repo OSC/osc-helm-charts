@@ -7,133 +7,65 @@ resources:
 variables: variables.yaml
 results:
   - policy: pod-service-account-validation
-    rule: pods-require-service-account
+    rule: webservice-require-service-account
     resources:
       - test-service-account-skip
     kind: Pod
     namespace: user-test
     result: skip
   - policy: pod-service-account-validation
-    rule: pods-require-service-account
+    rule: webservice-require-service-account
     resources:
       - test-service-account-pass
     kind: Pod
     namespace: webservice
     result: pass
   - policy: pod-service-account-validation
-    rule: pods-require-service-account
+    rule: webservice-require-service-account
     resources:
       - test-service-account-fail
     kind: Pod
     namespace: webservice
     result: fail
   - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-uid
+    rule: webservice-require-valid-service-account
     resources:
-      - pods-require-valid-service-account-uid-pass
+      - pods-require-valid-service-account-pass
+      - pods-require-valid-service-account-container-pass
+      - pods-require-valid-service-account-init-pass
     kind: Pod
     namespace: webservice
     result: pass
   - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-uid
+    rule: webservice-require-valid-service-account
     resources:
-      - pods-require-valid-service-account-uid-skip
+      - pods-require-valid-service-account-skip
+      - pods-require-valid-service-account-skip-op
     kind: Pod
     namespace: user-test
     result: skip
   - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-uid
-    resources:
-      - pods-require-valid-service-account-uid-skip-op
-    kind: Pod
-    namespace: webservice
-    result: skip
-  - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-uid
-    resources:
-      - pods-require-valid-service-account-uid-container-pass
-      - pods-require-valid-service-account-uid-init-pass
-    kind: Pod
-    namespace: webservice
-    result: pass
-  - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-uid
+    rule: webservice-require-valid-service-account
     resources:
       - pods-require-valid-service-account-uid-fail
       - pods-require-valid-service-account-uid-container-fail
       - pods-require-valid-service-account-uid-init-fail
-    kind: Pod
-    namespace: webservice
-    result: fail
-  - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-gid
-    resources:
-      - pods-require-valid-service-account-gid-skip
-    kind: Pod
-    namespace: user-test
-    result: skip
-  - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-gid
-    resources:
-      - pods-require-valid-service-account-gid-skip-op
-    kind: Pod
-    namespace: webservice
-    result: skip
-  - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-gid
-    resources:
-      - pods-require-valid-service-account-gid-pass
-      - pods-require-valid-service-account-gid-container-pass
-      - pods-require-valid-service-account-gid-init-pass
-    kind: Pod
-    namespace: webservice
-    result: pass
-  - policy: pod-service-account-validation
-    rule: pods-require-valid-service-account-gid
-    resources:
       - pods-require-valid-service-account-gid-fail
       - pods-require-valid-service-account-gid-container-fail
       - pods-require-valid-service-account-gid-init-fail
-    kind: Pod
-    namespace: webservice
-    result: fail
-  - policy: pod-service-account-validation
-    rule: fsgroup-require-valid-service-account-gid
-    resources:
-      - fsgroup-require-valid-service-account-gid-skip
-    kind: Pod
-    namespace: user-test
-    result: skip
-  - policy: pod-service-account-validation
-    rule: fsgroup-require-valid-service-account-gid
-    resources:
-      - fsgroup-require-valid-service-account-gid-skip-op
-    kind: Pod
-    namespace: webservice
-    result: skip
-  - policy: pod-service-account-validation
-    rule: fsgroup-require-valid-service-account-gid
-    resources:
-      - fsgroup-require-valid-service-account-gid-pass
-    kind: Pod
-    namespace: webservice
-    result: pass
-  - policy: pod-service-account-validation
-    rule: fsgroup-require-valid-service-account-gid
-    resources:
       - fsgroup-require-valid-service-account-gid-fail
     kind: Pod
     namespace: webservice
     result: fail
   - policy: pod-service-account-validation
-    rule: pods-service-account-authorized-for-groups
+    rule: webservice-require-valid-service-account
     resources:
       - test-groups-skip
     kind: Pod
     namespace: user-test
     result: skip
   - policy: pod-service-account-validation
-    rule: pods-service-account-authorized-for-groups
+    rule: webservice-service-account-authorized-for-groups
     resources:
       - test-groups-skip-op
       - test-groups-skip-len
@@ -141,14 +73,14 @@ results:
     namespace: webservice
     result: skip
   - policy: pod-service-account-validation
-    rule: pods-service-account-authorized-for-groups
+    rule: webservice-service-account-authorized-for-groups
     resources:
       - test-groups-pass
     kind: Pod
     namespace: webservice
     result: pass
   - policy: pod-service-account-validation
-    rule: pods-service-account-authorized-for-groups
+    rule: webservice-service-account-authorized-for-groups
     resources:
       - test-groups-fail
     kind: Pod

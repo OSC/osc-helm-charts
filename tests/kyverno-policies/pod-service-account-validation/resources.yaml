@@ -34,7 +34,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-uid-skip
+  name: pods-require-valid-service-account-skip
   namespace: user-test
 spec:
   securityContext:
@@ -46,7 +46,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-uid-skip-op
+  name: pods-require-valid-service-account-skip-op
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -64,7 +64,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-uid-pass
+  name: pods-require-valid-service-account-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -82,7 +82,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-uid-container-pass
+  name: pods-require-valid-service-account-container-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -99,7 +99,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-uid-init-pass
+  name: pods-require-valid-service-account-init-pass
   namespace: webservice
   labels:
     osc.edu/service-account: test
@@ -180,94 +180,6 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pods-require-valid-service-account-gid-skip
-  namespace: user-test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-gid-skip-op
-  namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-gid-pass
-  namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-gid-container-pass
-  namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pods-require-valid-service-account-gid-init-pass
-  namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
-  initContainers:
-  - name: nginx
-    image: nginx:1.12
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1001
----
-apiVersion: v1
-kind: Pod
-metadata:
   name: pods-require-valid-service-account-gid-fail
   namespace: webservice
   labels:
@@ -322,54 +234,6 @@ spec:
     securityContext:
       runAsUser: 1000
       runAsGroup: 1003
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: fsgroup-require-valid-service-account-gid-skip
-  namespace: user-test
-spec:
-  securityContext:
-    supplementalGroups: []
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: fsgroup-require-valid-service-account-gid-skip-op
-  namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: fsgroup-require-valid-service-account-gid-pass
-  namespace: webservice
-  labels:
-    osc.edu/service-account: test
-spec:
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1001
-    fsGroup: 1001
-    supplementalGroups: []
-    runAsNonRoot: true
-  containers:
-  - name: nginx
-    image: nginx:1.12
 ---
 apiVersion: v1
 kind: Pod

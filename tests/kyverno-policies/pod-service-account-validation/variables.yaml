@@ -1,32 +1,27 @@
 policies:
   - name: pod-service-account-validation
     rules:
-      - name: pods-require-valid-service-account-uid
+      - name: webservice-require-valid-service-account
         values:
           uidMap.data.user-test: '1000'
-      - name: pods-require-valid-service-account-gid
-        values:
           gidMap.data.user-test: '1001'
-      - name: fsgroup-require-valid-service-account-gid
-        values:
-          gidMap.data.user-test: '1001'
-      - name: pods-service-account-authorized-for-groups
+      - name: webservice-service-account-authorized-for-groups
         values:
           userGIDMap.data.user-test: '["1000", "1001"]'
     resources:
-      - name: pods-require-valid-service-account-uid-skip
+      - name: pods-require-valid-service-account-skip
         values:
           request.operation: CREATE
-      - name: pods-require-valid-service-account-uid-skip-op
+      - name: pods-require-valid-service-account-skip-op
         values:
           request.operation: DELETE
-      - name: pods-require-valid-service-account-uid-pass
+      - name: pods-require-valid-service-account-pass
         values:
           request.operation: CREATE
-      - name: pods-require-valid-service-account-uid-container-pass
+      - name: pods-require-valid-service-account-container-pass
         values:
           request.operation: CREATE
-      - name: pods-require-valid-service-account-uid-init-pass
+      - name: pods-require-valid-service-account-init-pass
         values:
           request.operation: CREATE
       - name: pods-require-valid-service-account-uid-fail
@@ -36,21 +31,6 @@ policies:
         values:
           request.operation: CREATE
       - name: pods-require-valid-service-account-uid-init-fail
-        values:
-          request.operation: CREATE
-      - name: pods-require-valid-service-account-gid-skip
-        values:
-          request.operation: CREATE
-      - name: pods-require-valid-service-account-gid-skip-op
-        values:
-          request.operation: DELETE
-      - name: pods-require-valid-service-account-gid-pass
-        values:
-          request.operation: CREATE
-      - name: pods-require-valid-service-account-gid-container-pass
-        values:
-          request.operation: CREATE
-      - name: pods-require-valid-service-account-gid-init-pass
         values:
           request.operation: CREATE
       - name: pods-require-valid-service-account-gid-fail
@@ -68,9 +48,6 @@ policies:
       - name: fsgroup-require-valid-service-account-gid-skip-op
         values:
           request.operation: DELETE
-      - name: fsgroup-require-valid-service-account-gid-pass
-        values:
-          request.operation: CREATE
       - name: fsgroup-require-valid-service-account-gid-fail
         values:
           request.operation: CREATE
