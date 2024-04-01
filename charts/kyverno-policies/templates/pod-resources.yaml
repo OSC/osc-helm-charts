@@ -23,7 +23,6 @@ spec:
                 operator: In
                 values:
                 - webservice
-                - paas
     validate:
       message: "CPU and memory resource requests and limits are required for pods"
       pattern:
@@ -61,7 +60,6 @@ spec:
                 operator: In
                 values:
                 - webservice
-                - paas
     validate:
       message: "CPU and memory limits exceed max 8 CPUs and 32GB of memory"
       pattern:

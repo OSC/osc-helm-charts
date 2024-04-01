@@ -47,20 +47,6 @@ results:
     namespace: webservice
     result: fail
   - policy: pod-resources
-    rule: pods-require-resources
-    resources:
-      - test-limits-pass-paas
-    kind: Pod
-    namespace: paas
-    result: pass
-  - policy: pod-resources
-    rule: pods-require-resources
-    resources:
-      - test-limits-memory-requests-fail-paas
-    kind: Pod
-    namespace: paas
-    result: fail
-  - policy: pod-resources
     rule: pods-max-user-resources
     resources:
       - test-limits-pass-cpu-limits1
@@ -74,13 +60,6 @@ results:
       - test-limits-webservice-pass-limits
     kind: Pod
     namespace: webservice
-    result: pass
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resources:
-      - test-limits-paas-pass-limits
-    kind: Pod
-    namespace: paas
     result: pass
   - policy: pod-resources
     rule: pods-max-user-resources
@@ -108,13 +87,6 @@ results:
   - policy: pod-resources
     rule: pods-max-user-resources
     resources:
-      - test-limits-paas-fail-cpu-limits
-    kind: Pod
-    namespace: paas
-    result: fail
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resources:
       - test-limits-pass-mem-limits1
       - test-limits-pass-mem-limits2
       - test-limits-cpu-requests-missing2
@@ -135,11 +107,4 @@ results:
       - test-limits-webservice-fail-mem-limits
     kind: Pod
     namespace: webservice
-    result: fail
-  - policy: pod-resources
-    rule: pods-max-user-resources
-    resources:
-      - test-limits-paas-fail-mem-limits
-    kind: Pod
-    namespace: paas
     result: fail
