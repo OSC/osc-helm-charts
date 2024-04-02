@@ -171,7 +171,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-paas-pass3
+  name: test-paas-fail3
   namespace: paas
 spec: 
   containers:
@@ -183,7 +183,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-paas-pass-infra
+  name: test-paas-fail-infra
   namespace: paas
 spec: 
   containers:

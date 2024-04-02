@@ -66,8 +66,6 @@ results:
     resources:
       - test-paas-pass
       - test-paas-pass2
-      - test-paas-pass3
-      - test-paas-pass-infra
     kind: Pod
     namespace: paas
     result: pass
@@ -76,6 +74,8 @@ results:
     resources:
       - test-paas-fail-omit
       - test-paas-fail-mismatch
+      - test-paas-fail3
+      - test-paas-fail-infra
     kind: Pod
     namespace: paas
     result: fail

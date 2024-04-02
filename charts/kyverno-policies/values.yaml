@@ -43,8 +43,6 @@ paas:
     - docker-registry-test.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
   validNodeSelector:
-    - infrastructure
-    - webservices
     - paas
 validationFailureAction: {}
 kyverno-policies:
