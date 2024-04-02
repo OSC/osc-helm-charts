@@ -4,6 +4,9 @@ policies:
       - name: pods-user-authorized-for-account
         values:
           userGroupMap.data.user-test: '["PZS0001","PZS0003","oscall"]'
+      - name: paas-user-authorized-for-account
+        values:
+          userGroupMap.data.user-test: '["PZS0001","PZS0003","oscall"]'
     resources:
       - name: test-skip
         values:
@@ -29,6 +32,20 @@ policies:
       - name: test-fail-prefix-paas
         values:
           request.operation: CREATE
+      - name: test-paas-skip
+        values:
+          request.operation: CREATE
+      - name: test-paas-skip-op
+        values:
+          request.operation: DELETE
+      - name: test-paas-pass
+        values:
+          request.operation: CREATE
+          serviceAccount: test
+      - name: test-paas-fail
+        values:
+          request.operation: CREATE
+          serviceAccount: test
 namespaceSelector:
   - name: user-test
     labels:

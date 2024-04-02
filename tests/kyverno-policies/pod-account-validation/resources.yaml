@@ -92,3 +92,49 @@ spec:
   containers:
   - name: nginx
     image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-skip
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-skip-op
+  namespace: paas
+  labels:
+    account: test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-pass
+  namespace: paas
+  labels:
+    account: PZS0001
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-paas-fail
+  namespace: paas
+  labels:
+    account: PZS0002
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12

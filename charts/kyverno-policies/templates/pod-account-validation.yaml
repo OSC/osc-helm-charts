@@ -56,3 +56,41 @@ spec:
         - key: "{{`{{ request.object.metadata.labels.account }}`}}"
           operator: NotIn
           value: "{{`{{ userGroupMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
+  - name: paas-user-authorized-for-account
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    - key: "{{`{{ request.object.metadata.labels.account || '' }}`}}"
+      operator: NotEquals
+      value: ""
+    - key: "{{`{{ serviceAccount }}`}}"
+      operator: NotEquals
+      value: ""
+    context:
+    - name: serviceAccount
+      apiCall:
+        urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+        jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" || ''"
+    - name: userGroupMap
+      configMap:
+        name: user-groups-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: "{{`{{ serviceAccount }}`}} not authorized to charge against account {{`{{ request.object.metadata.labels.account }}`}}"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.metadata.labels.account }}`}}"
+          operator: NotIn
+          value: "{{`{{ userGroupMap.data.\"user-{{ serviceAccount }}\" }}`}}"
