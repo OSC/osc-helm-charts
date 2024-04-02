@@ -315,6 +315,12 @@ data:
         target_label: receiver
       - regex: "label_receiver"
         action: labeldrop
+      - source_labels: [label_role]
+        regex: '(.+)'
+        replacement: '$1'
+        target_label: role
+      - regex: "label_role"
+        action: labeldrop
     - job_name: kube-state-metrics-telemetry
       metrics_path: /metrics
       static_configs:
