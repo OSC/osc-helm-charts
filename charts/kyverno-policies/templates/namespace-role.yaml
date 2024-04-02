@@ -20,9 +20,7 @@ spec:
           names:
           - default
           - user-*
-          - kube-node-lease
-          - kube-public
-          - kube-system
+          - kube-*
     validate:
       message: "Namespaces requires {{ include "osc.common.roleKey" . }} label be set."
       pattern:
