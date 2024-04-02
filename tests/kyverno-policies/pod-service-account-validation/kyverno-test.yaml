@@ -40,9 +40,15 @@ results:
     rule: webservice-require-valid-service-account
     resources:
       - pods-require-valid-service-account-skip
-      - pods-require-valid-service-account-skip-op
     kind: Pod
     namespace: user-test
+    result: skip
+  - policy: pod-service-account-validation
+    rule: webservice-require-valid-service-account
+    resources:
+      - pods-require-valid-service-account-skip-op
+    kind: Pod
+    namespace: webservice
     result: skip
   - policy: pod-service-account-validation
     rule: webservice-require-valid-service-account
@@ -85,4 +91,70 @@ results:
       - test-groups-fail
     kind: Pod
     namespace: webservice
+    result: fail
+
+  - policy: pod-service-account-validation
+    rule: paas-require-valid-service-account
+    resources:
+      - paas-pods-require-valid-service-account-pass
+      - paas-pods-require-valid-service-account-container-pass
+      - paas-pods-require-valid-service-account-init-pass
+    kind: Pod
+    namespace: paas
+    result: pass
+  - policy: pod-service-account-validation
+    rule: paas-require-valid-service-account
+    resources:
+      - pods-require-valid-service-account-skip
+    kind: Pod
+    namespace: user-test
+    result: skip
+  - policy: pod-service-account-validation
+    rule: paas-require-valid-service-account
+    resources:
+      - paas-pods-require-valid-service-account-skip-op
+    kind: Pod
+    namespace: paas
+    result: skip
+  - policy: pod-service-account-validation
+    rule: paas-require-valid-service-account
+    resources:
+      - paas-pods-require-valid-service-account-uid-fail
+      - paas-pods-require-valid-service-account-uid-container-fail
+      - paas-pods-require-valid-service-account-uid-init-fail
+      - paas-pods-require-valid-service-account-gid-fail
+      - paas-pods-require-valid-service-account-gid-container-fail
+      - paas-pods-require-valid-service-account-gid-init-fail
+      - paas-fsgroup-require-valid-service-account-gid-fail
+    kind: Pod
+    namespace: paas
+    result: fail
+  - policy: pod-service-account-validation
+    rule: paas-require-valid-service-account
+    resources:
+      - test-groups-skip
+    kind: Pod
+    namespace: user-test
+    result: skip
+  - policy: pod-service-account-validation
+    rule: paas-service-account-authorized-for-groups
+    resources:
+      - paas-test-groups-skip-op
+      - paas-test-groups-skip-len
+    kind: Pod
+    namespace: paas
+    result: skip
+  - policy: pod-service-account-validation
+    rule: paas-service-account-authorized-for-groups
+    resources:
+      - paas-test-groups-pass
+    kind: Pod
+    namespace: paas
+    result: pass
+  - policy: pod-service-account-validation
+    rule: paas-service-account-authorized-for-groups
+    resources:
+      - paas-test-groups-fail
+    kind: Pod
+    namespace: paas
     result: fail

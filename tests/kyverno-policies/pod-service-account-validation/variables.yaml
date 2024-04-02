@@ -8,6 +8,15 @@ policies:
       - name: webservice-service-account-authorized-for-groups
         values:
           userGIDMap.data.user-test: '["1000", "1001"]'
+      - name: paas-require-valid-service-account
+        values:
+          serviceAccount: test
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+      - name: paas-service-account-authorized-for-groups
+        values:
+          serviceAccount: test
+          userGIDMap.data.user-test: '["1000", "1001"]'
     resources:
       - name: pods-require-valid-service-account-skip
         values:
@@ -66,6 +75,57 @@ policies:
       - name: test-groups-fail
         values:
           request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-skip-op
+        values:
+          request.operation: DELETE
+      - name: paas-pods-require-valid-service-account-pass
+        values:
+          request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-container-pass
+        values:
+          request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-init-pass
+        values:
+          request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-uid-fail
+        values:
+          request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-uid-container-fail
+        values:
+          request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-uid-init-fail
+        values:
+          request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-gid-fail
+        values:
+          request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-gid-container-fail
+        values:
+          request.operation: CREATE
+      - name: paas-pods-require-valid-service-account-gid-init-fail
+        values:
+          request.operation: CREATE
+      - name: paas-fsgroup-require-valid-service-account-gid-skip
+        values:
+          request.operation: CREATE
+      - name: paas-fsgroup-require-valid-service-account-gid-skip-op
+        values:
+          request.operation: DELETE
+      - name: paas-fsgroup-require-valid-service-account-gid-fail
+        values:
+          request.operation: CREATE
+      - name: paas-test-groups-skip-op
+        values:
+          request.operation: DELETE
+      - name: paas-test-groups-skip-len
+        values:
+          request.operation: CREATE
+      - name: paas-test-groups-pass
+        values:
+          request.operation: CREATE
+      - name: paas-test-groups-fail
+        values:
+          request.operation: CREATE
 namespaceSelector:
   - name: user-test
     labels:
@@ -73,3 +133,7 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test

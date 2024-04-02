@@ -322,3 +322,243 @@ spec:
   containers:
   - name: nginx
     image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-skip-op
+  namespace: paas
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    supplementalGroups: []
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-pass
+  namespace: paas
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    supplementalGroups: []
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-container-pass
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-init-pass
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-uid-fail
+  namespace: paas
+spec:
+  securityContext:
+    runAsUser: 1002
+    runAsGroup: 1001
+    fsGroup: 1001
+    supplementalGroups: []
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-uid-container-fail
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-uid-init-fail
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1002
+      runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-gid-fail
+  namespace: paas
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1003
+    fsGroup: 1001
+    supplementalGroups: []
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-gid-container-fail
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-gid-init-fail
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+  initContainers:
+  - name: nginx
+    image: nginx:1.12
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1003
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-fsgroup-require-valid-service-account-gid-fail
+  namespace: paas
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1003
+    supplementalGroups: []
+    runAsNonRoot: true
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-test-groups-skip-op
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups:
+      - 1002
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-test-groups-skip-len
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-test-groups-pass
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups:
+      - 1000
+      - 1001
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-test-groups-fail
+  namespace: paas
+spec:
+  securityContext:
+    supplementalGroups:
+      - 1002
+  containers:
+  - name: nginx
+    image: nginx:1.12
