@@ -1,0 +1,18 @@
+policies:
+  - name: add-account
+    rules:
+      - name: paas-add-account
+        values:
+          account: test
+namespaceSelector:
+  - name: user-test
+    labels:
+      foo: bar
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test
+      account: test

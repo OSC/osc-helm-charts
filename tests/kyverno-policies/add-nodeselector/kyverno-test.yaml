@@ -12,3 +12,16 @@ results:
     patchedResource: ondemand-nodeselector-mutated.yaml
     kind: Pod
     result: pass
+  - policy: add-nodeselector
+    rule: paas-nodeselector
+    resources:
+      - test-paas-nodeselector
+    patchedResource: paas-nodeselector-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: add-nodeselector
+    rule: paas-nodeselector
+    resources:
+      - test-paas-skip
+    kind: Pod
+    result: skip

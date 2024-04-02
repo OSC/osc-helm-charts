@@ -1,0 +1,33 @@
+{{ range $namespace := .Values.namespaces }}
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: {{ $namespace.name }}-resourcequota
+  namespace: {{ $namespace.name }}
+  labels:
+    {{- include "paas.namespaced.labels" (list $namespace $) | nindent 4 }}
+spec:
+  hard:
+    requests.cpu: {{ $namespace.cpuLimit | default $.Values.default.cpuLimit | quote }}
+    requests.memory: {{ $namespace.memoryLimit | default $.Values.default.memoryLimit | quote }}
+    limits.cpu: {{ $namespace.cpuLimit | default $.Values.default.cpuLimit | quote }}
+    limits.memory: {{ $namespace.memoryLimit | default $.Values.default.memoryLimit | quote }}
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: {{ $namespace.name }}-limitrange
+  namespace: {{ $namespace.name }}
+  labels:
+    {{- include "paas.namespaced.labels" (list $namespace $) | nindent 4 }}
+spec:
+  limits:
+    - default:
+        cpu: {{ $namespace.cpuDefault | default $.Values.default.cpu | quote }}
+        memory: {{ $namespace.memoryDefault | default $.Values.default.memory | quote }}
+      defaultRequest:
+        cpu: {{ $namespace.cpuDefault | default $.Values.default.cpu | quote }}
+        memory: {{ $namespace.memoryDefault | default $.Values.default.memory | quote }}
+      type: Container
+{{ end }}

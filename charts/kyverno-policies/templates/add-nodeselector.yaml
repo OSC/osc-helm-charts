@@ -19,3 +19,20 @@ spec:
           spec:
             nodeSelector:
               node-role.kubernetes.io/ondemand: ''
+    - name: paas-nodeselector
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+      mutate:
+        patchStrategicMerge:
+          spec:
+            nodeSelector:
+              node-role.kubernetes.io/paas: ''

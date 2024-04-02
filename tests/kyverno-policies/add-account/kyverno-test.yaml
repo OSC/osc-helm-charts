@@ -1,0 +1,21 @@
+---
+name: add-account
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: add-account
+    rule: paas-add-account
+    resources:
+      - test-paas
+    patchedResource: test-paas-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: add-account
+    rule: paas-add-account
+    resources:
+      - test-skip
+    kind: Pod
+    result: skip

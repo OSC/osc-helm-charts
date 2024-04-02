@@ -52,3 +52,30 @@ spec:
           =(initContainers):
             - image: "{{ . }}/* | {{ . }}:*"
       {{- end }}
+  - name: authorized-registries-paas
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    exclude:
+      any:
+        - resources:
+            name: "cm-acme-http-solver-*"
+    validate:
+      message: >-
+        Images must come from {{ join " or " .Values.paas.authorizedRegistries }}
+      anyPattern:
+      {{- range .Values.paas.authorizedRegistries }}
+      - spec:
+          containers:
+            - image: "{{ . }}/* | {{ . }}:*"
+          =(initContainers):
+            - image: "{{ . }}/* | {{ . }}:*"
+      {{- end }}

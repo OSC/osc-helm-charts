@@ -1,0 +1,25 @@
+---
+name: namespace-service-account
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: namespace-service-account
+    rule: require-service-account
+    resources:
+      - test-skip
+    kind: Namespace
+    result: skip
+  - policy: namespace-service-account
+    rule: require-service-account
+    resources:
+      - test-pass
+    kind: Namespace
+    result: pass
+  - policy: namespace-service-account
+    rule: require-service-account
+    resources:
+      - test-fail
+    kind: Namespace
+    result: fail

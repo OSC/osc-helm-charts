@@ -2,7 +2,7 @@ apiVersion: v2
 name: kyverno-policies
 description: OSC Kyverno policies deployment
 type: application
-version: 0.24.0
+version: 0.25.0
 appVersion: "v1.11.4"
 maintainers:
   - name: treydock
@@ -10,3 +10,7 @@ dependencies:
   - name: kyverno-policies
     version: 3.1.4
     repository: https://kyverno.github.io/kyverno/
+  - name: osc-common
+    version: 0.7.0
+    repository: https://osc.github.io/osc-helm-charts/
+    # repository: file://../osc-common

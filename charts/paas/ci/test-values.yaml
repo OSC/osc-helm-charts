@@ -1,0 +1,20 @@
+---
+namespaces:
+- name: test
+  serviceAccount: test-account
+  account: test
+  groups: ['testgroup']
+  cpuLimit: '8'
+  cpuDefault: '1'
+  memoryLimit: '16Gi'
+  memoryDefault: '2Gi'
+  imagePullSecret:
+    username: testuser
+    password: password
+- name: foo
+  serviceAccount: foo-account
+  account: foo
+  groups: ['bar']
+- name: baz
+  serviceAccount: example
+  account: baz

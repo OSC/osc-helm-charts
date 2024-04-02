@@ -57,3 +57,32 @@ results:
     kind: Pod
     namespace: webservice
     result: pass
+  - policy: restrict-host-path
+    rule: paas-host-path
+    resources:
+      - test-skip-paas
+    kind: Pod
+    namespace: user-test
+    result: skip
+  - policy: restrict-host-path
+    rule: paas-host-path
+    resources:
+      - test-pass-paas
+      - test-no-hostpath-pass-paas
+    kind: Pod
+    namespace: paas
+    result: pass
+  - policy: restrict-host-path
+    rule: paas-host-path
+    resources:
+      - test-fail-paas
+    kind: Pod
+    namespace: paas
+    result: fail
+  - policy: restrict-host-path
+    rule: paas-host-path
+    resources:
+      - test-paas-mariadb
+    kind: Pod
+    namespace: paas
+    result: pass

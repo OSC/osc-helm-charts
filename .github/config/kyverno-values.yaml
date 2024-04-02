@@ -38,3 +38,4 @@ config:
           operator: In
           values:
             - webservice
+            - paas

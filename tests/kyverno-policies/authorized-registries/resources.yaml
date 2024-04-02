@@ -97,3 +97,63 @@ spec:
   containers:
   - name: nginx
     image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-skip-paas
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pass-paas
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: docker-registry.osc.edu/paas/nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pass2-paas
+  namespace: paas
+spec: 
+  containers:
+  - name: oauth2
+    image: quay.io/oauth2-proxy/oauth2-proxy:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pass3-paas
+  namespace: paas
+spec: 
+  containers:
+  - name: mysqld-exporter
+    image: docker-registry.osc.edu/kubernetes/bitnami/mysqld-exporter:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pass-site-paas
+  namespace: paas
+spec:
+  containers:
+  - name: nginx
+    image: docker-registry.osc.edu/nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-fail-paas
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12

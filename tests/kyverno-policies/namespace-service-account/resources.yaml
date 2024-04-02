@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-skip
+  labels:
+    app: web
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-pass
+  labels:
+    osc.edu/role: paas
+    osc.edu/service-account: test
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-fail
+  labels:
+    osc.edu/role: paas

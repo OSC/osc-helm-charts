@@ -1,0 +1,30 @@
+---
+name: namespace-role
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: namespace-role
+    rule: require-role
+    resources:
+      - user-test
+      - default
+      - kube-system
+    kind: Namespace
+    result: skip
+  - policy: namespace-role
+    rule: require-role
+    resources:
+      - test-ondemand
+      - test-infrastructure
+      - test-webservice
+      - test-paas
+    kind: Namespace
+    result: pass
+  - policy: namespace-role
+    rule: require-role
+    resources:
+      - test-fail
+    kind: Namespace
+    result: fail

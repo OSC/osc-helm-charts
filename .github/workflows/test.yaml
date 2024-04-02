@@ -49,6 +49,7 @@ jobs:
           - prometheus
           - kubernetes-dashboard-proxy
           - kyverno-policies
+          - paas
     name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
