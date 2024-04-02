@@ -14,9 +14,27 @@ policies:
       - name: test-pass
         values:
           request.operation: CREATE
+      - name: test-pass-paas
+        values:
+          request.operation: CREATE
       - name: test-fail
+        values:
+          request.operation: CREATE
+      - name: test-fail-paas
         values:
           request.operation: CREATE
       - name: test-fail-prefix
         values:
           request.operation: CREATE
+      - name: test-fail-prefix-paas
+        values:
+          request.operation: CREATE
+namespaceSelector:
+  - name: user-test
+    labels:
+      foo: bar
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test
+      account: test

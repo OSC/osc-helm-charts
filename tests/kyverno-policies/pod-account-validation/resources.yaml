@@ -36,6 +36,18 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-pass-paas
+  namespace: paas
+  labels:
+    account: PZS0001
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-fail
   namespace: user-test
   labels:
@@ -48,8 +60,32 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-fail-paas
+  namespace: paas
+  labels:
+    account: PZS0002
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-fail-prefix
   namespace: user-test
+  labels:
+    account: oscall
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-fail-prefix-paas
+  namespace: paas
   labels:
     account: oscall
 spec: 

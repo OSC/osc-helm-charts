@@ -1,0 +1,29 @@
+---
+name: pod-role-validation
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: pod-role-validation
+    rule: paas-require-role
+    resources:
+      - test-skip
+      - test-skip-webservice
+    kind: Pod
+    result: skip
+  - policy: pod-role-validation
+    rule: paas-require-role
+    resources:
+      - test-pass
+    kind: Pod
+    namespace: user-test
+    result: pass
+  - policy: pod-role-validation
+    rule: paas-require-role
+    resources:
+      - test-fail
+    kind: Pod
+    namespace: user-test
+    result: fail

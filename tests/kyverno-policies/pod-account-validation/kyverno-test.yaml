@@ -17,6 +17,7 @@ results:
     rule: pods-user-authorized-for-account
     resources:
       - test-pass
+      - test-pass-paas
     kind: Pod
     namespace: user-test
     result: pass
@@ -24,6 +25,7 @@ results:
     rule: pods-user-authorized-for-account
     resources:
       - test-fail
+      - test-fail-paas
     kind: Pod
     namespace: user-test
     result: fail
@@ -31,6 +33,7 @@ results:
     rule: pods-user-account-prefix
     resources:
       - test-fail-prefix
+      - test-fail-prefix-paas
     kind: Pod
     namespace: user-test
     result: fail
