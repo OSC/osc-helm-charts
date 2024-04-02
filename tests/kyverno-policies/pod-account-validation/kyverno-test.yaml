@@ -7,6 +7,27 @@ resources:
 variables: variables.yaml
 results:
   - policy: pod-account-validation
+    rule: pods-user-account-prefix
+    resources:
+      - test-pass
+      - test-pass-paas
+    kind: Pod
+    result: pass
+  - policy: pod-account-validation
+    rule: pods-user-account-prefix
+    resources:
+      - test-fail
+      - test-fail-paas
+    kind: Pod
+    result: fail
+  - policy: pod-account-validation
+    rule: pods-user-account-prefix
+    resources:
+      - test-fail-prefix
+      - test-fail-prefix-paas
+    kind: Pod
+    result: fail
+  - policy: pod-account-validation
     rule: pods-user-authorized-for-account
     resources:
       - test-skip
@@ -28,9 +49,21 @@ results:
     namespace: user-test
     result: fail
   - policy: pod-account-validation
-    rule: pods-user-account-prefix
+    rule: paas-user-authorized-for-account
     resources:
-      - test-fail-prefix
+      - test-paas-skip
+      - test-paas-skip-op
     kind: Pod
-    namespace: user-test
+    result: skip
+  - policy: pod-account-validation
+    rule: paas-user-authorized-for-account
+    resources:
+      - test-paas-pass
+    kind: Pod
+    result: pass
+  - policy: pod-account-validation
+    rule: paas-user-authorized-for-account
+    resources:
+      - test-paas-fail
+    kind: Pod
     result: fail

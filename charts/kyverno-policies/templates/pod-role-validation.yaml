@@ -1,0 +1,26 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-role-validation
+spec:
+  background: false
+  validationFailureAction: Enforce
+  rules:
+  - name: paas-require-role
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    validate:
+      message: "role label must be set to 'paas'"
+      pattern:
+        metadata:
+          labels:
+            role: "paas"

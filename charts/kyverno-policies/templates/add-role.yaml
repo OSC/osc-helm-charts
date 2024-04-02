@@ -1,0 +1,25 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-role
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+  - name: paas-add-role
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          labels:
+            role: paas
