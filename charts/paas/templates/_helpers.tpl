@@ -47,6 +47,13 @@ app.kubernetes.io/version: {{ $top.Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ $top.Release.Service }}
 {{- end }}
 
+{{/*
+Namespaced common annotations
+*/}}
+{{- define "paas.namespaced.annotations" -}}
+helm.sh/resource-policy: keep
+{{- end }}
+
 {{- define "paas.imagePullSecret" }}
 {{- $namespace := index . 0 -}}
 {{- $top := index . 1 -}}
