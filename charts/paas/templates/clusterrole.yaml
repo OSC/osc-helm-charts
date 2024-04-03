@@ -67,3 +67,19 @@ rules:
     - patch
     - update
     - delete
+- apiGroup: ["cert-manager.io"]
+  resources:
+    - certificates
+    - certificaterequests
+  verbs:
+    - get
+    - list
+    - watch
+- apiGroup: ["acme.cert-manager.io"]
+  resources:
+    - orders
+    - challenges
+  verbs:
+    - get
+    - list
+    - watch
