@@ -1,0 +1,133 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-skip
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-skip-webservice
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pass-pod
+  namespace: paas
+  labels:
+    osc.edu/role: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-pass-service
+  namespace: paas
+  labels:
+    osc.edu/role: paas
+spec:
+  ports:
+  - name: test
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: test
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-pass-ingress
+  namespace: paas
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/server-alias: test
+  labels:
+    app: web
+    osc.edu/role: paas
+spec:
+  rules:
+  - host: test
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 8080
+  tls:
+  - hosts:
+    - test.example.com
+    secretName: test
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-fail-pod
+  namespace: paas
+  labels:
+    osc.edu/role: test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-fail-service
+  namespace: paas
+spec:
+  ports:
+  - name: test
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: test
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-fail-ingress
+  namespace: paas
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/server-alias: test
+  labels:
+    app: web
+spec:
+  rules:
+  - host: test
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 8080
+  tls:
+  - hosts:
+    - test.example.com
+    secretName: test

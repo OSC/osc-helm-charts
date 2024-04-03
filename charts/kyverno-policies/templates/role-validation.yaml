@@ -1,12 +1,12 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: add-role
+  name: role-validation
 spec:
+  background: false
   validationFailureAction: Enforce
-  background: true
   rules:
-  - name: paas-add-role
+  - name: paas-require-role
     match:
       any:
         - resources:
@@ -20,8 +20,9 @@ spec:
                 operator: In
                 values:
                 - paas
-    mutate:
-      patchStrategicMerge:
+    validate:
+      message: "role label must be set to 'paas'"
+      pattern:
         metadata:
           labels:
-            osc.edu/role: paas
+            osc.edu/role: "paas"

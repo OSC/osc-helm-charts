@@ -1,26 +1,26 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: pod-role-validation
+  name: add-annotations
 spec:
-  background: false
   validationFailureAction: Enforce
+  background: true
   rules:
-  - name: paas-require-role
+  - name: paas-disable-scrape
     match:
       any:
         - resources:
             kinds:
             - Pod
+            - Service
             namespaceSelector:
               matchExpressions:
               - key: osc.edu/role
                 operator: In
                 values:
                 - paas
-    validate:
-      message: "role label must be set to 'paas'"
-      pattern:
+    mutate:
+      patchStrategicMerge:
         metadata:
-          labels:
-            role: "paas"
+          annotations:
+            prometheus.io/scrape: 'false'
