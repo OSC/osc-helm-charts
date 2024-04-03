@@ -67,6 +67,7 @@ rules:
     - patch
     - update
     - delete
+{{ if .Capabilities.APIVersions.Has "cert-manager.io/v1" -}}
 - apiGroup: ["cert-manager.io"]
   resources:
     - certificates
@@ -75,6 +76,8 @@ rules:
     - get
     - list
     - watch
+{{ end -}}
+{{ if .Capabilities.APIVersions.Has "acme.cert-manager.io/v1" -}}
 - apiGroup: ["acme.cert-manager.io"]
   resources:
     - orders
@@ -83,3 +86,4 @@ rules:
     - get
     - list
     - watch
+{{ end -}}

@@ -95,6 +95,12 @@ jobs:
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
           helm install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.1.4
+      # TODO: Implement if/when need to validate with cert-manager resources
+      #- name: Install cert-manager
+      #  if: matrix.chart == 'paas'
+      #  run: |
+      #    helm repo add jetstack https://charts.jetstack.io
+      #    helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.14.4 --set installCRDs=true
       - name: Add namespaces
         run: kubectl create namespace ${{ matrix.chart }}
       - name: Run chart-testing (install)
