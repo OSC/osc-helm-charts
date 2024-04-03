@@ -1,0 +1,51 @@
+---
+name: role-validation
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: role-validation
+    rule: paas-require-role
+    resources:
+      - test-skip
+      - test-skip-webservice
+    kind: Pod
+    result: skip
+  - policy: role-validation
+    rule: paas-require-role
+    resources:
+      - test-pass-pod
+    kind: Pod
+    result: pass
+  - policy: role-validation
+    rule: paas-require-role
+    resources:
+      - test-pass-service
+    kind: Service
+    result: pass
+  - policy: role-validation
+    rule: paas-require-role
+    resources:
+      - test-pass-ingress
+    kind: Ingress
+    result: pass
+  - policy: role-validation
+    rule: paas-require-role
+    resources:
+      - test-fail-pod
+    kind: Pod
+    result: fail
+  - policy: role-validation
+    rule: paas-require-role
+    resources:
+      - test-fail-service
+    kind: Service
+    result: fail
+  - policy: role-validation
+    rule: paas-require-role
+    resources:
+      - test-fail-ingress
+    kind: Ingress
+    result: fail
