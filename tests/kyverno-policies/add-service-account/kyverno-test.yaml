@@ -33,19 +33,6 @@ results:
     kind: Pod
     result: skip
   - policy: add-service-account
-    rule: webservice-service-account-run-as-containers
-    resources:
-      - test-webservice-service-account-containers
-    kind: Pod
-    result: skip
-  - policy: add-service-account
-    rule: webservice-service-account-run-as-containers
-    resources:
-      - test-webservice-service-account-mariadb-containers
-    patchedResource: webservice-service-account-mariadb-mutated-containers.yaml
-    kind: Pod
-    result: pass
-  - policy: add-service-account
     rule: paas-service-account-run-as
     resources:
       - test-paas-service-account

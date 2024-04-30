@@ -88,7 +88,11 @@ metadata:
     osc.edu/service-account: test
 spec:
   securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
     supplementalGroups: []
+    runAsNonRoot: true
   containers:
   - name: nginx
     image: nginx:1.12
@@ -105,7 +109,11 @@ metadata:
     osc.edu/service-account: test
 spec:
   securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
     supplementalGroups: []
+    runAsNonRoot: true
   containers:
   - name: nginx
     image: nginx:1.12
@@ -118,6 +126,23 @@ spec:
     securityContext:
       runAsUser: 1000
       runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-require-valid-service-account-runasnonroot-fail
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
 ---
 apiVersion: v1
 kind: Pod
@@ -362,7 +387,11 @@ metadata:
   namespace: paas
 spec:
   securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
     supplementalGroups: []
+    runAsNonRoot: true
   containers:
   - name: nginx
     image: nginx:1.12
@@ -377,7 +406,11 @@ metadata:
   namespace: paas
 spec:
   securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
     supplementalGroups: []
+    runAsNonRoot: true
   containers:
   - name: nginx
     image: nginx:1.12
@@ -390,6 +423,21 @@ spec:
     securityContext:
       runAsUser: 1000
       runAsGroup: 1001
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pods-require-valid-service-account-runasnonroot-fail
+  namespace: paas
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1001
+    fsGroup: 1001
+    supplementalGroups: []
+  containers:
+  - name: nginx
+    image: nginx:1.12
 ---
 apiVersion: v1
 kind: Pod

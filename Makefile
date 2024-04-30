@@ -37,7 +37,7 @@ kyverno-copy-policies: $(KYVERNO_POLICIES)
 	done
 
 kyverno-test: $(KYVENOR_CLI) kyverno-copy-policies
-	$(KYVENOR_CLI) test $(KYVERNO_POLICY_TESTS_DIR)
+	$(KYVENOR_CLI) test --detailed-results $(KYVERNO_POLICY_TESTS_DIR)
 
 encrypt-private-values: $(PRIVATE_CHARTS)
 	@for d in $(dir $^); do \

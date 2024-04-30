@@ -1,0 +1,19 @@
+policies:
+  - name: namespace-account
+    rules:
+      - name: valid-account
+        values:
+          userGroupMap.data.user-test: '["test"]'
+    resources:
+      - name: user-test
+        values:
+          request.operation: CREATE
+      - name: test-skip-op
+        values:
+          request.operation: DELETE
+      - name: test-pass
+        values:
+          request.operation: CREATE
+      - name: test-fail-account
+        values:
+          request.operation: CREATE
