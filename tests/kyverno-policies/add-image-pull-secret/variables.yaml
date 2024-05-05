@@ -1,0 +1,25 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+- name: add-image-pull-secret
+  resources:
+    - name: test-paas
+      values:
+        secret: osc-registry
+    - name: test-paas-add
+      values:
+        secret: osc-registry
+    - name: test-paas-skip
+      values:
+        secret: osc-registry
+    - name: test-paas-skip-no-secret
+namespaceSelector:
+  - name: user-test
+    labels:
+      foo: bar
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test
