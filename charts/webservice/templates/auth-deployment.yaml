@@ -76,6 +76,9 @@ spec:
           {{- range .Values.auth.allowGroups }}
           - --allowed-group={{ tpl . $ }}
           {{- end }}
+          {{- if .Values.auth.skipAuthRoute }}
+          - --skip-auth-route="{{ .Values.auth.skipAuthRoute }}"
+          {{- end }}
         ports:
         - containerPort: {{ .Values.auth.service.port }}
           name: http

@@ -33,114 +33,117 @@ spec:
       hostIPC: false
       hostPID: false
       containers:
-      - name: {{ include "webservice.name" . }}
-        image: "{{ .Values.image.repository }}:{{ tpl (include "webservice.imageTag" .) . }}"
-        {{- if eq (tpl (include "webservice.imageTag" .) .) "latest" }}
+    {{- $root := . }}
+    {{- range $idx, $container := .Values.containers }}
+      {{- $values := mergeOverwrite $root $container }}
+      - name: {{ tpl $container.name $root }}
+        image: "{{ $root.Values.image.repository }}:{{ tpl (include "webservice.imageTag" $root) $root }}"
+        {{- if eq (tpl (include "webservice.imageTag" $root) $root) "latest" }}
         imagePullPolicy: Always
         {{- else }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        imagePullPolicy: {{ $root.Values.image.pullPolicy }}
         {{- end }}
-        {{- if .Values.command }}
-        command: {{ toYaml .Values.command | nindent 10 }}
-        {{- else if (ne .Values.appType "none") }}
-        command: {{ index .Values "defaultCommand" .Values.appType | toYaml | nindent 10 }}
+        {{- if $root.Values.command }}
+        command: {{ toYaml $root.Values.command | nindent 10 }}
+        {{- else if (ne $root.Values.appType "none") }}
+        command: {{ index $root.Values "defaultCommand" $root.Values.appType | toYaml | nindent 10 }}
         {{- end }}
-        {{- if .Values.args }}
+        {{- if $root.Values.args }}
         args:
-        {{- range .Values.args }}
-        - {{ tpl . $ }}
-        {{- end }}
-        {{- else if (ne .Values.appType "none") }}
+        {{- range $root.Values.args }}
+        - {{ tpl . $values }}
+        {{- end }}  
+        {{- else if (ne $root.Values.appType "none") }}
         args:
-        {{- range (index .Values "defaultArgs" .Values.appType) }}
-        - {{ tpl . $ }}
+        {{- range (index $root.Values "defaultArgs" $root.Values.appType) }}
+        - {{ tpl . $root }}
         {{- end }}
         {{- end }}
-        {{- if .Values.workingDir }}
-        workingDir: {{ .Values.workingDir }}
+        {{- if $root.Values.workingDir }}
+        workingDir: {{ $root.Values.workingDir }}
         {{- end }}
-        {{- if or .Values.env .Values.database.enable .Values.database.mariadb.enable .Values.envSecrets }}
+        {{- if or $root.Values.env $root.Values.database.enable $root.Values.database.mariadb.enable $root.Values.envSecrets }}
         env:
-        {{- if and .Values.database.enable .Values.database.password }}
+        {{- if and $root.Values.database.enable $root.Values.database.password }}
         - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ include "webservice.name" . }}
+              name: {{ include "webservice.name" $root }}
               key: database-password
         {{- end }}
-        {{- range $k :=  keys .Values.envSecrets }}
+        {{- range $k :=  keys $root.Values.envSecrets }}
         - name: {{ $k }}
           valueFrom:
             secretKeyRef:
-              name: {{ include "webservice.name" $ }}
+              name: {{ include "webservice.name" $root }}
               key: {{ $k }}
         {{- end }}
-        {{- if and .Values.database.enable .Values.database.url }}
+        {{- if and $root.Values.database.enable $root.Values.database.url }}
         - name: DATABASE_URL
-          value: {{ tpl .Values.database.url . }}
+          value: {{ tpl .Values.database.url $root }}
         {{- end }}
-        {{- range $env := .Values.env }}
+        {{- range $env := $root.Values.env }}
         - name: {{ $env.name }}
-          value: {{ tpl $env.value $ | quote }}
+          value: {{ tpl $env.value $root | quote }}
         {{- end }}
         {{- end }}
         ports:
-        - containerPort: {{ .Values.service.port }}
-          name: http
-        {{- if or .Values.data.enable .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket .Values.mounts.roFile }}
+        - containerPort: {{ add $root.Values.service.port $idx }}
+          name: {{ $container.portName | default (tpl $container.name $root)  }}
+        {{- if or $root.Values.data.enable $root.Values.mounts.data $root.Values.mounts.home $root.Values.mounts.roDir $root.Values.mounts.rwDir $root.Values.mounts.socket $root.Values.mounts.roFile }}
         volumeMounts:
-        {{- if .Values.data.enable }}
+        {{- if $root.Values.data.enable }}
           - name: data
-            mountPath: {{ .Values.data.path }}
+            mountPath: {{ $root.Values.data.path }}
         {{- end }}
-        {{- if .Values.mounts.data }}
-          - name: {{ .Values.mounts.data.name }}
-            mountPath: {{ tpl .Values.mounts.data.mountPath . }}
+        {{- if $root.Values.mounts.data }}
+          - name: {{ $root.Values.mounts.data.name }}
+            mountPath: {{ tpl $root.Values.mounts.data.mountPath $root }}
         {{- end }}
-        {{- if .Values.mounts.home }}
+        {{- if $root.Values.mounts.home }}
           - name: home
-            mountPath: {{ tpl .Values.mounts.home . }}
+            mountPath: {{ tpl $root.Values.mounts.home $root }}
         {{- end }}
-        {{- range $name, $path := .Values.mounts.roDir }}
+        {{- range $name, $path := $root.Values.mounts.roDir }}
           - name: {{ $name }}
-            mountPath: {{ tpl $path $ }}
+            mountPath: {{ tpl $path $root }}
             readOnly: true
         {{- end }}
-        {{- range $name, $path := .Values.mounts.rwDir }}
+        {{- range $name, $path := $root.Values.mounts.rwDir }}
           - name: {{ $name }}
-            mountPath: {{ tpl $path $ }}
+            mountPath: {{ tpl $path $root }}
             readOnly: false
         {{- end }}
-        {{- range $name, $path := .Values.mounts.socket }}
+        {{- range $name, $path := $root.Values.mounts.socket }}
           - name: {{ $name }}
-            mountPath: {{ tpl $path $ }}
+            mountPath: {{ tpl $path $root }}
         {{- end }}
-        {{- range $name, $path := .Values.mounts.roFile }}
+        {{- range $name, $path := $root.Values.mounts.roFile }}
           - name: {{ $name }}
-            mountPath: {{ tpl $path $ }}
+            mountPath: {{ tpl $path $root }}
             readOnly: true
         {{- end }}
         {{- end }}
         {{- $probeType := "httpGet" }}
-        {{- if index .Values.probes.typeDefaults .Values.appType }}
-          {{- $probeType = (index .Values.probes.typeDefaults .Values.appType) }}
-        {{- else if .Values.probes.type }}
-          {{- $probeType = .Values.probes.type }}
+        {{- if index $root.Values.probes.typeDefaults $root.Values.appType }}
+          {{- $probeType = (index $root.Values.probes.typeDefaults $root.Values.appType) }}
+        {{- else if $root.Values.probes.type }}
+          {{- $probeType = $root.Values.probes.type }}
         {{- end }}
         startupProbe:
-          {{ $probeType }}: {{ toYaml (index .Values.startupProbe $probeType) | nindent 12 }}
-          {{- omit .Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
+          {{ $probeType }}: {{ toYaml (index $root.Values.startupProbe $probeType) | nindent 12 }}
+          {{- omit $root.Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         livenessProbe:
-          {{ $probeType }}: {{ toYaml (index .Values.livenessProbe $probeType) | nindent 12 }}
-          {{- omit .Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
+          {{ $probeType }}: {{ toYaml (index $root.Values.livenessProbe $probeType) | nindent 12 }}
+          {{- omit $root.Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         readinessProbe:
-          {{ $probeType }}: {{ toYaml (index .Values.readinessProbe $probeType) | nindent 12 }}
-          {{- omit .Values.readinessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
-  {{- $podResources := .Values.podResources}}
-  {{- if .Values.global.env }}
-    {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
-      {{- if (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
-        {{- $podResources = (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+          {{ $probeType }}: {{ toYaml (index $root.Values.readinessProbe $probeType) | nindent 12 }}
+          {{- omit $root.Values.readinessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
+  {{- $podResources := $root.Values.podResources}}
+  {{- if $root.Values.global.env }}
+    {{- if (index $root.Values.global.env (include "osc.common.environment" $root)) }}
+      {{- if (index $root.Values.global.env (include "osc.common.environment" $root) "podResources") }}
+        {{- $podResources = (index $root.Values.global.env (include "osc.common.environment" $root) "podResources") }}
       {{- end }}
     {{- end }}
   {{- end }}
@@ -153,6 +156,7 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           privileged: false
+    {{- end }}
     {{- if .Values.initContainers }}
       initContainers:
     {{- range $init := .Values.initContainers }}

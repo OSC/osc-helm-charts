@@ -18,10 +18,13 @@ metadata:
   {{- end }}
 spec:
   ports:
-  - name: http
-    port: {{ .Values.service.port }}
+  {{ $root := . }}
+  {{- range $idx, $container := .Values.containers }}
+  - name: {{ $container.portName | default (tpl $container.name $root)  }}
+    port: {{ add $root.Values.service.port $idx }}
     protocol: TCP
-    targetPort: http
+    targetPort: {{ $container.portName | default (tpl $container.name $root)  }}
+  {{- end }}
   selector:
-    {{- include "webservice.selectorLabels" . | nindent 4 }}
+    {{- include "webservice.selectorLabels" $root | nindent 4 }}
   type: ClusterIP
