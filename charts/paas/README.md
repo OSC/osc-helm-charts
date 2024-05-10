@@ -1,6 +1,6 @@
 # paas
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC PAAS bootstrap Helm Chart
 
@@ -26,10 +26,16 @@ namespaces:
   serviceAccount: test-account
   account: test
   groups: ['testgroup']
+  allowedDNS:
+    - test.osc.edu
+    - test.k8.osc.edu
 - name: foo
   serviceAccount: foo-account
   account: foo
   groups: ['bar']
+  allowedDNS:
+    - foo.osc.edu
+    - foo.k8.osc.edu
   cpuLimit: '8'
   cpuDefault: '1'
   memoryLimit: '16Gi'
@@ -47,6 +53,7 @@ namespaces:
 | serviceAccount | The user that will run pods | **required** |
 | account | The charge account for this namespace | **required** |
 | groups | The groups that can manage the namespace's resources | `[]` |
+| allowedDNS | Allowed DNS entries for namespace's Ingress resources | `[]` |
 | cpuLimit | The max CPU this namespace can consume | `4` |
 | cpuDefault | The default CPU request for this namespace | `1` |
 | memoryLimit | The max memory this namespace can consume | `8Gi` |

@@ -4,6 +4,9 @@ namespaces:
   serviceAccount: test-account
   account: test
   groups: ['testgroup']
+  allowedDNS:
+    - test.example.com
+    - test.k8.example.com
   cpuLimit: '8'
   cpuDefault: '1'
   memoryLimit: '16Gi'
