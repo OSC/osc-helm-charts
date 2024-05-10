@@ -54,3 +54,10 @@ metadata:
   name: chatsqc
   labels:
     osc.edu/role: webservice
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: emtdata
+  labels:
+    osc.edu/role: webservice

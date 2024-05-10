@@ -1,0 +1,14 @@
+global:
+  environment: dev
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+webservice:
+  mounts:
+    rwDir:
+      project: null
+  auth:
+    oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
+    cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
+  ingress:
+    host: test.local

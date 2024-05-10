@@ -1,0 +1,55 @@
+global:
+  environment: ""
+  imageTag: v0.1.0
+  oscServiceAccount: emthub
+  env:
+    production:
+      replicas: 2
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    test:
+      replicas: 2
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    dev:
+      replicas: 1
+      image:
+        tag: latest
+      podResources:
+        limits:
+          cpu: 2
+          memory: 2Gi
+        requests:
+          cpu: 500m
+          memory: 265Mi
+      maintenance:
+        groups:
+          - wiagstf
+webservice:
+  appType: rshiny
+  containers:
+  - name: web
+    startCommand: 'R --no-save --slave -f /app/entrypoint_web.R --args $$PORT'
+    ingressPath: /
+  - name: api
+    startCommand: 'R --no-save --slave -f /app/entrypoint_api.R --args $$PORT'
+    ingressPath: /api
+  auth:
+    enable: true
+    skipAuthRoute: "/api/*"
+    idpHost: EXTERNAL-DATA
+    clientSecret: EXTERNAL-SECRET
+    cookieSecret: EXTERNAL-SECRET
+  workingDir: /app
+  image:
+    repository: docker-registry.osc.edu/webservices/emt-api
+  env:
+    - name: DB_LOCATION
+      value: '/fs/ess/PAS2531/emthub/API/users_db/{{ include "osc.common.environment" . }}/users_db_{{ include "osc.common.environment" . }}.db'
+  mounts:
+    rwDir:
+      project: /fs/ess/PAS2531
+  alert:
+    receiver: emthub
+  debugGroups:
+    - wiagstf
