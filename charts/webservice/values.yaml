@@ -37,8 +37,13 @@ defaultArgs:
     - "--log-file=/dev/stdout"
     - "--pid-file=/tmp/passenger.pid"
     - "--app-start-command"
-    - 'R --no-save --slave -f /app/entrypoint.R --args $$PORT'
+    - '{{ index .startCommand | default "R --no-save --slave -f /app/entrypoint.R --args $$PORT" }}'
   none: []
+containers:
+  - name: '{{ include "webservice.name" . }}'
+    portName: http
+    startCommand: ~
+    ingressPath: /
 
 image:
   repository:
@@ -158,6 +163,7 @@ auth:
   oidcIssuerURL: https://$(IDP_HOST)/realms/osc
   # Also pulled from global.env.$environment.auth.accessGroup
   allowGroups:
+  skipAuthRoute:
   image:
     repository: quay.io/oauth2-proxy/oauth2-proxy
     tag: v7.1.3

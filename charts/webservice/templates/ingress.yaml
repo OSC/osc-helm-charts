@@ -41,10 +41,13 @@ spec:
   - host: {{ tpl (include "webservice.ingressHost" .) . | quote }}
     http:
       paths:
-      - path: /
+      {{- $root := . }}
+      {{- range $idx, $container := .Values.containers }}
+      - path: {{ $container.ingressPath }}
         pathType: Prefix
         backend:
           service:
-            name: {{ include "webservice.name" . }}
+            name: {{ include "webservice.name" $root }}
             port:
-              number: {{ .Values.service.port }}
+              number: {{ add $root.Values.service.port $idx }}
+      {{- end }}
