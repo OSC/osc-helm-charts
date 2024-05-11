@@ -49,5 +49,5 @@ spec:
           service:
             name: {{ include "webservice.name" $root }}
             port:
-              number: {{ add $root.Values.service.port $idx }}
+              number: {{ $container.port | default (add $root.Values.service.port $idx) }}
       {{- end }}

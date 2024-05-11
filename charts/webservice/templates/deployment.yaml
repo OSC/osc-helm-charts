@@ -64,6 +64,8 @@ spec:
         {{- end }}
         {{- if or $root.Values.env $root.Values.database.enable $root.Values.database.mariadb.enable $root.Values.envSecrets }}
         env:
+        - name: PASSENGER_PORT
+          value: {{ $container.port | default (add $root.Values.service.port $idx) | quote }}
         {{- if and $root.Values.database.enable $root.Values.database.password }}
         - name: DATABASE_PASSWORD
           valueFrom:
@@ -88,7 +90,7 @@ spec:
         {{- end }}
         {{- end }}
         ports:
-        - containerPort: {{ add $root.Values.service.port $idx }}
+        - containerPort: {{ $container.port | default (add $root.Values.service.port $idx) }}
           name: {{ $container.portName | default (tpl $container.name $root)  }}
         {{- if or $root.Values.data.enable $root.Values.mounts.data $root.Values.mounts.home $root.Values.mounts.roDir $root.Values.mounts.rwDir $root.Values.mounts.socket $root.Values.mounts.roFile }}
         volumeMounts:
@@ -131,13 +133,13 @@ spec:
           {{- $probeType = $root.Values.probes.type }}
         {{- end }}
         startupProbe:
-          {{ $probeType }}: {{ toYaml (index $root.Values.startupProbe $probeType) | nindent 12 }}
+          {{ $probeType }}: {{ tpl (toYaml (index $root.Values.startupProbe $probeType)) $root | nindent 12 }}
           {{- omit $root.Values.startupProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         livenessProbe:
-          {{ $probeType }}: {{ toYaml (index $root.Values.livenessProbe $probeType) | nindent 12 }}
+          {{ $probeType }}: {{ tpl (toYaml (index $root.Values.livenessProbe $probeType)) $root | nindent 12 }}
           {{- omit $root.Values.livenessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
         readinessProbe:
-          {{ $probeType }}: {{ toYaml (index $root.Values.readinessProbe $probeType) | nindent 12 }}
+          {{ $probeType }}: {{ tpl (toYaml (index $root.Values.readinessProbe $probeType)) $root | nindent 12 }}
           {{- omit $root.Values.readinessProbe "httpGet" "tcpSocket" | toYaml | nindent 10 }}
   {{- $podResources := $root.Values.podResources}}
   {{- if $root.Values.global.env }}

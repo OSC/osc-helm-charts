@@ -17,7 +17,8 @@ defaultCommand:
   none: []
 defaultArgs:
   rails:
-    - "--port={{ .Values.service.port }}"
+    # Set by PASSENGER_PORT env var
+    # - "--port={{ .Values.service.port }}"
     - "--min-instances=1"
     - "--sticky-sessions"
     - "--start-timeout=180"
@@ -27,7 +28,8 @@ defaultArgs:
     - "--log-file=/dev/stdout"
     - "--pid-file=/tmp/passenger.pid"
   rshiny:
-    - "--port={{ .Values.service.port }}"
+    # Set by PASSENGER_PORT env var
+    # - "--port={{ .Values.service.port }}"
     - "--min-instances=1"
     - "--sticky-sessions"
     - "--start-timeout=180"
@@ -41,6 +43,7 @@ defaultArgs:
   none: []
 containers:
   - name: '{{ include "webservice.name" . }}'
+    port: 3000
     portName: http
     startCommand: ~
     ingressPath: /
@@ -98,27 +101,27 @@ probes:
 startupProbe:
   httpGet:
     path: /
-    port: http
+    port: '{{ .portName | default .name }}'
   tcpSocket:
-    port: http
+    port: '{{ .portName | default .name }}'
   failureThreshold: 12
   periodSeconds: 10
   timeoutSeconds: 5
 livenessProbe:
   httpGet:
     path: /
-    port: http
+    port: '{{ .portName | default .name }}'
   tcpSocket:
-    port: http
+    port: '{{ .portName | default .name }}'
   failureThreshold: 6
   periodSeconds: 10
   timeoutSeconds: 5
 readinessProbe:
   httpGet:
     path: /
-    port: http
+    port: '{{ .portName | default .name }}'
   tcpSocket:
-    port: http
+    port: '{{ .portName | default .name }}'
   failureThreshold: 6
   periodSeconds: 10
   timeoutSeconds: 5

@@ -21,7 +21,7 @@ spec:
   {{ $root := . }}
   {{- range $idx, $container := .Values.containers }}
   - name: {{ $container.portName | default (tpl $container.name $root)  }}
-    port: {{ add $root.Values.service.port $idx }}
+    port: {{ $container.port | default (add $root.Values.service.port $idx) }}
     protocol: TCP
     targetPort: {{ $container.portName | default (tpl $container.name $root)  }}
   {{- end }}
