@@ -44,6 +44,7 @@ jobs:
           - webmo
           - emthub
           - chatsqc
+          - emtdata
     name: Test Install Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
