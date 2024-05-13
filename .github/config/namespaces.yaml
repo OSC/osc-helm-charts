@@ -58,6 +58,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: emtdata
+  name: emt-api
   labels:
     osc.edu/role: webservice
