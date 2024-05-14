@@ -65,7 +65,14 @@ spec:
           - --insecure-oidc-allow-unverified-email=true
           - --skip-provider-button
           - --silence-ping-logging
-          - --upstream=http://{{ include "webservice.name" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+        {{- $root := . }}
+        {{- range $idx, $container := .Values.containers }}
+          {{- $path := "" }}
+          {{- if ne $container.ingressPath "/" }}
+            {{- $path = $container.ingressPath }}
+          {{- end }}
+          - --upstream=http://{{ tpl $container.name $root }}.{{ $root.Release.Namespace }}.svc.cluster.local:{{ $container.port | default (add $root.Values.service.port $idx) }}{{ $path }}
+        {{- end }}
           - --metrics-address=:{{ .Values.auth.metricsService.port }}
           {{- if (include "webservice.idpHost" .) }}
           - --whitelist-domain=$(IDP_HOST)
