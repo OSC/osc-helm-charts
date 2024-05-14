@@ -1,48 +1,48 @@
+{{ $root := . }}
+{{ range $idx, $container := .Values.containers }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "webservice.name" . }}
+  name: {{ tpl $container.name $root }}
   labels:
-    {{- include "webservice.labels" . | nindent 4 }}
-  {{- if (include "webservice.alert.receiver" .) }}
-    receiver: {{ include "webservice.alert.receiver" . }}
+    {{- include "webservice.labels" $root | nindent 4 }}
+  {{- if (include "webservice.alert.receiver" $root) }}
+    receiver: {{ include "webservice.alert.receiver" $root }}
   {{- end }}
   annotations:
-    {{- if .Values.auth.enable }}
+    {{- if $root.Values.auth.enable }}
     prometheus.io/probe_scheme: 'https'
     {{- end }}
-    {{- if not .Values.auth.enable }}
+    {{- if not $root.Values.auth.enable }}
     cert-manager.io/cluster-issuer: letsencrypt
     {{- end }}
-    {{- with .Values.ingress.annotations }}
+    {{- with $root.Values.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
-    {{- if .Values.auth.enable }}
+    {{- if and (ne $container.auth false) (eq $root.Values.auth.enable true) }}
     nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
     nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
     {{- end }}
-    {{- if (include "webservice.ingressHostAlias" .) }}
-    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "webservice.ingressHostAlias" .) . }}
+    {{- if (include "webservice.ingressHostAlias" $root) }}
+    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "webservice.ingressHostAlias" $root) $root }}
     {{- end }}
-    {{- if eq .Values.appType "rshiny" }}
-      {{- toYaml .Values.ingress.rShinyAnnotations | nindent 4 }}
+    {{- if eq $root.Values.appType "rshiny" }}
+      {{- toYaml $root.Values.ingress.rShinyAnnotations | nindent 4 }}
     {{- end }}
 spec:
-{{- if not .Values.auth.enable }}
+{{- if not $root.Values.auth.enable }}
   tls:
   - hosts:
-    - {{ required "Must provide ingress host" (tpl (include "webservice.ingressHost" .) .) | quote }}
-  {{- if (include "webservice.ingressHostAlias" .) }}
-    - {{ tpl (include "webservice.ingressHostAlias" .) . | quote }}
+    - {{ required "Must provide ingress host" (tpl (include "webservice.ingressHost" $root) $root) | quote }}
+  {{- if (include "webservice.ingressHostAlias" $root) }}
+    - {{ tpl (include "webservice.ingressHostAlias" $root) $root | quote }}
   {{- end }}
-    secretName: {{ include "webservice.name" . }}-cert
+    secretName: {{ include "webservice.name" $root }}-cert
 {{- end }}
   rules:
-  - host: {{ tpl (include "webservice.ingressHost" .) . | quote }}
+  - host: {{ tpl (include "webservice.ingressHost" $root) $root | quote }}
     http:
       paths:
-      {{- $root := . }}
-      {{- range $idx, $container := .Values.containers }}
       - path: {{ $container.ingressPath }}
         pathType: Prefix
         backend:
@@ -50,4 +50,4 @@ spec:
             name: {{ include "webservice.name" $root }}
             port:
               number: {{ $container.port | default (add $root.Values.service.port $idx) }}
-      {{- end }}
+{{ end }}
