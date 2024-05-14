@@ -34,6 +34,7 @@ webservice:
   - name: api
     startCommand: 'R --no-save --slave -f /app/entrypoint_api.R --args $$PORT'
     ingressPath: /api
+    auth: false
   auth:
     enable: true
     skipAuthRoute: "/api/*"
