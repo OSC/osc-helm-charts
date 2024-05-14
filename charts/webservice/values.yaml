@@ -26,7 +26,7 @@ defaultArgs:
     - "--disable-security-update-check"
     - "--disable-anonymous-telemetry"
     - "--log-file=/dev/stdout"
-    - "--pid-file=/tmp/passenger.pid"
+    - "--pid-file=/tmp/passenger-{{ .name }}.pid"
   rshiny:
     # Set by PASSENGER_PORT env var
     # - "--port={{ .Values.service.port }}"
@@ -37,7 +37,7 @@ defaultArgs:
     - "--disable-security-update-check"
     - "--disable-anonymous-telemetry"
     - "--log-file=/dev/stdout"
-    - "--pid-file=/tmp/passenger.pid"
+    - "--pid-file=/tmp/passenger-{{ .name }}.pid"
     - "--app-start-command"
     - '{{ index .startCommand | default "R --no-save --slave -f /app/entrypoint.R --args $$PORT" }}'
   none: []
