@@ -30,14 +30,14 @@ metadata:
       {{- toYaml $root.Values.ingress.rShinyAnnotations | nindent 4 }}
     {{- end }}
 spec:
-{{- if not $root.Values.auth.enable }}
+{{- if or (eq $container.auth false) (eq $root.Values.auth.enable false) }}
   tls:
   - hosts:
     - {{ required "Must provide ingress host" (tpl (include "webservice.ingressHost" $root) $root) | quote }}
   {{- if (include "webservice.ingressHostAlias" $root) }}
     - {{ tpl (include "webservice.ingressHostAlias" $root) $root | quote }}
   {{- end }}
-    secretName: {{ include "webservice.name" $root }}-cert
+    secretName: {{ include "webservice.name" $root }}-{{ tpl $container.name $root }}-cert
 {{- end }}
   rules:
   - host: {{ tpl (include "webservice.ingressHost" $root) $root | quote }}
