@@ -47,6 +47,7 @@ containers:
     portName: http
     startCommand: ~
     ingressPath: /
+    auth: ~
 
 image:
   repository:
