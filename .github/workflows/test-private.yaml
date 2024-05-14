@@ -84,7 +84,7 @@ jobs:
       - name: Install Keycloak
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 9.2.2
+          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 21.2.0
       - name: Install Kyverno
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
