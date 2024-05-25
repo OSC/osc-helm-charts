@@ -1,0 +1,38 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: ingress-allowed-dns
+spec:
+  background: true
+  validationFailureAction: Enforce
+  rules:
+  - name: allowed-dns
+    match:
+      any:
+        - resources:
+            kinds:
+            - Ingress
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    context:
+    - name: allowed
+      apiCall:
+        urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+        jmesPath: "metadata.annotations.\"osc.edu/allowed-dns\" || ''"
+    validate:
+      message: "DNS host requested is not allowed"
+      foreach:
+      - list: request.object.spec.rules
+        deny:
+          conditions:
+            all:
+            - key: "{{`{{ element.host }}`}}"
+              operator: Equals
+              value: "*.osc.edu"
+            - key: "{{`{{ element.host }}`}}"
+              operator: NotIn
+              value: "{{`{{ allowed | split(@, ',') }}`}}"
