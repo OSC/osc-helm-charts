@@ -45,6 +45,7 @@ paas:
   validNodeSelector:
     - paas
   certManagerClusterIssuer: letsencrypt
+  ingressClassName: nginx
 validationFailureAction: {}
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom

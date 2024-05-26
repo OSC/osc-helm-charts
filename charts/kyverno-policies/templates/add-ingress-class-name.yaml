@@ -1,0 +1,24 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-ingress-class-name
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+  - name: add-ingress-class-name
+    match:
+      any:
+        - resources:
+            kinds:
+            - Ingress
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    mutate:
+      patchStrategicMerge:
+        spec:
+          ingressClassName: "{{ .Values.paas.ingressClassName }}"

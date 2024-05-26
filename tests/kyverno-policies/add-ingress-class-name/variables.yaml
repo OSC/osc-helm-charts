@@ -1,0 +1,9 @@
+namespaceSelector:
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test
+      account: test

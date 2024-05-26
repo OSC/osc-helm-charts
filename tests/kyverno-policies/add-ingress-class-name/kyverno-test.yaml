@@ -1,0 +1,21 @@
+---
+name: add-ingress-class-name
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: add-ingress-class-name
+    rule: add-ingress-class-name
+    resources:
+      - paas/paas-pass
+    patchedResource: test-paas-ingress-mutated.yaml
+    kind: Ingress
+    result: pass
+  - policy: add-ingress-class-name
+    rule: add-ingress-class-name
+    resources:
+      - webservice/skip
+    kind: Ingress
+    result: skip
