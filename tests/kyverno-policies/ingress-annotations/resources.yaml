@@ -1,0 +1,75 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: paas-pass
+  namespace: paas
+  annotations:
+   nginx.ingress.kubernetes.io/server-alias: foo.osc.edu
+spec:
+  rules:
+  - host: web.osc.edu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: paas-pass-empty
+  namespace: paas
+spec:
+  rules:
+  - host: web.osc.edu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: paas-fail
+  namespace: paas
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: foo.osc.edu
+spec:
+  rules:
+  - host: foo.osc.edu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: skip
+  namespace: webservice
+spec:
+  rules:
+  - host: foo.osc.edu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80

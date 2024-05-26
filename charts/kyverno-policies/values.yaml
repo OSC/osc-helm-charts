@@ -44,6 +44,7 @@ paas:
     - quay.io/oauth2-proxy/oauth2-proxy
   validNodeSelector:
     - paas
+  certManagerClusterIssuer: letsencrypt
 validationFailureAction: {}
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom
