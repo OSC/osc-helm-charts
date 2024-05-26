@@ -1,0 +1,134 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-skip
+  namespace: ingress-nginx
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-pass
+  namespace: test
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-fail
+  namespace: test
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-name-skip
+  namespace: webservice
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: ExternalName
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-name-pass
+  namespace: paas
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-name-fail
+  namespace: paas
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: ExternalName
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-port-skip
+  namespace: webservice
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-port-pass
+  namespace: paas
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-port-fail
+  namespace: paas
+spec:
+  ports:
+  - name: http-port
+    port: 80
+    protocol: TCP
+    targetPort: http-port
+  selector:
+    app: web
+  type: NodePort

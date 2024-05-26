@@ -1,0 +1,59 @@
+# https://github.com/kyverno/policies/blob/main/other/restrict_loadbalancer.yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: service-types
+spec:
+  background: true
+  validationFailureAction: Enforce
+  rules:
+  - name: no-load-balancer
+    match:
+      any:
+      - resources:
+          kinds:
+          - Service
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - ingress-nginx
+    validate:
+      message: "Service of type LoadBalancer is not allowed."
+      pattern:
+        spec:
+          type: "!LoadBalancer"
+  - name: no-external-name
+    match:
+      any:
+      - resources:
+          kinds:
+          - Service
+          namespaceSelector:
+            matchExpressions:
+            - key: osc.edu/role
+              operator: In
+              values:
+              - paas
+    validate:
+      message: "Service of type ExternalName is not allowed."
+      pattern:
+        spec:
+          type: "!ExternalName"
+  - name: no-node-port
+    match:
+      any:
+      - resources:
+          kinds:
+          - Service
+          namespaceSelector:
+            matchExpressions:
+            - key: osc.edu/role
+              operator: In
+              values:
+              - paas
+    validate:
+      message: "Service of type NodePort is not allowed."
+      pattern:
+        spec:
+          type: "!NodePort"
