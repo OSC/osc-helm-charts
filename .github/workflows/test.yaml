@@ -111,3 +111,4 @@ jobs:
           kubectl describe pod -A
           kubectl describe service -A
           kubectl describe daemonset -A
+          kubectl logs -n kyverno -l app.kubernetes.io/component=admission-controller
