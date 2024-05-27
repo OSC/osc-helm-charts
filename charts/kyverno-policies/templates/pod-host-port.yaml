@@ -1,0 +1,39 @@
+# REF: https://kyverno.io/policies/pod-security/baseline/disallow-host-ports/disallow-host-ports/
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-host-port
+spec:
+  background: true
+  validationFailureAction: Enforce
+  rules:
+  - name: no-host-port
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    validate:
+      message: "Pod hostPort is not allowed"
+      pattern:
+        spec:
+          =(ephemeralContainers):
+            - =(ports):
+                - =(hostPort): 0
+          =(initContainers):
+            - =(ports):
+                - =(hostPort): 0
+          containers:
+            - =(ports):
+                - =(hostPort): 0
