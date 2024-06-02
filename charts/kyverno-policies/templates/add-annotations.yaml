@@ -24,3 +24,20 @@ spec:
         metadata:
           annotations:
             prometheus.io/scrape: 'false'
+  - name: paas-cert-manager
+    match:
+      any:
+        - resources:
+            kinds:
+            - Ingress
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          annotations:
+            cert-manager.io/cluster-issuer: "{{ .Values.paas.certManagerClusterIssuer }}"

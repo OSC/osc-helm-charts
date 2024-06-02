@@ -1,0 +1,30 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: ingress-annotations
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: ingress-annotations
+    rule: deny-external-dns-annotations
+    resources:
+      - paas/paas-pass
+      - paas/paas-pass-empty
+    kind: Ingress
+    result: pass
+  - policy: ingress-annotations
+    rule: deny-external-dns-annotations
+    resources:
+      - paas/paas-fail
+    kind: Ingress
+    result: fail
+  - policy: ingress-annotations
+    rule: deny-external-dns-annotations
+    resources:
+      - webservice/skip
+    kind: Ingress
+    result: skip

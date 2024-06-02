@@ -12,4 +12,7 @@ metadata:
     account: {{ required "Namespace 'account' is required" $namespace.account }}
   annotations:
     {{- include "paas.namespaced.annotations" . | nindent 4 }}
+    {{- with $namespace.allowedDNS }}
+    osc.edu/allowed-dns: {{ join "," . | quote }}
+    {{- end }}
 {{ end }}

@@ -21,3 +21,34 @@ spec:
         metadata:
           labels:
             account: "?*"
+  - name: valid-account
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+          selector:
+            matchLabels:
+              {{ include "osc.common.roleKey" . }}: paas
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    - key: "{{`{{ request.object.metadata.labels.account || '' }}`}}"
+      operator: NotEquals
+      value: ""
+    - key: "{{`{{`}} request.object.metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" || '' {{`}}`}}"
+      operator: NotEquals
+      value: ""
+    context:
+    - name: userGroupMap
+      configMap:
+        name: user-groups-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: "{{`{{`}} request.object.metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" {{`}}`}} not authorized to charge against account {{`{{ request.object.metadata.labels.account }}`}}"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.metadata.labels.account }}`}}"
+          operator: NotIn
+          value: "{{`{{`}} userGroupMap.data.\"user-{{`{{`}} request.object.metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" {{`}}`}}\" {{`}}`}}"

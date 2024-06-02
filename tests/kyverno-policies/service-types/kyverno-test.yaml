@@ -1,0 +1,65 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: service-types
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: service-types
+    rule: no-load-balancer
+    resources:
+      - ingress-nginx/load-balancer-skip
+    kind: Service
+    result: skip
+  - policy: service-types
+    rule: no-load-balancer
+    resources:
+      - test/load-balancer-pass
+    kind: Service
+    result: pass
+  - policy: service-types
+    rule: no-load-balancer
+    resources:
+      - test/load-balancer-fail
+    kind: Service
+    result: fail
+  - policy: service-types
+    rule: no-external-name
+    resources:
+      - webservice/external-name-skip
+    kind: Service
+    result: skip
+  - policy: service-types
+    rule: no-external-name
+    resources:
+      - paas/external-name-pass
+    kind: Service
+    result: pass
+  - policy: service-types
+    rule: no-external-name
+    resources:
+      - paas/external-name-fail
+    kind: Service
+    result: fail
+  - policy: service-types
+    rule: no-node-port
+    resources:
+      - webservice/node-port-skip
+    kind: Service
+    result: skip
+  - policy: service-types
+    rule: no-node-port
+    resources:
+      - paas/node-port-pass
+    kind: Service
+    result: pass
+  - policy: service-types
+    rule: no-node-port
+    resources:
+      - paas/node-port-fail
+    kind: Service
+    result: fail

@@ -27,3 +27,16 @@ results:
       - test-skip-webservice
     kind: Pod
     result: skip
+  - policy: add-annotations
+    rule: paas-cert-manager
+    resources:
+      - paas/paas-pass
+    patchedResource: test-paas-ingress-mutated.yaml
+    kind: Ingress
+    result: pass
+  - policy: add-annotations
+    rule: paas-cert-manager
+    resources:
+      - webservice/skip
+    kind: Ingress
+    result: skip

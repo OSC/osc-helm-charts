@@ -4,6 +4,7 @@ policies:
   - policy.yaml
 resources:
   - resources.yaml
+variables: variables.yaml
 results:
   - policy: namespace-account
     rule: require-account
@@ -21,5 +22,24 @@ results:
     rule: require-account
     resources:
       - test-fail
+    kind: Namespace
+    result: fail
+  - policy: namespace-account
+    rule: valid-account
+    resources:
+      - user-test
+      - test-skip-op
+    kind: Namespace
+    result: skip
+  - policy: namespace-account
+    rule: valid-account
+    resources:
+      - test-pass
+    kind: Namespace
+    result: pass
+  - policy: namespace-account
+    rule: valid-account
+    resources:
+      - test-fail-account
     kind: Namespace
     result: fail

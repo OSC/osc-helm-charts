@@ -53,6 +53,7 @@ results:
   - policy: pod-service-account-validation
     rule: webservice-require-valid-service-account
     resources:
+      - pods-require-valid-service-account-runasnonroot-fail
       - pods-require-valid-service-account-uid-fail
       - pods-require-valid-service-account-uid-container-fail
       - pods-require-valid-service-account-uid-init-fail
@@ -119,6 +120,7 @@ results:
   - policy: pod-service-account-validation
     rule: paas-require-valid-service-account
     resources:
+      - paas-pods-require-valid-service-account-runasnonroot-fail
       - paas-pods-require-valid-service-account-uid-fail
       - paas-pods-require-valid-service-account-uid-container-fail
       - paas-pods-require-valid-service-account-uid-init-fail

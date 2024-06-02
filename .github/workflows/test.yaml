@@ -94,7 +94,9 @@ jobs:
       - name: Install Kyverno
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
-          helm install kyverno kyverno/kyverno -n kyverno --create-namespace --version 3.1.4
+          helm install kyverno kyverno/kyverno -n kyverno --create-namespace -f .github/config/kyverno-values.yaml --version 3.1.4
+          timeout 60 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{.items[0].status.phase}" | grep Running ; do echo "Waiting for Kyverno" ; sleep 10 ; done'
+          sleep 60
       - name: Install cert-manager
         if: matrix.chart == 'paas'
         run: |
@@ -111,3 +113,4 @@ jobs:
           kubectl describe pod -A
           kubectl describe service -A
           kubectl describe daemonset -A
+          kubectl logs -n kyverno -l app.kubernetes.io/component=admission-controller

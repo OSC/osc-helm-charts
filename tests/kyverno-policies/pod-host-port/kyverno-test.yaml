@@ -1,0 +1,35 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pod-host-port
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: pod-host-port
+    rule: no-host-port
+    resources:
+      - webservice-skip
+    kind: Pod
+    result: skip
+  - policy: pod-host-port
+    rule: no-host-port
+    resources:
+      - paas-pass
+      - user-pass
+    kind: Pod
+    result: pass
+  - policy: pod-host-port
+    rule: no-host-port
+    resources:
+      - paas-fail
+      - paas-init-fail
+      - paas-ephemeral-fail
+      - user-fail
+      - user-init-fail
+      - user-ephemeral-fail
+    kind: Pod
+    result: fail

@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webservice-skip
+  namespace: webservice
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    ports:
+      hostPort: 123
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pass
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-pass
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-fail
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    ports:
+      hostPort: 123
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-init-fail
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  initContainers:
+  - name: init
+    image: foo:123
+    ports:
+      hostPort: 123
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-ephemeral-fail
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  ephemeralContainers:
+  - name: init
+    image: foo:123
+    ports:
+      hostPort: 123
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+    ports:
+      hostPort: 123
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-init-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  initContainers:
+  - name: init
+    image: foo:123
+    ports:
+      hostPort: 123
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: user-ephemeral-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  ephemeralContainers:
+  - name: init
+    image: foo:123
+    ports:
+      hostPort: 123
