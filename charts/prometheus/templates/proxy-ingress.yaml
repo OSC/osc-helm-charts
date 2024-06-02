@@ -12,6 +12,7 @@ metadata:
     nginx.ingress.kubernetes.io/server-alias: {{ .Values.proxy.ingress.hostAlias }}
     {{- end }}
 spec:
+  ingressClassName: {{ .Values.proxy.ingress.className }}
   tls:
     - hosts:
         - {{ .Values.proxy.ingress.host | quote }}
