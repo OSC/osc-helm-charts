@@ -82,7 +82,7 @@ spec:
         {{- end }}
         {{- if and $root.Values.database.enable $root.Values.database.url }}
         - name: DATABASE_URL
-          value: {{ tpl .Values.database.url $root }}
+          value: {{ tpl $root.Values.database.url $root }}
         {{- end }}
         {{- range $env := $root.Values.env }}
         - name: {{ $env.name }}
