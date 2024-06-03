@@ -39,11 +39,11 @@ defaultArgs:
     - "--log-file=/dev/stdout"
     - "--pid-file=/tmp/passenger-{{ .name }}.pid"
     - "--app-start-command"
-    - '{{ index .startCommand | default "R --no-save --slave -f /app/entrypoint.R --args $$PORT" }}'
+    - '{{ .startCommand | default "R --no-save --slave -f /app/entrypoint.R --args $$PORT" }}'
   none: []
 containers:
   - name: '{{ include "webservice.name" . }}'
-    port: 3000
+    port: ~
     portName: http
     startCommand: ~
     ingressPath: /
