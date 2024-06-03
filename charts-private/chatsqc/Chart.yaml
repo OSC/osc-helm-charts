@@ -2,12 +2,12 @@ apiVersion: v2
 name: chatsqc
 description: OSC chatsqc web service
 type: application
-version: 0.1.2
+version: 0.2.0
 appVersion: v1.1
 maintainers:
   - name: treydock
 dependencies:
   - name: webservice
-    version: 0.33.0
+    version: 0.35.1
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../../charts/webservice
