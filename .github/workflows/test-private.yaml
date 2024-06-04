@@ -92,8 +92,8 @@ jobs:
           helm dependency build charts/kyverno-policies
           helm install kyverno-policies charts/kyverno-policies -n kyverno -f .github/config/kyverno-policies-values.yaml
           kubectl apply -f .github/config/k8-ldap-configmaps.yaml
-          timeout 60 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{.items[0].status.phase}" | grep Running ; do echo "Waiting for Kyverno" ; sleep 10 ; done'
-          sleep 60
+          timeout 120 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{.items[0].status.phase}" | grep Running ; do echo "Waiting for Kyverno" ; sleep 10 ; done'
+          sleep 120
       - name: Add namespaces
         run: kubectl apply -f .github/config/namespaces.yaml
       - name: Run chart-testing (install)
