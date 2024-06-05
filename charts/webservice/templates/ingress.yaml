@@ -4,7 +4,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  {{- if eq (len $root.Values.containers) 1 }}
+  name: {{ include "webservice.name" $root }}
+  {{- else }}
   name: {{ include "webservice.name" $root }}-{{ tpl $container.name $root }}
+  {{- end }}
   labels:
     {{- include "webservice.labels" $root | nindent 4 }}
   {{- if (include "webservice.alert.receiver" $root) }}
