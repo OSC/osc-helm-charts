@@ -86,6 +86,7 @@ nominatim:
       prometheus.io/probe_path: /status
   ingress:
     enabled: true
+    className: nginx
     tls: true
     annotations:
       prometheus.io/probe_scheme: https
