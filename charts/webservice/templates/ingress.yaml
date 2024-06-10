@@ -1,59 +1,56 @@
-{{ $root := . }}
-{{ range $idx, $container := .Values.containers }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  {{- if eq (len $root.Values.containers) 1 }}
-  name: {{ include "webservice.name" $root }}
-  {{- else }}
-  name: {{ include "webservice.name" $root }}-{{ tpl $container.name $root }}
-  {{- end }}
+  name: {{ include "webservice.name" . }}
   labels:
-    {{- include "webservice.labels" $root | nindent 4 }}
-  {{- if (include "webservice.alert.receiver" $root) }}
-    receiver: {{ include "webservice.alert.receiver" $root }}
+    {{- include "webservice.labels" . | nindent 4 }}
+  {{- if (include "webservice.alert.receiver" .) }}
+    receiver: {{ include "webservice.alert.receiver" . }}
   {{- end }}
   annotations:
-    {{- if $root.Values.auth.enable }}
     prometheus.io/probe_scheme: 'https'
-    {{- end }}
-    {{- if not $root.Values.auth.enable }}
     cert-manager.io/cluster-issuer: letsencrypt
-    {{- end }}
-    {{- with $root.Values.ingress.annotations }}
+    {{- with .Values.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
-    {{- if and (ne $container.auth false) (eq $root.Values.auth.enable true) }}
-    nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+    {{- if .Values.auth.enable }}
+    {{- with .Values.auth.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
     {{- end }}
-    {{- if (include "webservice.ingressHostAlias" $root) }}
-    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "webservice.ingressHostAlias" $root) $root }}
     {{- end }}
-    {{- if eq $root.Values.appType "rshiny" }}
-      {{- toYaml $root.Values.ingress.rShinyAnnotations | nindent 4 }}
+    {{- if (include "webservice.ingressHostAlias" .) }}
+    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "webservice.ingressHostAlias" .) . }}
+    {{- end }}
+    {{- if eq .Values.appType "rshiny" }}
+      {{- toYaml .Values.ingress.rShinyAnnotations | nindent 4 }}
     {{- end }}
 spec:
-  ingressClassName: {{ $root.Values.ingress.className }}
-{{- if or (eq $container.auth false) (eq $root.Values.auth.enable false) }}
+  ingressClassName: {{ .Values.ingress.className }}
   tls:
   - hosts:
-    - {{ required "Must provide ingress host" (tpl (include "webservice.ingressHost" $root) $root) | quote }}
-  {{- if (include "webservice.ingressHostAlias" $root) }}
-    - {{ tpl (include "webservice.ingressHostAlias" $root) $root | quote }}
+    - {{ required "Must provide ingress host" (tpl (include "webservice.ingressHost" .) .) | quote }}
+  {{- if (include "webservice.ingressHostAlias" .) }}
+    - {{ tpl (include "webservice.ingressHostAlias" .) . | quote }}
   {{- end }}
-    secretName: {{ include "webservice.name" $root }}-{{ tpl $container.name $root }}-cert
-{{- end }}
+    secretName: {{ include "webservice.name" . }}-cert
   rules:
+  {{ $root := . }}
+  {{- range $idx, $container := .Values.containers }}
   - host: {{ tpl (include "webservice.ingressHost" $root) $root | quote }}
     http:
       paths:
-      - path: {{ $container.ingressPath }}
+      - path: /
         pathType: Prefix
         backend:
           service:
+          {{- if $root.Values.auth.enable }}
+            name: {{ include "webservice.auth.name" $root }}
+            port:
+              number: {{ $root.Values.auth.service.port }}
+          {{- else }}
             name: {{ include "webservice.name" $root }}
             port:
               number: {{ $container.port | default (add $root.Values.service.port $idx) }}
-{{ end }}
+          {{- end }}
+  {{- end }}

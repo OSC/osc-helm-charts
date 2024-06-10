@@ -229,6 +229,10 @@ database:
           podSelector:
             app.kubernetes.io/name: '{{ include "webservice.name" . }}'
 
+hook:
+  image:
+    repository: docker-registry.osc.edu/kubernetes/bitnami/kubectl
+    tag: '1.27.14'
 # Used for network policies
 ingressName: ingress-nginx
 prometheusName: prometheus
