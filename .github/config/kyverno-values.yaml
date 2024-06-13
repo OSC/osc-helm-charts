@@ -9,7 +9,7 @@ admissionController:
     extraArgs:
       loggingFormat: text
       exceptionNamespace: kyverno
-      webhookTimeout: 20
+      webhookTimeout: 30
 config:
   # TODO: Remove once fixed: https://github.com/kyverno/kyverno/issues/3190
   resourceFilters:
