@@ -37,7 +37,7 @@ webservice:
     auth: false
   auth:
     enable: true
-    skipAuthRoute: "/api/*"
+    skipAuthRoute: "^/api($|/.*)"
     idpHost: EXTERNAL-DATA
     clientSecret: EXTERNAL-SECRET
     cookieSecret: EXTERNAL-SECRET
