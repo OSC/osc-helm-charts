@@ -35,22 +35,28 @@ spec:
   {{- end }}
     secretName: {{ include "webservice.name" . }}-cert
   rules:
-  {{ $root := . }}
-  {{- range $idx, $container := .Values.containers }}
-  - host: {{ tpl (include "webservice.ingressHost" $root) $root | quote }}
+  - host: {{ tpl (include "webservice.ingressHost" .) . | quote }}
     http:
       paths:
+    {{- if .Values.auth.enable }}
       - path: /
         pathType: Prefix
         backend:
           service:
-          {{- if $root.Values.auth.enable }}
-            name: {{ include "webservice.auth.name" $root }}
+            name: {{ include "webservice.auth.name" . }}
             port:
-              number: {{ $root.Values.auth.service.port }}
-          {{- else }}
+              number: {{ .Values.auth.service.port }}
+    {{- else }}
+      {{ $root := . }}
+      {{- range $idx, $container := .Values.containers }}
+        {{- if $container.ingressPath }}
+      - path: {{ $container.ingressPath }}
+        pathType: Prefix
+        backend:
+          service:
             name: {{ include "webservice.name" $root }}
             port:
               number: {{ $container.port | default (add $root.Values.service.port $idx) }}
-          {{- end }}
-  {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
