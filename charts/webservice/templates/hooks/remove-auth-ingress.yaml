@@ -136,6 +136,9 @@ spec:
           - "delete"
           - "secret"
           - {{ include "webservice.auth.name" . }}-cert
+          {{- range $container := .Values.containers }}
+          - {{ printf "%s-%s-cert" (include "webservice.name" $) (tpl $container.name $) | quote }}
+          {{- end }}
           - "--namespace={{ .Release.Namespace }}"
           - "--ignore-not-found=true"
         securityContext:
