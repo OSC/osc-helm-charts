@@ -5,6 +5,7 @@ imagePullSecrets:
     password: IMAGE-PULL-PASSWORD
 admissionController:
   replicaCount: 1
+  createSelfSignedCert: true
   container:
     extraArgs:
       loggingFormat: text
