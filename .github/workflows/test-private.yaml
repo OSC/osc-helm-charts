@@ -89,10 +89,10 @@ jobs:
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
           helm install kyverno kyverno/kyverno -n kyverno --create-namespace -f .github/config/kyverno-values.yaml --version 3.1.4
+          timeout 120 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{range .items[*]}{.status.containerStatuses[*].ready}{end}" | grep "true" ; do echo "Waiting for Kyverno" ; sleep 10 ; done'
           helm dependency build charts/kyverno-policies
           helm install kyverno-policies charts/kyverno-policies -n kyverno -f .github/config/kyverno-policies-values.yaml
           kubectl apply -f .github/config/k8-ldap-configmaps.yaml
-          timeout 120 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{.items[0].status.phase}" | grep Running ; do echo "Waiting for Kyverno" ; sleep 10 ; done'
           sleep 120
       - name: Add namespaces
         run: kubectl apply -f .github/config/namespaces.yaml
