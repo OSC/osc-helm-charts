@@ -127,10 +127,12 @@ spec:
         {{- end }}
         {{- end }}
         {{- $probeType := "httpGet" }}
-        {{- if index $root.Values.probes.typeDefaults $root.Values.appType }}
-          {{- $probeType = (index $root.Values.probes.typeDefaults $root.Values.appType) }}
+        {{- if $container.probeType }}
+          {{- $probeType = $container.probeType }}
         {{- else if $root.Values.probes.type }}
           {{- $probeType = $root.Values.probes.type }}
+        {{- else if index $root.Values.probes.typeDefaults $root.Values.appType }}
+          {{- $probeType = (index $root.Values.probes.typeDefaults $root.Values.appType) }}
         {{- end }}
         startupProbe:
           {{ $probeType }}: {{ tpl (toYaml (index $root.Values.startupProbe $probeType)) $root | nindent 12 }}
