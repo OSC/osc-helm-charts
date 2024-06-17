@@ -12,7 +12,7 @@ metadata:
     # job is considered part of the release.
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-25"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ template "osc.common.imagePullSecret" . }}
@@ -28,7 +28,7 @@ metadata:
     # job is considered part of the release.
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-20"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 imagePullSecrets:
   - name: {{ $name }}
 ---
@@ -43,7 +43,7 @@ metadata:
     # job is considered part of the release.
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-15"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 rules:
 - apiGroups: [""]
   resources: ["secrets"]
@@ -63,7 +63,7 @@ metadata:
     # job is considered part of the release.
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-10"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -86,7 +86,7 @@ metadata:
     # job is considered part of the release.
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 spec:
   template:
     metadata:
