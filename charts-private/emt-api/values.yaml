@@ -41,6 +41,7 @@ webservice:
     type: httpGet
   auth:
     enable: true
+    accessGroup: PAS2531
     skipAuthRoute: "^/api($|/.*)"
     idpHost: EXTERNAL-DATA
     clientSecret: EXTERNAL-SECRET
