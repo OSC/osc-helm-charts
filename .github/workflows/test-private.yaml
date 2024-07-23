@@ -35,7 +35,6 @@ jobs:
       matrix:
         chart:
           - "phylogatr-web"
-          - "focalmap"
           - "sirmodel"
           # TODO: Maybe too few resources with Kind cluster to support init job
           # Init job is required to bootstrap Nominatim

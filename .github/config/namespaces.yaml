@@ -9,13 +9,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: focalmap
-  labels:
-    osc.edu/role: webservice
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: nominatim
   labels:
     osc.edu/role: webservice
