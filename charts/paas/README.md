@@ -1,6 +1,6 @@
 # paas
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC PAAS bootstrap Helm Chart
 
@@ -40,6 +40,7 @@ namespaces:
   cpuDefault: '1'
   memoryLimit: '16Gi'
   memoryDefault: '2Gi'
+  gpuLimit: '1'
   imagePullSecret:
     username: testuser
     password: password
@@ -58,6 +59,7 @@ namespaces:
 | cpuDefault | The default CPU request for this namespace | `1` |
 | memoryLimit | The max memory this namespace can consume | `8Gi` |
 | memoryDefault | The default memory request for this namespace | `2Gi` |
+| gpuLimit | The max GPUs this namespace can consume | `0` |
 | imagePullSecret.username | The username used to access the registry | **required** if `imagePullSecret` defined |
 | imagePullSecret.password | The password used to access the registry | **required** if `imagePullSecret` defined |
 
@@ -72,3 +74,4 @@ namespaces:
 | default.cpu | The default CPU request for PAAS namespace pods | `"1"` |
 | default.memoryLimit | The default memory limit for PAAS namespaces | `"8Gi"` |
 | default.memory | The default memory request for PAAS namespace pods | `"2Gi"` |
+| default.gpuLimit | The default GPU limit for PAAS namespaces | `"0"` |

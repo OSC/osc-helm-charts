@@ -13,8 +13,10 @@ spec:
   hard:
     requests.cpu: {{ $namespace.cpuLimit | default $.Values.default.cpuLimit | quote }}
     requests.memory: {{ $namespace.memoryLimit | default $.Values.default.memoryLimit | quote }}
+    requests.nvidia.com/gpu: {{ $namespace.gpuLimit | default $.Values.default.gpuLimit | quote }}
     limits.cpu: {{ $namespace.cpuLimit | default $.Values.default.cpuLimit | quote }}
     limits.memory: {{ $namespace.memoryLimit | default $.Values.default.memoryLimit | quote }}
+    limits.nvidia.com/gpu: {{ $namespace.gpuLimit | default $.Values.default.gpuLimit | quote }}
 ---
 apiVersion: v1
 kind: LimitRange

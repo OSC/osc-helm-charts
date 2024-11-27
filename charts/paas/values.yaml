@@ -20,3 +20,5 @@ default:
   memoryLimit: '8Gi'
   # -- The default memory request for PAAS namespace pods
   memory: '2Gi'
+  # -- The default GPU limit for PAAS namespaces
+  gpuLimit: '0'
