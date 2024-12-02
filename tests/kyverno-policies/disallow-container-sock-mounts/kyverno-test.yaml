@@ -1,5 +1,8 @@
 ---
-name: disallow-container-sock-mounts
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: disallow-container-sock-mounts
 policies:
   - policy.yaml
 resources:

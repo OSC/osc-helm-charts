@@ -1,5 +1,8 @@
 ---
-name: add-role
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: add-role
 policies:
   - policy.yaml
 resources:

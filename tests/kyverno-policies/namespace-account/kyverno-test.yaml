@@ -1,5 +1,8 @@
 ---
-name: namespace-account
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: namespace-account
 policies:
   - policy.yaml
 resources:

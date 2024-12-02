@@ -1,5 +1,8 @@
 ---
-name: restrict-external-ips
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: restrict-external-ips
 policies:
   - policy.yaml
 resources:
