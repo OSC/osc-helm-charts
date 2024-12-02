@@ -1,5 +1,8 @@
 ---
-name: restrict-host-path
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: restrict-host-path
 policies:
   - policy.yaml
 resources:
@@ -9,80 +12,69 @@ results:
   - policy: restrict-host-path
     rule: users-host-path
     resources:
-      - test-skip
-    namespace: test
+      - test/test-skip
     kind: Pod
     result: skip
   - policy: restrict-host-path
     rule: users-host-path
     resources:
-      - test-pass
-      - test-no-hostpath-pass
+      - user-test/test-pass
+      - user-test/test-no-hostpath-pass
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: restrict-host-path
     rule: users-host-path
     resources:
-      - test-fail
+      - user-test/test-fail
     kind: Pod
-    namespace: user-test
     result: fail
   - policy: restrict-host-path
     rule: webservices-host-path
     resources:
-      - test-skip-webservice
+      - user-test/test-skip-webservice
     kind: Pod
-    namespace: user-test
     result: skip
   - policy: restrict-host-path
     rule: webservices-host-path
     resources:
-      - test-pass-webservice
-      - test-no-hostpath-pass-webservice
+      - webservice/test-pass-webservice
+      - webservice/test-no-hostpath-pass-webservice
     kind: Pod
-    namespace: webservice
     result: pass
   - policy: restrict-host-path
     rule: webservices-host-path
     resources:
-      - test-fail-webservice
+      - webservice/test-fail-webservice
     kind: Pod
-    namespace: webservice
     result: fail
   - policy: restrict-host-path
     rule: webservices-host-path
     resources:
-      - test-webservice-mariadb
+      - webservice/test-webservice-mariadb
     kind: Pod
-    namespace: webservice
     result: pass
   - policy: restrict-host-path
     rule: paas-host-path
     resources:
-      - test-skip-paas
+      - user-test/test-skip-paas
     kind: Pod
-    namespace: user-test
     result: skip
   - policy: restrict-host-path
     rule: paas-host-path
     resources:
-      - test-pass-paas
-      - test-no-hostpath-pass-paas
+      - paas/test-pass-paas
+      - paas/test-no-hostpath-pass-paas
     kind: Pod
-    namespace: paas
     result: pass
   - policy: restrict-host-path
     rule: paas-host-path
     resources:
-      - test-fail-paas
+      - paas/test-fail-paas
     kind: Pod
-    namespace: paas
     result: fail
   - policy: restrict-host-path
     rule: paas-host-path
     resources:
-      - test-paas-mariadb
+      - paas/test-paas-mariadb
     kind: Pod
-    namespace: paas
     result: pass

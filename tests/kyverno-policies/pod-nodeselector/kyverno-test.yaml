@@ -1,5 +1,8 @@
 ---
-name: pod-nodeselector
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pod-nodeselector
 policies:
   - policy.yaml
 resources:
@@ -9,73 +12,64 @@ results:
   - policy: pod-nodeselector
     rule: pod-nodeselector-user
     resources:
-      - test-user-skip
+      - test/test-user-skip
     kind: Pod
-    namespace: test
     result: skip
   - policy: pod-nodeselector
     rule: pod-nodeselector-user
     resources:
-      - test-user-pass
-      - test-user-pass2
+      - user-test/test-user-pass
+      - user-test/test-user-pass2
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: pod-nodeselector
     rule: pod-nodeselector-user
     resources:
-      - test-user-fail-omit
-      - test-user-fail-mismatch
+      - user-test/test-user-fail-omit
+      - user-test/test-user-fail-mismatch
     kind: Pod
-    namespace: user-test
     result: fail
   - policy: pod-nodeselector
     rule: pod-nodeselector-webservice
     resources:
-      - test-webservice-skip
+      - user-test/test-webservice-skip
     kind: Pod
-    namespace: webservice
     result: skip
   - policy: pod-nodeselector
     rule: pod-nodeselector-webservice
     resources:
-      - test-webservice-pass
-      - test-webservice-pass2
-      - test-webservice-pass3
-      - test-webservice-pass-infra
+      - webservice/test-webservice-pass
+      - webservice/test-webservice-pass2
+      - webservice/test-webservice-pass3
+      - webservice/test-webservice-pass-infra
     kind: Pod
-    namespace: webservice
     result: pass
   - policy: pod-nodeselector
     rule: pod-nodeselector-webservice
     resources:
-      - test-webservice-fail-omit
-      - test-webservice-fail-mismatch
+      - webservice/test-webservice-fail-omit
+      - webservice/test-webservice-fail-mismatch
     kind: Pod
-    namespace: webservice
     result: fail
   - policy: pod-nodeselector
     rule: pod-nodeselector-paas
     resources:
-      - test-paas-skip
+      - user-test/test-paas-skip
     kind: Pod
-    namespace: paas
     result: skip
   - policy: pod-nodeselector
     rule: pod-nodeselector-paas
     resources:
-      - test-paas-pass
-      - test-paas-pass2
+      - paas/test-paas-pass
+      - paas/test-paas-pass2
     kind: Pod
-    namespace: paas
     result: pass
   - policy: pod-nodeselector
     rule: pod-nodeselector-paas
     resources:
-      - test-paas-fail-omit
-      - test-paas-fail-mismatch
-      - test-paas-fail3
-      - test-paas-fail-infra
+      - paas/test-paas-fail-omit
+      - paas/test-paas-fail-mismatch
+      - paas/test-paas-fail3
+      - paas/test-paas-fail-infra
     kind: Pod
-    namespace: paas
     result: fail

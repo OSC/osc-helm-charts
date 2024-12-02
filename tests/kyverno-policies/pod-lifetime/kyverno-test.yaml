@@ -1,5 +1,8 @@
 ---
-name: pod-lifetime
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pod-lifetime
 policies:
   - policy.yaml
 resources:
@@ -8,42 +11,36 @@ results:
   - policy: pod-lifetime
     rule: pods-require-lifetime
     resources:
-      - test-lifetime-skip
+      - test/test-lifetime-skip
     kind: Pod
-    namespace: test
     result: skip
   - policy: pod-lifetime
     rule: pods-require-lifetime
     resources:
-      - test-lifetime-pass
+      - user-test/test-lifetime-pass
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: pod-lifetime
     rule: pods-require-lifetime
     resources:
-      - test-lifetime-fail
+      - user-test/test-lifetime-fail
     kind: Pod
-    namespace: user-test
     result: fail
   - policy: pod-lifetime
     rule: pods-max-lifetime
     resources:
-      - test-max-lifetime-skip
+      - test/test-max-lifetime-skip
     kind: Pod
-    namespace: test
     result: skip
   - policy: pod-lifetime
     rule: pods-max-lifetime
     resources:
-      - test-lifetime-max-pass
+      - user-test/test-lifetime-max-pass
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: pod-lifetime
     rule: pods-max-lifetime
     resources:
-      - test-lifetime-max-fail
+      - user-test/test-lifetime-max-fail
     kind: Pod
-    namespace: user-test
     result: fail

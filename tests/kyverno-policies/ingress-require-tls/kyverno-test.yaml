@@ -1,5 +1,8 @@
 ---
-name: ingress-require-tls
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: ingress-require-tls
 policies:
   - policy.yaml
 resources:

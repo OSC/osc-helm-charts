@@ -1,5 +1,8 @@
 ---
-name: pod-user-validation
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pod-user-validation
 policies:
   - policy.yaml
 resources:
@@ -9,92 +12,80 @@ results:
   - policy: pod-user-validation
     rule: pods-require-valid-uid
     resources:
-      - pods-require-valid-uid-skip
+      - test/pods-require-valid-uid-skip
     kind: Pod
-    namespace: test
     result: skip
   - policy: pod-user-validation
     rule: pods-require-valid-uid
     resources:
-      - pods-require-valid-uid-skip-op
+      - user-test/pods-require-valid-uid-skip-op
     kind: Pod
-    namespace: user-test
     result: skip
   - policy: pod-user-validation
     rule: pods-require-valid-uid
     resources:
-      - pods-require-valid-uid-pass
-      - pods-require-valid-uid-container-pass
-      - pods-require-valid-uid-init-pass
+      - user-test/pods-require-valid-uid-pass
+      - user-test/pods-require-valid-uid-container-pass
+      - user-test/pods-require-valid-uid-init-pass
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: pod-user-validation
     rule: pods-require-valid-uid
     resources:
-      - pods-require-valid-uid-fail
-      - pods-require-valid-uid-container-fail
-      - pods-require-valid-uid-init-fail
+      - user-test/pods-require-valid-uid-fail
+      - user-test/pods-require-valid-uid-container-fail
+      - user-test/pods-require-valid-uid-init-fail
     kind: Pod
-    namespace: user-test
     result: fail
   - policy: pod-user-validation
     rule: pods-require-valid-gid
     resources:
-      - pods-require-valid-gid-skip
+      - test/pods-require-valid-gid-skip
     kind: Pod
-    namespace: test
     result: skip
   - policy: pod-user-validation
     rule: pods-require-valid-gid
     resources:
-      - pods-require-valid-gid-skip-op
+      - user-test/pods-require-valid-gid-skip-op
     kind: Pod
-    namespace: user-test
     result: skip
   - policy: pod-user-validation
     rule: pods-require-valid-gid
     resources:
-      - pods-require-valid-gid-pass
-      - pods-require-valid-gid-container-pass
-      - pods-require-valid-gid-init-pass
+      - user-test/pods-require-valid-gid-pass
+      - user-test/pods-require-valid-gid-container-pass
+      - user-test/pods-require-valid-gid-init-pass
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: pod-user-validation
     rule: pods-require-valid-gid
     resources:
-      - pods-require-valid-gid-fail
-      - pods-require-valid-gid-container-fail
-      - pods-require-valid-gid-init-fail
+      - user-test/pods-require-valid-gid-fail
+      - user-test/pods-require-valid-gid-container-fail
+      - user-test/pods-require-valid-gid-init-fail
     kind: Pod
-    namespace: user-test
     result: fail
   - policy: pod-user-validation
     rule: fsgroup-require-valid-gid
     resources:
-      - fsgroup-require-valid-gid-skip
+      - test/fsgroup-require-valid-gid-skip
     kind: Pod
-    namespace: test
     result: skip
   - policy: pod-user-validation
     rule: fsgroup-require-valid-gid
     resources:
-      - fsgroup-require-valid-gid-skip-op
+      - user-test/fsgroup-require-valid-gid-skip-op
     kind: Pod
-    namespace: user-test
     result: skip
   - policy: pod-user-validation
     rule: fsgroup-require-valid-gid
     resources:
-      - fsgroup-require-valid-gid-pass
+      - user-test/fsgroup-require-valid-gid-pass
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: pod-user-validation
     rule: fsgroup-require-valid-gid
     resources:
-      - fsgroup-require-valid-gid-fail
+      - user-test/fsgroup-require-valid-gid-fail
     kind: Pod
-    namespace: user-test
     result: fail

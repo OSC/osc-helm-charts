@@ -1,5 +1,8 @@
 ---
-name: disallow-nfs
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: disallow-nfs
 policies:
   - policy.yaml
 resources:
