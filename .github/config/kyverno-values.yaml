@@ -33,7 +33,7 @@ config:
   - "[ClusterReportChangeRequest,*,*]"
   - "[*,keycloak,*]"
   webhooks:
-  - namespaceSelector:
+    namespaceSelector:
       matchExpressions:
         - key: osc.edu/role
           operator: In
