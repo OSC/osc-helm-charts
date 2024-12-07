@@ -65,13 +65,6 @@ kyverno-policies:
 #          - external-dns
 #          - prometheus
   policyExclude:
-    disallow-capabilities-strict:
-      any:
-        # TODO: Remove once ood_core updated
-        # https://github.com/OSC/ood_core/pull/748
-        - resources:
-            namespaces:
-            - "user-?*"
     disallow-host-path:
       any:
         - resources:
@@ -87,13 +80,6 @@ kyverno-policies:
                 values:
                 - webservice
                 - paas
-    restrict-seccomp-strict:
-      any:
-        # TODO: Remove once ood_core updated
-        # https://github.com/OSC/ood_core/pull/748
-        - resources:
-            namespaces:
-            - "user-?*"
     restrict-volume-types:
       any:
         - resources:
