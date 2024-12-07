@@ -1,5 +1,8 @@
 ---
-name: restrict-registries
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: restrict-registries
 policies:
   - policy.yaml
 resources:
@@ -9,14 +12,12 @@ results:
   - policy: restrict-registries
     rule: restrict-registry-docker.io
     resources:
-      - test-pass
+      - test/test-pass
     kind: Pod
-    namespace: test
     result: pass
   - policy: restrict-registries
     rule: restrict-registry-docker.io
     resources:
-      - test-fail
+      - test/test-fail
     kind: Pod
-    namespace: test
     result: fail

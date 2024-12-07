@@ -1,5 +1,8 @@
 ---
-name: authorized-registries
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: authorized-registries
 policies:
   - policy.yaml
 resources:
@@ -9,24 +12,21 @@ results:
   - policy: authorized-registries
     rule: authorized-registries-users
     resources:
-      - test-skip
+      - test/test-skip
     kind: Pod
-    namespace: foo
     result: skip
   - policy: authorized-registries
     rule: authorized-registries-users
     resources:
-      - test-pass
-      - test-pass-site
+      - user-test/test-pass
+      - user-test/test-pass-site
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: authorized-registries
     rule: authorized-registries-users
     resources:
-      - test-fail
+      - user-test/test-fail
     kind: Pod
-    namespace: user-test
     result: fail
   - policy: authorized-registries
     rule: authorized-registries-webservices
@@ -37,19 +37,17 @@ results:
   - policy: authorized-registries
     rule: authorized-registries-webservices
     resources:
-      - test-pass-webservice
-      - test-pass2-webservice
-      - test-pass3-webservice
-      - test-pass-site-webservice
+      - webservice/test-pass-webservice
+      - webservice/test-pass2-webservice
+      - webservice/test-pass3-webservice
+      - webservice/test-pass-site-webservice
     kind: Pod
-    namespace: webservice
     result: pass
   - policy: authorized-registries
     rule: authorized-registries-webservices
     resources:
-      - test-fail-webservice
+      - webservice/test-fail-webservice
     kind: Pod
-    namespace: webservice
     result: fail
   - policy: authorized-registries
     rule: authorized-registries-paas
@@ -60,17 +58,15 @@ results:
   - policy: authorized-registries
     rule: authorized-registries-paas
     resources:
-      - test-pass-paas
-      - test-pass2-paas
-      - test-pass3-paas
-      - test-pass-site-paas
+      - paas/test-pass-paas
+      - paas/test-pass2-paas
+      - paas/test-pass3-paas
+      - paas/test-pass-site-paas
     kind: Pod
-    namespace: paas
     result: pass
   - policy: authorized-registries
     rule: authorized-registries-paas
     resources:
-      - test-fail-paas
+      - paas/test-fail-paas
     kind: Pod
-    namespace: paas
     result: fail

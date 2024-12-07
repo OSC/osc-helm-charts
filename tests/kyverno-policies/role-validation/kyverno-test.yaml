@@ -1,5 +1,8 @@
 ---
-name: role-validation
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: role-validation
 policies:
   - policy.yaml
 resources:
