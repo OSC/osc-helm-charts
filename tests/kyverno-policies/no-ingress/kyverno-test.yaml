@@ -1,5 +1,8 @@
 ---
-name: no-ingress
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: no-ingress
 policies:
   - policy.yaml
 resources:
@@ -8,14 +11,12 @@ results:
   - policy: no-ingress
     rule: user-no-ingress
     resources:
-      - test-pass
+      - test/test-pass
     kind: Ingress
-    namespace: test
     result: skip
   - policy: no-ingress
     rule: user-no-ingress
     resources:
-      - test-fail
+      - user-test/test-fail
     kind: Ingress
-    namespace: user-test
     result: fail

@@ -1,5 +1,8 @@
 ---
-name: pod-groups-validation
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pod-groups-validation
 policies:
   - policy.yaml
 resources:
@@ -15,22 +18,19 @@ results:
   - policy: pod-groups-validation
     rule: pods-user-authorized-for-groups
     resources:
-      - test-skip-op
-      - test-skip-len
+      - user-test/test-skip-op
+      - user-test/test-skip-len
     kind: Pod
-    namespace: user-test
     result: skip
   - policy: pod-groups-validation
     rule: pods-user-authorized-for-groups
     resources:
-      - test-pass
+      - user-test/test-pass
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: pod-groups-validation
     rule: pods-user-authorized-for-groups
     resources:
-      - test-fail
+      - user-test/test-fail
     kind: Pod
-    namespace: user-test
     result: fail

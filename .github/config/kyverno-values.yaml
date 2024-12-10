@@ -12,28 +12,13 @@ admissionController:
       exceptionNamespace: kyverno
       webhookTimeout: 30
 config:
-  # TODO: Remove once fixed: https://github.com/kyverno/kyverno/issues/3190
-  resourceFilters:
-  - "[ConfigMap,*,*]"
-  - "[*,local-path-storage,*]"
-  - "[Event,*,*]"
-  - "[*,default,*]"
-  - "[*,kube-system,*]"
-  - "[*,kube-public,*]"
-  - "[*,kube-node-lease,*]"
-  - "[Node,*,*]"
-  - "[APIService,*,*]"
-  - "[TokenReview,*,*]"
-  - "[SubjectAccessReview,*,*]"
-  - "[SelfSubjectAccessReview,*,*]"
-  - "[*,kyverno,*]"
-  - "[Binding,*,*]"
-  - "[ReplicaSet,*,*]"
-  - "[ReportChangeRequest,*,*]"
-  - "[ClusterReportChangeRequest,*,*]"
-  - "[*,keycloak,*]"
+  resourceFiltersIncludeNamespaces:
+  - local-path-storage
+  - default
+  - kyverno
+  - keycloak
   webhooks:
-  - namespaceSelector:
+    namespaceSelector:
       matchExpressions:
         - key: osc.edu/role
           operator: In

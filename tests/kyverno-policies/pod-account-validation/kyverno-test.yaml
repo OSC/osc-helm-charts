@@ -1,5 +1,8 @@
 ---
-name: pod-account-validation
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pod-account-validation
 policies:
   - policy.yaml
 resources:

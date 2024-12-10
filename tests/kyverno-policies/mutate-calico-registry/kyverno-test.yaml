@@ -1,5 +1,8 @@
 ---
-name: mutate-calico-registry
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: mutate-calico-registry
 policies:
   - policy.yaml
 resources:
