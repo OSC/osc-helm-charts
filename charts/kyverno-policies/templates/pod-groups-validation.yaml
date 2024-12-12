@@ -31,5 +31,5 @@ spec:
       deny:
         conditions:
         - key: "{{`{{ request.object.spec.securityContext.supplementalGroups[*].to_string(@) }}`}}"
-          operator: NotIn
+          operator: AnyNotIn
           value: "{{`{{ userGIDMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"

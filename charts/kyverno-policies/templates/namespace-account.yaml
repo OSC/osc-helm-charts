@@ -50,5 +50,5 @@ spec:
       deny:
         conditions:
         - key: "{{`{{ request.object.metadata.labels.account }}`}}"
-          operator: NotIn
+          operator: AnyNotIn
           value: "{{`{{`}} userGroupMap.data.\"user-{{`{{`}} request.object.metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" {{`}}`}}\" {{`}}`}}"
