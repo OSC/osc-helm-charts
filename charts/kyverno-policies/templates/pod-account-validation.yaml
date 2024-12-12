@@ -54,7 +54,7 @@ spec:
       deny:
         conditions:
         - key: "{{`{{ request.object.metadata.labels.account }}`}}"
-          operator: NotIn
+          operator: AnyNotIn
           value: "{{`{{ userGroupMap.data.\"{{ request.object.metadata.namespace }}\" }}`}}"
   - name: paas-user-authorized-for-account
     match:
@@ -92,5 +92,5 @@ spec:
       deny:
         conditions:
         - key: "{{`{{ request.object.metadata.labels.account }}`}}"
-          operator: NotIn
+          operator: AnyNotIn
           value: "{{`{{ userGroupMap.data.\"user-{{ serviceAccount }}\" }}`}}"

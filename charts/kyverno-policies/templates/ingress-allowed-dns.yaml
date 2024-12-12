@@ -34,5 +34,5 @@ spec:
               operator: Equals
               value: "*.osc.edu"
             - key: "{{`{{ element.host }}`}}"
-              operator: NotIn
+              operator: AnyNotIn
               value: "{{`{{ allowed | split(@, ',') }}`}}"
