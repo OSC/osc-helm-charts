@@ -15,4 +15,7 @@ metadata:
     {{- with $namespace.allowedDNS }}
     osc.edu/allowed-dns: {{ join "," . | quote }}
     {{- end }}
+    {{- if ne $namespace.collectLogs true }}
+    splunk.com/exclude: "true"
+    {{- end }}
 {{ end }}
