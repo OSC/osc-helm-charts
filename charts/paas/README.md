@@ -1,6 +1,6 @@
 # paas
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC PAAS bootstrap Helm Chart
 
@@ -55,6 +55,7 @@ namespaces:
 | account | The charge account for this namespace | **required** |
 | groups | The groups that can manage the namespace's resources | `[]` |
 | allowedDNS | Allowed DNS entries for namespace's Ingress resources | `[]` |
+| collectLogs | Collect pod logs | `false` |
 | cpuLimit | The max CPU this namespace can consume | `4` |
 | cpuDefault | The default CPU request for this namespace | `1` |
 | memoryLimit | The max memory this namespace can consume | `8Gi` |

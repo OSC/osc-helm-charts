@@ -18,6 +18,7 @@ namespaces:
   serviceAccount: foo-account
   account: foo
   groups: ['bar']
+  collectLogs: true
 - name: baz
   serviceAccount: example
   account: baz
