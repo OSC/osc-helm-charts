@@ -45,7 +45,7 @@ webservice:
     repository: docker-registry.osc.edu/webservices/webmo
   env:
   - name: SLURM_CONF
-    value: '/etc/slurm/slurm-owens.conf'
+    value: '/etc/slurm/slurm-pitzer.conf'
   - name: WEBMO_INSTALL
     value: /users/PZS0605/webmo/k8s_webmo/deployments/{{ include "osc.common.environment" . }}/install
   mounts:
