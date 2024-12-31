@@ -8,3 +8,4 @@ chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
   - osc=https://osc.github.io/osc-helm-charts/
   - robjuz-helm-charts=https://treydock.github.io/robjuz-helm-charts/
+helm-extra-args: '--timeout 600s'
