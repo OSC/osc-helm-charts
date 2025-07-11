@@ -1,0 +1,31 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: add-gpu-nodeselector
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+results:
+  - policy: add-gpu-nodeselector
+    rule: gpu-nodeselector
+    resources:
+      - test-gpu-skip
+    patchedResource: gpu-nodeselector-not-mutated.yaml
+    kind: Pod
+    result: skip
+  - policy: add-gpu-nodeselector
+    rule: gpu-nodeselector
+    resources:
+      - test-gpu-skip-set
+    patchedResource: gpu-nodeselector-not-mutated-if-set.yaml
+    kind: Pod
+    result: skip
+  - policy: add-gpu-nodeselector
+    rule: gpu-nodeselector
+    resources:
+      - test-gpu-nodeselector
+    patchedResource: gpu-nodeselector-mutated.yaml
+    kind: Pod
+    result: pass
