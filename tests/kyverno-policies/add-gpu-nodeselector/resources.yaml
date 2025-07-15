@@ -2,17 +2,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-ondemand-nodeselector
-  namespace: user-test
-spec:
-  containers:
-    - name: nginx
-      image: nginx:latest
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-paas-nodeselector
+  name: test-gpu-skip
   namespace: paas
 spec:
   containers:
@@ -22,9 +12,27 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-paas-skip
-  namespace: webservices
+  name: test-gpu-skip-set
+  namespace: paas
 spec:
   containers:
     - name: nginx
       image: nginx:latest
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+  nodeSelector:
+    nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-3g.20gb
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-gpu-nodeselector
+  namespace: paas
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      resources:
+        limits:
+          nvidia.com/gpu: 1

@@ -1,0 +1,23 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-gpu-nodeselector
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: gpu-nodeselector
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+      mutate:
+        patchStrategicMerge:
+          spec:
+            containers:
+            - <(resources):
+                <(limits):
+                  <(nvidia.com/gpu): '>0'
+            nodeSelector:
+              +(nvidia.com/gpu.product): NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
