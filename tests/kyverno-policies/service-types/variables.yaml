@@ -2,6 +2,21 @@ apiVersion: cli.kyverno.io/v1alpha1
 kind: Values
 metadata:
   name: values
+policies:
+- name: service-types
+  resources:
+    - name: node-port-pass
+      values:
+        allowed: ''
+    - name: node-port-skip
+      values:
+        allowed: ''
+    - name: node-port-fail
+      values:
+        allowed: ''
+    - name: node-port-allowed
+      values:
+        allowed: 'true'
 namespaceSelector:
   - name: webservice
     labels:
