@@ -13,11 +13,37 @@ spec:
             kinds:
             - Pod
       mutate:
-        patchStrategicMerge:
-          spec:
-            containers:
-            - <(resources):
-                <(limits):
-                  <(nvidia.com/gpu): '>0'
-            nodeSelector:
-              +(nvidia.com/gpu.product): NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+        foreach:
+        - list: "request.object.spec.containers"
+          preconditions:
+            any:
+              - key: '{{`{{ element.resources.limits."nvidia.com/gpu" || "0" }}`}}'
+                operator: GreaterThan
+                value: 0
+              - key: '{{`{{ element.resources.requests."nvidia.com/gpu" || "0" }}`}}'
+                operator: GreaterThan
+                value: 0
+          patchStrategicMerge:
+            spec:
+              nodeSelector:
+                +(nvidia.com/gpu.product): NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+    - name: remove-gpu-nodeselector
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+      mutate:
+        foreach:
+        - list: "request.object.spec.containers"
+          preconditions:
+            all:
+              - key: "{{`{{ element.resources.limits.\"nvidia.com/gpu\" || '' }}`}}"
+                operator: Equals
+                value: ''
+              - key: "{{`{{ element.resources.requests.\"nvidia.com/gpu\" || '' }}`}}"
+                operator: Equals
+                value: ''
+          patchesJson6902: |-
+            - path: /spec/nodeSelector/nvidia.com~1gpu.product
+              op: remove
