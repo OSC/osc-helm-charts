@@ -49,6 +49,7 @@ results:
     rule: no-node-port
     resources:
       - webservice/node-port-skip
+      - paas/node-port-allowed
     kind: Service
     result: skip
   - policy: service-types

@@ -52,6 +52,16 @@ spec:
               operator: In
               values:
               - paas
+    context:
+    - name: allowed
+      apiCall:
+        urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+        jmesPath: "metadata.annotations.\"osc.edu/allow-nodeport\" || ''"
+    preconditions:
+      all:
+      - key: "{{`{{ allowed }}`}}"
+        operator: NotEquals
+        value: 'true'
     validate:
       message: "Service of type NodePort is not allowed."
       pattern:
