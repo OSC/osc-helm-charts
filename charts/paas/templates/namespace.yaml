@@ -18,7 +18,7 @@ metadata:
     {{- if ne $namespace.collectLogs true }}
     splunk.com/exclude: "true"
     {{- end }}
-    {{- if ne $namespace.allowNodeport true }}
+    {{- if eq $namespace.allowNodeport true }}
     osc.edu/allow-nodeport: "true"
     {{- end }}
 {{ end }}
