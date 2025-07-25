@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-gpu-remove
+  namespace: paas
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      resources:
+        limits:
+          cpu: 1
+  nodeSelector:
+    node-role.kubernetes.io/paas: ''
