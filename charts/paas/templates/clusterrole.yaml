@@ -10,6 +10,7 @@ rules:
   resources:
     - namespaces
     - pods/log
+    - events
   verbs:
     - get
     - list
