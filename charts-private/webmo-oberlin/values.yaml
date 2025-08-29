@@ -1,6 +1,6 @@
 global:
   environment: ""
-  imageTag: 23.7
+  imageTag: 26.7
   oscServiceAccount: webmooberlin
   env:
     production:
