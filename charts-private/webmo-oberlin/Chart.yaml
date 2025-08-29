@@ -2,8 +2,8 @@ apiVersion: v2
 name: webmo-oberlin
 description: OSC webmo-oberlin web service
 type: application
-version: 0.1.0
-appVersion: '23.1'
+version: 0.1.1
+appVersion: '26.7'
 maintainers:
   - name: treydock
 dependencies:
