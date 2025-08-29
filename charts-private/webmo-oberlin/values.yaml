@@ -1,0 +1,75 @@
+global:
+  environment: ""
+  imageTag: 23.7
+  oscServiceAccount: webmooberlin
+  env:
+    production:
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+      podResources:
+        limits:
+          cpu: 8
+          memory: 16Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+    test:
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+      podResources:
+        limits:
+          cpu: 4
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+    dev:
+      image:
+        tag: latest
+      podResources:
+        limits:
+          cpu: 4
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+      maintenance:
+        groups:
+          - wiagstf
+webservice:
+  appType: none
+  replicas: 1
+  auth:
+    enable: false
+  image:
+    repository: docker-registry.osc.edu/webservices/webmo-oberlin
+  env:
+  - name: SLURM_CONF
+    value: '/etc/slurm/slurm-cardinal.conf'
+  - name: WEBMO_INSTALL
+    value: /users/POBC0046/webmooberlin/k8s_webmo/deployments/{{ include "osc.common.environment" . }}/install
+  mounts:
+    rwDir:
+      webmo: /users/POBC0046/webmooberlin/k8s_webmo/deployments/{{ include "osc.common.environment" . }}
+    roDir:
+      slurm-conf: /etc/slurm
+    socket:
+      munge-socket: /var/run/munge/munge.socket.2
+  startupProbe:
+    httpGet:
+      path: /status
+  livenessProbe:
+    httpGet:
+      path: /status
+  readinessProbe:
+    httpGet:
+      path: /cgi-bin/login.cgi
+  service:
+    port: 8080
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/app-root: /cgi-bin/login.cgi
+  alert:
+    receiver: gateways
+  debugGroups:
+    - wiagstf
