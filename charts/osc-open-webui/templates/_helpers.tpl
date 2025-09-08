@@ -129,30 +129,6 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "osc-open-webui.name" .) }}
 {{- end }}
 {{- end }}
 
-{{- define "osc-open-webui.ingressHost" }}
-{{- if .Values.ingress.host }}
-{{- .Values.ingress.host }}
-{{- else if and .Values.global.env }}
-  {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
-    {{- if (index .Values.global.env (include "osc.common.environment" .) "ingress") }}
-      {{- index .Values.global.env (include "osc.common.environment" .) "ingress" "host" }}
-    {{- end }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
-{{- define "osc-open-webui.ingressHostAlias" }}
-{{- if .Values.ingress.hostAlias }}
-{{- .Values.ingress.hostAlias }}
-{{- else if and .Values.global.env }}
-  {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
-    {{- if (index .Values.global.env (include "osc.common.environment" .) "ingress") }}
-      {{- index .Values.global.env (include "osc.common.environment" .) "ingress" "hostAlias" }}
-    {{- end }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
 {{- define "osc-open-webui.data.name" }}
 {{- printf "%s-data" (include "osc-open-webui.name" .) }}
 {{- end }}

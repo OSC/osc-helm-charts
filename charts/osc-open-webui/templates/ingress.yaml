@@ -19,20 +19,20 @@ metadata:
       {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- end }}
-    {{- if (include "osc-open-webui.ingressHostAlias" .) }}
-    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "osc-open-webui.ingressHostAlias" .) . }}
+    {{- if .Values.ingress.hostAlias }}
+    nginx.ingress.kubernetes.io/server-alias: {{ tpl .Values.ingress.hostAlias . }}
     {{- end }}
 spec:
   ingressClassName: {{ .Values.ingress.className }}
   tls:
   - hosts:
-    - {{ required "Must provide ingress host" (tpl (include "osc-open-webui.ingressHost" .) .) | quote }}
-  {{- if (include "osc-open-webui.ingressHostAlias" .) }}
-    - {{ tpl (include "osc-open-webui.ingressHostAlias" .) . | quote }}
+    - {{ required "Must provide ingress host" (tpl .Values.ingress.host .) | quote }}
+  {{- if .Values.ingress.hostAlias }}
+    - {{ tpl .Values.ingress.hostAlias . | quote }}
   {{- end }}
     secretName: {{ include "osc-open-webui.name" . }}-cert
   rules:
-  - host: {{ tpl (include "osc-open-webui.ingressHost" .) . | quote }}
+  - host: {{ tpl .Values.ingress.host . | quote }}
     http:
       paths:
       - path: /
@@ -44,7 +44,7 @@ spec:
             port:
               number: {{ .Values.auth.service.port }}
           {{- else }}
-            name: {{ include "open-webui.name" . }}
+            name: {{ index .Values "open-webui" "nameOverride" }}
             port:
               name: http
           {{- end }}
