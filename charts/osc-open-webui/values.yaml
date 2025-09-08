@@ -6,36 +6,32 @@ global:
     username: robot$webservices-read
     password:
   nodeSelectorRole: webservices
+  ingress:
+    # Also pulled from global.env.$environment.ingress.host
+    host: ""
+    # Also pulled from global.env.$environment.ingress.hostAlias
+    hostAlias: ""
+  auth:
+    idpHost:
+    clientSecret:
+    cookieSecret:
+    allowGroups:
+  alert:
+    receiver:
 
 # Used for network policies
 ingressName: ingress-nginx
 prometheusName: prometheus
 
-ingress:
-  # Also pulled from global.env.$environment.ingress.host
-  host: ""
-  # Also pulled from global.env.$environment.ingress.hostAlias
-  hostAlias: ""
-  className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
-
-alert:
-  # Also pulled from global.env.$environment.alert.receiver
-  receiver:
-
 auth:
   enable: true
   clientID: kubernetes-{{ include "osc-open-webui.name" . }}
-  clientSecret:
-  cookieSecret:
   cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
   # Also pulled from global.env.$environment.auth.idpHost
   idpHost:
   oidcIssuerURL: https://$(IDP_HOST)/realms/osc
   # Also pulled from global.env.$environment.auth.accessGroup
   allowGroups:
-  skipAuthRoute:
   image:
     repository: quay.io/oauth2-proxy/oauth2-proxy
     tag: v7.1.3
@@ -58,12 +54,7 @@ auth:
     requests:
       cpu: 100m
       memory: 64Mi
-  ingress:
-    className: ~
-    annotations:
-      prometheus.io/probe_path: /ping
-  # Also pulled from global.env.$environment.auth.replicas
-  # replicas: 1
+  replicas: 1
   podDistributionBudget:
     minAvailable: 1
 
@@ -90,8 +81,10 @@ open-webui:
   persistence:
     size: 10Gi
     storageClass: webservices-nfs-client
-  nodeSelector:
-    node-role.kubernetes.io/webservices: ''
+  nodeSelector: {}
+  # -- Example node selector
+  # nodeSelector:
+  #   node-role.kubernetes.io/webservices: ''
   service:
     port: 80
     annotations:

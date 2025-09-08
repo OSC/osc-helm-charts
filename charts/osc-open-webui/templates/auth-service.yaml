@@ -5,8 +5,8 @@ metadata:
   name: {{ include "osc-open-webui.auth.name" . }}
   labels:
     {{- include "osc-open-webui.auth.labels" . | nindent 4 }}
-  {{- if (include "osc-open-webui.alert.receiver" .) }}
-    receiver: {{ include "osc-open-webui.alert.receiver" . }}
+  {{- if .Values.global.alert.receiver }}
+    receiver: {{ .Values.global.alert.receiver }}
   {{- end }}
   {{- with .Values.auth.service.annotations }}
   annotations:

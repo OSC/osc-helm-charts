@@ -1,4 +1,4 @@
-{{- $replicas := (include "osc-open-webui.auth.replicas" .) | default 1 }}
+{{- $replicas := .Values.auth.replicas | default 1 }}
 {{- if (gt (int $replicas) 1 ) }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget

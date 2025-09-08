@@ -3,13 +3,14 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
-
-ingress:
-  host: webservice.example.com
+  ingress:
+    host: webservice.example.com
+  auth:
+    idpHost: keycloak.keycloak.svc.cluster.local
+    clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
+    cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
 
 auth:
-  clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
-  cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
   oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
 
 open-webui:
@@ -51,58 +52,3 @@ open-webui:
     volumes: []
     volumeMounts: []
     extraEnv: []
-
-command: ['/http-echo']
-args:
-  - "-listen=:{{ .Values.service.port }}"
-  - "-text=Hello World"
-defaultArgs:
-  type: none
-alert:
-  receiver: test
-debugGroups:
-  - foobar
-image:
-  repository: hashicorp/http-echo
-  tag: latest
-envSecrets:
-  TEST: secret
-podSecurityContext:
-  runAsUser: 1000
-  runAsGroup: 1000
-  fsGroup: 1000
-podResources:
-  limits:
-    cpu: 200m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
-data:
-  enable: true
-  size: 50Mi
-database:
-  mariadb:
-    enable: true
-    primary:
-      persistence:
-        size: 50Mi
-      resources:
-        limits:
-          cpu: 500m
-          memory: 512Mi
-        requests:
-          cpu: 200m
-          memory: 256Mi
-  postgresql:
-    enable: true
-    primary:
-      persistence:
-        size: 50Mi
-      resources:
-        limits:
-          cpu: 500m
-          memory: 512Mi
-        requests:
-          cpu: 200m
-          memory: 256Mi

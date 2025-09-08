@@ -26,6 +26,17 @@ global:
   oscServiceAccount: testuser
   imagePullSecret:
     password: SECRET
+  ingress:
+    host: testuser.k8.osc.edu
+    hostAlias: testuser.osc.edu
+  auth:
+    idpHost: IDP
+    clientSecret: client-id
+    cookieSecret: client-secret
+    allowGroups:
+  alert:
+    receiver:
+
 open-webui:
   podLabels:
     osc.edu/service-account: testuser
@@ -64,22 +75,21 @@ open-webui:
 | global.imagePullSecret.username |  | `"robot$webservices-read"` |
 | global.imagePullSecret.password |  | `nil` |
 | global.nodeSelectorRole |  | `"webservices"` |
+| global.ingress.host |  | `""` |
+| global.ingress.hostAlias |  | `""` |
+| global.auth.idpHost |  | `nil` |
+| global.auth.clientSecret |  | `nil` |
+| global.auth.cookieSecret |  | `nil` |
+| global.auth.allowGroups |  | `nil` |
+| global.alert.receiver |  | `nil` |
 | ingressName |  | `"ingress-nginx"` |
 | prometheusName |  | `"prometheus"` |
-| ingress.host |  | `""` |
-| ingress.hostAlias |  | `""` |
-| ingress.className |  | `"nginx"` |
-| ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"8k"` |
-| alert.receiver |  | `nil` |
 | auth.enable |  | `true` |
 | auth.clientID |  | `"kubernetes-{{ include \"osc-open-webui.name\" . }}"` |
-| auth.clientSecret |  | `nil` |
-| auth.cookieSecret |  | `nil` |
 | auth.cookieName |  | `"_{{ include \"osc.common.serviceAccountValue\" . }}{{ include \"osc.common.environment\" . }}"` |
 | auth.idpHost |  | `nil` |
 | auth.oidcIssuerURL |  | `"https://$(IDP_HOST)/realms/osc"` |
 | auth.allowGroups |  | `nil` |
-| auth.skipAuthRoute |  | `nil` |
 | auth.image.repository |  | `"quay.io/oauth2-proxy/oauth2-proxy"` |
 | auth.image.tag |  | `"v7.1.3"` |
 | auth.image.pullPolicy |  | `"IfNotPresent"` |
@@ -94,8 +104,7 @@ open-webui:
 | auth.podResources.limits.memory |  | `"128Mi"` |
 | auth.podResources.requests.cpu |  | `"100m"` |
 | auth.podResources.requests.memory |  | `"64Mi"` |
-| auth.ingress.className |  | `nil` |
-| auth.ingress.annotations."prometheus.io/probe_path" |  | `"/ping"` |
+| auth.replicas |  | `1` |
 | auth.podDistributionBudget.minAvailable |  | `1` |
 | open-webui.pipelines.enabled |  | `false` |
 | open-webui.podLabels |  | `{}` |
@@ -108,10 +117,8 @@ open-webui:
 | open-webui.ingress.enabled |  | `false` |
 | open-webui.persistence.size |  | `"10Gi"` |
 | open-webui.persistence.storageClass |  | `"webservices-nfs-client"` |
-| open-webui.nodeSelector."node-role.kubernetes.io/webservices" |  | `""` |
-| open-webui.service.port |  | `80` |
-| open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
-| open-webui.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
+| open-webui.nodeSelector |  | `{}` |
+| open-webui.service | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `{"annotations":{"prometheus.io/probe_module":"http","prometheus.io/probe_scheme":"http"},"port":80}` |
 | open-webui.podSecurityContext.runAsNonRoot |  | `true` |
 | open-webui.securityContext.allowPrivilegeEscalation |  | `false` |
 | open-webui.securityContext.capabilities.drop[0] |  | `"ALL"` |

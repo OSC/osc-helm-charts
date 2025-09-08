@@ -22,6 +22,17 @@ global:
   oscServiceAccount: testuser
   imagePullSecret:
     password: SECRET
+  ingress:
+    host: testuser.k8.osc.edu
+    hostAlias: testuser.osc.edu
+  auth:
+    idpHost: IDP
+    clientSecret: client-id
+    cookieSecret: client-secret
+    allowGroups:
+  alert:
+    receiver:
+
 open-webui:
   podLabels:
     osc.edu/service-account: testuser
