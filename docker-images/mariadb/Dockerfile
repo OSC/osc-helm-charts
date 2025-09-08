@@ -1,4 +1,4 @@
-FROM bitnami/mariadb:10.5.13-debian-10-r58
+FROM bitnamilegacy/mariadb:10.5.27-debian-12-r2
 LABEL maintainer 'Trey Dockendorf <tdockendorf@osc.edu>'
 
 USER 0
