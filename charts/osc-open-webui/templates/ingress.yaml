@@ -1,0 +1,50 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "osc-open-webui.name" . }}
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+  {{- if (include "osc-open-webui.alert.receiver" .) }}
+    receiver: {{ include "osc-open-webui.alert.receiver" . }}
+  {{- end }}
+  annotations:
+    prometheus.io/probe_scheme: 'https'
+    cert-manager.io/cluster-issuer: letsencrypt
+    {{- with .Values.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if .Values.auth.enable }}
+    {{- with .Values.auth.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- end }}
+    {{- if (include "osc-open-webui.ingressHostAlias" .) }}
+    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "osc-open-webui.ingressHostAlias" .) . }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  tls:
+  - hosts:
+    - {{ required "Must provide ingress host" (tpl (include "osc-open-webui.ingressHost" .) .) | quote }}
+  {{- if (include "osc-open-webui.ingressHostAlias" .) }}
+    - {{ tpl (include "osc-open-webui.ingressHostAlias" .) . | quote }}
+  {{- end }}
+    secretName: {{ include "osc-open-webui.name" . }}-cert
+  rules:
+  - host: {{ tpl (include "osc-open-webui.ingressHost" .) . | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+          {{- if eq .Values.auth.enable true }}
+            name: {{ include "osc-open-webui.auth.name" . }}
+            port:
+              number: {{ .Values.auth.service.port }}
+          {{- else }}
+            name: {{ include "open-webui.name" . }}
+            port:
+              name: http
+          {{- end }}
