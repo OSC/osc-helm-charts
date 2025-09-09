@@ -176,11 +176,19 @@ open-webui:
     # volumes:
     # - name: data
     #   hostPath:
-    #    path: /fs/ess/TODO/ollama-models
-    #    type: Directory
+    #     path: /fs/ess/TODO/ollama-models
+    #     type: Directory
+    # - name: home
+    #   hostPath:
+    #     path: /users/PROJECT/USER
+    #     type: Directory
     volumeMounts:
       - name: data
         mountPath: /data
+      - name: home
+        mountPath: /home/ollama
     extraEnv:
       - name: OLLAMA_MODELS
         value: /data
+      - name: HOME
+        value: /home/ollama

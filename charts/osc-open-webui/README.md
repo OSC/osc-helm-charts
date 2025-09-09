@@ -61,6 +61,10 @@ open-webui:
         hostPath:
           path: /fs/ess/PROJECT/ollama-models
           type: Directory
+      - name: home
+        hostPath:
+          path: /users/PROJECT/USER/ollama-home
+          type: Directory
 ```
 
 ## Values
@@ -157,6 +161,8 @@ open-webui:
 | open-webui.ollama.resources.requests.memory |  | `"4Gi"` |
 | open-webui.ollama.resources.requests.cpu |  | `2` |
 | open-webui.ollama.volumes |  | `[]` |
-| open-webui.ollama.volumeMounts | Example ESS mount volumes: - name: data   hostPath:    path: /fs/ess/TODO/ollama-models    type: Directory | `[{"mountPath":"/data","name":"data"}]` |
+| open-webui.ollama.volumeMounts | Example ESS mount volumes: - name: data   hostPath:     path: /fs/ess/TODO/ollama-models     type: Directory - name: home   hostPath:     path: /users/PROJECT/USER     type: Directory | `[{"mountPath":"/data","name":"data"},{"mountPath":"/home/ollama","name":"home"}]` |
 | open-webui.ollama.extraEnv[0].name |  | `"OLLAMA_MODELS"` |
 | open-webui.ollama.extraEnv[0].value |  | `"/data"` |
+| open-webui.ollama.extraEnv[1].name |  | `"HOME"` |
+| open-webui.ollama.extraEnv[1].value |  | `"/home/ollama"` |
