@@ -56,9 +56,6 @@ open-webui:
         hostPath:
           path: /fs/ess/PROJECT/ollama-models
           type: Directory
-    extraEnv:
-      - name: OLLAMA_MODELS
-        value: /fs/ess/PROJECT/ollama-models
 ```
 
 {{ define "chart.valuesTable" -}}

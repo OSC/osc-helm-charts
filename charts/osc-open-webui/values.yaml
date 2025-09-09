@@ -166,8 +166,6 @@ open-webui:
     volumeMounts:
       - name: data
         mountPath: /data
-    extraEnv: []
-    # -- Example extra env
-    # extraEnv:
-    # - name: OLLAMA_MODELS
-    #   value: /fs/ess/TODO/ollama-models
+    extraEnv:
+      - name: OLLAMA_MODELS
+        value: /data
