@@ -1,0 +1,46 @@
+global:
+  oscServiceAccount: ouollama
+  imagePullSecret:
+    password: EXTERNAL-SECRET
+  auth:
+    idpHost: EXTERNAL-DATA
+    clientID: EXTERNAL-DATA
+    clientSecret: EXTERNAL-SECRET
+    cookieSecret: EXTERNAL-SECRET
+    allowGroups:
+      - PHS0375
+      - oscall
+  ingress:
+    host: EXTERNAL-DATA
+    hostAlias: EXTERNAL-DATA
+  webui_secret_key: EXTERNAL-SECRET
+osc-open-webui:
+  open-webui:
+    podLabels:
+      osc.edu/service-account: ouollama
+    nodeSelector:
+      node-role.kubernetes.io/webservices: ''
+    sso:
+      oidc:
+        clientId: EXTERNAL-DATA
+        clientSecret: EXTERNAL-SECRET
+        providerUrl: EXTERNAL-DATA
+    ollama:
+      nodeSelector:
+        # EXTERNAL-DATA
+        # nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+        node-role.kubernetes.io/webservices: ''
+      deployment:
+        labels:
+          osc.edu/service-account: ouollama
+      podLabels:
+        osc.edu/service-account: ouollama
+      volumes:
+      - name: data
+        hostPath:
+          path: /fs/ess/PHS0375/ollama-models
+          type: Directory
+      - name: home
+        hostPath:
+          path: /users/PHS0375/ouollama/ollama-home
+          type: Directory
