@@ -36,6 +36,7 @@ global:
     allowGroups:
   alert:
     receiver:
+  webui_secret_key: SECRET
 
 open-webui:
   podLabels:
@@ -84,6 +85,7 @@ open-webui:
 | global.auth.cookieSecret |  | `nil` |
 | global.auth.allowGroups |  | `nil` |
 | global.alert.receiver |  | `nil` |
+| global.webui_secret_key |  | `nil` |
 | ingressName |  | `"ingress-nginx"` |
 | prometheusName |  | `"prometheus"` |
 | auth.enable |  | `true` |

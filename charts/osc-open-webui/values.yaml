@@ -18,6 +18,7 @@ global:
     allowGroups:
   alert:
     receiver:
+  webui_secret_key:
 
 # Used for network policies
 ingressName: ingress-nginx
