@@ -1,5 +1,5 @@
 ARG VERSION
-FROM bitnami/postgresql:$VERSION
+FROM bitnamilegacy/postgresql:$VERSION
 LABEL maintainer 'Trey Dockendorf <tdockendorf@osc.edu>'
 
 USER 0

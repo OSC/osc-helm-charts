@@ -1,0 +1,55 @@
+global:
+  oscServiceAccount: nobody
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  ingress:
+    host: webservice.example.com
+  auth:
+    idpHost: keycloak.keycloak.svc.cluster.local
+    clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
+    cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
+  webui_secret_key: supersecret
+
+auth:
+  oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
+
+open-webui:
+  nameOverride: open-webui
+  podLabels:
+    osc.edu/service-account: nobody
+  persistence:
+    storageClass: standard
+    size: 50Mi
+  nodeSelector:
+    kubernetes.io/os: linux
+  resources:
+    limits:
+      memory: 500Mi
+      cpu: 1
+    requests:
+      memory: 200Mi
+      cpu: 500m
+  sso:
+    enabled: true
+    enableSignup: true
+    enableGroupManagement: true
+    oidc:
+      enabled: true
+      clientId: test
+      clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
+      providerUrl: http://keycloak.keycloak.svc.cluster.local/realms/master/.well-known/openid-configuration
+      scopes: 'openid email profile groups'
+  ollama:
+    gpu:
+      enabled: false
+    resources:
+      limits:
+        memory: 500Mi
+        cpu: 1
+      requests:
+        memory: 200Mi
+        cpu: 500m
+    volumes: []
+    volumeMounts: []
+    extraEnv: []

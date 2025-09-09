@@ -1,0 +1,44 @@
+{{ if .Values.auth.enable }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "osc-open-webui.auth.name" . }}
+  labels:
+    {{- include "osc-open-webui.auth.labels" . | nindent 4 }}
+  {{- if .Values.global.alert.receiver }}
+    receiver: {{ .Values.global.alert.receiver }}
+  {{- end }}
+  {{- with .Values.auth.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.auth.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    {{- include "osc-open-webui.auth.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "osc-open-webui.auth.name" . }}-metrics
+  labels:
+    {{- include "osc-open-webui.auth.labels" . | nindent 4 }}
+  {{- with .Values.auth.metricsService.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.auth.metricsService.port }}
+    targetPort: metrics
+    protocol: TCP
+    name: metrics
+  selector:
+    {{- include "osc-open-webui.auth.selectorLabels" . | nindent 4 }}
+{{ end }}

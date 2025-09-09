@@ -1,0 +1,106 @@
+{{ if .Values.auth.enable }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "osc-open-webui.auth.name" . }}
+  labels:
+    {{ include "osc.common.serviceAccount" . }}
+    {{- include "osc-open-webui.auth.labels" . | nindent 4 }}
+  {{- if .Values.global.alert.receiver }}
+    receiver: {{ .Values.global.alert.receiver }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "osc-open-webui.auth.selectorLabels" . | nindent 6 }}
+  replicas: {{ .Values.auth.replicas | default 1 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 40%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        {{ include "osc.common.serviceAccount" . }}
+        {{- include "osc-open-webui.auth.selectorLabels" . | nindent 8 }}
+      {{- if .Values.global.alert.receiver }}
+        receiver: {{ .Values.global.alert.receiver }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "osc-open-webui.name" . }}
+      securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
+      hostNetwork: false
+      hostIPC: false
+      hostPID: false
+      containers:
+      - name: {{ include "osc-open-webui.auth.name" . }}
+        image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag }}"
+        imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
+        env:
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "osc-open-webui.auth.secretName" . }}
+              key: client-secret
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "osc-open-webui.auth.secretName" . }}
+              key: cookie-secret
+        - name: IDP_HOST
+          value: {{ required "Auth IDP host is required" .Values.global.auth.idpHost }}
+        args:
+          - --provider=oidc
+          - --http-address=0.0.0.0:{{ .Values.auth.service.port }}
+          - --reverse-proxy=true
+          - --oidc-issuer-url={{ .Values.auth.oidcIssuerURL }}
+          - --client-id={{ tpl .Values.auth.clientID . }}
+          - --cookie-httponly=false
+          - --cookie-secure=true
+          - --cookie-samesite=none
+          - --cookie-refresh=180s
+          - --cookie-name={{ tpl .Values.auth.cookieName . }}
+          - --email-domain=*
+          - --insecure-oidc-allow-unverified-email=true
+          - --skip-provider-button
+          - --silence-ping-logging
+          - --upstream=http://{{ index .Values "open-webui" "nameOverride" }}.{{ .Release.Namespace }}.svc.cluster.local:{{ index .Values "open-webui" "service" "port" }}
+          - --metrics-address=:{{ .Values.auth.metricsService.port }}
+          - --whitelist-domain=$(IDP_HOST)
+          {{- if .Values.global.auth.accessGroup }}
+          - --allowed-group={{ .Values.global.auth.accessGroup }}
+          {{- end }}
+          {{- range .Values.auth.allowGroups }}
+          - --allowed-group={{ tpl . $ }}
+          {{- end }}
+        ports:
+        - containerPort: {{ .Values.auth.service.port }}
+          name: http
+        - containerPort: {{ .Values.auth.metricsService.port }}
+          name: metrics
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        resources: {{ toYaml .Values.auth.podResources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
+          readOnlyRootFilesystem: true
+      nodeSelector:
+        {{ include "osc.common.nodeSelectorRole" . }}
+{{ end }}

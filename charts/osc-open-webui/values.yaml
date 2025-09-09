@@ -1,0 +1,195 @@
+global:
+  oscServiceAccount:
+  imagePullSecret:
+    name: osc-registry
+    registry: docker-registry.osc.edu
+    username: robot$webservices-read
+    password:
+  nodeSelectorRole: webservices
+  ingress:
+    # Also pulled from global.env.$environment.ingress.host
+    host: ""
+    # Also pulled from global.env.$environment.ingress.hostAlias
+    hostAlias: ""
+  auth:
+    idpHost:
+    clientSecret:
+    cookieSecret:
+    allowGroups:
+  alert:
+    receiver:
+  webui_secret_key:
+
+# Used for network policies
+ingressName: ingress-nginx
+prometheusName: prometheus
+
+auth:
+  enable: true
+  clientID: kubernetes-{{ include "osc-open-webui.name" . }}
+  cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
+  # Also pulled from global.env.$environment.auth.idpHost
+  idpHost:
+  oidcIssuerURL: https://$(IDP_HOST)/realms/osc
+  # Also pulled from global.env.$environment.auth.accessGroup
+  allowGroups:
+  image:
+    repository: quay.io/oauth2-proxy/oauth2-proxy
+    tag: v7.1.3
+    pullPolicy: IfNotPresent
+  service:
+    port: 4180
+    annotations:
+      prometheus.io/probe_module: http-healthz
+      prometheus.io/probe_path: /ping
+  metricsService:
+    type: ClusterIP
+    port: 8080
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
+  podResources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  replicas: 1
+  podDistributionBudget:
+    minAvailable: 1
+
+open-webui:
+  pipelines:
+    enabled: false
+  podLabels: {}
+    # -- Example service account label
+    # osc.edu/service-account: TODO
+  image:
+    repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
+    tag: '0.6.26'
+  imagePullSecrets:
+    - name: osc-registry
+  resources:
+    limits:
+      memory: 4Gi
+      cpu: 2
+    requests:
+      memory: 2Gi
+      cpu: 1
+  copyAppData:
+    resources:
+      limits:
+        memory: 1Gi
+        cpu: 1
+      requests:
+        memory: 500Mi
+        cpu: 500m
+  ingress:
+    enabled: false
+  persistence:
+    size: 10Gi
+    storageClass: webservices-nfs-client
+  nodeSelector: {}
+  # -- Example node selector
+  # nodeSelector:
+  #   node-role.kubernetes.io/webservices: ''
+  extraEnvVars:
+    - name: WEBUI_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: osc-open-webui-secret
+          key: webui_secret_key
+  service:
+    port: 80
+    annotations:
+      prometheus.io/probe_module: http
+      prometheus.io/probe_scheme: http
+  podSecurityContext:
+    runAsNonRoot: true
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+  sso:
+    enabled: true
+    enableSignup: true
+    enableGroupManagement: true
+    oidc:
+      enabled: true
+      clientId:
+      clientSecret:
+      providerUrl:
+      # -- Example provider URL
+      # providerUrl: http://keycloak.example.com/realms/master/.well-known/openid-configuration
+      scopes: 'openid email profile groups'
+  ollama:
+    image:
+      repository: docker-registry.osc.edu/kubernetes/ollama/ollama
+      tag: '0.11.7'
+    imagePullSecrets:
+      - name: osc-registry
+    gpu:
+      enabled: true
+      type: nvidia
+      number: 1
+    nodeSelector: {}
+    # -- Example using MIG product
+    # nodeSelector:
+    #   nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
+    #   node-role.kubernetes.io/webservices: ''
+    service:
+      annotations:
+        prometheus.io/probe_module: http
+        prometheus.io/probe_scheme: http
+    deployment:
+      labels: {}
+      # -- Example labels
+      # labels:
+      #   osc.edu/service-account: TODO
+    podLabels: {}
+    # -- Example labels
+    # podLabels:
+    #   osc.edu/service-account: TODO
+    podSecurityContext:
+      runAsNonRoot: true
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    resources:
+      limits:
+        memory: 8Gi
+        cpu: 4
+      requests:
+        memory: 4Gi
+        cpu: 2
+    volumes: []
+    # -- Example ESS mount
+    # volumes:
+    # - name: data
+    #   hostPath:
+    #     path: /fs/ess/TODO/ollama-models
+    #     type: Directory
+    # - name: home
+    #   hostPath:
+    #     path: /users/PROJECT/USER
+    #     type: Directory
+    volumeMounts:
+      - name: data
+        mountPath: /data
+      - name: home
+        mountPath: /home/ollama
+    extraEnv:
+      - name: OLLAMA_MODELS
+        value: /data
+      - name: HOME
+        value: /home/ollama
