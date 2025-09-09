@@ -76,6 +76,14 @@ open-webui:
     requests:
       memory: 2Gi
       cpu: 1
+  copyAppData:
+    resources:
+      limits:
+        memory: 1Gi
+        cpu: 1
+      requests:
+        memory: 500Mi
+        cpu: 500m
   ingress:
     enabled: false
   persistence:
@@ -85,6 +93,12 @@ open-webui:
   # -- Example node selector
   # nodeSelector:
   #   node-role.kubernetes.io/webservices: ''
+  extraEnvVars:
+    - name: WEBUI_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: osc-open-webui-secret
+          key: webui_secret_key
   service:
     port: 80
     annotations:
@@ -114,7 +128,7 @@ open-webui:
       scopes: 'openid email profile groups'
   ollama:
     image:
-      repository: docker-registry.osc.edu/kubernetes/ollama
+      repository: docker-registry.osc.edu/kubernetes/ollama/ollama
       tag: '0.11.7'
     imagePullSecrets:
       - name: osc-registry
@@ -126,6 +140,7 @@ open-webui:
     # -- Example using MIG product
     # nodeSelector:
     #   nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
+    #   node-role.kubernetes.io/webservices: ''
     service:
       annotations:
         prometheus.io/probe_module: http

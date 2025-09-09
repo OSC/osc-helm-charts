@@ -50,6 +50,7 @@ open-webui:
   ollama:
     nodeSelector:
       nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
+      node-role.kubernetes.io/webservices: ''
     deployment:
       labels:
         osc.edu/service-account: testuser
@@ -111,11 +112,18 @@ open-webui:
 | open-webui.resources.limits.cpu |  | `2` |
 | open-webui.resources.requests.memory |  | `"2Gi"` |
 | open-webui.resources.requests.cpu |  | `1` |
+| open-webui.copyAppData.resources.limits.memory |  | `"1Gi"` |
+| open-webui.copyAppData.resources.limits.cpu |  | `1` |
+| open-webui.copyAppData.resources.requests.memory |  | `"500Mi"` |
+| open-webui.copyAppData.resources.requests.cpu |  | `"500m"` |
 | open-webui.ingress.enabled |  | `false` |
 | open-webui.persistence.size |  | `"10Gi"` |
 | open-webui.persistence.storageClass |  | `"webservices-nfs-client"` |
 | open-webui.nodeSelector |  | `{}` |
-| open-webui.service | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `{"annotations":{"prometheus.io/probe_module":"http","prometheus.io/probe_scheme":"http"},"port":80}` |
+| open-webui.extraEnvVars | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `[{"name":"WEBUI_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"webui_secret_key","name":"osc-open-webui-secret"}}}]` |
+| open-webui.service.port |  | `80` |
+| open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
+| open-webui.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
 | open-webui.podSecurityContext.runAsNonRoot |  | `true` |
 | open-webui.securityContext.allowPrivilegeEscalation |  | `false` |
 | open-webui.securityContext.capabilities.drop[0] |  | `"ALL"` |
@@ -129,14 +137,14 @@ open-webui:
 | open-webui.sso.oidc.clientSecret |  | `nil` |
 | open-webui.sso.oidc.providerUrl |  | `nil` |
 | open-webui.sso.oidc.scopes | Example provider URL providerUrl: http://keycloak.example.com/realms/master/.well-known/openid-configuration | `"openid email profile groups"` |
-| open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama"` |
+| open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |
 | open-webui.ollama.image.tag |  | `"0.11.7"` |
 | open-webui.ollama.imagePullSecrets[0].name |  | `"osc-registry"` |
 | open-webui.ollama.gpu.enabled |  | `true` |
 | open-webui.ollama.gpu.type |  | `"nvidia"` |
 | open-webui.ollama.gpu.number |  | `1` |
 | open-webui.ollama.nodeSelector |  | `{}` |
-| open-webui.ollama.service | Example using MIG product nodeSelector:   nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb | `{"annotations":{"prometheus.io/probe_module":"http","prometheus.io/probe_scheme":"http"}}` |
+| open-webui.ollama.service | Example using MIG product nodeSelector:   nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb   node-role.kubernetes.io/webservices: '' | `{"annotations":{"prometheus.io/probe_module":"http","prometheus.io/probe_scheme":"http"}}` |
 | open-webui.ollama.deployment.labels |  | `{}` |
 | open-webui.ollama.podLabels |  | `{}` |
 | open-webui.ollama.podSecurityContext | Example labels podLabels:   osc.edu/service-account: TODO | `{"runAsNonRoot":true}` |
