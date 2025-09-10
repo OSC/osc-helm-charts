@@ -98,6 +98,8 @@ open-webui:
   extraEnvVars:
     - name: ENABLE_OAUTH_GROUP_CREATION
       value: "True"
+    - name: DEFAULT_USER_ROLE
+      value: user
     - name: WEBUI_SECRET_KEY
       valueFrom:
         secretKeyRef:
