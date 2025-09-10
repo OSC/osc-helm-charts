@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -14,7 +14,7 @@ OSC Open Web UI deployment
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://helm.openwebui.com/ | open-webui | 8.1.0 |
+| https://helm.openwebui.com/ | open-webui | 8.4.0 |
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
 
 ## Usage
@@ -97,6 +97,7 @@ open-webui:
 | auth.image.repository |  | `"quay.io/oauth2-proxy/oauth2-proxy"` |
 | auth.image.tag |  | `"v7.1.3"` |
 | auth.image.pullPolicy |  | `"IfNotPresent"` |
+| auth.podSecurityContext.runAsNonRoot |  | `true` |
 | auth.service.port |  | `4180` |
 | auth.service.annotations."prometheus.io/probe_module" |  | `"http-healthz"` |
 | auth.service.annotations."prometheus.io/probe_path" |  | `"/ping"` |
@@ -113,7 +114,7 @@ open-webui:
 | open-webui.nameOverride |  | `"open-webui"` |
 | open-webui.pipelines.enabled |  | `false` |
 | open-webui.podLabels |  | `{}` |
-| open-webui.image | Example service account label osc.edu/service-account: TODO | `{"repository":"docker-registry.osc.edu/kubernetes/open-webui/open-webui","tag":"0.6.26"}` |
+| open-webui.image | Example service account label osc.edu/service-account: TODO | `{"repository":"docker-registry.osc.edu/kubernetes/open-webui/open-webui","tag":"0.6.28"}` |
 | open-webui.imagePullSecrets[0].name |  | `"osc-registry"` |
 | open-webui.resources.limits.memory |  | `"4Gi"` |
 | open-webui.resources.limits.cpu |  | `2` |
@@ -132,10 +133,10 @@ open-webui:
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
 | open-webui.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
 | open-webui.podSecurityContext.runAsNonRoot |  | `true` |
-| open-webui.securityContext.allowPrivilegeEscalation |  | `false` |
-| open-webui.securityContext.capabilities.drop[0] |  | `"ALL"` |
-| open-webui.securityContext.seccompProfile.type |  | `"RuntimeDefault"` |
-| open-webui.securityContext.privileged |  | `false` |
+| open-webui.containerSecurityContext.allowPrivilegeEscalation |  | `false` |
+| open-webui.containerSecurityContext.capabilities.drop[0] |  | `"ALL"` |
+| open-webui.containerSecurityContext.seccompProfile.type |  | `"RuntimeDefault"` |
+| open-webui.containerSecurityContext.privileged |  | `false` |
 | open-webui.sso.enabled |  | `true` |
 | open-webui.sso.enableSignup |  | `true` |
 | open-webui.sso.enableGroupManagement |  | `true` |

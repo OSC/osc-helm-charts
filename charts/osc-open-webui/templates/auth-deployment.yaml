@@ -29,7 +29,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ include "osc-open-webui.name" . }}
-      securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
+      securityContext: {{ toYaml .Values.auth.podSecurityContext | nindent 8 }}
       hostNetwork: false
       hostIPC: false
       hostPID: false
