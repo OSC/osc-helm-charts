@@ -13,6 +13,7 @@ global:
     hostAlias: ""
   auth:
     idpHost:
+    clientID:
     clientSecret:
     cookieSecret:
     allowGroups:
@@ -26,13 +27,8 @@ prometheusName: prometheus
 
 auth:
   enable: true
-  clientID: kubernetes-{{ include "osc-open-webui.name" . }}
   cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
-  # Also pulled from global.env.$environment.auth.idpHost
-  idpHost:
   oidcIssuerURL: https://$(IDP_HOST)/realms/osc
-  # Also pulled from global.env.$environment.auth.accessGroup
-  allowGroups:
   image:
     repository: quay.io/oauth2-proxy/oauth2-proxy
     tag: v7.1.3
@@ -60,6 +56,7 @@ auth:
     minAvailable: 1
 
 open-webui:
+  nameOverride: open-webui
   pipelines:
     enabled: false
   podLabels: {}

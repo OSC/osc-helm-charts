@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -31,9 +31,11 @@ global:
     hostAlias: testuser.osc.edu
   auth:
     idpHost: IDP
-    clientSecret: client-id
-    cookieSecret: client-secret
+    clientID: client-id
+    clientSecret: client-secret
+    cookieSecret: secret
     allowGroups:
+      - group
   alert:
     receiver:
   webui_secret_key: SECRET
@@ -81,6 +83,7 @@ open-webui:
 | global.ingress.host |  | `""` |
 | global.ingress.hostAlias |  | `""` |
 | global.auth.idpHost |  | `nil` |
+| global.auth.clientID |  | `nil` |
 | global.auth.clientSecret |  | `nil` |
 | global.auth.cookieSecret |  | `nil` |
 | global.auth.allowGroups |  | `nil` |
@@ -89,11 +92,8 @@ open-webui:
 | ingressName |  | `"ingress-nginx"` |
 | prometheusName |  | `"prometheus"` |
 | auth.enable |  | `true` |
-| auth.clientID |  | `"kubernetes-{{ include \"osc-open-webui.name\" . }}"` |
 | auth.cookieName |  | `"_{{ include \"osc.common.serviceAccountValue\" . }}{{ include \"osc.common.environment\" . }}"` |
-| auth.idpHost |  | `nil` |
 | auth.oidcIssuerURL |  | `"https://$(IDP_HOST)/realms/osc"` |
-| auth.allowGroups |  | `nil` |
 | auth.image.repository |  | `"quay.io/oauth2-proxy/oauth2-proxy"` |
 | auth.image.tag |  | `"v7.1.3"` |
 | auth.image.pullPolicy |  | `"IfNotPresent"` |
@@ -110,6 +110,7 @@ open-webui:
 | auth.podResources.requests.memory |  | `"64Mi"` |
 | auth.replicas |  | `1` |
 | auth.podDistributionBudget.minAvailable |  | `1` |
+| open-webui.nameOverride |  | `"open-webui"` |
 | open-webui.pipelines.enabled |  | `false` |
 | open-webui.podLabels |  | `{}` |
 | open-webui.image | Example service account label osc.edu/service-account: TODO | `{"repository":"docker-registry.osc.edu/kubernetes/open-webui/open-webui","tag":"0.6.26"}` |

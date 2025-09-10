@@ -27,9 +27,11 @@ global:
     hostAlias: testuser.osc.edu
   auth:
     idpHost: IDP
-    clientSecret: client-id
-    cookieSecret: client-secret
+    clientID: client-id
+    clientSecret: client-secret
+    cookieSecret: secret
     allowGroups:
+      - group
   alert:
     receiver:
   webui_secret_key: SECRET
