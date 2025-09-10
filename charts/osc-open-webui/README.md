@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -127,7 +127,7 @@ open-webui:
 | open-webui.persistence.size |  | `"10Gi"` |
 | open-webui.persistence.storageClass |  | `"webservices-nfs-client"` |
 | open-webui.nodeSelector |  | `{}` |
-| open-webui.extraEnvVars | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `[{"name":"WEBUI_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"webui_secret_key","name":"osc-open-webui-secret"}}}]` |
+| open-webui.extraEnvVars | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `[{"name":"ENABLE_OAUTH_GROUP_CREATION","value":"True"},{"name":"WEBUI_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"webui_secret_key","name":"osc-open-webui-secret"}}}]` |
 | open-webui.service.port |  | `80` |
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
 | open-webui.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
