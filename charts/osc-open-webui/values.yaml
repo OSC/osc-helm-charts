@@ -92,6 +92,8 @@ open-webui:
   # nodeSelector:
   #   node-role.kubernetes.io/webservices: ''
   extraEnvVars:
+    - name: ENABLE_OAUTH_GROUP_CREATION
+      value: "True"
     - name: WEBUI_SECRET_KEY
       valueFrom:
         secretKeyRef:
