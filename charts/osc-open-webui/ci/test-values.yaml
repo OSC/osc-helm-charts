@@ -7,6 +7,7 @@ global:
     host: webservice.example.com
   auth:
     idpHost: keycloak.keycloak.svc.cluster.local
+    clientID: test
     clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
     cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
   webui_secret_key: supersecret
