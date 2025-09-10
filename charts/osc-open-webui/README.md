@@ -38,6 +38,8 @@ global:
       - group
   alert:
     receiver:
+  maintenance:
+    groups:
   webui_secret_key: SECRET
 
 open-webui:
@@ -88,6 +90,7 @@ open-webui:
 | global.auth.cookieSecret |  | `nil` |
 | global.auth.allowGroups |  | `nil` |
 | global.alert.receiver |  | `nil` |
+| global.maintenance.groups |  | `nil` |
 | global.webui_secret_key |  | `nil` |
 | ingressName |  | `"ingress-nginx"` |
 | prometheusName |  | `"prometheus"` |

@@ -19,6 +19,8 @@ global:
     allowGroups:
   alert:
     receiver:
+  maintenance:
+    groups:
   webui_secret_key:
 
 # Used for network policies
