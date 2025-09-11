@@ -131,7 +131,7 @@ open-webui:
 | open-webui.persistence.size |  | `"10Gi"` |
 | open-webui.persistence.storageClass |  | `"webservices-nfs-client"` |
 | open-webui.nodeSelector |  | `{}` |
-| open-webui.extraEnvVars | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `[{"name":"ENABLE_OAUTH_GROUP_CREATION","value":"True"},{"name":"DEFAULT_USER_ROLE","value":"user"},{"name":"WEBUI_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"webui_secret_key","name":"osc-open-webui-secret"}}}]` |
+| open-webui.extraEnvVars | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `[{"name":"ENABLE_OAUTH_GROUP_CREATION","value":"True"},{"name":"DEFAULT_USER_ROLE","value":"user"},{"name":"ENABLE_SIGNUP","value":"False"},{"name":"ENABLE_LOGIN_FORM","value":"False"},{"name":"WEBUI_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"webui_secret_key","name":"osc-open-webui-secret"}}}]` |
 | open-webui.service.port |  | `80` |
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
 | open-webui.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
