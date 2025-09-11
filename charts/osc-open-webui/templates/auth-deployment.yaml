@@ -68,12 +68,11 @@ spec:
           - --upstream=http://{{ index .Values "open-webui" "nameOverride" }}.{{ .Release.Namespace }}.svc.cluster.local:{{ index .Values "open-webui" "service" "port" }}
           - --metrics-address=:{{ .Values.auth.metricsService.port }}
           - --whitelist-domain=$(IDP_HOST)
-          {{- if .Values.global.auth.accessGroup }}
-          - --allowed-group={{ .Values.global.auth.accessGroup }}
-          {{- end }}
-          {{- range .Values.auth.allowGroups }}
+          {{- range .Values.global.auth.allowGroups }}
           - --allowed-group={{ tpl . $ }}
           {{- end }}
+          - --skip-auth-route="^/api($|/.*)"
+          - --skip-auth-route="^/ollama/api($|/.*)"
         ports:
         - containerPort: {{ .Values.auth.service.port }}
           name: http
