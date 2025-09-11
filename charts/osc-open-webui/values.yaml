@@ -100,6 +100,8 @@ open-webui:
       value: "True"
     - name: DEFAULT_USER_ROLE
       value: user
+    - name: ENABLE_LOGIN_FORM
+      value: "False"
     - name: WEBUI_SECRET_KEY
       valueFrom:
         secretKeyRef:
