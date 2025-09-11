@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -88,7 +88,7 @@ open-webui:
 | global.auth.clientID |  | `nil` |
 | global.auth.clientSecret |  | `nil` |
 | global.auth.cookieSecret |  | `nil` |
-| global.auth.allowGroups |  | `nil` |
+| global.auth.allowGroups |  | `[]` |
 | global.alert.receiver |  | `nil` |
 | global.maintenance.groups |  | `nil` |
 | global.webui_secret_key |  | `nil` |

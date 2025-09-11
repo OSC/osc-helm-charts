@@ -16,7 +16,7 @@ global:
     clientID:
     clientSecret:
     cookieSecret:
-    allowGroups:
+    allowGroups: []
   alert:
     receiver:
   maintenance:
