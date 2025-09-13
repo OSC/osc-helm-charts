@@ -95,7 +95,8 @@ open-webui:
   # -- Example node selector
   # nodeSelector:
   #   node-role.kubernetes.io/webservices: ''
-  extraEnvVars:
+  extraEnvVars: []
+  commonEnvVars:
     - name: ENABLE_OAUTH_GROUP_CREATION
       value: "True"
     - name: DEFAULT_USER_ROLE
@@ -104,11 +105,9 @@ open-webui:
       value: "False"
     - name: ENABLE_LOGIN_FORM
       value: "False"
-    - name: WEBUI_SECRET_KEY
-      valueFrom:
-        secretKeyRef:
-          name: osc-open-webui-secret
-          key: webui_secret_key
+  extraEnvFrom:
+    - secretRef:
+        name: osc-open-webui-secret
   service:
     port: 80
     annotations:
