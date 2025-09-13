@@ -50,6 +50,7 @@ jobs:
           - kubernetes-dashboard-proxy
           - kyverno-policies
           - paas
+          - osc-open-webui
     name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout

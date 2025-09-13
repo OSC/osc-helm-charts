@@ -49,6 +49,11 @@ open-webui:
   ollama:
     gpu:
       enabled: false
+    deployment:
+      labels:
+        osc.edu/service-account: nobody
+    podLabels:
+      osc.edu/service-account: nobody
     resources:
       limits:
         memory: 500Mi

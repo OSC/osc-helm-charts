@@ -57,6 +57,9 @@ open-webui:
         osc.edu/service-account: testuser
     podLabels:
       osc.edu/service-account: testuser
+    extraEnvVars:
+      - name: CONFIG_ITEM
+        value: "False"
     volumes:
       - name: data
         hostPath:
