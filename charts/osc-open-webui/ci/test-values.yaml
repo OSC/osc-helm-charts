@@ -19,6 +19,8 @@ global:
 
 auth:
   oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
+  podSecurityContext:
+    runAsUser: 1000
 
 open-webui:
   nameOverride: open-webui
@@ -36,6 +38,8 @@ open-webui:
     requests:
       memory: 200Mi
       cpu: 500m
+  podSecurityContext:
+    runAsUser: 1000
   sso:
     enabled: true
     enableSignup: true
@@ -49,6 +53,11 @@ open-webui:
   ollama:
     gpu:
       enabled: false
+    deployment:
+      labels:
+        osc.edu/service-account: nobody
+    podLabels:
+      osc.edu/service-account: nobody
     resources:
       limits:
         memory: 500Mi
@@ -56,6 +65,8 @@ open-webui:
       requests:
         memory: 200Mi
         cpu: 500m
+    podSecurityContext:
+      runAsUser: 1000
     volumes: []
     volumeMounts: []
     extraEnv: []
