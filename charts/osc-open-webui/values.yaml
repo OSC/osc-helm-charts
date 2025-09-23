@@ -100,11 +100,11 @@ open-webui:
     - name: HOST
       value: '127.0.0.1'
     - name: WEBUI_AUTH_TRUSTED_EMAIL_HEADER
-      value: X-Forwarded-Email
+      value: X-Auth-Request-Email
     - name: WEBUI_AUTH_TRUSTED_NAME_HEADER
-      value: X-Forwarded-Preferred-Username
+      value: X-Auth-Request-Preferred-Username
     - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
-      value: X-Forwarded-Groups
+      value: X-Auth-Request-Groups
     - name: DEFAULT_USER_ROLE
       value: user
     - name: ENABLE_SIGNUP
