@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -61,6 +61,9 @@ open-webui:
         osc.edu/service-account: testuser
     podLabels:
       osc.edu/service-account: testuser
+    extraEnvVars:
+      - name: CONFIG_ITEM
+        value: "False"
     volumes:
       - name: data
         hostPath:
@@ -131,7 +134,16 @@ open-webui:
 | open-webui.persistence.size |  | `"10Gi"` |
 | open-webui.persistence.storageClass |  | `"webservices-nfs-client"` |
 | open-webui.nodeSelector |  | `{}` |
-| open-webui.extraEnvVars | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `[{"name":"ENABLE_OAUTH_GROUP_CREATION","value":"True"},{"name":"DEFAULT_USER_ROLE","value":"user"},{"name":"ENABLE_SIGNUP","value":"False"},{"name":"ENABLE_LOGIN_FORM","value":"False"},{"name":"WEBUI_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"webui_secret_key","name":"osc-open-webui-secret"}}}]` |
+| open-webui.extraEnvVars | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `[]` |
+| open-webui.commonEnvVars[0].name |  | `"ENABLE_OAUTH_GROUP_CREATION"` |
+| open-webui.commonEnvVars[0].value |  | `"True"` |
+| open-webui.commonEnvVars[1].name |  | `"DEFAULT_USER_ROLE"` |
+| open-webui.commonEnvVars[1].value |  | `"user"` |
+| open-webui.commonEnvVars[2].name |  | `"ENABLE_SIGNUP"` |
+| open-webui.commonEnvVars[2].value |  | `"False"` |
+| open-webui.commonEnvVars[3].name |  | `"ENABLE_LOGIN_FORM"` |
+| open-webui.commonEnvVars[3].value |  | `"False"` |
+| open-webui.extraEnvFrom[0].secretRef.name |  | `"osc-open-webui-secret"` |
 | open-webui.service.port |  | `80` |
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
 | open-webui.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
