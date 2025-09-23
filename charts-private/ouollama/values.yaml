@@ -10,9 +10,9 @@ global:
     allowGroups:
       - PHS0375
       - oscall
-    maintenance:
-      groups:
-        - oscstaff
+  maintenance:
+    groups:
+      - oscstaff
   ingress:
     host: EXTERNAL-DATA
     hostAlias: EXTERNAL-DATA
