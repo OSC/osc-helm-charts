@@ -97,8 +97,6 @@ open-webui:
   #   node-role.kubernetes.io/webservices: ''
   extraEnvVars: []
   commonEnvVars:
-    - name: HOST
-      value: '127.0.0.1'
     - name: WEBUI_AUTH_TRUSTED_EMAIL_HEADER
       value: X-Auth-Request-Email
     - name: WEBUI_AUTH_TRUSTED_NAME_HEADER
@@ -134,6 +132,8 @@ open-webui:
   sso:
     enabled: false
   ollama:
+    # Added so can be referenced
+    fullnameOverride: open-webui-ollama
     image:
       repository: docker-registry.osc.edu/kubernetes/ollama/ollama
       tag: '0.11.11'
