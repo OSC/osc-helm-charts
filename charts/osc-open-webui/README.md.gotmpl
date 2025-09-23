@@ -43,11 +43,6 @@ open-webui:
     osc.edu/service-account: testuser
   nodeSelector:
     node-role.kubernetes.io/webservices: ''
-  sso:
-    oidc:
-      clientId: client-id
-      clientSecret: client-secret
-      providerUrl: https://IDP/realms/osc/.well-known/openid-configuration
   ollama:
     nodeSelector:
       nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
