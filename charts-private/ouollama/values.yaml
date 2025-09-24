@@ -23,11 +23,6 @@ osc-open-webui:
       osc.edu/service-account: ouollama
     nodeSelector:
       node-role.kubernetes.io/webservices: ''
-    sso:
-      oidc:
-        clientId: EXTERNAL-DATA
-        clientSecret: EXTERNAL-SECRET
-        providerUrl: EXTERNAL-DATA
     ollama:
       nodeSelector:
         # EXTERNAL-DATA
