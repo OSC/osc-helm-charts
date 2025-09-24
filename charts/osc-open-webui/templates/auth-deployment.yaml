@@ -27,6 +27,8 @@ spec:
       {{- if .Values.global.alert.receiver }}
         receiver: {{ .Values.global.alert.receiver }}
       {{- end }}
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/auth-secret.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ include "osc-open-webui.name" . }}
       securityContext: {{ toYaml .Values.auth.podSecurityContext | nindent 8 }}
