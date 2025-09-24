@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -14,7 +14,7 @@ OSC Open Web UI deployment
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://helm.openwebui.com/ | open-webui | 8.4.0 |
+| https://helm.openwebui.com/ | open-webui | 8.6.0 |
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
 
 ## Usage
@@ -47,11 +47,6 @@ open-webui:
     osc.edu/service-account: testuser
   nodeSelector:
     node-role.kubernetes.io/webservices: ''
-  sso:
-    oidc:
-      clientId: client-id
-      clientSecret: client-secret
-      providerUrl: https://IDP/realms/osc/.well-known/openid-configuration
   ollama:
     nodeSelector:
       nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
@@ -120,7 +115,8 @@ open-webui:
 | open-webui.nameOverride |  | `"open-webui"` |
 | open-webui.pipelines.enabled |  | `false` |
 | open-webui.podLabels |  | `{}` |
-| open-webui.image | Example service account label osc.edu/service-account: TODO | `{"repository":"docker-registry.osc.edu/kubernetes/open-webui/open-webui","tag":"0.6.28"}` |
+| open-webui.image.repository |  | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
+| open-webui.image.tag |  | `"0.6.30"` |
 | open-webui.imagePullSecrets[0].name |  | `"osc-registry"` |
 | open-webui.resources.limits.memory |  | `"4Gi"` |
 | open-webui.resources.limits.cpu |  | `2` |
@@ -134,15 +130,21 @@ open-webui:
 | open-webui.persistence.size |  | `"10Gi"` |
 | open-webui.persistence.storageClass |  | `"webservices-nfs-client"` |
 | open-webui.nodeSelector |  | `{}` |
-| open-webui.extraEnvVars | Example node selector nodeSelector:   node-role.kubernetes.io/webservices: '' | `[]` |
-| open-webui.commonEnvVars[0].name |  | `"ENABLE_OAUTH_GROUP_CREATION"` |
-| open-webui.commonEnvVars[0].value |  | `"True"` |
-| open-webui.commonEnvVars[1].name |  | `"DEFAULT_USER_ROLE"` |
-| open-webui.commonEnvVars[1].value |  | `"user"` |
-| open-webui.commonEnvVars[2].name |  | `"ENABLE_SIGNUP"` |
-| open-webui.commonEnvVars[2].value |  | `"False"` |
-| open-webui.commonEnvVars[3].name |  | `"ENABLE_LOGIN_FORM"` |
-| open-webui.commonEnvVars[3].value |  | `"False"` |
+| open-webui.extraEnvVars |  | `[]` |
+| open-webui.commonEnvVars[0].name |  | `"WEBUI_AUTH_TRUSTED_EMAIL_HEADER"` |
+| open-webui.commonEnvVars[0].value |  | `"X-Auth-Request-Email"` |
+| open-webui.commonEnvVars[1].name |  | `"WEBUI_AUTH_TRUSTED_NAME_HEADER"` |
+| open-webui.commonEnvVars[1].value |  | `"X-Auth-Request-Preferred-Username"` |
+| open-webui.commonEnvVars[2].name |  | `"WEBUI_AUTH_TRUSTED_GROUPS_HEADER"` |
+| open-webui.commonEnvVars[2].value |  | `"X-Auth-Request-Groups"` |
+| open-webui.commonEnvVars[3].name |  | `"DEFAULT_USER_ROLE"` |
+| open-webui.commonEnvVars[3].value |  | `"user"` |
+| open-webui.commonEnvVars[4].name |  | `"ENABLE_SIGNUP"` |
+| open-webui.commonEnvVars[4].value |  | `"False"` |
+| open-webui.commonEnvVars[5].name |  | `"ENABLE_LOGIN_FORM"` |
+| open-webui.commonEnvVars[5].value |  | `"False"` |
+| open-webui.commonEnvVars[6].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
+| open-webui.commonEnvVars[6].value |  | `"False"` |
 | open-webui.extraEnvFrom[0].secretRef.name |  | `"osc-open-webui-secret"` |
 | open-webui.service.port |  | `80` |
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
@@ -152,25 +154,20 @@ open-webui:
 | open-webui.containerSecurityContext.capabilities.drop[0] |  | `"ALL"` |
 | open-webui.containerSecurityContext.seccompProfile.type |  | `"RuntimeDefault"` |
 | open-webui.containerSecurityContext.privileged |  | `false` |
-| open-webui.sso.enabled |  | `true` |
-| open-webui.sso.enableSignup |  | `true` |
-| open-webui.sso.enableGroupManagement |  | `true` |
-| open-webui.sso.oidc.enabled |  | `true` |
-| open-webui.sso.oidc.clientId |  | `nil` |
-| open-webui.sso.oidc.clientSecret |  | `nil` |
-| open-webui.sso.oidc.providerUrl |  | `nil` |
-| open-webui.sso.oidc.scopes | Example provider URL providerUrl: http://keycloak.example.com/realms/master/.well-known/openid-configuration | `"openid email profile groups"` |
+| open-webui.sso.enabled |  | `false` |
+| open-webui.ollama.fullnameOverride |  | `"open-webui-ollama"` |
 | open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |
-| open-webui.ollama.image.tag |  | `"0.11.7"` |
+| open-webui.ollama.image.tag |  | `"0.11.11"` |
 | open-webui.ollama.imagePullSecrets[0].name |  | `"osc-registry"` |
 | open-webui.ollama.gpu.enabled |  | `true` |
 | open-webui.ollama.gpu.type |  | `"nvidia"` |
 | open-webui.ollama.gpu.number |  | `1` |
 | open-webui.ollama.nodeSelector |  | `{}` |
-| open-webui.ollama.service | Example using MIG product nodeSelector:   nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb   node-role.kubernetes.io/webservices: '' | `{"annotations":{"prometheus.io/probe_module":"http","prometheus.io/probe_scheme":"http"}}` |
+| open-webui.ollama.service.annotations."prometheus.io/probe_module" |  | `"http"` |
+| open-webui.ollama.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
 | open-webui.ollama.deployment.labels |  | `{}` |
 | open-webui.ollama.podLabels |  | `{}` |
-| open-webui.ollama.podSecurityContext | Example labels podLabels:   osc.edu/service-account: TODO | `{"runAsNonRoot":true}` |
+| open-webui.ollama.podSecurityContext.runAsNonRoot |  | `true` |
 | open-webui.ollama.securityContext.allowPrivilegeEscalation |  | `false` |
 | open-webui.ollama.securityContext.capabilities.drop[0] |  | `"ALL"` |
 | open-webui.ollama.securityContext.seccompProfile.type |  | `"RuntimeDefault"` |
@@ -180,7 +177,10 @@ open-webui:
 | open-webui.ollama.resources.requests.memory |  | `"4Gi"` |
 | open-webui.ollama.resources.requests.cpu |  | `2` |
 | open-webui.ollama.volumes |  | `[]` |
-| open-webui.ollama.volumeMounts | Example ESS mount volumes: - name: data   hostPath:     path: /fs/ess/TODO/ollama-models     type: Directory - name: home   hostPath:     path: /users/PROJECT/USER     type: Directory | `[{"mountPath":"/data","name":"data"},{"mountPath":"/home/ollama","name":"home"}]` |
+| open-webui.ollama.volumeMounts[0].name |  | `"data"` |
+| open-webui.ollama.volumeMounts[0].mountPath |  | `"/data"` |
+| open-webui.ollama.volumeMounts[1].name |  | `"home"` |
+| open-webui.ollama.volumeMounts[1].mountPath |  | `"/home/ollama"` |
 | open-webui.ollama.extraEnv[0].name |  | `"OLLAMA_MODELS"` |
 | open-webui.ollama.extraEnv[0].value |  | `"/data"` |
 | open-webui.ollama.extraEnv[1].name |  | `"HOME"` |

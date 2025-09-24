@@ -1,0 +1,41 @@
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "osc-open-webui.name" . }}-{{ index .Values "open-webui" "nameOverride" }}
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ index .Values "open-webui" "nameOverride" }}
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.ingressName }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.prometheusName }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "osc-open-webui.name" . }}-{{ index .Values "open-webui" "ollama" "fullnameOverride" }}
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ index .Values "open-webui" "ollama" "fullnameOverride" }}
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ index .Values "open-webui" "nameOverride" }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.ingressName }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.prometheusName }}

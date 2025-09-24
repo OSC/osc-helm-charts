@@ -64,11 +64,11 @@ open-webui:
   pipelines:
     enabled: false
   podLabels: {}
-    # -- Example service account label
-    # osc.edu/service-account: TODO
+  # Example service account label
+  # osc.edu/service-account: TODO
   image:
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
-    tag: '0.6.28'
+    tag: '0.6.30'
   imagePullSecrets:
     - name: osc-registry
   resources:
@@ -92,18 +92,24 @@ open-webui:
     size: 10Gi
     storageClass: webservices-nfs-client
   nodeSelector: {}
-  # -- Example node selector
+  # Example node selector
   # nodeSelector:
   #   node-role.kubernetes.io/webservices: ''
   extraEnvVars: []
   commonEnvVars:
-    - name: ENABLE_OAUTH_GROUP_CREATION
-      value: "True"
+    - name: WEBUI_AUTH_TRUSTED_EMAIL_HEADER
+      value: X-Auth-Request-Email
+    - name: WEBUI_AUTH_TRUSTED_NAME_HEADER
+      value: X-Auth-Request-Preferred-Username
+    - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
+      value: X-Auth-Request-Groups
     - name: DEFAULT_USER_ROLE
       value: user
     - name: ENABLE_SIGNUP
       value: "False"
     - name: ENABLE_LOGIN_FORM
+      value: "False"
+    - name: ENABLE_VERSION_UPDATE_CHECK
       value: "False"
   extraEnvFrom:
     - secretRef:
@@ -124,21 +130,13 @@ open-webui:
       type: RuntimeDefault
     privileged: false
   sso:
-    enabled: true
-    enableSignup: true
-    enableGroupManagement: true
-    oidc:
-      enabled: true
-      clientId:
-      clientSecret:
-      providerUrl:
-      # -- Example provider URL
-      # providerUrl: http://keycloak.example.com/realms/master/.well-known/openid-configuration
-      scopes: 'openid email profile groups'
+    enabled: false
   ollama:
+    # Added so can be referenced
+    fullnameOverride: open-webui-ollama
     image:
       repository: docker-registry.osc.edu/kubernetes/ollama/ollama
-      tag: '0.11.7'
+      tag: '0.11.11'
     imagePullSecrets:
       - name: osc-registry
     gpu:
@@ -146,7 +144,7 @@ open-webui:
       type: nvidia
       number: 1
     nodeSelector: {}
-    # -- Example using MIG product
+    # Example using MIG product
     # nodeSelector:
     #   nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
     #   node-role.kubernetes.io/webservices: ''
@@ -156,11 +154,11 @@ open-webui:
         prometheus.io/probe_scheme: http
     deployment:
       labels: {}
-      # -- Example labels
+      # Example labels
       # labels:
       #   osc.edu/service-account: TODO
     podLabels: {}
-    # -- Example labels
+    # Example labels
     # podLabels:
     #   osc.edu/service-account: TODO
     podSecurityContext:
@@ -181,7 +179,7 @@ open-webui:
         memory: 4Gi
         cpu: 2
     volumes: []
-    # -- Example ESS mount
+    # Example ESS mount
     # volumes:
     # - name: data
     #   hostPath:
