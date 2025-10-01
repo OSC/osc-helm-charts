@@ -7,10 +7,15 @@ metadata:
   namespace: {{ $namespace.name }}
   labels:
     {{- include "paas.namespaced.labels" (list $namespace $) | nindent 4 }}
-{{ if $namespace.groups -}}
+{{ if or $namespace.groups $namespace.users -}}
 subjects:
   {{- range $namespace.groups | default list }}
   - kind: Group
+    name: {{ . }}
+    apiGroup: rbac.authorization.k8s.io
+  {{- end }}
+  {{- range $namespace.users | default list }}
+  - kind: User
     name: {{ . }}
     apiGroup: rbac.authorization.k8s.io
   {{- end }}

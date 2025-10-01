@@ -22,3 +22,7 @@ namespaces:
 - name: baz
   serviceAccount: example
   account: baz
+- name: testuser
+  serviceAccount: testuser
+  account: testgroup
+  users: ['testuser']
