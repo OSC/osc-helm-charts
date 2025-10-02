@@ -11,7 +11,7 @@ metadata:
     {{ include "osc.common.serviceAccountKey" . }}: {{ required "Namespace 'serviceAccount' is required" $namespace.serviceAccount}}
     account: {{ required "Namespace 'account' is required" $namespace.account }}
   annotations:
-    {{- include "paas.namespaced.annotations" . | nindent 4 }}
+    {{- include "paas.namespaced.annotations" $ | nindent 4 }}
     {{- with $namespace.allowedDNS }}
     osc.edu/allowed-dns: {{ join "," . | quote }}
     {{- end }}

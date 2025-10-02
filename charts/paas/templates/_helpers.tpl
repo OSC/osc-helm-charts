@@ -51,7 +51,7 @@ app.kubernetes.io/managed-by: {{ $top.Release.Service }}
 Namespaced common annotations
 */}}
 {{- define "paas.namespaced.annotations" -}}
-helm.sh/resource-policy: keep
+helm.sh/resource-policy: {{ .Values.resourcePolicy }}
 {{- end }}
 
 {{- define "paas.imagePullSecret" }}
