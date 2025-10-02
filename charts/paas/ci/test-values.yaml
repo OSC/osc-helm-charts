@@ -19,6 +19,9 @@ namespaces:
   account: foo
   groups: ['bar']
   collectLogs: true
+  imagePullSecret:
+    username: foo
+    password: password
 - name: baz
   serviceAccount: example
   account: baz
