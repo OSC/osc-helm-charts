@@ -38,9 +38,9 @@ Namespaced Common labels
 {{- define "paas.namespaced.labels" -}}
 {{- $namespace := index . 0 -}}
 {{- $top := index . 1 -}}
-helm.sh/chart: paas
+helm.sh/chart: {{ include "paas.chart" $top }}
 app.kubernetes.io/instance: {{ $namespace.name }}
-app.kubernetes.io/name: {{ $namespace.name }}
+app.kubernetes.io/name: {{ include "paas.name" $top }}
 {{- if $top.Chart.AppVersion }}
 app.kubernetes.io/version: {{ $top.Chart.AppVersion | quote }}
 {{- end }}
