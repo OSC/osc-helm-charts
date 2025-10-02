@@ -1,6 +1,6 @@
 # paas
 
-![Version: 0.6.2](https://img.shields.io/badge/Version-0.6.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC PAAS bootstrap Helm Chart
 
@@ -54,6 +54,7 @@ namespaces:
 | serviceAccount | The user that will run pods | **required** |
 | account | The charge account for this namespace | **required** |
 | groups | The groups that can manage the namespace's resources | `[]` |
+| users | The users that can manage the namespace's resources | `[]` |
 | allowedDNS | Allowed DNS entries for namespace's Ingress resources | `[]` |
 | collectLogs | Collect pod logs | `false` |
 | allowNodeport | Allow NodePort services | `false` |
