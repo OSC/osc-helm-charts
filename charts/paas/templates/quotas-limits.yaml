@@ -8,7 +8,7 @@ metadata:
   labels:
     {{- include "paas.namespaced.labels" (list $namespace $) | nindent 4 }}
   annotations:
-    {{- include "paas.namespaced.annotations" . | nindent 4 }}
+    {{- include "paas.namespaced.annotations" $ | nindent 4 }}
 spec:
   hard:
     requests.cpu: {{ $namespace.cpuLimit | default $.Values.default.cpuLimit | quote }}
@@ -26,7 +26,7 @@ metadata:
   labels:
     {{- include "paas.namespaced.labels" (list $namespace $) | nindent 4 }}
   annotations:
-    {{- include "paas.namespaced.annotations" . | nindent 4 }}
+    {{- include "paas.namespaced.annotations" $ | nindent 4 }}
 spec:
   limits:
     - default:

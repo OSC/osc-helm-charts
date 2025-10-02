@@ -11,6 +11,8 @@ namespaces: {}
 # namespaces:
 # - name: test
 #   groups: [ 'testgroup' ]
+# -- resource-policy setting
+resourcePolicy: keep
 default:
   # -- The default CPU limit for PAAS namespaces
   cpuLimit: '4'

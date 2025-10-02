@@ -1,6 +1,6 @@
 # paas
 
-![Version: 0.7.1](https://img.shields.io/badge/Version-0.7.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.7.2](https://img.shields.io/badge/Version-0.7.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC PAAS bootstrap Helm Chart
 
@@ -73,6 +73,7 @@ namespaces:
 | global.imagePullSecret.name | Image pull secret name for PAAS namespaces | `"osc-registry"` |
 | global.imagePullSecret.registry | Registry for image pull secret added to all PAAS namespaces | `"docker-registry.osc.edu"` |
 | namespaces | Define PAAS namespaces | `{}` |
+| resourcePolicy | resource-policy setting | `"keep"` |
 | default.cpuLimit | The default CPU limit for PAAS namespaces | `"4"` |
 | default.cpu | The default CPU request for PAAS namespace pods | `"1"` |
 | default.memoryLimit | The default memory limit for PAAS namespaces | `"8Gi"` |
