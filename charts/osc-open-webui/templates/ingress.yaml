@@ -13,6 +13,7 @@ metadata:
     prometheus.io/probe_scheme: 'https'
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    nginx.ingress.kubernetes.io/enable-cors: 'true'
     prometheus.io/probe_path: /ping
     {{- if .Values.global.ingress.hostAlias }}
     nginx.ingress.kubernetes.io/server-alias: {{ tpl .Values.global.ingress.hostAlias . }}
