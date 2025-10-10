@@ -64,6 +64,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
     nginx.ingress.kubernetes.io/auth-response-headers:
       x-auth-request-preferred-username, x-auth-request-email, x-auth-request-groups
+    nginx.ingress.kubernetes.io/enable-cors: 'true'
     {{- if .Values.global.ingress.hostAlias }}
     nginx.ingress.kubernetes.io/server-alias: {{ tpl .Values.global.ingress.hostAlias . }}
     {{- end }}
