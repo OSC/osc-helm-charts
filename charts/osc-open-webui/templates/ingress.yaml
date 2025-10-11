@@ -64,7 +64,7 @@ spec:
   {{- if .Values.global.ingress.hostAlias }}
     - {{ include "osc-open-webui.api.hostAlias" . | quote }}
   {{- end }}
-    secretName: {{ include "osc-open-webui.name" . }}-cert
+    secretName: {{ include "osc-open-webui.api.name" . }}-cert
   rules:
   - host: {{ include "osc-open-webui.api.host" . | quote }}
     http:
