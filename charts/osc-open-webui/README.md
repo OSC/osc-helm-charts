@@ -134,7 +134,7 @@ open-webui:
 | open-webui.commonEnvVars[0].name |  | `"WEBUI_AUTH_TRUSTED_EMAIL_HEADER"` |
 | open-webui.commonEnvVars[0].value |  | `"X-Forwarded-Email"` |
 | open-webui.commonEnvVars[1].name |  | `"WEBUI_AUTH_TRUSTED_NAME_HEADER"` |
-| open-webui.commonEnvVars[1].value |  | `"X-Forwarded-User"` |
+| open-webui.commonEnvVars[1].value |  | `"X-Forwarded-Preferred-Username"` |
 | open-webui.commonEnvVars[2].name |  | `"WEBUI_AUTH_TRUSTED_GROUPS_HEADER"` |
 | open-webui.commonEnvVars[2].value |  | `"X-Forwarded-Groups"` |
 | open-webui.commonEnvVars[3].name |  | `"ENABLE_OAUTH_GROUP_CREATION"` |
@@ -144,11 +144,13 @@ open-webui:
 | open-webui.commonEnvVars[5].name |  | `"ENABLE_SIGNUP"` |
 | open-webui.commonEnvVars[5].value |  | `"True"` |
 | open-webui.commonEnvVars[6].name |  | `"ENABLE_OAUTH_SIGNUP"` |
-| open-webui.commonEnvVars[6].value |  | `"True"` |
+| open-webui.commonEnvVars[6].value |  | `"False"` |
 | open-webui.commonEnvVars[7].name |  | `"ENABLE_LOGIN_FORM"` |
-| open-webui.commonEnvVars[7].value |  | `"False"` |
-| open-webui.commonEnvVars[8].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
-| open-webui.commonEnvVars[8].value |  | `"False"` |
+| open-webui.commonEnvVars[7].value |  | `"True"` |
+| open-webui.commonEnvVars[8].name |  | `"WEBUI_AUTH"` |
+| open-webui.commonEnvVars[8].value |  | `"True"` |
+| open-webui.commonEnvVars[9].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
+| open-webui.commonEnvVars[9].value |  | `"False"` |
 | open-webui.extraEnvFrom[0].secretRef.name |  | `"osc-open-webui-secret"` |
 | open-webui.service.port |  | `80` |
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |

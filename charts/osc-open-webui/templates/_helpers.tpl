@@ -84,3 +84,31 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "osc-open-webui.name" .) }}
 {{- define "osc-open-webui.data.name" }}
 {{- printf "%s-data" (include "osc-open-webui.name" .) }}
 {{- end }}
+
+{{- define "osc-open-webui.api.name" -}}
+{{- printf "%s-api" (include "osc-open-webui.name" .) }}
+{{- end }}
+
+{{- define "osc-open-webui.api.labels" -}}
+helm.sh/chart: {{ include "osc-open-webui.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/name: {{ printf "%s-api" (include "osc-open-webui.name" .) }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "osc-open-webui.api.hostAlias" }}
+{{- $hostAliasParts := splitList "." .Values.global.ingress.hostAlias }}
+{{- $hostAliasName := first $hostAliasParts }}
+{{- $hostAliasDomain := rest $hostAliasParts | join "." }}
+{{- printf "%s-api.%s" $hostAliasName $hostAliasDomain }}
+{{- end }}
+
+{{- define "osc-open-webui.api.host" }}
+{{- $parts := splitList "." .Values.global.ingress.host }}
+{{- $name := first $parts }}
+{{- $domain := rest $parts | join "." }}
+{{- printf "%s-api.%s" $name $domain }}
+{{- end }}

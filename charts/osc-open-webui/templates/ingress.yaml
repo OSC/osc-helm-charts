@@ -38,4 +38,49 @@ spec:
             name: {{ include "osc-open-webui.auth.name" . }}
             port:
               number: {{ .Values.auth.service.port }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "osc-open-webui.api.name" . }}
+  labels:
+    {{- include "osc-open-webui.api.labels" . | nindent 4 }}
+  {{- if .Values.global.alert.receiver }}
+    receiver: {{ .Values.global.alert.receiver }}
+  {{- end }}
+  annotations:
+    prometheus.io/probe_scheme: 'https'
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    #nginx.ingress.kubernetes.io/enable-cors: 'true'
+    {{- if .Values.global.ingress.hostAlias }}
+    nginx.ingress.kubernetes.io/server-alias: {{ include "osc-open-webui.api.hostAlias" . }}
+    {{- end }}
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - {{ include "osc-open-webui.api.host" . | quote }}
+  {{- if .Values.global.ingress.hostAlias }}
+    - {{ include "osc-open-webui.api.hostAlias" . | quote }}
+  {{- end }}
+    secretName: {{ include "osc-open-webui.name" . }}-cert
+  rules:
+  - host: {{ include "osc-open-webui.api.host" . | quote }}
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ index .Values "open-webui" "nameOverride" }}
+            port:
+              name: http
+      - path: /ollama/api
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ index .Values "open-webui" "nameOverride" }}
+            port:
+              name: http
 {{ end }}
