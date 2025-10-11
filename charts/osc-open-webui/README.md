@@ -132,11 +132,11 @@ open-webui:
 | open-webui.nodeSelector |  | `{}` |
 | open-webui.extraEnvVars |  | `[]` |
 | open-webui.commonEnvVars[0].name |  | `"WEBUI_AUTH_TRUSTED_EMAIL_HEADER"` |
-| open-webui.commonEnvVars[0].value |  | `"X-Forwarded-Email"` |
+| open-webui.commonEnvVars[0].value |  | `"X-Auth-Request-Email"` |
 | open-webui.commonEnvVars[1].name |  | `"WEBUI_AUTH_TRUSTED_NAME_HEADER"` |
-| open-webui.commonEnvVars[1].value |  | `"X-Forwarded-Preferred-Username"` |
+| open-webui.commonEnvVars[1].value |  | `"X-Auth-Request-Preferred-Username"` |
 | open-webui.commonEnvVars[2].name |  | `"WEBUI_AUTH_TRUSTED_GROUPS_HEADER"` |
-| open-webui.commonEnvVars[2].value |  | `"X-Forwarded-Groups"` |
+| open-webui.commonEnvVars[2].value |  | `"X-Auth-Request-Groups"` |
 | open-webui.commonEnvVars[3].name |  | `"ENABLE_OAUTH_GROUP_CREATION"` |
 | open-webui.commonEnvVars[3].value |  | `"True"` |
 | open-webui.commonEnvVars[4].name |  | `"DEFAULT_USER_ROLE"` |
