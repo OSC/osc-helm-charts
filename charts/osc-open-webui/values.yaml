@@ -98,15 +98,19 @@ open-webui:
   extraEnvVars: []
   commonEnvVars:
     - name: WEBUI_AUTH_TRUSTED_EMAIL_HEADER
-      value: X-Auth-Request-Email
+      value: X-Forwarded-Email
     - name: WEBUI_AUTH_TRUSTED_NAME_HEADER
-      value: X-Auth-Request-Preferred-Username
+      value: X-Forwarded-User
     - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
-      value: X-Auth-Request-Groups
+      value: X-Forwarded-Groups
+    - name: ENABLE_OAUTH_GROUP_CREATION
+      value: "True"
     - name: DEFAULT_USER_ROLE
       value: user
     - name: ENABLE_SIGNUP
-      value: "False"
+      value: "True"
+    - name: ENABLE_OAUTH_SIGNUP
+      value: "True"
     - name: ENABLE_LOGIN_FORM
       value: "False"
     - name: ENABLE_VERSION_UPDATE_CHECK

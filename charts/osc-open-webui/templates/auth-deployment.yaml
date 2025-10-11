@@ -57,7 +57,6 @@ spec:
           - --http-address=0.0.0.0:{{ .Values.auth.service.port }}
           - --reverse-proxy=true
           - --pass-user-headers
-          - --set-xauthrequest
           - --oidc-issuer-url={{ .Values.auth.oidcIssuerURL }}
           - --client-id={{ tpl (required "Auth client ID is required" .Values.global.auth.clientID) . }}
           - --cookie-httponly=false
