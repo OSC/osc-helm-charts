@@ -57,11 +57,11 @@ spec:
           - --http-address=0.0.0.0:{{ .Values.auth.service.port }}
           - --reverse-proxy=true
           - --pass-user-headers
+          - --set-xauthrequest
           - --oidc-issuer-url={{ .Values.auth.oidcIssuerURL }}
           - --client-id={{ tpl (required "Auth client ID is required" .Values.global.auth.clientID) . }}
           - --cookie-httponly=false
-          - --cookie-secure=true
-          - --cookie-samesite=none
+          - --cookie-secure=false
           - --cookie-refresh=180s
           - --cookie-name={{ tpl .Values.auth.cookieName . }}
           - --email-domain=*
@@ -74,8 +74,8 @@ spec:
           {{- range .Values.global.auth.allowGroups }}
           - --allowed-group={{ tpl . $ }}
           {{- end }}
-          - --skip-auth-route="^/api($|/.*)"
-          - --skip-auth-route="^/ollama/api($|/.*)"
+          #- --skip-auth-route="^/api($|/.*)"
+          #- --skip-auth-route="^/ollama/api($|/.*)"
         ports:
         - containerPort: {{ .Values.auth.service.port }}
           name: http

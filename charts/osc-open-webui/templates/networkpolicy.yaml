@@ -11,6 +11,9 @@ spec:
       app.kubernetes.io/name: {{ index .Values "open-webui" "nameOverride" }}
   ingress:
   - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ include "osc-open-webui.auth.name" . }}
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.ingressName }}

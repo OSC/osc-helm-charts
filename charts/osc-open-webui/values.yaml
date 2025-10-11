@@ -100,7 +100,7 @@ open-webui:
     - name: WEBUI_AUTH_TRUSTED_EMAIL_HEADER
       value: X-Forwarded-Email
     - name: WEBUI_AUTH_TRUSTED_NAME_HEADER
-      value: X-Forwarded-User
+      value: X-Forwarded-Preferred-Username
     - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
       value: X-Forwarded-Groups
     - name: ENABLE_OAUTH_GROUP_CREATION
@@ -110,9 +110,11 @@ open-webui:
     - name: ENABLE_SIGNUP
       value: "True"
     - name: ENABLE_OAUTH_SIGNUP
-      value: "True"
-    - name: ENABLE_LOGIN_FORM
       value: "False"
+    - name: ENABLE_LOGIN_FORM
+      value: "True"
+    - name: WEBUI_AUTH
+      value: "True"
     - name: ENABLE_VERSION_UPDATE_CHECK
       value: "False"
   extraEnvFrom:
