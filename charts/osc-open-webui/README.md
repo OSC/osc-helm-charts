@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -137,14 +137,20 @@ open-webui:
 | open-webui.commonEnvVars[1].value |  | `"X-Auth-Request-Preferred-Username"` |
 | open-webui.commonEnvVars[2].name |  | `"WEBUI_AUTH_TRUSTED_GROUPS_HEADER"` |
 | open-webui.commonEnvVars[2].value |  | `"X-Auth-Request-Groups"` |
-| open-webui.commonEnvVars[3].name |  | `"DEFAULT_USER_ROLE"` |
-| open-webui.commonEnvVars[3].value |  | `"user"` |
-| open-webui.commonEnvVars[4].name |  | `"ENABLE_SIGNUP"` |
-| open-webui.commonEnvVars[4].value |  | `"False"` |
-| open-webui.commonEnvVars[5].name |  | `"ENABLE_LOGIN_FORM"` |
-| open-webui.commonEnvVars[5].value |  | `"False"` |
-| open-webui.commonEnvVars[6].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
+| open-webui.commonEnvVars[3].name |  | `"ENABLE_OAUTH_GROUP_CREATION"` |
+| open-webui.commonEnvVars[3].value |  | `"True"` |
+| open-webui.commonEnvVars[4].name |  | `"DEFAULT_USER_ROLE"` |
+| open-webui.commonEnvVars[4].value |  | `"user"` |
+| open-webui.commonEnvVars[5].name |  | `"ENABLE_SIGNUP"` |
+| open-webui.commonEnvVars[5].value |  | `"True"` |
+| open-webui.commonEnvVars[6].name |  | `"ENABLE_OAUTH_SIGNUP"` |
 | open-webui.commonEnvVars[6].value |  | `"False"` |
+| open-webui.commonEnvVars[7].name |  | `"ENABLE_LOGIN_FORM"` |
+| open-webui.commonEnvVars[7].value |  | `"True"` |
+| open-webui.commonEnvVars[8].name |  | `"WEBUI_AUTH"` |
+| open-webui.commonEnvVars[8].value |  | `"True"` |
+| open-webui.commonEnvVars[9].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
+| open-webui.commonEnvVars[9].value |  | `"False"` |
 | open-webui.extraEnvFrom[0].secretRef.name |  | `"osc-open-webui-secret"` |
 | open-webui.service.port |  | `80` |
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |

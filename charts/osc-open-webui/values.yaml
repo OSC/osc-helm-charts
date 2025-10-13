@@ -103,12 +103,18 @@ open-webui:
       value: X-Auth-Request-Preferred-Username
     - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
       value: X-Auth-Request-Groups
+    - name: ENABLE_OAUTH_GROUP_CREATION
+      value: "True"
     - name: DEFAULT_USER_ROLE
       value: user
     - name: ENABLE_SIGNUP
+      value: "True"
+    - name: ENABLE_OAUTH_SIGNUP
       value: "False"
     - name: ENABLE_LOGIN_FORM
-      value: "False"
+      value: "True"
+    - name: WEBUI_AUTH
+      value: "True"
     - name: ENABLE_VERSION_UPDATE_CHECK
       value: "False"
   extraEnvFrom:

@@ -4,7 +4,8 @@ global:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
   ingress:
-    host: webservice.example.com
+    host: webservice.k8.example.com
+    hostAlias: webservice.example.com
   auth:
     idpHost: keycloak.keycloak.svc.cluster.local
     clientID: test
