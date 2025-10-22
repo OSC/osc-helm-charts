@@ -227,6 +227,10 @@ kube-state-metrics:
 dcgm-exporter:
   nameOverride: dcgm-exporter
   fullnameOverride: dcgm-exporter
+  image:
+    repository: docker-registry.osc.edu/webservices/dcgm-exporter
+  imagePullSecrets:
+    - osc-registry
   arguments:
     - --no-hostname
   extraEnv:
