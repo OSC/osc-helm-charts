@@ -228,7 +228,8 @@ dcgm-exporter:
   nameOverride: dcgm-exporter
   fullnameOverride: dcgm-exporter
   image:
-    repository: docker-registry.osc.edu/webservices/dcgm-exporter
+    repository: docker-registry.osc.edu/osc/dcgm-exporter
+    tag: 4.4.1-4.6.0-ubuntu22.04
   imagePullSecrets:
     - osc-registry
   arguments:
