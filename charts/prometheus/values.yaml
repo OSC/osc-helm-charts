@@ -231,7 +231,7 @@ dcgm-exporter:
     repository: docker-registry.osc.edu/osc/dcgm-exporter
     tag: 4.4.1-4.6.0-ubuntu22.04
   imagePullSecrets:
-    - osc-registry
+    - name: osc-registry
   arguments:
     - --no-hostname
   extraEnv:
