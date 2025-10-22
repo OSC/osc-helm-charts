@@ -34,7 +34,9 @@ jobs:
       fail-fast: false
       matrix:
         chart:
-          - "phylogatr-web"
+          # TODO: Add back once phylogatr is fixed
+          # https://github.com/OSC/phylogatr-web/pull/91
+          # - "phylogatr-web"
           - "sirmodel"
           # TODO: Maybe too few resources with Kind cluster to support init job
           # Init job is required to bootstrap Nominatim
@@ -84,7 +86,7 @@ jobs:
       - name: Install Keycloak
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 21.2.0
+          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 21.2.0 --set image.repository=bitnamilegacy/keycloak --set postgresql.image.repository=bitnamilegacy/postgresql
       - name: Install Kyverno
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
