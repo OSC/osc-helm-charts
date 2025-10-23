@@ -61,3 +61,10 @@ metadata:
   name: webmo-oberlin
   labels:
     osc.edu/role: webservice
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chatisa
+  labels:
+    osc.edu/role: webservice

@@ -1,0 +1,52 @@
+global:
+  environment: ""
+  imageTag: v4.3.0
+  oscServiceAccount: k8spublic
+  env:
+    production:
+      replicas: 2
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    test:
+      replicas: 2
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    dev:
+      replicas: 1
+      image:
+        tag: latest
+      podResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      maintenance:
+        groups:
+          - sappstf
+webservice:
+  appType: none
+  auth:
+    enable: false
+  workingDir: /app
+  image:
+    repository: docker-registry.osc.edu/webservices/chatisa
+  env:
+  - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+    value: 'false'
+  startupProbe:
+    httpGet:
+      path: /healthz
+  livenessProbe:
+    httpGet:
+      path: /healthz
+  readinessProbe:
+    httpGet:
+      path: /healthz
+  service:
+    port: 8080
+  alert:
+    receiver: sciapps
+  debugGroups:
+    - sappstf
