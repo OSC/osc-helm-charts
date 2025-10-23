@@ -1,6 +1,6 @@
 global:
   environment: ""
-  imageTag: v1.1
+  imageTag: v4.3.0
   oscServiceAccount: k8spublic
   env:
     production:
@@ -24,7 +24,7 @@ global:
           memory: 128Mi
       maintenance:
         groups:
-          - wiagstf
+          - sappstf
 webservice:
   appType: none
   auth:
@@ -47,6 +47,6 @@ webservice:
   service:
     port: 8080
   alert:
-    receiver: gateways
+    receiver: sciapps
   debugGroups:
-    - wiagstf
+    - sappstf
