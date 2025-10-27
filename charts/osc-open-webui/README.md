@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -192,4 +192,4 @@ open-webui:
 | open-webui.ollama.extraEnv[1].name |  | `"HOME"` |
 | open-webui.ollama.extraEnv[1].value |  | `"/home/ollama"` |
 | open-webui.ollama.extraEnv[2].name |  | `"OLLAMA_FLASH_ATTENTION"` |
-| open-webui.ollama.extraEnv[2].value |  | `1` |
+| open-webui.ollama.extraEnv[2].value |  | `"1"` |

@@ -206,4 +206,4 @@ open-webui:
       - name: HOME
         value: /home/ollama
       - name: OLLAMA_FLASH_ATTENTION
-        value: 1
+        value: '1'
