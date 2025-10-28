@@ -35,6 +35,11 @@ webservice:
   env:
   - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
     value: 'false'
+  mounts:
+    emptyDir:
+      temp: /app/temp
+      export: /app/export
+      logs: /app/logs
   startupProbe:
     httpGet:
       path: /healthz
