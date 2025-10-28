@@ -38,7 +38,7 @@ webservice:
   mounts:
     emptyDir:
       temp: /app/temp
-      export: /app/export
+      exports: /app/exports
       logs: /app/logs
   startupProbe:
     httpGet:
