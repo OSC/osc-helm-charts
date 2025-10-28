@@ -45,6 +45,10 @@ podResources:
 data:
   enable: true
   size: 50Mi
+mounts:
+  emptyDir:
+    test: /tmp/test
+    foo: /tmp/bar
 database:
   mariadb:
     enable: true

@@ -57,6 +57,7 @@ image:
   pullPolicy: IfNotPresent
 
 mounts:
+  emptyDir: {}
   home: ''
   roDir: {}
   socket: {}

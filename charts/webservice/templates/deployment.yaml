@@ -92,11 +92,15 @@ spec:
         ports:
         - containerPort: {{ $container.port | default (add $root.Values.service.port $idx) }}
           name: {{ $container.portName | default (tpl $container.name $root)  }}
-        {{- if or $root.Values.data.enable $root.Values.mounts.data $root.Values.mounts.home $root.Values.mounts.roDir $root.Values.mounts.rwDir $root.Values.mounts.socket $root.Values.mounts.roFile }}
+        {{- if or $root.Values.data.enable $root.Values.mounts.emptyDir $root.Values.mounts.data $root.Values.mounts.home $root.Values.mounts.roDir $root.Values.mounts.rwDir $root.Values.mounts.socket $root.Values.mounts.roFile }}
         volumeMounts:
         {{- if $root.Values.data.enable }}
           - name: data
             mountPath: {{ $root.Values.data.path }}
+        {{- end }}
+        {{- range $name, $path := $root.Values.mounts.emptyDir }}
+          - name: {{ $name }}
+            mountPath: {{ tpl $path $root }}
         {{- end }}
         {{- if $root.Values.mounts.data }}
           - name: {{ $root.Values.mounts.data.name }}
@@ -207,11 +211,15 @@ spec:
           value: {{ tpl $initEnv.value $ | quote }}
         {{- end }}
         {{- end }}
-        {{- if or $.Values.data.enable $.Values.mounts.data $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.rwDir $.Values.mounts.socket $.Values.mounts.roFile }}
+        {{- if or $.Values.data.enable $.Values.mounts.emptyDir $.Values.mounts.data $.Values.mounts.home $.Values.mounts.roDir $.Values.mounts.rwDir $.Values.mounts.socket $.Values.mounts.roFile }}
         volumeMounts:
         {{- if $.Values.data.enable }}
           - name: data
             mountPath: {{ $.Values.data.path }}
+        {{- end }}
+        {{- range $name, $path := $.Values.mounts.emptyDir }}
+          - name: {{ $name }}
+            mountPath: {{ tpl $path $ }}
         {{- end }}
         {{- if $.Values.mounts.data }}
           - name: data
@@ -242,7 +250,11 @@ spec:
         {{- end }}
         {{- end }}
         {{- if $init.mounts }}
-        {{- if or $init.mounts.data $init.mounts.home $init.mounts.roDir $init.mounts.rwDir $init.mounts.socket $init.mounts.roFile }}
+        {{- if or $init.mounts.emptyDir $init.mounts.data $init.mounts.home $init.mounts.roDir $init.mounts.rwDir $init.mounts.socket $init.mounts.roFile }}
+        {{- range $name, $path := $init.mounts.emptyDir }}
+          - name: {{ $name }}
+            mountPath: {{ tpl $path $ }}
+        {{- end }}
         {{- if $init.mounts.data }}
           - name: {{ $init.mounts.data.name }}
             mountPath: {{ tpl $init.mounts.data.mountPath $ }}
@@ -288,12 +300,16 @@ spec:
       {{- with .Values.nodeSelector }}
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or .Values.data.enable .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket .Values.mounts.roFile }}
+      {{- if or .Values.data.enable .Values.mounts.emptyDir .Values.mounts.data .Values.mounts.home .Values.mounts.roDir .Values.mounts.rwDir .Values.mounts.socket .Values.mounts.roFile }}
       volumes:
         {{- if .Values.data.enable }}
         - name: data
           persistentVolumeClaim:
             claimName: {{ include "webservice.data.name" . }}
+        {{- end }}
+        {{- range $name, $path := .Values.mounts.emptyDir }}
+        - name: {{ $name }}
+          emptyDir: {}
         {{- end }}
         {{- if .Values.mounts.data }}
         - name: {{ .Values.mounts.data.name }}
