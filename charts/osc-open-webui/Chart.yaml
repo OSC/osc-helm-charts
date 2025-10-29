@@ -2,7 +2,7 @@ apiVersion: v2
 name: osc-open-webui
 description: OSC Open Web UI deployment
 type: application
-version: 0.4.2
+version: 0.5.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
