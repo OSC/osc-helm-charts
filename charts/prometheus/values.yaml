@@ -247,11 +247,11 @@ dcgm-exporter:
     enabled: false
   resources:
     limits:
-      cpu: '1'
-      memory: '256Mi'
+      cpu: '2'
+      memory: '1Gi'
     requests:
-      cpu: '0.5'
-      memory: '128Mi'
+      cpu: '1'
+      memory: '512Mi'
   nodeSelector:
     feature.node.kubernetes.io/pci-10de.present: "true"
 
