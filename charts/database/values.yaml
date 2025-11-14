@@ -33,9 +33,9 @@ mariadb:
   image:
     # -- The OSC registry path to mariadb replicated image.
     # This value should not need to be changed.
-    repository: kubernetes/bitnami/mariadb
+    repository: webservices/mariadb
     # -- The version of MariaDB image.
-    # **This version of must replicated to OSC registry**
+    # **This version of must built by this repo**
     tag: 10.5.13-debian-10-r58
   # @ignored
   auth:
@@ -137,9 +137,9 @@ postgresql:
   image:
     # -- The OSC registry path to postgresql replicated image.
     # This value should not need to be changed.
-    repository: kubernetes/bitnami/postgresql
+    repository: webservices/postgresql
     # -- The version of MariaDB image.
-    # **This version of must replicated to OSC registry**
+    # **This version of must built by this repo**
     tag: 14.4.0-debian-11-r18
   auth:
     # -- The postgres user admin password
