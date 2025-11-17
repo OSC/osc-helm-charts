@@ -145,10 +145,11 @@ open-webui:
       tag: '0.11.11'
     imagePullSecrets:
       - name: osc-registry
-    gpu:
-      enabled: true
-      type: nvidia
-      number: 1
+    ollama:
+      gpu:
+        enabled: true
+        type: nvidia
+        number: 1
     nodeSelector: {}
     # Example using MIG product
     # nodeSelector:
