@@ -42,8 +42,9 @@ open-webui:
   podSecurityContext:
     runAsUser: 1000
   ollama:
-    gpu:
-      enabled: false
+    ollama:
+      gpu:
+        enabled: false
     deployment:
       labels:
         osc.edu/service-account: nobody

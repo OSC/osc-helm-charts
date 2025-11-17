@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.4.3](https://img.shields.io/badge/Version-0.4.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -165,9 +165,9 @@ open-webui:
 | open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |
 | open-webui.ollama.image.tag |  | `"0.11.11"` |
 | open-webui.ollama.imagePullSecrets[0].name |  | `"osc-registry"` |
-| open-webui.ollama.gpu.enabled |  | `true` |
-| open-webui.ollama.gpu.type |  | `"nvidia"` |
-| open-webui.ollama.gpu.number |  | `1` |
+| open-webui.ollama.ollama.gpu.enabled |  | `true` |
+| open-webui.ollama.ollama.gpu.type |  | `"nvidia"` |
+| open-webui.ollama.ollama.gpu.number |  | `1` |
 | open-webui.ollama.nodeSelector |  | `{}` |
 | open-webui.ollama.service.annotations."prometheus.io/probe_module" |  | `"http"` |
 | open-webui.ollama.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
