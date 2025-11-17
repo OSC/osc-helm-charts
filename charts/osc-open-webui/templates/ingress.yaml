@@ -108,6 +108,9 @@ metadata:
     {{- if .Values.global.ingress.hostAlias }}
     nginx.ingress.kubernetes.io/server-alias: {{ include "osc-open-webui.api.hostAlias" . | quote }}
     {{- end }}
+    {{- if .Values.global.ingress.apiAllowedRange }}
+    nginx.ingress.kubernetes.io/whitelist-source-range: {{ join "," .Values.global.ingress.apiAllowedRange | quote }}
+    {{- end }}
 spec:
   ingressClassName: nginx
   tls:

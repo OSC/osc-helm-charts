@@ -7,10 +7,10 @@ global:
     password:
   nodeSelectorRole: webservices
   ingress:
-    # Also pulled from global.env.$environment.ingress.host
     host: ""
-    # Also pulled from global.env.$environment.ingress.hostAlias
     hostAlias: ""
+    # -- Allowed CIDR ranges for API access
+    apiAllowedRange:
   auth:
     idpHost:
     clientID:
