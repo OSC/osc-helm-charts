@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.13.0](https://img.shields.io/badge/Version-0.13.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.14.0](https://img.shields.io/badge/Version-0.14.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -16,6 +16,7 @@ OSC database service Helm Chart
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | mariadb | 11.4.2 |
 | https://charts.bitnami.com/bitnami | postgresql | 11.6.20 |
+| https://charts.bitnami.com/bitnami | redis | 23.2.12 |
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
 
 ## Usage
@@ -58,6 +59,17 @@ postgresql:
     password: secret
 ```
 
+### Redis
+
+Enable Redis
+
+```yaml
+redis:
+  enable: true
+  auth:
+    password: secret
+```
+
 ## Values
 
 | Key | Description | Default |
@@ -72,6 +84,7 @@ postgresql:
 | global.imagePullSecrets | The OSC image pull secret name to use to pull images | `["osc-registry"]` |
 | global.database.allowIngress | Allow Ingress access | `false` |
 | global.ingressName | The name of IGNIX Ingress | `"ingress-nginx"` |
+| global.security.allowInsecureImages |  | `true` |
 | imagePullSecret.enable | Manage the image pull secret from osc-common. Disable if this chart is used as a subchart. | `true` |
 | mariadb.enable | Enable MariaDB subchart by setting to `true` | `false` |
 | mariadb.image.repository | The OSC registry path to mariadb replicated image. This value should not need to be changed. | `"webservices/mariadb"` |
@@ -94,3 +107,12 @@ postgresql:
 | postgresql.metrics.enabled |  | `true` |
 | postgresql.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/postgres-exporter"` |
 | postgresql.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.10.1-debian-11-r20"` |
+| redis.enable | Enable Redis subchart by setting to `true` | `false` |
+| redis.image.repository | The OSC registry path to redis replicated image. This value should not need to be changed. | `"kubernetes/bitnami/redis"` |
+| redis.image.tag | The version of Redis image. **This version of must built by this repo** | `"8.2.1-debian-12-r0"` |
+| redis.auth.password | The Redis password | **required** |
+| redis.architecture |  | `"standalone"` |
+| redis.master.resources | Set limits for master Redis pod | `{"limits":{"cpu":"4","memory":"4Gi"},"requests":{"cpu":"1","memory":"256Mi"}}` |
+| redis.metrics.enabled |  | `true` |
+| redis.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/redis-exporter"` |
+| redis.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"1.76.0-debian-12-r0"` |

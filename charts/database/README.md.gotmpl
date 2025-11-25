@@ -53,6 +53,17 @@ postgresql:
     password: secret
 ```
 
+### Redis
+
+Enable Redis
+
+```yaml
+redis:
+  enable: true
+  auth:
+    password: secret
+```
+
 {{ define "chart.valuesTable" -}}
 | Key | Description | Default |
 |-----|-------------|---------|

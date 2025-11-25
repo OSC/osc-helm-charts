@@ -23,6 +23,8 @@ global:
     allowIngress: false
   # -- The name of IGNIX Ingress
   ingressName: ingress-nginx
+  security:
+    allowInsecureImages: true
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
   # Disable if this chart is used as a subchart.
@@ -263,4 +265,128 @@ postgresql:
     metrics:
       enabled: true
       namespaceSelector:
+        app.kubernetes.io/name: prometheus
+redis:
+  # -- Enable Redis subchart by setting to `true`
+  enable: false
+  image:
+    # -- The OSC registry path to redis replicated image.
+    # This value should not need to be changed.
+    repository: kubernetes/bitnami/redis
+    # -- The version of Redis image.
+    # **This version of must built by this repo**
+    tag: 8.2.1-debian-12-r0
+  auth:
+    # -- The Redis password
+    # @default -- **required**
+    password:
+  architecture: standalone
+  master:
+    # @ignored
+    podLabels:
+      '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+      '{{ include "osc.common.roleKey" . }}': '{{ .Values.global.nodeSelectorRole }}'
+    # @ignored
+    containerSecurityContext:
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    # -- Set limits for master Redis pod
+    resources:
+      limits:
+        cpu: '4'
+        memory: 4Gi
+      requests:
+        cpu: '1'
+        memory: 256Mi
+    # @ignored
+    nodeSelector:
+      '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+    # @ignored
+#    initContainers:
+#    - name: init-data
+#      image: '{{ include "postgresql.volumePermissions.image" . }}'
+#      imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+#      resources:
+#        limits:
+#          cpu: '1'
+#          memory: 512Mi
+#        requests:
+#          cpu: 250m
+#          memory: 128Mi
+#      command:
+#        - /bin/sh
+#        - -ec
+#        - |
+#          mkdir -p {{ .Values.primary.persistence.mountPath }}/data
+#          chmod 700 {{ .Values.primary.persistence.mountPath }}/data
+#      securityContext:
+#        runAsNonRoot: true
+#        allowPrivilegeEscalation: false
+#        capabilities:
+#          drop:
+#          - ALL
+#        seccompProfile:
+#          type: RuntimeDefault
+#        privileged: false
+#      volumeMounts:
+#        - name: data
+#          mountPath: '{{ .Values.primary.persistence.mountPath }}'
+#        - name: dshm
+#          mountPath: /dev/shm
+#  volumePermissions:
+#    image:
+#      # -- The OSC registry path to replicated image.
+#      # This value should not need to be changed.
+#      repository: kubernetes/bitnami/bitnami-shell
+#      # -- The version of replicated image.
+#      # **This version of must replicated to OSC registry**
+#      tag: 11-debian-11-r20
+  metrics:
+    enabled: true
+    image:
+      # -- The OSC registry path to replicated image.
+      # This value should not need to be changed.
+      repository: kubernetes/bitnami/redis-exporter
+      # -- The version of replicated image.
+      # **This version of must replicated to OSC registry**
+      tag: 1.76.0-debian-12-r0
+    # @ignored
+    containerSecurityContext:
+      enabled: true
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    # @ignored
+    service:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: /metrics
+        prometheus.io/match_metrics: 'true'
+    # @ignored
+    resources:
+      limits:
+        cpu: '2'
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  # @ignored
+  networkPolicy:
+    enabled: true
+    allowExternal: false
+    metrics:
+      enabled: true
+      allowExternal: false
+      ingressNSMatchLabels:
         app.kubernetes.io/name: prometheus
