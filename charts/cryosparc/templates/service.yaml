@@ -1,0 +1,50 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cryosparc.name" . }}
+  labels:
+    {{- include "cryosparc.labels" . | nindent 4 }}
+  {{- if (include "cryosparc.alert.receiver" .) }}
+    receiver: {{ include "cryosparc.alert.receiver" . }}
+  {{- end }}
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: {{ .Values.service.basePort }}
+  selector:
+    {{- include "cryosparc.selectorLabels" . | nindent 4 }}
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cryosparc.name" . }}-nodeport
+  labels:
+    {{- include "cryosparc.labels" . | nindent 4 }}
+  {{- if (include "cryosparc.alert.receiver" .) }}
+    receiver: {{ include "cryosparc.alert.receiver" . }}
+  {{- end }}
+spec:
+  selector:
+    {{- include "cryosparc.selectorLabels" . | nindent 4 }}
+  externalTrafficPolicy: Local
+  ports:
+  - name: mongod
+    protocol: TCP
+    port: {{ add .Values.service.basePort 1 }}
+    targetPort: {{ add .Values.service.basePort 1 }}
+    nodePort: {{ add .Values.service.basePort 1 }}
+  - name: cmd-server
+    protocol: TCP
+    port: {{ add .Values.service.basePort 2 }}
+    targetPort: {{ add .Values.service.basePort 2 }}
+    nodePort: {{ add .Values.service.basePort 2 }}
+  - name: rtp-server
+    protocol: TCP
+    port: {{ add .Values.service.basePort 5 }}
+    targetPort: {{ add .Values.service.basePort 5 }}
+    nodePort: {{ add .Values.service.basePort 5 }}
+  type: NodePort

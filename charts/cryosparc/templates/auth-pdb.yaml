@@ -1,0 +1,18 @@
+{{- $replicas := (include "webservice.auth.replicas" .) | default 1 }}
+{{- if (gt (int $replicas) 1 ) }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "webservice.auth.name" . }}
+  labels:
+    {{- include "webservice.auth.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.auth.podDistributionBudget.minAvailable }}
+  minAvailable: {{ .Values.auth.podDistributionBudget.minAvailable }}
+  {{- else if .Values.auth.podDistributionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.auth.podDistributionBudget.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "webservice.auth.selectorLabels" . | nindent 6 }}
+{{- end }}
