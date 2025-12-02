@@ -1,0 +1,41 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "cryosparc.name" . }}
+  labels:
+    {{- include "cryosparc.labels" . | nindent 4 }}
+  {{- if (include "cryosparc.alert.receiver" .) }}
+    receiver: {{ include "cryosparc.alert.receiver" . }}
+  {{- end }}
+  annotations:
+    prometheus.io/probe_scheme: 'https'
+    cert-manager.io/cluster-issuer: letsencrypt
+    {{- with .Values.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if .Values.auth.enable }}
+    {{- with .Values.auth.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- end }}
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - {{ required "Must provide ingress host" (tpl (include "cryosparc.ingressHost" .) .) | quote }}
+  {{- if (include "cryosparc.ingressHostAlias" .) }}
+    - {{ tpl (include "cryosparc.ingressHostAlias" .) . | quote }}
+  {{- end }}
+    secretName: {{ include "cryosparc.name" . }}-cert
+  rules:
+  - host: {{ tpl (include "cryosparc.ingressHost" .) . | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "cryosparc.name" . }}
+            port:
+              name: http
