@@ -1,0 +1,15 @@
+{{ if .Values.data.enable }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "webservice.data.name" . }}
+  labels:
+    {{- include "webservice.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ tpl .Values.data.storageClass . }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.data.storageSize }}
+{{ end }}

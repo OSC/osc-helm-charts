@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "webservice.name" . }}-test-connection"
+  labels:
+    {{ include "osc.common.serviceAccount" . }}
+    {{- include "webservice.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  securityContext: {{ toYaml .Values.podSecurityContext | nindent 4 }}
+  containers:
+    - name: wget
+      image: busybox:latest
+      imagePullPolicy: Always
+      command: ['wget']
+      args: ['-O-','-S','{{ include "webservice.name" . }}:{{ .Values.service.port }}{{ tpl .Values.startupProbe.httpGet.path . }}']
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+  {{- $podResources := .Values.podResources }}
+  {{- if .Values.global.env }}
+    {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
+      {{- if (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+        {{- $podResources = (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+      resources: {{ toYaml $podResources | nindent 8 }}
+  restartPolicy: Never
+  nodeSelector:
+    {{ include "osc.common.nodeSelectorRole" . }}

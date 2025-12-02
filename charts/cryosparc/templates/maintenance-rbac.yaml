@@ -1,0 +1,38 @@
+{{- if (include "webservice.maintenance.groups" .) }}
+{{- $groups := (printf "{ \"groups\": %s }" (include "webservice.maintenance.groups" .)) | fromJson }}
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: maintenance
+  namespace: {{ .Release.Namespace | quote }}
+rules:
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments/scale"]
+  verbs: ["get", "patch", "update"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: maintenance
+  namespace: {{ .Release.Namespace | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: maintenance
+subjects:
+{{- range $groups.groups }}
+  - kind: Group
+    name: {{ . | quote }}
+    apiGroup: rbac.authorization.k8s.io
+{{- end }}
+{{ end }}

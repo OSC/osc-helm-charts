@@ -1,0 +1,121 @@
+{{ if .Values.auth.enable }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "webservice.auth.name" . }}
+  labels:
+    {{ include "osc.common.serviceAccount" . }}
+    {{- include "webservice.auth.labels" . | nindent 4 }}
+  {{- if (include "webservice.alert.receiver" .) }}
+    receiver: {{ include "webservice.alert.receiver" . }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "webservice.auth.selectorLabels" . | nindent 6 }}
+  replicas: {{ include "webservice.auth.replicas" . | default 1 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 40%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        {{ include "osc.common.serviceAccount" . }}
+        {{- include "webservice.auth.selectorLabels" . | nindent 8 }}
+      {{- if (include "webservice.alert.receiver" .) }}
+        receiver: {{ include "webservice.alert.receiver" . }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "webservice.name" . }}
+      securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
+      hostNetwork: false
+      hostIPC: false
+      hostPID: false
+      containers:
+      - name: {{ include "webservice.auth.name" . }}
+        image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag }}"
+        imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
+        env:
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "webservice.auth.secretName" . }}
+              key: client-secret
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "webservice.auth.secretName" . }}
+              key: cookie-secret
+        - name: IDP_HOST
+          value: {{ include "webservice.idpHost" . }}
+        args:
+          - --provider=oidc
+          - --http-address=0.0.0.0:{{ .Values.auth.service.port }}
+          - --reverse-proxy=true
+          - --oidc-issuer-url={{ .Values.auth.oidcIssuerURL }}
+          - --client-id={{ tpl .Values.auth.clientID . }}
+          - --cookie-httponly=false
+          - --cookie-secure=true
+          - --cookie-samesite=none
+          - --cookie-refresh=180s
+          - --cookie-name={{ tpl .Values.auth.cookieName . }}
+          - --email-domain=*
+          - --insecure-oidc-allow-unverified-email=true
+          - --skip-provider-button
+          - --silence-ping-logging
+        {{- $root := . }}
+        {{- range $idx, $container := .Values.containers }}
+          {{- $path := "" }}
+          {{- if ne $container.ingressPath "/" }}
+            {{- $path = $container.ingressPath }}
+          {{- end }}
+          - --upstream=http://{{ include "webservice.name" $root }}.{{ $root.Release.Namespace }}.svc.cluster.local:{{ $container.port | default (add $root.Values.service.port $idx) }}{{ $path }}
+        {{- end }}
+          - --metrics-address=:{{ .Values.auth.metricsService.port }}
+          {{- if (include "webservice.idpHost" .) }}
+          - --whitelist-domain=$(IDP_HOST)
+          {{- end }}
+          {{- if (include "webservice.accessGroup" .) }}
+          - --allowed-group={{ include "webservice.accessGroup" . }}
+          {{- end }}
+          {{- range .Values.auth.allowGroups }}
+          - --allowed-group={{ tpl . $ }}
+          {{- end }}
+          {{- if .Values.auth.skipAuthRoute }}
+          - --skip-auth-route="{{ .Values.auth.skipAuthRoute }}"
+          {{- end }}
+        ports:
+        - containerPort: {{ .Values.auth.service.port }}
+          name: http
+        - containerPort: {{ .Values.auth.metricsService.port }}
+          name: metrics
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        resources: {{ toYaml .Values.auth.podResources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
+          readOnlyRootFilesystem: true
+      nodeSelector:
+        {{ include "osc.common.nodeSelectorRole" . }}
+      {{- with .Values.nodeSelector }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{ end }}

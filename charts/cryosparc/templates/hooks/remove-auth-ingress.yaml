@@ -1,0 +1,164 @@
+{{ if .Values.auth.enable }}
+{{ $name := printf "%s-remove-auth-ingress" (include "webservice.name" .) }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "webservice.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-25"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ template "osc.common.imagePullSecret" . }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "webservice.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-20"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+imagePullSecrets:
+  - name: {{ $name }}
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "webservice.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-15"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["delete"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "webservice.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $name }}
+subjects:
+- kind: ServiceAccount
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}
+  labels:
+    app: "remove-auth-ingress"
+    {{ include "osc.common.serviceAccount" . }}
+    {{- include "webservice.labels" . | nindent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  template:
+    metadata:
+      name: {{ $name }}
+      labels:
+        app: "remove-auth-ingress"
+        {{ include "osc.common.serviceAccount" . }}
+        {{- include "webservice.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ $name }}
+      securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
+      restartPolicy: Never
+      containers:
+      - name: remove-auth-ingress
+        image: "{{ .Values.hook.image.repository }}:{{ .Values.hook.image.tag }}"
+        command:
+          - "kubectl"
+        args:
+          - "delete"
+          - "ingress"
+          - {{ include "webservice.auth.name" . | quote }}
+          {{- range $container := .Values.containers }}
+          - {{ printf "%s-%s" (include "webservice.name" $) (tpl $container.name $) | quote }}
+          {{- end }}
+          - "--namespace={{ .Release.Namespace }}"
+          - "--ignore-not-found=true"
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Mi
+          requests:
+            cpu: 500m
+            memory: 265Mi
+      - name: remove-auth-secret
+        image: "{{ .Values.hook.image.repository }}:{{ .Values.hook.image.tag }}"
+        command:
+          - "kubectl"
+        args:
+          - "delete"
+          - "secret"
+          - {{ include "webservice.auth.name" . }}-cert
+          {{- range $container := .Values.containers }}
+          - {{ printf "%s-%s-cert" (include "webservice.name" $) (tpl $container.name $) | quote }}
+          {{- end }}
+          - "--namespace={{ .Release.Namespace }}"
+          - "--ignore-not-found=true"
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
+        resources:
+          limits:
+            cpu: 1
+            memory: 512Mi
+          requests:
+            cpu: 500m
+            memory: 265Mi
+      nodeSelector:
+        {{ include "osc.common.nodeSelectorRole" . }}
+      {{- with .Values.nodeSelector }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{ end }}
