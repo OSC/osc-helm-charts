@@ -1,18 +1,18 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "webservice.name" . }}
+  name: {{ include "cryosparc.name" . }}
   labels:
-    {{- include "webservice.labels" . | nindent 4 }}
+    {{- include "cryosparc.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
-      {{- include "webservice.selectorLabels" . | nindent 6 }}
+      {{- include "cryosparc.selectorLabels" . | nindent 6 }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          {{- include "webservice.auth.selectorLabels" . | nindent 10 }}
+          {{- include "cryosparc.auth.selectorLabels" . | nindent 10 }}
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.ingressName }}

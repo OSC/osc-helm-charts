@@ -6,21 +6,26 @@ global:
     password:
   nodeSelectorRole: webservices
   storageClass: webservices-nfs-client
+slurmCluster: "ascend"
 license: ''
+project: ''
 workingDir: /opt/cryosparc_master
-command: []
-args: []
 env: []
+defaultCommand: {}
 containers: {}
-image: {}
+image:
+  repository: docker-registry.osc.edu/sciapps/cryosparc
+  tag:
+  pullPolicy: IfNotPresent
+
 mounts:
-  home: ''
-  emptyDir: {}
-  rwDir: {}
-  roDir: {}
-    slurm-conf: /etc/slurm
+  home: /users/{{ .Values.project }}/{{ include "osc.common.serviceAccountValue" . }}
+  rwDir:
+    project: /fs/ess/{{ .Values.project }}
+  roDir:
+    slurm_conf: /etc/slurm
   socket:
-    munge-socket: /var/run/munge/munge.socket.2
+    munge_socket: /var/run/munge/munge.socket.2
 
 nodeSelector: {}
 
@@ -29,11 +34,11 @@ podSecurityContext:
 
 podResources:
   limits:
-    cpu: 4
-    memory: 4Gi
+    cpu: 8
+    memory: 32Gi
   requests:
-    cpu: 1
-    memory: 256Mi
+    cpu: 4
+    memory: 16Gi
 
 # Also pulled from global.env.$environment.replicas
 # replicas: 1
@@ -51,13 +56,11 @@ alert:
   receiver:
 
 service:
-  basePort: 39000
+  basePort: 31000
 
 probes:
   type: ~
   path: /
-  typeDefaults:
-    rshiny: tcpSocket
 startupProbe:
   httpGet:
     path: '{{ .probePath | default .Values.probes.path }}'
@@ -104,6 +107,7 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 
 auth:
   enable: true

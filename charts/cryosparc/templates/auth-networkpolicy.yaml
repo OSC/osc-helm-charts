@@ -2,13 +2,13 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "webservice.auth.name" . }}
+  name: {{ include "cryosparc.auth.name" . }}
   labels:
-    {{- include "webservice.auth.labels" . | nindent 4 }}
+    {{- include "cryosparc.auth.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
-      {{- include "webservice.auth.selectorLabels" . | nindent 6 }}
+      {{- include "cryosparc.auth.selectorLabels" . | nindent 6 }}
   ingress:
   - from:
     - namespaceSelector:

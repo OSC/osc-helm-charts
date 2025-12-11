@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "webservice.auth.name" . }}
+  name: {{ include "cryosparc.auth.name" . }}
   labels:
-    {{- include "webservice.auth.labels" . | nindent 4 }}
-  {{- if (include "webservice.alert.receiver" .) }}
-    receiver: {{ include "webservice.alert.receiver" . }}
+    {{- include "cryosparc.auth.labels" . | nindent 4 }}
+  {{- if (include "cryosparc.alert.receiver" .) }}
+    receiver: {{ include "cryosparc.alert.receiver" . }}
   {{- end }}
   {{- with .Values.auth.service.annotations }}
   annotations:
@@ -20,14 +20,14 @@ spec:
     protocol: TCP
     name: http
   selector:
-    {{- include "webservice.auth.selectorLabels" . | nindent 4 }}
+    {{- include "cryosparc.auth.selectorLabels" . | nindent 4 }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "webservice.auth.name" . }}-metrics
+  name: {{ include "cryosparc.auth.name" . }}-metrics
   labels:
-    {{- include "webservice.auth.labels" . | nindent 4 }}
+    {{- include "cryosparc.auth.labels" . | nindent 4 }}
   {{- with .Values.auth.metricsService.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -40,5 +40,5 @@ spec:
     protocol: TCP
     name: metrics
   selector:
-    {{- include "webservice.auth.selectorLabels" . | nindent 4 }}
+    {{- include "cryosparc.auth.selectorLabels" . | nindent 4 }}
 {{ end }}
