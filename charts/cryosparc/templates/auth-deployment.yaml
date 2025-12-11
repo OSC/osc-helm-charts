@@ -2,18 +2,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "webservice.auth.name" . }}
+  name: {{ include "cryosparc.auth.name" . }}
   labels:
     {{ include "osc.common.serviceAccount" . }}
-    {{- include "webservice.auth.labels" . | nindent 4 }}
-  {{- if (include "webservice.alert.receiver" .) }}
-    receiver: {{ include "webservice.alert.receiver" . }}
+    {{- include "cryosparc.auth.labels" . | nindent 4 }}
+  {{- if (include "cryosparc.alert.receiver" .) }}
+    receiver: {{ include "cryosparc.alert.receiver" . }}
   {{- end }}
 spec:
   selector:
     matchLabels:
-      {{- include "webservice.auth.selectorLabels" . | nindent 6 }}
-  replicas: {{ include "webservice.auth.replicas" . | default 1 }}
+      {{- include "cryosparc.auth.selectorLabels" . | nindent 6 }}
+  replicas: {{ include "cryosparc.auth.replicas" . | default 1 }}
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -23,33 +23,33 @@ spec:
     metadata:
       labels:
         {{ include "osc.common.serviceAccount" . }}
-        {{- include "webservice.auth.selectorLabels" . | nindent 8 }}
-      {{- if (include "webservice.alert.receiver" .) }}
-        receiver: {{ include "webservice.alert.receiver" . }}
+        {{- include "cryosparc.auth.selectorLabels" . | nindent 8 }}
+      {{- if (include "cryosparc.alert.receiver" .) }}
+        receiver: {{ include "cryosparc.alert.receiver" . }}
       {{- end }}
     spec:
-      serviceAccountName: {{ include "webservice.name" . }}
+      serviceAccountName: {{ include "cryosparc.name" . }}
       securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
       hostNetwork: false
       hostIPC: false
       hostPID: false
       containers:
-      - name: {{ include "webservice.auth.name" . }}
+      - name: {{ include "cryosparc.auth.name" . }}
         image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag }}"
         imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
         env:
         - name: OAUTH2_PROXY_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ include "webservice.auth.secretName" . }}
+              name: {{ include "cryosparc.auth.secretName" . }}
               key: client-secret
         - name: OAUTH2_PROXY_COOKIE_SECRET
           valueFrom:
             secretKeyRef:
-              name: {{ include "webservice.auth.secretName" . }}
+              name: {{ include "cryosparc.auth.secretName" . }}
               key: cookie-secret
         - name: IDP_HOST
-          value: {{ include "webservice.idpHost" . }}
+          value: {{ include "cryosparc.idpHost" . }}
         args:
           - --provider=oidc
           - --http-address=0.0.0.0:{{ .Values.auth.service.port }}
@@ -71,14 +71,14 @@ spec:
           {{- if ne $container.ingressPath "/" }}
             {{- $path = $container.ingressPath }}
           {{- end }}
-          - --upstream=http://{{ include "webservice.name" $root }}.{{ $root.Release.Namespace }}.svc.cluster.local:{{ $container.port | default (add $root.Values.service.port $idx) }}{{ $path }}
+          - --upstream=http://{{ include "cryosparc.name" $root }}.{{ $root.Release.Namespace }}.svc.cluster.local:{{ $container.port | default (add $root.Values.service.port $idx) }}{{ $path }}
         {{- end }}
           - --metrics-address=:{{ .Values.auth.metricsService.port }}
-          {{- if (include "webservice.idpHost" .) }}
+          {{- if (include "cryosparc.idpHost" .) }}
           - --whitelist-domain=$(IDP_HOST)
           {{- end }}
-          {{- if (include "webservice.accessGroup" .) }}
-          - --allowed-group={{ include "webservice.accessGroup" . }}
+          {{- if (include "cryosparc.accessGroup" .) }}
+          - --allowed-group={{ include "cryosparc.accessGroup" . }}
           {{- end }}
           {{- range .Values.auth.allowGroups }}
           - --allowed-group={{ tpl . $ }}

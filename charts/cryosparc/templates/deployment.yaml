@@ -32,17 +32,26 @@ spec:
       hostNetwork: false
       hostIPC: false
       hostPID: false
+      {{- $nodes := lookup "v1" "Node" "" "" }}
+      {{- if $nodes }}
+      hostAliases:
+        {{- range $index, $node := $nodes.items }}
+      - ip: "127.0.0.{{ add $index 10 }}"
+        hostnames:
+        - {{ $node.metadata.name | quote }}
+        {{- end }}
+      {{- end }}
       initContainers:
       - name: {{ include "cryosparc.name" . }}-init
         image: {{ .Values.image.repository }}:{{ tpl (include "cryosparc.imageTag" .) . }}
         command: ["sh", "-c"]
         args:
         - |
-          mkdir -p /cryosparc_data/lanes;
-          mkdir -p /cryosparc_data/database;
+          mkdir -p /cryosparc_home/lanes;
+          mkdir -p /cryosparc_home/database;
         volumeMounts:
-        - name: cryosparc-data
-          mountPath: /cryosparc_data
+        - name: cryosparc_home
+          mountPath: /cryosparc_home
       containers:
       - name: {{ include "cryosparc.name" . }}
         image: {{ .Values.image.repository }}:{{ tpl (include "cryosparc.imageTag" .) . }}
@@ -57,13 +66,12 @@ spec:
           # Fix rollout restart issue
           cryosparcm restart;
           # Add Sciapps admin account
-          cryosparcm listusers |grep "oscsoft@osc.edu";
+          cryosparcm listusers |grep "$ADMIN_USERNAME";
           if [ $? -ne 0 ]; then
-            export db_username=$(echo -n "$DB_USERNAME");
-            export db_password=$(echo -n "$DB_PASSWORD");
-            cryosparcm createuser --email "oscsoft@osc.edu" --username "$db_username" --firstname "SciApps" --lastname "Admin" --password "$db_password";
-            cryosparcm updateuser --email "oscsoft@osc.edu" --admin "true" --password "$db_password";
+            cryosparcm createuser --email "$ADMIN_EMAIL" --username "$ADMIN_USERNAME" --firstname "SciApps" --lastname "Admin" --password "$ADMIN_PASSWORD";
+            cryosparcm updateuser --email "$ADMIN_EMAIL" --admin "true" --password "$ADMIN_PASSWORD";
           fi
+          unset ADMIN_EMAIL ADMIN_USERNAME ADMIN_PASSWORD
           # Update cluster lanes
           ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
             cd $x;
@@ -82,47 +90,57 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: DB_USERNAME
+        - name: CRYOSPARC_LICENSE_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: license
+        - name: ADMIN_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: email
+        - name: ADMIN_USERNAME
           valueFrom:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: username
-        - name: DB_PASSWORD
+        - name: ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: password
         volumeMounts:
-        - name: cryosparc-config
+        - name: cryosparc_config
           mountPath: /opt/cryosparc_master/config.sh
           subPath: master-config
-        - name: cryosparc-data
-          mountPath: {{ .Values.mounts.home }}
-        - name: cryosparc-data
+        - name: cryosparc_home
+          mountPath: /cryosparc_home
+        - name: cryosparc_home
           mountPath: /opt/cryosparc_master/database
           subPath: database
-        - name: cryosparc-data
+        - name: cryosparc_home
           mountPath: /opt/cryosparc_master/lanes
           subPath: lanes
         {{- range $name, $path := .Values.mounts.rwDir }}
-          - name: {{ $name }}
-            mountPath: {{ tpl $path $ }}
-            readOnly: false
+        - name: {{ $name }}
+          mountPath: {{ tpl $path $ }}
+          readOnly: false
         {{- end }}
         {{- range $name, $path := .Values.mounts.roDir }}
-          - name: {{ $name }}
-            mountPath: {{ tpl $path $ }}
-            readOnly: true
+        - name: {{ $name }}
+          mountPath: {{ tpl $path $ }}
+          readOnly: true
         {{- end }}
         {{- range $name, $path := .Values.mounts.socket }}
-          - name: {{ $name }}
-            mountPath: {{ tpl $path $ }}
+        - name: {{ $name }}
+          mountPath: {{ tpl $path $ }}
         {{- end }}
   {{- $podResources := .Values.podResources}}
   {{- if .Values.global.env }}
     {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
       {{- if (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
-        {{- $podResources = (index .Values.global.env (include "osc.common.environment" $root) "podResources") }}
+        {{- $podResources = (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
       {{- end }}
     {{- end }}
   {{- end }}
@@ -141,14 +159,9 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-      {{- if .Values.data.enable }}
-      - name: data
-        persistentVolumeClaim:
-          claimName: {{ include "cryosparc.data.name" . }}
-      {{- end }}
-      - name: cryosparc-data
+      - name: cryosparc_home
         hostPath:
-          path: {{ .Values.mounts.home }}
+          path: {{ tpl .Values.mounts.home . }}
           type: Directory
       {{- range $name, $path := .Values.mounts.rwDir }}
       - name: {{ $name }}
