@@ -19,8 +19,11 @@ metadata:
       {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- end }}
+    {{- if (include "cryosparc.ingressHostAlias" .) }}
+    nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "cryosparc.ingressHostAlias" .) . }}
+    {{- end }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   tls:
   - hosts:
     - {{ required "Must provide ingress host" (tpl (include "cryosparc.ingressHost" .) .) | quote }}

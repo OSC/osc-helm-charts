@@ -5,7 +5,6 @@ metadata:
 data:
   config.sh: |
     # Instance Configuration
-    export CRYOSPARC_LICENSE_ID={{ .Values.license  | quote }}
     export CRYOSPARC_DB_PATH="/opt/cryosparc_master/database"
     export CRYOSPARC_BASE_PORT={{ .Values.service.basePort }}
     export CRYOSPARC_DB_CONNECTION_TIMEOUT_MS=20000

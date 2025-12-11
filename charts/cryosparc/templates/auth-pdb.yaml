@@ -1,11 +1,11 @@
-{{- $replicas := (include "webservice.auth.replicas" .) | default 1 }}
+{{- $replicas := (include "cryosparc.auth.replicas" .) | default 1 }}
 {{- if (gt (int $replicas) 1 ) }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "webservice.auth.name" . }}
+  name: {{ include "cryosparc.auth.name" . }}
   labels:
-    {{- include "webservice.auth.labels" . | nindent 4 }}
+    {{- include "cryosparc.auth.labels" . | nindent 4 }}
 spec:
   {{- if .Values.auth.podDistributionBudget.minAvailable }}
   minAvailable: {{ .Values.auth.podDistributionBudget.minAvailable }}
@@ -14,5 +14,5 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "webservice.auth.selectorLabels" . | nindent 6 }}
+      {{- include "cryosparc.auth.selectorLabels" . | nindent 6 }}
 {{- end }}
