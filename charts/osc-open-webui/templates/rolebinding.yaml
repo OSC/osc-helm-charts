@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: {{ .Release.Namespace | quote }}
+  name: webservices-deploy
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+roleRef:
+  # ClusterRole managed centrally inside OSC internal repo
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: webservices-deploy
+subjects:
+  # ServiceAccount managed centrally inside OSC internal repo
+  - kind: ServiceAccount
+    name: webservices-deploy
+    namespace: default
