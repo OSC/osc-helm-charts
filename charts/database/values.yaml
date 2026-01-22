@@ -185,7 +185,7 @@ postgresql:
     # @ignored
     initContainers:
     - name: init-data
-      image: '{{ include "postgresql.volumePermissions.image" . }}'
+      image: '{{ include "postgresql.v1.volumePermissions.image" . }}'
       imagePullPolicy: '{{ .Values.image.pullPolicy }}'
       resources:
         limits:
