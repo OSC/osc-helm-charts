@@ -1,5 +1,5 @@
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-VERSION = 14.4.0-debian-11-r18
+VERSION = 17.6.0-debian-12-r4
 TAG = docker-registry.osc.edu/webservices/postgresql:$(VERSION)
 
 build:

@@ -2,17 +2,17 @@ apiVersion: v2
 name: database
 description: OSC database service Helm Chart
 type: application
-version: 0.14.0
+version: 0.15.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
 dependencies:
   - name: mariadb
-    version: 11.4.2
+    version: 21.0.8
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enable
   - name: postgresql
-    version: 11.6.20
+    version: 16.7.27
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enable
   - name: redis

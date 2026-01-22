@@ -1,0 +1,37 @@
+global:
+  oscServiceAccount: nobody
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  storageClass: standard
+postgresql:
+  enable: true
+  auth:
+    postgresPassword: secret
+    database: name
+    username: name
+    password: secret
+  primary:
+    persistence:
+      size: 50Mi
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+redis:
+  enable: true
+  auth:
+    password: secret
+  master:
+    persistence:
+      size: 50Mi
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
