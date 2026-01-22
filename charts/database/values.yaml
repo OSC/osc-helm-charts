@@ -38,7 +38,7 @@ mariadb:
     repository: webservices/mariadb
     # -- The version of MariaDB image.
     # **This version of must built by this repo**
-    tag: 10.5.13-debian-10-r58
+    tag: 11.8.3-debian-12-r0
   # @ignored
   auth:
     forcePassword: true
@@ -84,10 +84,10 @@ mariadb:
     image:
       # -- The OSC registry path to replicated image.
       # This value should not need to be changed.
-      repository: kubernetes/bitnami/bitnami-shell
+      repository: kubernetes/bitnami/os-shell
       # -- The version of replicated image.
       # **This version of must replicated to OSC registry**
-      tag: 11-debian-11-r61
+      tag: 12-debian-12-r51
   metrics:
     # @ignored
     enabled: true
@@ -97,7 +97,7 @@ mariadb:
       repository: kubernetes/bitnami/mysqld-exporter
       # -- The version of replicated image.
       # **This version of must replicated to OSC registry**
-      tag: 0.14.0-debian-11-r67
+      tag: 0.17.2-debian-12-r16
     # @ignored
     containerSecurityContext:
       enabled: true
@@ -142,7 +142,7 @@ postgresql:
     repository: webservices/postgresql
     # -- The version of MariaDB image.
     # **This version of must built by this repo**
-    tag: 14.4.0-debian-11-r18
+    tag: 17.6.0-debian-12-r4
   auth:
     # -- The postgres user admin password
     # @default -- **required**
@@ -218,10 +218,10 @@ postgresql:
     image:
       # -- The OSC registry path to replicated image.
       # This value should not need to be changed.
-      repository: kubernetes/bitnami/bitnami-shell
+      repository: kubernetes/bitnami/os-shell
       # -- The version of replicated image.
       # **This version of must replicated to OSC registry**
-      tag: 11-debian-11-r20
+      tag: 12-debian-12-r51
   metrics:
     enabled: true
     image:
@@ -230,7 +230,7 @@ postgresql:
       repository: kubernetes/bitnami/postgres-exporter
       # -- The version of replicated image.
       # **This version of must replicated to OSC registry**
-      tag: 0.10.1-debian-11-r20
+      tag: 0.17.1-debian-12-r16
     # @ignored
     containerSecurityContext:
       enabled: true
