@@ -1,0 +1,53 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-storageclass
+  annotations:
+    policies.kyverno.io/category: Other
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: PersistentVolumeClaim
+    kyverno.io/kyverno-version: 1.6.2
+    policies.kyverno.io/minversion: 1.6.0
+    kyverno.io/kubernetes-version: "1.23"
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: webservice-pvc-storageclass
+      match:
+        any:
+          - resources:
+              kinds:
+                - PersistentVolumeClaim
+              namespaceSelector:
+                matchExpressions:
+                - key: osc.edu/role
+                  operator: In
+                  values:
+                  - webservice
+              operations:
+                - CREATE
+                - UPDATE
+      validate:
+        message: PVC storageClassName must be one of {{ join " , " .Values.webservices.validStorageClass }}
+        pattern:
+          spec:
+            <(storageClassName): "{{ join " | " .Values.webservices.validStorageClass }}"
+    - name: paas-pvc-storageclass
+      match:
+        any:
+          - resources:
+              kinds:
+                - PersistentVolumeClaim
+              namespaceSelector:
+                matchLabels:
+                  osc.edu/role: paas
+                  app.kubernetes.io/name: paas-staff
+              operations:
+                - CREATE
+                - UPDATE
+      validate:
+        message: PVC storageClassName must be one of {{ join " , " .Values.paas.validStorageClass }}
+        pattern:
+          spec:
+            <(storageClassName): "{{ join " | " .Values.paas.validStorageClass }}"
