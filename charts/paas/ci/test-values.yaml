@@ -7,6 +7,7 @@ namespaces:
   allowedDNS:
     - test.example.com
     - test.k8.example.com
+  managePVC: true
   cpuLimit: '8'
   cpuDefault: '1'
   memoryLimit: '16Gi'
