@@ -63,3 +63,30 @@ spec:
         spec:
           =(volumes):
           - X(persistentVolumeClaim): "null"
+  - name: disallow-statefulset-pvc
+    match:
+      any:
+      - resources:
+          kinds:
+          - StatefulSet
+          namespaces:
+          - "user-?*"
+      - resources:
+          kinds:
+            - StatefulSet
+          namespaceSelector:
+            matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+              - key: app.kubernetes.io/name
+                operator: NotIn
+                values:
+                - paas-staff
+    validate:
+      message: >-
+        volumeClaimTemplates is not allowed
+      pattern:
+        spec:
+          X(volumeClaimTemplates): "null"
