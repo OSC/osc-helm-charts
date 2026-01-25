@@ -24,3 +24,5 @@ default:
   memory: '2Gi'
   # -- The default GPU limit for PAAS namespaces
   gpuLimit: '0'
+  # -- Allow managing PVCs
+  managePVC: false

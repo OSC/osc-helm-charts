@@ -24,4 +24,29 @@ roleRef:
   kind: ClusterRole
   name: {{ include "paas.name" $ }}
   apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: paas-{{ $namespace.name }}-pvc
+  namespace: {{ $namespace.name }}
+  labels:
+    {{- include "paas.namespaced.labels" (list $namespace $) | nindent 4 }}
+{{ if or $namespace.groups $namespace.users -}}
+subjects:
+  {{- range $namespace.groups | default list }}
+  - kind: Group
+    name: {{ . }}
+    apiGroup: rbac.authorization.k8s.io
+  {{- end }}
+  {{- range $namespace.users | default list }}
+  - kind: User
+    name: {{ . }}
+    apiGroup: rbac.authorization.k8s.io
+  {{- end }}
+{{ end -}}
+roleRef:
+  kind: Role
+  name: paas-{{ $namespace.name }}-pvc
+  apiGroup: rbac.authorization.k8s.io
 {{ end }}
