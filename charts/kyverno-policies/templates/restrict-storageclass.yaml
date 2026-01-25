@@ -20,11 +20,8 @@ spec:
               kinds:
                 - PersistentVolumeClaim
               namespaceSelector:
-                matchExpressions:
-                - key: osc.edu/role
-                  operator: In
-                  values:
-                  - webservice
+                matchLabels:
+                  osc.edu/role: webservice
               operations:
                 - CREATE
                 - UPDATE
@@ -51,3 +48,42 @@ spec:
         pattern:
           spec:
             <(storageClassName): "{{ join " | " .Values.paas.validStorageClass }}"
+    - name: webservice-statefulset-storageclass
+      match:
+        any:
+          - resources:
+              kinds:
+                - StatefulSet
+              namespaceSelector:
+                matchLabels:
+                  osc.edu/role: webservice
+              operations:
+                - CREATE
+                - UPDATE
+      validate:
+        message: StatefulSet storageClassName must be one of {{ join " , " .Values.webservices.validStorageClass }}
+        pattern:
+          spec:
+            "=(volumeClaimTemplates)":
+              - spec:
+                  <(storageClassName): "{{ join " | " .Values.webservices.validStorageClass }}"
+    - name: paas-statefulset-storageclass
+      match:
+        any:
+          - resources:
+              kinds:
+                - StatefulSet
+              namespaceSelector:
+                matchLabels:
+                  osc.edu/role: paas
+                  app.kubernetes.io/name: paas-staff
+              operations:
+                - CREATE
+                - UPDATE
+      validate:
+        message: StatefulSet storageClassName must be one of {{ join " , " .Values.paas.validStorageClass }}
+        pattern:
+          spec:
+            "=(volumeClaimTemplates)":
+              - spec:
+                  <(storageClassName): "{{ join " | " .Values.paas.validStorageClass }}"

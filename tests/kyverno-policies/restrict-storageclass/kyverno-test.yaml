@@ -45,3 +45,39 @@ results:
       - paas-pvc-skip
     kind: PersistentVolumeClaim
     result: fail
+  - policy: restrict-storageclass
+    rule: webservice-statefulset-storageclass
+    resources:
+      - paas-statefulset-skip
+    kind: StatefulSet
+    result: skip
+  - policy: restrict-storageclass
+    rule: webservice-statefulset-storageclass
+    resources:
+      - webservice-statefulset-pass
+    kind: StatefulSet
+    result: pass
+  - policy: restrict-storageclass
+    rule: webservice-statefulset-storageclass
+    resources:
+      - webservice-statefulset-fail
+    kind: StatefulSet
+    result: fail
+  - policy: restrict-storageclass
+    rule: paas-statefulset-storageclass
+    resources:
+      - webservice-statefulset-fail
+    kind: StatefulSet
+    result: skip
+  - policy: restrict-storageclass
+    rule: paas-statefulset-storageclass
+    resources:
+      - paas-statefulset-pass
+    kind: StatefulSet
+    result: pass
+  - policy: restrict-storageclass
+    rule: paas-statefulset-storageclass
+    resources:
+      - paas-statefulset-skip
+    kind: StatefulSet
+    result: fail

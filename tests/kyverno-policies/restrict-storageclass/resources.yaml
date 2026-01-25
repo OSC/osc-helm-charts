@@ -50,3 +50,51 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: paas-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-skip
+  namespace: paas-staff
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-skip
+      spec:
+        storageClassName: webservices-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-pass
+  namespace: paas-staff
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: paas-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-pass
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pass
+      spec:
+        storageClassName: webservices-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-fail
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-fail
+      spec:
+        storageClassName: infra-nfs-client
