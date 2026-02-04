@@ -1,0 +1,83 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: restrict-storageclass
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: restrict-storageclass
+    rule: webservice-pvc-storageclass
+    resources:
+      - paas-pvc-skip
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: restrict-storageclass
+    rule: webservice-pvc-storageclass
+    resources:
+      - webservice-pvc-pass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: restrict-storageclass
+    rule: webservice-pvc-storageclass
+    resources:
+      - webservice-pvc-fail
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: restrict-storageclass
+    rule: paas-pvc-storageclass
+    resources:
+      - webservice-pvc-fail
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: restrict-storageclass
+    rule: paas-pvc-storageclass
+    resources:
+      - paas-pvc-pass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: restrict-storageclass
+    rule: paas-pvc-storageclass
+    resources:
+      - paas-pvc-skip
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: restrict-storageclass
+    rule: webservice-statefulset-storageclass
+    resources:
+      - paas-statefulset-skip
+    kind: StatefulSet
+    result: skip
+  - policy: restrict-storageclass
+    rule: webservice-statefulset-storageclass
+    resources:
+      - webservice-statefulset-pass
+    kind: StatefulSet
+    result: pass
+  - policy: restrict-storageclass
+    rule: webservice-statefulset-storageclass
+    resources:
+      - webservice-statefulset-fail
+    kind: StatefulSet
+    result: fail
+  - policy: restrict-storageclass
+    rule: paas-statefulset-storageclass
+    resources:
+      - webservice-statefulset-fail
+    kind: StatefulSet
+    result: skip
+  - policy: restrict-storageclass
+    rule: paas-statefulset-storageclass
+    resources:
+      - paas-statefulset-pass
+    kind: StatefulSet
+    result: pass
+  - policy: restrict-storageclass
+    rule: paas-statefulset-storageclass
+    resources:
+      - paas-statefulset-skip
+    kind: StatefulSet
+    result: fail

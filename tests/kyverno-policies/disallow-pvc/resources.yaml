@@ -1,0 +1,217 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-skip
+  namespace: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: webservices-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-skip-paas-staff
+  namespace: paas-staff
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: webservices-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-fail
+  namespace: user-test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: webservices-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: webservices-nfs-client
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-skip
+  namespace: test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  volumes:
+    - name: test
+      persistentVolumeClaim:
+        claimName: test
+    - name: configmap
+      configMap:
+        name: config
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-staff-skip
+  namespace: paas-staff
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  volumes:
+    - name: test
+      persistentVolumeClaim:
+        claimName: test
+    - name: configmap
+      configMap:
+        name: config
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pass
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  volumes:
+    - name: configmap
+      configMap:
+        name: config
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-pass
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  volumes:
+    - name: configmap
+      configMap:
+        name: config
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-fail
+  namespace: user-test
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  volumes:
+    - name: test
+      persistentVolumeClaim:
+        claimName: test
+    - name: configmap
+      configMap:
+        name: config
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: paas-fail
+  namespace: paas
+spec: 
+  containers:
+  - name: nginx
+    image: nginx:1.12
+  volumes:
+    - name: test
+      persistentVolumeClaim:
+        claimName: test
+    - name: configmap
+      configMap:
+        name: config
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-statefulset-skip
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-skip
+      spec:
+        storageClassName: webservice-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-statefulset-pass
+  namespace: user-test
+spec:
+  template:
+    spec:
+      containers:
+        - name: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-statefulset-fail
+  namespace: user-test
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: test-statefulset-fail
+      spec:
+        storageClassName: paas-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-skip
+  namespace: paas-staff
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: paas-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-pass
+  namespace: paas
+spec:
+  template:
+    spec:
+      containers:
+        - name: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-fail
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: paas-nfs-client

@@ -1,0 +1,92 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-pvc
+  annotations:
+    policies.kyverno.io/category: Pod Security Standards (Restricted)
+    policies.kyverno.io/description: >-
+      Disallow persistentVolumeClaims
+spec:
+  background: true
+  validationFailureAction: Enforce
+  rules:
+  - name: user-no-pvc
+    match:
+      any:
+      - resources:
+          kinds:
+            - PersistentVolumeClaim
+          namespaces:
+            - "user-?*"
+      - resources:
+          kinds:
+            - PersistentVolumeClaim
+          namespaceSelector:
+            matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+              - key: app.kubernetes.io/name
+                operator: NotIn
+                values:
+                - paas-staff
+    validate:
+      message: "PersistentVolumeClaim is not allowed."
+      deny: {}
+  - name: disallow-pvc
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          namespaces:
+          - "user-?*"
+      - resources:
+          kinds:
+            - PersistentVolumeClaim
+          namespaceSelector:
+            matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+              - key: app.kubernetes.io/name
+                operator: NotIn
+                values:
+                - paas-staff
+    validate:
+      message: >-
+        persistentVolumeClaims is not allowed
+      pattern:
+        spec:
+          =(volumes):
+          - X(persistentVolumeClaim): "null"
+  - name: disallow-statefulset-pvc
+    match:
+      any:
+      - resources:
+          kinds:
+          - StatefulSet
+          namespaces:
+          - "user-?*"
+      - resources:
+          kinds:
+            - StatefulSet
+          namespaceSelector:
+            matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - paas
+              - key: app.kubernetes.io/name
+                operator: NotIn
+                values:
+                - paas-staff
+    validate:
+      message: >-
+        volumeClaimTemplates is not allowed
+      pattern:
+        spec:
+          X(volumeClaimTemplates): "null"

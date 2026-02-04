@@ -29,6 +29,8 @@ webservices:
   validNodeSelector:
     - infrastructure
     - webservices
+  validStorageClass:
+    - webservices-nfs-client
 paas:
   allowHostPaths:
     - /var/lib/sss/pipes
@@ -46,6 +48,8 @@ paas:
     - paas
   certManagerClusterIssuer: letsencrypt
   ingressClassName: nginx
+  validStorageClass:
+    - paas-nfs-client
 validationFailureAction: {}
 kyverno-policies:
   # Supported- baseline/restricted/privileged/custom
