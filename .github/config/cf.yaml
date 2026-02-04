@@ -2,7 +2,7 @@ target-branch: main
 chart-repos:
   - prometheus-community=https://prometheus-community.github.io/helm-charts/
   - dcgm-exporter=https://nvidia.github.io/dcgm-exporter/helm-charts
-  - kubernetes-dashboard=https://kubernetes.github.io/dashboard/
+  - kubernetes-dashboard=https://kubernetes-retired.github.io/dashboard/
   - kyverno=https://kyverno.github.io/kyverno/
   - external-dns=https://kubernetes-sigs.github.io/external-dns/
   - bitnami=https://charts.bitnami.com/bitnami
