@@ -28,5 +28,8 @@ podSecurityContext:
   fsGroup: 5511
 service:
   basePort: 31010
+mockNodes:
+  - kubeworker21
+  - kubeworker23
 license: xxx-xxx-xxx
 project: PAS0710

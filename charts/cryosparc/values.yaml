@@ -20,12 +20,9 @@ image:
 
 mounts:
   home: /users/{{ .Values.project }}/{{ include "osc.common.serviceAccountValue" . }}
-  rwDir:
-    project: /fs/ess/{{ .Values.project }}
-  roDir:
-    slurm_conf: /etc/slurm
-  socket:
-    munge_socket: /var/run/munge/munge.socket.2
+  project: /fs/ess/{{ .Values.project }}
+  slurm_conf: /etc/slurm
+  munge_socket: /var/run/munge/munge.socket.2
 
 nodeSelector: {}
 
