@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "cryosparc.name" . }}
   labels:
@@ -32,14 +32,23 @@ spec:
       hostNetwork: false
       hostIPC: false
       hostPID: false
+      {{- if .Values.mockNodes }}
+      hostAliases:
+        {{- range .Values.mockNodes }}
+      - ip: "127.0.0.1"
+        hostnames:
+        - {{ . | quote }}
+        {{- end }}
+      {{- else }}
       {{- $nodes := lookup "v1" "Node" "" "" }}
       {{- if $nodes }}
       hostAliases:
-        {{- range $index, $node := $nodes.items }}
-      - ip: "127.0.0.{{ add $index 10 }}"
+        {{- range $node := $nodes.items }}
+      - ip: "127.0.0.1"
         hostnames:
         - {{ $node.metadata.name | quote }}
         {{- end }}
+      {{- end }}
       {{- end }}
       initContainers:
       - name: {{ include "cryosparc.name" . }}-init
@@ -122,21 +131,15 @@ spec:
         - name: cryosparc_home
           mountPath: /opt/cryosparc_master/lanes
           subPath: lanes
-        {{- range $name, $path := .Values.mounts.rwDir }}
-        - name: {{ $name }}
-          mountPath: {{ tpl $path $ }}
+        - name: project
+          mountPath: {{ tpl .Values.mounts.project . }}
           readOnly: false
-        {{- end }}
-        {{- range $name, $path := .Values.mounts.roDir }}
-        - name: {{ $name }}
-          mountPath: {{ tpl $path $ }}
+        - name: slurm_conf
+          mountPath: {{ .Values.mounts.slurm_conf }}
           readOnly: true
-        {{- end }}
-        {{- range $name, $path := .Values.mounts.socket }}
-        - name: {{ $name }}
-          mountPath: {{ tpl $path $ }}
-        {{- end }}
-  {{- $podResources := .Values.podResources}}
+        - name: munge_socket
+          mountPath: {{ .Values.mounts.munge_socket }}
+  {{- $podResources := .Values.podResources }}
   {{- if .Values.global.env }}
     {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
       {{- if (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
@@ -163,24 +166,18 @@ spec:
         hostPath:
           path: {{ tpl .Values.mounts.home . }}
           type: Directory
-      {{- range $name, $path := .Values.mounts.rwDir }}
-      - name: {{ $name }}
+      - name: project
         hostPath:
-          path: {{ tpl $path $ }}
+          path: {{ tpl .Values.mounts.project . }}
           type: Directory
-      {{- end }}
-      {{- range $name, $path := .Values.mounts.roDir }}
-      - name: {{ $name }}
+      - name: slurm_conf
         hostPath:
-          path: {{ tpl $path $ }}
+          path: {{ .Values.mounts.slurm_conf }}
           type: Directory
-      {{- end }}
-      {{- range $name, $path := .Values.mounts.socket }}
-      - name: {{ $name }}
+      - name: munge_socket
         hostPath:
-          path: {{ tpl $path $ }}
+          path: {{ .Values.mounts.munge_socket }}
           type: Socket
-      {{- end }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
