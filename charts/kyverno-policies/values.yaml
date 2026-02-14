@@ -30,6 +30,7 @@ webservices:
     - infrastructure
     - webservices
   validStorageClass:
+    - local-path
     - local-storage
     - webservices-nfs-client
 paas:
@@ -50,6 +51,7 @@ paas:
   certManagerClusterIssuer: letsencrypt
   ingressClassName: nginx
   validStorageClass:
+    - local-path
     - local-storage
     - paas-nfs-client
 validationFailureAction: {}
