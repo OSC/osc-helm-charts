@@ -20,6 +20,7 @@ results:
     resources:
       - webservice-pvc-pass
       - webservice-pvc-pass-local
+      - webservice-pvc-pass-local-path
     kind: PersistentVolumeClaim
     result: pass
   - policy: restrict-storageclass
@@ -39,6 +40,7 @@ results:
     resources:
       - paas-pvc-pass
       - paas-pvc-pass-local
+      - paas-pvc-pass-local-path
     kind: PersistentVolumeClaim
     result: pass
   - policy: restrict-storageclass
@@ -58,6 +60,7 @@ results:
     resources:
       - webservice-statefulset-pass
       - webservice-statefulset-pass-local
+      - webservice-statefulset-pass-local-path
     kind: StatefulSet
     result: pass
   - policy: restrict-storageclass
@@ -77,6 +80,7 @@ results:
     resources:
       - paas-statefulset-pass
       - paas-statefulset-pass-local
+      - paas-statefulset-pass-local-path
     kind: StatefulSet
     result: pass
   - policy: restrict-storageclass
