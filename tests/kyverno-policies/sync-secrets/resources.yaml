@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: webservice
+  labels:
+    sync-secret: webservices-read
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: paas
