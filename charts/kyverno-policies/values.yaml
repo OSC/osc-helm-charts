@@ -30,6 +30,7 @@ webservices:
     - infrastructure
     - webservices
   validStorageClass:
+    - local-storage
     - webservices-nfs-client
 paas:
   allowHostPaths:
@@ -49,6 +50,7 @@ paas:
   certManagerClusterIssuer: letsencrypt
   ingressClassName: nginx
   validStorageClass:
+    - local-storage
     - paas-nfs-client
 validationFailureAction: {}
 kyverno-policies:
