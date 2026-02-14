@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: webservices-read-gen
+  namespace: webservice
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: supersecret
