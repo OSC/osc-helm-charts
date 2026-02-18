@@ -13,6 +13,21 @@ rules:
 - apiGroups: [""]
   resources: ["pods", "pods/log"]
   verbs: ["get", "list"]
+- apiGroups:
+  - ""
+  resources:
+  - pods/portforward
+  - pods/proxy
+  - services/proxy
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
 - apiGroups: ["apps"]
   resources: ["deployments", "replicasets"]
   verbs: ["get", "list"]
