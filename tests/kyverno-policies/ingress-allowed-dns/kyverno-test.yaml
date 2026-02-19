@@ -15,6 +15,7 @@ results:
       - paas-pass
       - paas-pass-external
       - paas-pass-wildcard
+      - paas-pass-wildcard-full
     kind: Ingress
     result: pass
   - policy: ingress-allowed-dns
