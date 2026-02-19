@@ -30,7 +30,7 @@ spec:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/auth-secret.yaml") . | sha256sum }}
     spec:
-      serviceAccountName: {{ include "osc-open-webui.name" . }}
+      serviceAccountName: {{ include "osc-open-webui.auth.name" . }}
       securityContext: {{ toYaml .Values.auth.podSecurityContext | nindent 8 }}
       hostNetwork: false
       hostIPC: false
