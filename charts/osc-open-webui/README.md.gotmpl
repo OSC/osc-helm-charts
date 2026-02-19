@@ -58,11 +58,11 @@ open-webui:
     volumes:
       - name: data
         hostPath:
-          path: /fs/ess/PROJECT/ollama-models
+          path: /fs/ess/PROJECT
           type: Directory
       - name: home
         hostPath:
-          path: /users/PROJECT/USER/ollama-home
+          path: /users/PROJECT/USER
           type: Directory
 ```
 

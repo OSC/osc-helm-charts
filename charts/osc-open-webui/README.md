@@ -62,11 +62,11 @@ open-webui:
     volumes:
       - name: data
         hostPath:
-          path: /fs/ess/PROJECT/ollama-models
+          path: /fs/ess/PROJECT
           type: Directory
       - name: home
         hostPath:
-          path: /users/PROJECT/USER/ollama-home
+          path: /users/PROJECT/USER
           type: Directory
 ```
 
@@ -183,11 +183,27 @@ open-webui:
 | open-webui.ollama.resources.limits.cpu |  | `4` |
 | open-webui.ollama.resources.requests.memory |  | `"4Gi"` |
 | open-webui.ollama.resources.requests.cpu |  | `2` |
+| open-webui.ollama.initContainers[0].name |  | `"create-dirs"` |
+| open-webui.ollama.initContainers[0].image |  | `"docker-registry.osc.edu/kubernetes/busyboxy:latest"` |
+| open-webui.ollama.initContainers[0].imagePullPolicy |  | `"Always"` |
+| open-webui.ollama.initContainers[0].command[0] |  | `"sh"` |
+| open-webui.ollama.initContainers[0].command[1] |  | `"-c"` |
+| open-webui.ollama.initContainers[0].command[2] |  | `"mkdir -p /data/ollama-models /home/ollama/ollama-home"` |
+| open-webui.ollama.initContainers[0].volumeMounts[0].name |  | `"data"` |
+| open-webui.ollama.initContainers[0].volumeMounts[0].mountPath |  | `"/data"` |
+| open-webui.ollama.initContainers[0].volumeMounts[1].name |  | `"home"` |
+| open-webui.ollama.initContainers[0].volumeMounts[1].mountPath |  | `"/home/ollama"` |
+| open-webui.ollama.initContainers[0].securityContext.allowPrivilegeEscalation |  | `false` |
+| open-webui.ollama.initContainers[0].securityContext.capabilities.drop[0] |  | `"ALL"` |
+| open-webui.ollama.initContainers[0].securityContext.seccompProfile.type |  | `"RuntimeDefault"` |
+| open-webui.ollama.initContainers[0].securityContext.privileged |  | `false` |
 | open-webui.ollama.volumes |  | `[]` |
 | open-webui.ollama.volumeMounts[0].name |  | `"data"` |
 | open-webui.ollama.volumeMounts[0].mountPath |  | `"/data"` |
+| open-webui.ollama.volumeMounts[0].subPath |  | `"ollama-models"` |
 | open-webui.ollama.volumeMounts[1].name |  | `"home"` |
 | open-webui.ollama.volumeMounts[1].mountPath |  | `"/home/ollama"` |
+| open-webui.ollama.volumeMounts[1].subPath |  | `"ollama-home"` |
 | open-webui.ollama.extraEnv[0].name |  | `"OLLAMA_MODELS"` |
 | open-webui.ollama.extraEnv[0].value |  | `"/data"` |
 | open-webui.ollama.extraEnv[1].name |  | `"HOME"` |

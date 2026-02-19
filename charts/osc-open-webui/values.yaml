@@ -186,12 +186,30 @@ open-webui:
       requests:
         memory: 4Gi
         cpu: 2
+    initContainers:
+      - name: create-dirs
+        image: docker-registry.osc.edu/kubernetes/busyboxy:latest
+        imagePullPolicy: Always
+        command: ['sh', '-c', 'mkdir -p /data/ollama-models /home/ollama/ollama-home']
+        volumeMounts:
+          - name: data
+            mountPath: /data
+          - name: home
+            mountPath: /home/ollama
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
     volumes: []
     # Example ESS mount
     # volumes:
     # - name: data
     #   hostPath:
-    #     path: /fs/ess/TODO/ollama-models
+    #     path: /fs/ess/TODO
     #     type: Directory
     # - name: home
     #   hostPath:
@@ -200,8 +218,10 @@ open-webui:
     volumeMounts:
       - name: data
         mountPath: /data
+        subPath: ollama-models
       - name: home
         mountPath: /home/ollama
+        subPath: ollama-home
     extraEnv:
       - name: OLLAMA_MODELS
         value: /data
