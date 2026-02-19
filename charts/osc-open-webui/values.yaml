@@ -62,7 +62,15 @@ auth:
 
 open-webui:
   nameOverride: open-webui
+  # -- Set to force old names after upgrades
+  fullnameOverride: open-webui
+  serviceAccount:
+    # -- Set to force old names after upgrades
+    name: open-webui
+  openaiApiKey: false
   pipelines:
+    enabled: false
+  websocket:
     enabled: false
   podLabels: {}
   # Example service account label
@@ -98,10 +106,6 @@ open-webui:
   #   node-role.kubernetes.io/webservices: ''
   extraEnvVars: []
   commonEnvVars:
-    - name: WEBUI_AUTH_TRUSTED_EMAIL_HEADER
-      value: X-Auth-Request-Email
-    - name: WEBUI_AUTH_TRUSTED_NAME_HEADER
-      value: X-Auth-Request-Preferred-Username
     - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
       value: X-Auth-Request-Groups
     - name: ENABLE_OAUTH_GROUP_CREATION
@@ -137,7 +141,11 @@ open-webui:
       type: RuntimeDefault
     privileged: false
   sso:
-    enabled: false
+    enabled: true
+    trustedHeader:
+      enabled: true
+      nameHeader: X-Auth-Request-Preferred-Username
+      emailHeader: X-Auth-Request-Email
   ollama:
     # Added so can be referenced
     fullnameOverride: open-webui-ollama

@@ -12,5 +12,5 @@ dependencies:
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../common
   - name: open-webui
-    version: 8.6.0
+    version: 12.3.0
     repository: https://helm.openwebui.com/
