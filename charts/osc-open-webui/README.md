@@ -14,7 +14,7 @@ OSC Open Web UI deployment
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://helm.openwebui.com/ | open-webui | 8.6.0 |
+| https://helm.openwebui.com/ | open-webui | 12.3.0 |
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
 
 ## Usage
@@ -114,7 +114,11 @@ open-webui:
 | auth.replicas |  | `1` |
 | auth.podDistributionBudget.minAvailable |  | `1` |
 | open-webui.nameOverride |  | `"open-webui"` |
+| open-webui.fullnameOverride | Set to force old names after upgrades | `"open-webui"` |
+| open-webui.serviceAccount.name | Set to force old names after upgrades | `"open-webui"` |
+| open-webui.openaiApiKey |  | `false` |
 | open-webui.pipelines.enabled |  | `false` |
+| open-webui.websocket.enabled |  | `false` |
 | open-webui.podLabels |  | `{}` |
 | open-webui.image.repository |  | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
 | open-webui.image.tag |  | `"0.8.2"` |
@@ -132,26 +136,22 @@ open-webui:
 | open-webui.persistence.storageClass |  | `"webservices-nfs-client"` |
 | open-webui.nodeSelector |  | `{}` |
 | open-webui.extraEnvVars |  | `[]` |
-| open-webui.commonEnvVars[0].name |  | `"WEBUI_AUTH_TRUSTED_EMAIL_HEADER"` |
-| open-webui.commonEnvVars[0].value |  | `"X-Auth-Request-Email"` |
-| open-webui.commonEnvVars[1].name |  | `"WEBUI_AUTH_TRUSTED_NAME_HEADER"` |
-| open-webui.commonEnvVars[1].value |  | `"X-Auth-Request-Preferred-Username"` |
-| open-webui.commonEnvVars[2].name |  | `"WEBUI_AUTH_TRUSTED_GROUPS_HEADER"` |
-| open-webui.commonEnvVars[2].value |  | `"X-Auth-Request-Groups"` |
-| open-webui.commonEnvVars[3].name |  | `"ENABLE_OAUTH_GROUP_CREATION"` |
+| open-webui.commonEnvVars[0].name |  | `"WEBUI_AUTH_TRUSTED_GROUPS_HEADER"` |
+| open-webui.commonEnvVars[0].value |  | `"X-Auth-Request-Groups"` |
+| open-webui.commonEnvVars[1].name |  | `"ENABLE_OAUTH_GROUP_CREATION"` |
+| open-webui.commonEnvVars[1].value |  | `"True"` |
+| open-webui.commonEnvVars[2].name |  | `"DEFAULT_USER_ROLE"` |
+| open-webui.commonEnvVars[2].value |  | `"user"` |
+| open-webui.commonEnvVars[3].name |  | `"ENABLE_SIGNUP"` |
 | open-webui.commonEnvVars[3].value |  | `"True"` |
-| open-webui.commonEnvVars[4].name |  | `"DEFAULT_USER_ROLE"` |
-| open-webui.commonEnvVars[4].value |  | `"user"` |
-| open-webui.commonEnvVars[5].name |  | `"ENABLE_SIGNUP"` |
+| open-webui.commonEnvVars[4].name |  | `"ENABLE_OAUTH_SIGNUP"` |
+| open-webui.commonEnvVars[4].value |  | `"False"` |
+| open-webui.commonEnvVars[5].name |  | `"ENABLE_LOGIN_FORM"` |
 | open-webui.commonEnvVars[5].value |  | `"True"` |
-| open-webui.commonEnvVars[6].name |  | `"ENABLE_OAUTH_SIGNUP"` |
-| open-webui.commonEnvVars[6].value |  | `"False"` |
-| open-webui.commonEnvVars[7].name |  | `"ENABLE_LOGIN_FORM"` |
-| open-webui.commonEnvVars[7].value |  | `"True"` |
-| open-webui.commonEnvVars[8].name |  | `"WEBUI_AUTH"` |
-| open-webui.commonEnvVars[8].value |  | `"True"` |
-| open-webui.commonEnvVars[9].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
-| open-webui.commonEnvVars[9].value |  | `"False"` |
+| open-webui.commonEnvVars[6].name |  | `"WEBUI_AUTH"` |
+| open-webui.commonEnvVars[6].value |  | `"True"` |
+| open-webui.commonEnvVars[7].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
+| open-webui.commonEnvVars[7].value |  | `"False"` |
 | open-webui.extraEnvFrom[0].secretRef.name |  | `"osc-open-webui-secret"` |
 | open-webui.service.port |  | `80` |
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
@@ -161,7 +161,10 @@ open-webui:
 | open-webui.containerSecurityContext.capabilities.drop[0] |  | `"ALL"` |
 | open-webui.containerSecurityContext.seccompProfile.type |  | `"RuntimeDefault"` |
 | open-webui.containerSecurityContext.privileged |  | `false` |
-| open-webui.sso.enabled |  | `false` |
+| open-webui.sso.enabled |  | `true` |
+| open-webui.sso.trustedHeader.enabled |  | `true` |
+| open-webui.sso.trustedHeader.nameHeader |  | `"X-Auth-Request-Preferred-Username"` |
+| open-webui.sso.trustedHeader.emailHeader |  | `"X-Auth-Request-Email"` |
 | open-webui.ollama.fullnameOverride |  | `"open-webui-ollama"` |
 | open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |
 | open-webui.ollama.image.tag |  | `"0.16.1"` |
