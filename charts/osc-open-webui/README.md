@@ -83,6 +83,7 @@ open-webui:
 | global.nodeSelectorRole |  | `"webservices"` |
 | global.ingress.host |  | `""` |
 | global.ingress.hostAlias |  | `""` |
+| global.ingress.annotations | Additional Ingres annotations | `nil` |
 | global.auth.idpHost |  | `nil` |
 | global.auth.clientID |  | `nil` |
 | global.auth.clientSecret |  | `nil` |
@@ -152,6 +153,8 @@ open-webui:
 | open-webui.commonEnvVars[6].value |  | `"True"` |
 | open-webui.commonEnvVars[7].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
 | open-webui.commonEnvVars[7].value |  | `"False"` |
+| open-webui.commonEnvVars[8].name |  | `"ENABLE_API_KEYS"` |
+| open-webui.commonEnvVars[8].value |  | `"True"` |
 | open-webui.extraEnvFrom[0].secretRef.name |  | `"osc-open-webui-secret"` |
 | open-webui.service.port |  | `80` |
 | open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |

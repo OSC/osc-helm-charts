@@ -12,6 +12,8 @@ global:
     host: ""
     # Also pulled from global.env.$environment.ingress.hostAlias
     hostAlias: ""
+    # -- Additional Ingres annotations
+    annotations: ~
   auth:
     idpHost:
     clientID:
