@@ -1,6 +1,7 @@
 global:
   oscServiceAccount:
   imagePullSecret:
+    create: true
     name: osc-registry
     registry: docker-registry.osc.edu
     username: robot$webservices-read
