@@ -69,7 +69,7 @@ open-webui:
   # osc.edu/service-account: TODO
   image:
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
-    tag: '0.6.30'
+    tag: '0.8.2'
   imagePullSecrets:
     - name: osc-registry
   resources:
@@ -143,7 +143,7 @@ open-webui:
     fullnameOverride: open-webui-ollama
     image:
       repository: docker-registry.osc.edu/kubernetes/ollama/ollama
-      tag: '0.11.11'
+      tag: '0.16.1'
     imagePullSecrets:
       - name: osc-registry
     ollama:
