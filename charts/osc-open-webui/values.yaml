@@ -122,6 +122,8 @@ open-webui:
       value: "True"
     - name: ENABLE_VERSION_UPDATE_CHECK
       value: "False"
+    - name: ENABLE_API_KEYS
+      value: "True"
   extraEnvFrom:
     - secretRef:
         name: osc-open-webui-secret
