@@ -117,7 +117,7 @@ open-webui:
 | open-webui.pipelines.enabled |  | `false` |
 | open-webui.podLabels |  | `{}` |
 | open-webui.image.repository |  | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
-| open-webui.image.tag |  | `"0.6.30"` |
+| open-webui.image.tag |  | `"0.8.2"` |
 | open-webui.imagePullSecrets[0].name |  | `"osc-registry"` |
 | open-webui.resources.limits.memory |  | `"4Gi"` |
 | open-webui.resources.limits.cpu |  | `2` |
@@ -164,7 +164,7 @@ open-webui:
 | open-webui.sso.enabled |  | `false` |
 | open-webui.ollama.fullnameOverride |  | `"open-webui-ollama"` |
 | open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |
-| open-webui.ollama.image.tag |  | `"0.11.11"` |
+| open-webui.ollama.image.tag |  | `"0.16.1"` |
 | open-webui.ollama.imagePullSecrets[0].name |  | `"osc-registry"` |
 | open-webui.ollama.ollama.gpu.enabled |  | `true` |
 | open-webui.ollama.ollama.gpu.type |  | `"nvidia"` |
