@@ -188,7 +188,7 @@ open-webui:
         cpu: 2
     initContainers:
       - name: create-dirs
-        image: docker-registry.osc.edu/kubernetes/busyboxy:latest
+        image: docker-registry.osc.edu/kubernetes/busybox:latest
         imagePullPolicy: Always
         command: ['sh', '-c', 'mkdir -p /data/ollama-models /home/ollama/ollama-home']
         volumeMounts:

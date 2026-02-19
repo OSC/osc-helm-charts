@@ -184,7 +184,7 @@ open-webui:
 | open-webui.ollama.resources.requests.memory |  | `"4Gi"` |
 | open-webui.ollama.resources.requests.cpu |  | `2` |
 | open-webui.ollama.initContainers[0].name |  | `"create-dirs"` |
-| open-webui.ollama.initContainers[0].image |  | `"docker-registry.osc.edu/kubernetes/busyboxy:latest"` |
+| open-webui.ollama.initContainers[0].image |  | `"docker-registry.osc.edu/kubernetes/busybox:latest"` |
 | open-webui.ollama.initContainers[0].imagePullPolicy |  | `"Always"` |
 | open-webui.ollama.initContainers[0].command[0] |  | `"sh"` |
 | open-webui.ollama.initContainers[0].command[1] |  | `"-c"` |
