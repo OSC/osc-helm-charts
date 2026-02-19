@@ -14,6 +14,7 @@ results:
     resources:
       - paas-pass
       - paas-pass-external
+      - paas-pass-wildcard
     kind: Ingress
     result: pass
   - policy: ingress-allowed-dns
@@ -27,5 +28,6 @@ results:
     resources:
       - paas-fail
       - paas-fail-dne
+      - paas-fail-wildcard
     kind: Ingress
     result: fail
