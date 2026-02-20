@@ -192,7 +192,7 @@ mongodb:
   initContainers:
   - name: create-data-dir
     image: '{{ include "mongodb.image" . }}'
-    command: ['sh', '-c', 'mkdir -p /bitnami/mongodb/mongodb']
+    command: ['sh', '-c', 'mkdir -p /bitnami/mongodb/{{ .Values.global.dataDir.subPath }}/{{ include "osc.common.environment" . }}']
     containerSecurityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
@@ -216,7 +216,7 @@ mongodb:
   extraVolumeMounts:
     - name: data
       mountPath: /bitnami/mongodb
-      subPath: '{{ .Values.global.dataDir.subPath }}'
+      subPath: '{{ .Values.global.dataDir.subPath }}/{{ include "osc.common.environment" . }}'
       readOnly: false
   # @ignored
   extraVolumes:
