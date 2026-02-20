@@ -51,6 +51,7 @@ jobs:
           - kyverno-policies
           - paas
           - osc-open-webui
+          - cryosparc
     name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
