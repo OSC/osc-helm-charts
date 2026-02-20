@@ -1,6 +1,7 @@
 global:
   oscServiceAccount:
   imagePullSecret:
+    create: true
     name: osc-registry
     registry: docker-registry.osc.edu
     username: robot$webservices-read
@@ -11,6 +12,8 @@ global:
     host: ""
     # Also pulled from global.env.$environment.ingress.hostAlias
     hostAlias: ""
+    # -- Additional Ingress annotations
+    annotations: ~
   auth:
     idpHost:
     clientID:
@@ -61,14 +64,22 @@ auth:
 
 open-webui:
   nameOverride: open-webui
+  # -- Set to force old names after upgrades
+  fullnameOverride: open-webui
+  serviceAccount:
+    # -- Set to force old names after upgrades
+    name: open-webui
+  openaiApiKey: false
   pipelines:
+    enabled: false
+  websocket:
     enabled: false
   podLabels: {}
   # Example service account label
   # osc.edu/service-account: TODO
   image:
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
-    tag: '0.6.30'
+    tag: '0.8.2'
   imagePullSecrets:
     - name: osc-registry
   resources:
@@ -97,10 +108,6 @@ open-webui:
   #   node-role.kubernetes.io/webservices: ''
   extraEnvVars: []
   commonEnvVars:
-    - name: WEBUI_AUTH_TRUSTED_EMAIL_HEADER
-      value: X-Auth-Request-Email
-    - name: WEBUI_AUTH_TRUSTED_NAME_HEADER
-      value: X-Auth-Request-Preferred-Username
     - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
       value: X-Auth-Request-Groups
     - name: ENABLE_OAUTH_GROUP_CREATION
@@ -117,6 +124,8 @@ open-webui:
       value: "True"
     - name: ENABLE_VERSION_UPDATE_CHECK
       value: "False"
+    - name: ENABLE_API_KEYS
+      value: "True"
   extraEnvFrom:
     - secretRef:
         name: osc-open-webui-secret
@@ -136,13 +145,17 @@ open-webui:
       type: RuntimeDefault
     privileged: false
   sso:
-    enabled: false
+    enabled: true
+    trustedHeader:
+      enabled: true
+      nameHeader: X-Auth-Request-Preferred-Username
+      emailHeader: X-Auth-Request-Email
   ollama:
     # Added so can be referenced
     fullnameOverride: open-webui-ollama
     image:
       repository: docker-registry.osc.edu/kubernetes/ollama/ollama
-      tag: '0.11.11'
+      tag: '0.16.1'
     imagePullSecrets:
       - name: osc-registry
     ollama:
@@ -185,12 +198,30 @@ open-webui:
       requests:
         memory: 4Gi
         cpu: 2
+    initContainers:
+      - name: create-dirs
+        image: docker-registry.osc.edu/kubernetes/busybox:latest
+        imagePullPolicy: Always
+        command: ['sh', '-c', 'mkdir -p /data/ollama-models /home/ollama/ollama-home']
+        volumeMounts:
+          - name: data
+            mountPath: /data
+          - name: home
+            mountPath: /home/ollama
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
     volumes: []
     # Example ESS mount
     # volumes:
     # - name: data
     #   hostPath:
-    #     path: /fs/ess/TODO/ollama-models
+    #     path: /fs/ess/TODO
     #     type: Directory
     # - name: home
     #   hostPath:
@@ -199,8 +230,10 @@ open-webui:
     volumeMounts:
       - name: data
         mountPath: /data
+        subPath: ollama-models
       - name: home
         mountPath: /home/ollama
+        subPath: ollama-home
     extraEnv:
       - name: OLLAMA_MODELS
         value: /data

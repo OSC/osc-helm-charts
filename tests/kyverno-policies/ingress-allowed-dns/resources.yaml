@@ -19,6 +19,42 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: paas-pass-wildcard
+  namespace: paas
+spec:
+  rules:
+  - host: test-foo.osc.edu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: paas-pass-wildcard-full
+  namespace: paas
+spec:
+  rules:
+  - host: test.osc.edu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
   name: paas-pass-external
   namespace: paas
 spec:
@@ -38,6 +74,24 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: paas-fail
+  namespace: paas
+spec:
+  rules:
+  - host: foo.osc.edu
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: paas-fail-wildcard
   namespace: paas
 spec:
   rules:

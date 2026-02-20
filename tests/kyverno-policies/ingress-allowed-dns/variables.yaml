@@ -11,9 +11,18 @@ policies:
     - name: paas-pass-external
       values:
         allowed: 'web.osc.edu,bar.osc.edu'
+    - name: paas-pass-wildcard
+      values:
+        allowed: 'test*.osc.edu'
+    - name: paas-pass-wildcard-full
+      values:
+        allowed: 'test*.osc.edu'
     - name: paas-fail
       values:
         allowed: 'web.osc.edu'
+    - name: paas-fail-wildcard
+      values:
+        allowed: 'web*.osc.edu'
     - name: paas-fail-dne
       values:
         allowed: ''
