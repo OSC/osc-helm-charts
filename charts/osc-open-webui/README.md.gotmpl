@@ -17,7 +17,7 @@
 
 Define necessary values:
 
-```
+```yaml
 global:
   oscServiceAccount: testuser
   imagePullSecret:
@@ -63,6 +63,52 @@ open-webui:
       - name: home
         hostPath:
           path: /users/PROJECT/USER
+          type: Directory
+```
+
+Below is an example of PAAS usage:
+
+```yaml
+---
+global:
+  imagePullSecret:
+    create: false
+  ingress:
+    host: <USERNAME>.k8.osc.edu
+    annotations:
+      # Limit to OH-TECH VPN
+      nginx.ingress.kubernetes.io/whitelist-source-range: '<OH-TECH VPN>'
+  # Generate from the command 'uuidgen'
+  webui_secret_key: <SECRET>
+auth:
+  enable: false
+open-webui:
+  persistence:
+    storageClass: paas-nfs-client
+  sso:
+    enabled: false
+  ollama:
+    ollama:
+      models:
+        pull:
+          - <model to pull>
+        run:
+          - <model to pull>
+    nodeSelector:
+      # Set MIG
+      # One of
+      # - NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+      # - NVIDIA-A100-PCIE-40GB-MIG-3g.20gb
+      # - NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
+      nvidia.com/gpu.product: <MIG>
+    volumes:
+      - name: data
+        hostPath:
+          path: /fs/scratch/<Primary group>/<Username>
+          type: Directory
+      - name: home
+        hostPath:
+          path: /users/<Primary group>/<Username>
           type: Directory
 ```
 
