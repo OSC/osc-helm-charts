@@ -21,6 +21,8 @@ global:
   database:
     # -- Allow Ingress access
     allowIngress: false
+  # -- Groups allowed to perform maintenance operations
+  maintenanceGroups: []
   # -- Groups that are allowed to perform port forwarding
   portforwardGroups: []
   dataDir:

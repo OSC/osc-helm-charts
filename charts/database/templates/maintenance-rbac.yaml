@@ -1,0 +1,55 @@
+{{- if .Values.global.maintenanceGroups }}
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "database.name" . }}-maintenance
+  namespace: {{ .Release.Namespace | quote }}
+rules:
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["get", "list", "create"]
+- apiGroups:
+  - ""
+  resources:
+  - pods/portforward
+  - pods/proxy
+  - services/proxy
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments/scale"]
+  verbs: ["get", "patch", "update"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "database.name" . }}-maintenance
+  namespace: {{ .Release.Namespace | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "database.name" . }}-maintenance
+subjects:
+{{- range .Values.global.maintenanceGroups }}
+  - kind: Group
+    name: {{ . | quote }}
+    apiGroup: rbac.authorization.k8s.io
+{{- end }}
+{{ end }}

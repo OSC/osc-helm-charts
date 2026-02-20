@@ -106,6 +106,7 @@ redis:
 | global.imageRegistry | Global value to pass down to database charts to set registry to pull images from | `"docker-registry.osc.edu"` |
 | global.imagePullSecrets | The OSC image pull secret name to use to pull images | `["osc-registry"]` |
 | global.database.allowIngress | Allow Ingress access | `false` |
+| global.maintenanceGroups | Groups allowed to perform maintenance operations | `[]` |
 | global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
 | global.dataDir.path | Base path for storing MongoDB data | `nil` |
 | global.dataDir.subPath | Subpath for dataDir storage | `nil` |

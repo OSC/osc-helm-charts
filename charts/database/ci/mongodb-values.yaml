@@ -4,6 +4,8 @@ global:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
   storageClass: standard
+  maintenanceGroups:
+    - testgroup
   portforwardGroups:
     - testgroup1
 mongodb:
