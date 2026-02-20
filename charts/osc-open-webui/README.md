@@ -83,7 +83,7 @@ open-webui:
 | global.nodeSelectorRole |  | `"webservices"` |
 | global.ingress.host |  | `""` |
 | global.ingress.hostAlias |  | `""` |
-| global.ingress.annotations | Additional Ingres annotations | `nil` |
+| global.ingress.annotations | Additional Ingress annotations | `nil` |
 | global.auth.idpHost |  | `nil` |
 | global.auth.clientID |  | `nil` |
 | global.auth.clientSecret |  | `nil` |
