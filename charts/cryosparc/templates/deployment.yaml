@@ -32,24 +32,10 @@ spec:
       hostNetwork: false
       hostIPC: false
       hostPID: false
-      {{- if .Values.mockNodes }}
       hostAliases:
-        {{- range .Values.mockNodes }}
       - ip: "127.0.0.1"
         hostnames:
-        - {{ . | quote }}
-        {{- end }}
-      {{- else }}
-      {{- $nodes := lookup "v1" "Node" "" "" }}
-      {{- if $nodes }}
-      hostAliases:
-        {{- range $node := $nodes.items }}
-      - ip: "127.0.0.1"
-        hostnames:
-        - {{ $node.metadata.name | quote }}
-        {{- end }}
-      {{- end }}
-      {{- end }}
+        {{- include "cryosparc.nodes" . | nindent 8 }}
       initContainers:
       - name: {{ include "cryosparc.name" . }}-init
         image: {{ .Values.image.repository }}:{{ tpl (include "cryosparc.imageTag" .) . }}
