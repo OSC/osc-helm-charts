@@ -185,7 +185,7 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
 {{- $nodes := (lookup "v1" "Node" "" "").items }}
 {{- if $nodes }}
 {{- range $node := $nodes }}
-- {{- $node.metadata.name }}
+{{- $node.metadata.name | toYaml }}
 {{- end }}
 {{- else }}
 {{- .Values.nodes | toYaml }}
