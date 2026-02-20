@@ -1,0 +1,23 @@
+global:
+  oscServiceAccount: nobody
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  storageClass: standard
+  portforwardGroups:
+    - testgroup1
+mongodb:
+  enable: true
+  persistence:
+    enabled: true
+    size: 50Mi
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  initContainers: []
+  extraVolumeMounts: []
+  extraVolumes: []
