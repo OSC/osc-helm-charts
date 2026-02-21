@@ -1,0 +1,181 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "cryosparc.name" . }}
+  labels:
+    {{ include "osc.common.serviceAccount" . }}
+    {{- include "cryosparc.labels" . | nindent 4 }}
+  {{- if (include "cryosparc.alert.receiver" .) }}
+    receiver: {{ include "cryosparc.alert.receiver" . }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "cryosparc.selectorLabels" . | nindent 6 }}
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 40%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        {{ include "osc.common.serviceAccount" . }}
+        {{- include "cryosparc.selectorLabels" . | nindent 8 }}
+      {{- if (include "cryosparc.alert.receiver" .) }}
+        receiver: {{ include "cryosparc.alert.receiver" . }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "cryosparc.name" . }}
+      securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
+      hostNetwork: false
+      hostIPC: false
+      hostPID: false
+      {{- $nodes := include "cryosparc.nodes" . | fromJsonArray }}
+      {{- if $nodes }}
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        {{- $nodes | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+      - name: {{ include "cryosparc.name" . }}-init
+        image: {{ .Values.image.repository }}:{{ tpl (include "cryosparc.imageTag" .) . }}
+        command: ["sh", "-c"]
+        args:
+        - |
+          mkdir -p /cryosparc_home/lanes;
+          mkdir -p /cryosparc_home/database;
+        volumeMounts:
+        - name: cryosparc_home
+          mountPath: /cryosparc_home
+      containers:
+      - name: {{ include "cryosparc.name" . }}
+        image: {{ .Values.image.repository }}:{{ tpl (include "cryosparc.imageTag" .) . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["sh", "-c"]
+        args:
+        - |
+          cat /opt/cryosparc_master/config.sh;
+          printenv MY_NODE_NAME;
+          export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
+          cryosparcm start;
+          # Fix rollout restart issue
+          cryosparcm restart;
+          # Add Sciapps admin account
+          cryosparcm listusers |grep "$ADMIN_USERNAME";
+          if [ $? -ne 0 ]; then
+            cryosparcm createuser --email "$ADMIN_EMAIL" --username "$ADMIN_USERNAME" --firstname "SciApps" --lastname "Admin" --password "$ADMIN_PASSWORD";
+            cryosparcm updateuser --email "$ADMIN_EMAIL" --admin "true" --password "$ADMIN_PASSWORD";
+          fi
+          unset ADMIN_EMAIL ADMIN_USERNAME ADMIN_PASSWORD
+          # Update cluster lanes
+          ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
+            cd $x;
+            cryosparcm cluster connect;
+          done;
+          cryosparcm status;
+          # Keep the pod running
+          while true; do 
+            sleep 3600;
+          done;
+        workingDir: {{ .Values.workingDir }}
+        env:
+        - name: SLURM_CONF
+          value: {{ printf "/etc/slurm/slurm-%s.conf" .Values.slurmCluster }}
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: CRYOSPARC_LICENSE_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: license
+        - name: ADMIN_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: email
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: username
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: password
+        volumeMounts:
+        - name: cryosparc_config
+          mountPath: /opt/cryosparc_master/config.sh
+          subPath: master-config
+        - name: cryosparc_home
+          mountPath: /cryosparc_home
+        - name: cryosparc_home
+          mountPath: /opt/cryosparc_master/database
+          subPath: database
+        - name: cryosparc_home
+          mountPath: /opt/cryosparc_master/lanes
+          subPath: lanes
+        - name: project
+          mountPath: {{ tpl .Values.mounts.project . }}
+          readOnly: false
+        - name: slurm_conf
+          mountPath: {{ .Values.mounts.slurm_conf }}
+          readOnly: true
+        - name: munge_socket
+          mountPath: {{ .Values.mounts.munge_socket }}
+  {{- $podResources := .Values.podResources }}
+  {{- if .Values.global.env }}
+    {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
+      {{- if (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+        {{- $podResources = (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+        resources: {{ toYaml $podResources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
+      nodeSelector:
+        {{ include "osc.common.nodeSelectorRole" . }}
+      {{- with .Values.nodeSelector }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: cryosparc_home
+        hostPath:
+          path: {{ tpl .Values.mounts.home . }}
+          type: Directory
+      - name: project
+        hostPath:
+          path: {{ tpl .Values.mounts.project . }}
+          type: Directory
+      - name: slurm_conf
+        hostPath:
+          path: {{ .Values.mounts.slurm_conf }}
+          type: Directory
+      - name: munge_socket
+        hostPath:
+          path: {{ .Values.mounts.munge_socket }}
+          type: Socket
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - {{ include "cryosparc.name" . }}
+              topologyKey: kubernetes.io/hostname

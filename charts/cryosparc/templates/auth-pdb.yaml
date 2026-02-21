@@ -1,0 +1,18 @@
+{{- $replicas := (include "cryosparc.auth.replicas" .) | default 1 }}
+{{- if (gt (int $replicas) 1 ) }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "cryosparc.auth.name" . }}
+  labels:
+    {{- include "cryosparc.auth.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.auth.podDistributionBudget.minAvailable }}
+  minAvailable: {{ .Values.auth.podDistributionBudget.minAvailable }}
+  {{- else if .Values.auth.podDistributionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.auth.podDistributionBudget.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "cryosparc.auth.selectorLabels" . | nindent 6 }}
+{{- end }}
