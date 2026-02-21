@@ -1,0 +1,11 @@
+---
+global:
+  debugGroups:
+    - testdebug
+    - testdebug2
+  maintenanceGroups:
+    - testmaint
+    - testmaint2
+  portforwardGroups:
+    - portforward
+    - portforward2
