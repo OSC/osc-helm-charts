@@ -181,13 +181,13 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
 {{- end }}
 {{- end }}
 
-{{- define "cryosparc.nodes" }}
-{{- $nodes := (lookup "v1" "Node" "" "").items }}
-{{- if $nodes }}
-{{- range $node := $nodes }}
-{{- $node.metadata.name | toYaml }}
-{{- end }}
-{{- else }}
-{{- .Values.nodes | toYaml }}
-{{- end }}
-{{- end }}
+{{- define "cryosparc.nodes" -}}
+{{- $nodeNames := list -}}
+{{- $nodes := (lookup "v1" "Node" "" "").items -}}
+  {{- if $nodes -}}
+    {{- range $node := $nodes -}}
+      {{- $nodeNames = append $nodeNames $node.metadata.name -}}
+    {{- end -}}
+  {{- end -}}
+{{- $nodeNames | toJson -}}
+{{- end -}}
