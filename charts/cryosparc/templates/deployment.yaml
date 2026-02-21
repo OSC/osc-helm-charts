@@ -32,10 +32,13 @@ spec:
       hostNetwork: false
       hostIPC: false
       hostPID: false
+      {{- $nodes := include "cryosparc.nodes" . | fromJsonArray }}
+      {{- if $nodes }}
       hostAliases:
       - ip: "127.0.0.1"
         hostnames:
-        {{- include "cryosparc.nodes" . | nindent 8 }}
+        {{- $nodes | toYaml | nindent 8 }}
+      {{- end }}
       initContainers:
       - name: {{ include "cryosparc.name" . }}-init
         image: {{ .Values.image.repository }}:{{ tpl (include "cryosparc.imageTag" .) . }}
