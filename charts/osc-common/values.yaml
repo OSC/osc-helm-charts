@@ -2,9 +2,13 @@ global:
   # -- The service account used by OSC deployments.
   # Also pulled from global.env.<env>.serviceAccount
   oscServiceAccount: ""
+  # -- The deployment's OSC environment
+  environment: production
   # -- The OSC node role to use with nodeSelector
   nodeSelectorRole: ""
   imagePullSecret:
+    # -- Create the image pull secret
+    create: true
     # -- imagePullSecret name
     name: osc-registry
     # -- imagePullSecret registry
@@ -15,3 +19,9 @@ global:
     # This value will be set by OSC's Puppet.
     # This value must be set to IMAGE-PULL-PASSWORD for CI tests.
     password:
+  # -- Groups that debug pods
+  debugGroups: []
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups: []
+  # -- Groups that are allowed to perform port forwarding
+  portforwardGroups: []
