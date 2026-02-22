@@ -17,7 +17,7 @@ OSC database service Helm Chart
 | https://charts.bitnami.com/bitnami | mariadb | 21.0.8 |
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.27 |
 | https://charts.bitnami.com/bitnami | redis | 23.2.12 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.8.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.8.1 |
 | oci://registry-1.docker.io/bitnamicharts | mongodb | 18.5.0 |
 
 ## Usage
