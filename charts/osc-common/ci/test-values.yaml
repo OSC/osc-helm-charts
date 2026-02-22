@@ -1,5 +1,8 @@
 ---
 global:
+  networkPolicy:
+    ingressLabels:
+      require: foo
   debugGroups:
     - testdebug
     - testdebug2
