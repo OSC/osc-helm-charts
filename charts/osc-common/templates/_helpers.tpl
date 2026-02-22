@@ -76,7 +76,7 @@ osc.edu/role
 {{- end -}}
 
 {{- define "osc.common.imagePullSecret.name" }}
-{{- .Values.global.imagePullSecret.name }}
+{{- printf "%s-%s" (include "osc.common.name" . ) .Values.global.imagePullSecret.name }}
 {{- end }}
 
 {{- define "osc.common.imagePullSecret" }}
