@@ -1,0 +1,14 @@
+---
+global:
+  networkPolicy:
+    ingressLabels:
+      require: foo
+  debugGroups:
+    - testdebug
+    - testdebug2
+  maintenanceGroups:
+    - testmaint
+    - testmaint2
+  portforwardGroups:
+    - portforward
+    - portforward2
