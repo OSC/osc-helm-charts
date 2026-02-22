@@ -109,7 +109,7 @@ spec:
               name: {{ include "cryosparc.name" . }}
               key: password
         volumeMounts:
-        - name: cryosparc_config
+        - name: cryosparc-config
           mountPath: /opt/cryosparc_master/config.sh
           subPath: master-config
         - name: cryosparc-home
@@ -123,10 +123,10 @@ spec:
         - name: project
           mountPath: {{ tpl .Values.mounts.project . }}
           readOnly: false
-        - name: slurm_conf
+        - name: slurm-conf
           mountPath: {{ .Values.mounts.slurm_conf }}
           readOnly: true
-        - name: munge_socket
+        - name: munge-socket
           mountPath: {{ .Values.mounts.munge_socket }}
   {{- $podResources := .Values.podResources }}
   {{- if .Values.global.env }}
@@ -159,11 +159,11 @@ spec:
         hostPath:
           path: {{ tpl .Values.mounts.project . }}
           type: Directory
-      - name: slurm_conf
+      - name: slurm-conf
         hostPath:
           path: {{ .Values.mounts.slurm_conf }}
           type: Directory
-      - name: munge_socket
+      - name: munge-socket
         hostPath:
           path: {{ .Values.mounts.munge_socket }}
           type: Socket
