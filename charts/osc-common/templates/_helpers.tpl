@@ -18,6 +18,7 @@ Common labels
 {{- define "osc.common.labels" -}}
 helm.sh/chart: {{ include "osc.common.chart" . }}
 {{ include "osc.common.selectorLabels" . }}
+{{ include "osc.common.role" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
