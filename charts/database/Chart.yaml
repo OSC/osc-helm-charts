@@ -24,6 +24,6 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enable
   - name: osc-common
-    version: 0.7.0
+    version: 0.8.0
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../osc-common

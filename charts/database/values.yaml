@@ -1,5 +1,14 @@
 global:
+    # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
+  oscServiceAccount: ""
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The nodeSelector role
+  nodeSelectorRole: webservices
   imagePullSecret:
+    # -- Create the image pull secret
+    create: true
     # -- image pull secret name
     name: osc-registry
     # -- OSC registry address
@@ -9,8 +18,15 @@ global:
     # -- The image pull secret password for database images
     # @default -- **required**
     password:
-  # -- The nodeSelector role
-  nodeSelectorRole: webservices
+  networkPolicy:
+    # -- Create the network policy
+    create: false
+    # -- Labels to allow Ingress from the same namespace
+    ingressLabels: {}
+    # -- Name of the Ingress namespace
+    ingressNamespace: ingress-nginx
+    # -- Name of the Prometheus namespace
+    prometheusNamespace: prometheus
   # -- The persistent storage class
   storageClass: webservices-nfs-client
   # -- Global value to pass down to database charts to set registry to pull images from
@@ -18,10 +34,9 @@ global:
   # -- The OSC image pull secret name to use to pull images
   imagePullSecrets:
     - osc-registry
-  database:
-    # -- Allow Ingress access
-    allowIngress: false
-  # -- Groups allowed to perform maintenance operations
+  # -- Groups that debug pods
+  debugGroups: []
+  # -- Groups that can perform maintenance operations
   maintenanceGroups: []
   # -- Groups that are allowed to perform port forwarding
   portforwardGroups: []
@@ -30,8 +45,6 @@ global:
     path: ~
     # -- Subpath for dataDir storage
     subPath: ~
-  # -- The name of IGNIX Ingress
-  ingressName: ingress-nginx
   security:
     allowInsecureImages: true
 
