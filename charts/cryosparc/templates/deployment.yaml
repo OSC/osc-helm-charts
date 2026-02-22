@@ -48,7 +48,7 @@ spec:
           mkdir -p /cryosparc_home/lanes;
           mkdir -p /cryosparc_home/database;
         volumeMounts:
-        - name: cryosparc_home
+        - name: cryosparc-home
           mountPath: /cryosparc_home
       containers:
       - name: {{ include "cryosparc.name" . }}
@@ -112,12 +112,12 @@ spec:
         - name: cryosparc_config
           mountPath: /opt/cryosparc_master/config.sh
           subPath: master-config
-        - name: cryosparc_home
+        - name: cryosparc-home
           mountPath: /cryosparc_home
-        - name: cryosparc_home
+        - name: cryosparc-home
           mountPath: /opt/cryosparc_master/database
           subPath: database
-        - name: cryosparc_home
+        - name: cryosparc-home
           mountPath: /opt/cryosparc_master/lanes
           subPath: lanes
         - name: project
@@ -151,7 +151,7 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-      - name: cryosparc_home
+      - name: cryosparc-home
         hostPath:
           path: {{ tpl .Values.mounts.home . }}
           type: Directory
