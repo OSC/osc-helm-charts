@@ -24,8 +24,17 @@ global:
     create: true
     # -- Labels for NetworkPolicy podSelector
     podSelector: ~
+    # Example define podSelector labels
+    #  podSelector:
+    #    app.kubernetes.io/name: test
+    #
     # -- Labels to allow Ingress from the same namespace
     ingressLabels: []
+    # Example additional ingress labels
+    #  ingressLabels:
+    #    - require: test
+    #    - client: test
+    #
     # -- Name of the Ingress namespace
     ingressNamespace: ingress-nginx
     # -- Name of the Prometheus namespace
