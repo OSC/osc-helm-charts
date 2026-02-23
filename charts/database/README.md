@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.15.0](https://img.shields.io/badge/Version-0.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.16.0](https://img.shields.io/badge/Version-0.16.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -17,7 +17,8 @@ OSC database service Helm Chart
 | https://charts.bitnami.com/bitnami | mariadb | 21.0.8 |
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.27 |
 | https://charts.bitnami.com/bitnami | redis | 23.2.12 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.8.1 |
+| oci://registry-1.docker.io/bitnamicharts | mongodb | 18.5.0 |
 
 ## Usage
 
@@ -29,6 +30,17 @@ Enable Ingress access:
 global:
   database:
     allowIngress: true
+```
+
+### Allow access using Port Forwarding
+
+Allow groups to do port Forwarding
+
+```yaml
+global:
+  portforwardGroups:
+    - group1
+    - group2
 ```
 
 ### MariaDB
@@ -43,6 +55,17 @@ mariadb:
     database: name
     username: name
     password: secret
+```
+
+### MongoDB
+
+```yaml
+global:
+  dataDir:
+    base: /fs/ess/<PROJECT>
+    subPath: myapp
+mongodb:
+  enable: true
 ```
 
 ### PostgreSQL
@@ -74,16 +97,26 @@ redis:
 
 | Key | Description | Default |
 |-----|-------------|---------|
+| global.oscServiceAccount | The service account used by OSC deployments. Also pulled from global.env.<env>.serviceAccount | `""` |
+| global.environment | The deployment's OSC environment | `"production"` |
+| global.nodeSelectorRole | The nodeSelector role | `"webservices"` |
+| global.imagePullSecret.create | Create the image pull secret | `true` |
 | global.imagePullSecret.name | image pull secret name | `"osc-registry"` |
 | global.imagePullSecret.registry | OSC registry address | `"docker-registry.osc.edu"` |
 | global.imagePullSecret.username | OSC registry username | `"robot$webservices-read"` |
 | global.imagePullSecret.password | The image pull secret password for database images | **required** |
-| global.nodeSelectorRole | The nodeSelector role | `"webservices"` |
+| global.networkPolicy.create | Create the network policy | `false` |
+| global.networkPolicy.ingressLabels | Labels to allow Ingress from the same namespace | `{}` |
+| global.networkPolicy.ingressNamespace | Name of the Ingress namespace | `"ingress-nginx"` |
+| global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
 | global.storageClass | The persistent storage class | `"webservices-nfs-client"` |
 | global.imageRegistry | Global value to pass down to database charts to set registry to pull images from | `"docker-registry.osc.edu"` |
 | global.imagePullSecrets | The OSC image pull secret name to use to pull images | `["osc-registry"]` |
-| global.database.allowIngress | Allow Ingress access | `false` |
-| global.ingressName | The name of IGNIX Ingress | `"ingress-nginx"` |
+| global.debugGroups | Groups that debug pods | `[]` |
+| global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
+| global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
+| global.dataDir.path | Base path for storing MongoDB data | `nil` |
+| global.dataDir.subPath | Subpath for dataDir storage | `nil` |
 | global.security.allowInsecureImages |  | `true` |
 | imagePullSecret.enable | Manage the image pull secret from osc-common. Disable if this chart is used as a subchart. | `true` |
 | mariadb.enable | Enable MariaDB subchart by setting to `true` | `false` |
@@ -94,6 +127,12 @@ redis:
 | mariadb.volumePermissions.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"12-debian-12-r51"` |
 | mariadb.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mysqld-exporter"` |
 | mariadb.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.17.2-debian-12-r16"` |
+| mongodb.enable | Enable MongoDB subchart by setting to `true` | `false` |
+| mongodb.image.repository | The OSC registry path to mongodb replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mongodb"` |
+| mongodb.image.tag | The version of MongoDB image. This tag should be replicated into the OSC registry | `"8.0.13-debian-12-r0"` |
+| mongodb.resources | Set limits for the MongoDB pod | `{"limits":{"cpu":4,"memory":"4Gi"},"requests":{"cpu":1,"memory":"256Mi"}}` |
+| mongodb.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mongodb-exporter"` |
+| mongodb.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.47.0-debian-12-r1"` |
 | postgresql.enable | Enable PostgreSQL subchart by setting to `true` | `false` |
 | postgresql.image.repository | The OSC registry path to postgresql replicated image. This value should not need to be changed. | `"webservices/postgresql"` |
 | postgresql.image.tag | The version of MariaDB image. **This version of must built by this repo** | `"17.6.0-debian-12-r4"` |

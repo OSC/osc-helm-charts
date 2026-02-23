@@ -1,5 +1,14 @@
 global:
+    # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
+  oscServiceAccount: ""
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The nodeSelector role
+  nodeSelectorRole: webservices
   imagePullSecret:
+    # -- Create the image pull secret
+    create: true
     # -- image pull secret name
     name: osc-registry
     # -- OSC registry address
@@ -9,8 +18,15 @@ global:
     # -- The image pull secret password for database images
     # @default -- **required**
     password:
-  # -- The nodeSelector role
-  nodeSelectorRole: webservices
+  networkPolicy:
+    # -- Create the network policy
+    create: false
+    # -- Labels to allow Ingress from the same namespace
+    ingressLabels: {}
+    # -- Name of the Ingress namespace
+    ingressNamespace: ingress-nginx
+    # -- Name of the Prometheus namespace
+    prometheusNamespace: prometheus
   # -- The persistent storage class
   storageClass: webservices-nfs-client
   # -- Global value to pass down to database charts to set registry to pull images from
@@ -18,13 +34,20 @@ global:
   # -- The OSC image pull secret name to use to pull images
   imagePullSecrets:
     - osc-registry
-  database:
-    # -- Allow Ingress access
-    allowIngress: false
-  # -- The name of IGNIX Ingress
-  ingressName: ingress-nginx
+  # -- Groups that debug pods
+  debugGroups: []
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups: []
+  # -- Groups that are allowed to perform port forwarding
+  portforwardGroups: []
+  dataDir:
+    # -- Base path for storing MongoDB data
+    path: ~
+    # -- Subpath for dataDir storage
+    subPath: ~
   security:
     allowInsecureImages: true
+
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
   # Disable if this chart is used as a subchart.
@@ -133,6 +156,129 @@ mariadb:
       enabled: true
       namespaceSelector:
         app.kubernetes.io/name: prometheus
+mongodb:
+  # -- Enable MongoDB subchart by setting to `true`
+  enable: false
+  # @ignored
+  architecture: standalone
+  # @ignored
+  useStatefulSet: true
+  # @ignored
+  auth:
+    enabled: false
+  image:
+    # -- The OSC registry path to mongodb replicated image.
+    # This value should not need to be changed.
+    repository: kubernetes/bitnami/mongodb
+    # -- The version of MongoDB image.
+    # This tag should be replicated into the OSC registry
+    tag: 8.0.13-debian-12-r0
+  # @ignored
+  podLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    '{{ include "osc.common.roleKey" . }}': '{{ .Values.global.nodeSelectorRole }}'
+  # @ignored
+  containerSecurityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+  # -- Set limits for the MongoDB pod
+  resources:
+    limits:
+      cpu: 4
+      memory: 4Gi
+    requests:
+      cpu: 1
+      memory: 256Mi
+  # @ignored
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+  # @ignored
+  persistence:
+    enabled: false
+    name: empty
+    mountPath: /empty
+  # @ignored
+  initContainers:
+  - name: create-data-dir
+    image: '{{ include "mongodb.image" . }}'
+    command: ['sh', '-c', 'mkdir -p /bitnami/mongodb/{{ .Values.global.dataDir.subPath }}/{{ include "osc.common.environment" . }}']
+    containerSecurityContext:
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    resources:
+      limits:
+        cpu: 1
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+    volumeMounts:
+      - name: data
+        mountPath: /bitnami/mongodb
+  # @ignored
+  extraVolumeMounts:
+    - name: data
+      mountPath: /bitnami/mongodb
+      subPath: '{{ .Values.global.dataDir.subPath }}/{{ include "osc.common.environment" . }}'
+      readOnly: false
+  # @ignored
+  extraVolumes:
+    - name: data
+      hostPath:
+        path: '{{ .Values.global.dataDir.path }}'
+        type: Directory
+  metrics:
+    # @ignored
+    enabled: true
+    image:
+      # -- The OSC registry path to replicated image.
+      # This value should not need to be changed.
+      repository: kubernetes/bitnami/mongodb-exporter
+      # -- The version of replicated image.
+      # **This version of must replicated to OSC registry**
+      tag: 0.47.0-debian-12-r1
+    # @ignored
+    containerSecurityContext:
+      enabled: true
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+    # @ignored
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /metrics
+      prometheus.io/match_metrics: 'true'
+    # @ignored
+    resources:
+      limits:
+        cpu: 2
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  # @ignored
+  networkPolicy:
+    enabled: true
+    allowExternal: false
+    ingressNSMatchLabels:
+      app.kubernetes.io/name: prometheus
 postgresql:
   # -- Enable PostgreSQL subchart by setting to `true`
   enable: false

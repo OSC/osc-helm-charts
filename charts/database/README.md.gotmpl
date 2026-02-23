@@ -25,6 +25,17 @@ global:
     allowIngress: true
 ```
 
+### Allow access using Port Forwarding
+
+Allow groups to do port Forwarding
+
+```yaml
+global:
+  portforwardGroups:
+    - group1
+    - group2
+```
+
 ### MariaDB
 
 Enable MariaDB:
@@ -37,6 +48,17 @@ mariadb:
     database: name
     username: name
     password: secret
+```
+
+### MongoDB
+
+```yaml
+global:
+  dataDir:
+    base: /fs/ess/<PROJECT>
+    subPath: myapp
+mongodb:
+  enable: true
 ```
 
 ### PostgreSQL
