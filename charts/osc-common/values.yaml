@@ -22,7 +22,7 @@ global:
   networkPolicy:
     # -- Create the network policy
     create: true
-    # -- Labels for NetworkPolicy podSelector
+    # -- Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"`
     podSelector: ~
     # Example define podSelector labels
     #  podSelector:
