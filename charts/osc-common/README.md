@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.8.1](https://img.shields.io/badge/Version-0.8.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -44,3 +44,6 @@ OSC common Helm Chart
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
 | global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
+| global.webservicesDeploy.create | Create webservices deployment rolebinding | `true` |
+| global.webservicesDeploy.clusterRole | OSC managed webservices-deploy ClusterRole name | `"webservices-deploy"` |
+| global.webservicesDeploy.serviceAccount | OSC managed webservices-deploy ServiceAccount name | `"webservices-deploy"` |

@@ -34,3 +34,10 @@ global:
   maintenanceGroups: []
   # -- Groups that are allowed to perform port forwarding
   portforwardGroups: []
+  webservicesDeploy:
+    # -- Create webservices deployment rolebinding
+    create: true
+    # -- OSC managed webservices-deploy ClusterRole name
+    clusterRole: webservices-deploy
+    # -- OSC managed webservices-deploy ServiceAccount name
+    serviceAccount: webservices-deploy
