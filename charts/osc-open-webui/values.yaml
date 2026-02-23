@@ -1,12 +1,38 @@
 global:
-  oscServiceAccount:
-  imagePullSecret:
-    create: true
-    name: osc-registry
-    registry: docker-registry.osc.edu
-    username: robot$webservices-read
-    password:
+  # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
+  oscServiceAccount: ""
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The nodeSelector role
   nodeSelectorRole: webservices
+  imagePullSecret:
+    # -- Create the image pull secret
+    create: true
+    # -- image pull secret name
+    name: osc-registry
+    # -- OSC registry address
+    registry: docker-registry.osc.edu
+    # -- OSC registry username
+    username: robot$webservices-read
+    # -- The image pull secret password for database images
+    # @default -- **required**
+    password:
+  networkPolicy:
+    # -- Create the network policy
+    create: false
+    # -- Labels to allow Ingress from the same namespace
+    ingressLabels: {}
+    # -- Name of the Ingress namespace
+    ingressNamespace: ingress-nginx
+    # -- Name of the Prometheus namespace
+    prometheusNamespace: prometheus
+  # -- Groups that debug pods
+  debugGroups: []
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups: []
+  # -- Groups that are allowed to perform port forwarding
+  portforwardGroups: []
   ingress:
     # Also pulled from global.env.$environment.ingress.host
     host: ""
@@ -22,8 +48,6 @@ global:
     allowGroups: []
   alert:
     receiver:
-  maintenance:
-    groups:
   webui_secret_key:
 
 # Used for network policies

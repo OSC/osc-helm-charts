@@ -1,5 +1,5 @@
 global:
-    # -- The service account used by OSC deployments.
+  # -- The service account used by OSC deployments.
   # Also pulled from global.env.<env>.serviceAccount
   oscServiceAccount: ""
   # -- The deployment's OSC environment

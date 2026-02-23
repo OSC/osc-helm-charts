@@ -15,7 +15,7 @@ OSC Open Web UI deployment
 | Repository | Name | Version |
 |------------|------|---------|
 | https://helm.openwebui.com/ | open-webui | 12.3.0 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.8.1 |
 
 ## Usage
 
@@ -38,8 +38,8 @@ global:
       - group
   alert:
     receiver:
-  maintenance:
-    groups:
+  maintenanceGroups:
+    - group
   webui_secret_key: SECRET
 
 open-webui:
@@ -120,13 +120,21 @@ open-webui:
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| global.oscServiceAccount |  | `nil` |
-| global.imagePullSecret.create |  | `true` |
-| global.imagePullSecret.name |  | `"osc-registry"` |
-| global.imagePullSecret.registry |  | `"docker-registry.osc.edu"` |
-| global.imagePullSecret.username |  | `"robot$webservices-read"` |
-| global.imagePullSecret.password |  | `nil` |
-| global.nodeSelectorRole |  | `"webservices"` |
+| global.oscServiceAccount | The service account used by OSC deployments. Also pulled from global.env.<env>.serviceAccount | `""` |
+| global.environment | The deployment's OSC environment | `"production"` |
+| global.nodeSelectorRole | The nodeSelector role | `"webservices"` |
+| global.imagePullSecret.create | Create the image pull secret | `true` |
+| global.imagePullSecret.name | image pull secret name | `"osc-registry"` |
+| global.imagePullSecret.registry | OSC registry address | `"docker-registry.osc.edu"` |
+| global.imagePullSecret.username | OSC registry username | `"robot$webservices-read"` |
+| global.imagePullSecret.password | The image pull secret password for database images | **required** |
+| global.networkPolicy.create | Create the network policy | `false` |
+| global.networkPolicy.ingressLabels | Labels to allow Ingress from the same namespace | `{}` |
+| global.networkPolicy.ingressNamespace | Name of the Ingress namespace | `"ingress-nginx"` |
+| global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
+| global.debugGroups | Groups that debug pods | `[]` |
+| global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
+| global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
 | global.ingress.host |  | `""` |
 | global.ingress.hostAlias |  | `""` |
 | global.ingress.annotations | Additional Ingress annotations | `nil` |
@@ -136,7 +144,6 @@ open-webui:
 | global.auth.cookieSecret |  | `nil` |
 | global.auth.allowGroups |  | `[]` |
 | global.alert.receiver |  | `nil` |
-| global.maintenance.groups |  | `nil` |
 | global.webui_secret_key |  | `nil` |
 | ingressName |  | `"ingress-nginx"` |
 | prometheusName |  | `"prometheus"` |
