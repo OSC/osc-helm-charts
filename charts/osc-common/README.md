@@ -38,7 +38,8 @@ OSC common Helm Chart
 | global.imagePullSecret.username | imagePullSecret username | `"robot$webservices-read"` |
 | global.imagePullSecret.password | imagePullSecret password. This value will be set by OSC's Puppet. This value must be set to IMAGE-PULL-PASSWORD for CI tests. | `nil` |
 | global.networkPolicy.create | Create the network policy | `true` |
-| global.networkPolicy.ingressLabels | Labels to allow Ingress from the same namespace | `{}` |
+| global.networkPolicy.podSelector | Labels for NetworkPolicy podSelector | `nil` |
+| global.networkPolicy.ingressLabels | Labels to allow Ingress from the same namespace | `[]` |
 | global.networkPolicy.ingressNamespace | Name of the Ingress namespace | `"ingress-nginx"` |
 | global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
 | global.debugGroups | Groups that debug pods | `[]` |

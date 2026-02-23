@@ -2,8 +2,10 @@
 global:
   nodeSelectorRole: test
   networkPolicy:
+    podSelector:
+      app.kubernetes.io/name: test
     ingressLabels:
-      require: foo
+      - require: foo
   debugGroups:
     - testdebug
     - testdebug2
