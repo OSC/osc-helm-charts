@@ -18,7 +18,7 @@ spec:
     - podSelector:
         matchLabels:
           {{- include "osc.common.selectorLabels" . | nindent 10 }}
-    {{- range $labels := .Values.global.networkPolicy.ingressLabels  }}
+    {{- range $labels := .Values.global.networkPolicy.ingressAllowedPods  }}
     - podSelector:
         matchLabels:
           {{-  tpl (toYaml $labels) $ | nindent 10 }}

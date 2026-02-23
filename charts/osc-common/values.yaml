@@ -28,10 +28,10 @@ global:
     #  podSelector:
     #    app.kubernetes.io/name: test
     #
-    # -- Labels to allow Ingress from the same namespace
-    ingressLabels: []
+    # -- Labels of pods allowed to Ingress from the same namespace
+    ingressAllowedPods: []
     # Example additional ingress labels
-    #  ingressLabels:
+    #  ingressAllowedPods:
     #    - require: test
     #    - client: test
     #

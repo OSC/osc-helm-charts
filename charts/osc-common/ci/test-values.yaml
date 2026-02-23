@@ -4,7 +4,7 @@ global:
   networkPolicy:
     podSelector:
       app.kubernetes.io/name: test
-    ingressLabels:
+    ingressAllowedPods:
       - require: foo
   debugGroups:
     - testdebug
