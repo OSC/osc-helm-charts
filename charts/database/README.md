@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.16.0](https://img.shields.io/badge/Version-0.16.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.16.1](https://img.shields.io/badge/Version-0.16.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -17,7 +17,7 @@ OSC database service Helm Chart
 | https://charts.bitnami.com/bitnami | mariadb | 21.0.8 |
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.27 |
 | https://charts.bitnami.com/bitnami | redis | 23.2.12 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.8.1 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.0 |
 | oci://registry-1.docker.io/bitnamicharts | mongodb | 18.5.0 |
 
 ## Usage
@@ -103,18 +103,17 @@ redis:
 | global.imagePullSecret.create | Create the image pull secret | `true` |
 | global.imagePullSecret.name | image pull secret name | `"osc-registry"` |
 | global.imagePullSecret.registry | OSC registry address | `"docker-registry.osc.edu"` |
-| global.imagePullSecret.username | OSC registry username | `"robot$webservices-read"` |
 | global.imagePullSecret.password | The image pull secret password for database images | **required** |
 | global.networkPolicy.create | Create the network policy | `false` |
-| global.networkPolicy.ingressLabels | Labels to allow Ingress from the same namespace | `{}` |
-| global.networkPolicy.ingressNamespace | Name of the Ingress namespace | `"ingress-nginx"` |
-| global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
+| global.networkPolicy.podSelector | Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"` | `nil` |
+| global.networkPolicy.ingressAllowedPods | Labels of pods allowed to Ingress from the same namespace | `[]` |
 | global.storageClass | The persistent storage class | `"webservices-nfs-client"` |
 | global.imageRegistry | Global value to pass down to database charts to set registry to pull images from | `"docker-registry.osc.edu"` |
 | global.imagePullSecrets | The OSC image pull secret name to use to pull images | `["osc-registry"]` |
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
 | global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
+| global.webservicesDeploy.create | Create webservices deployment rolebinding | `true` |
 | global.dataDir.path | Base path for storing MongoDB data | `nil` |
 | global.dataDir.subPath | Subpath for dataDir storage | `nil` |
 | global.security.allowInsecureImages |  | `true` |

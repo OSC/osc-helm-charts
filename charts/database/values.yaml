@@ -13,20 +13,25 @@ global:
     name: osc-registry
     # -- OSC registry address
     registry: docker-registry.osc.edu
-    # -- OSC registry username
-    username: robot$webservices-read
     # -- The image pull secret password for database images
     # @default -- **required**
     password:
   networkPolicy:
     # -- Create the network policy
     create: false
-    # -- Labels to allow Ingress from the same namespace
-    ingressLabels: {}
-    # -- Name of the Ingress namespace
-    ingressNamespace: ingress-nginx
-    # -- Name of the Prometheus namespace
-    prometheusNamespace: prometheus
+    # -- Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"`
+    podSelector: ~
+    # Example define podSelector labels
+    #  podSelector:
+    #    app.kubernetes.io/name: test
+    #
+    # -- Labels of pods allowed to Ingress from the same namespace
+    ingressAllowedPods: []
+    # Example additional ingress labels
+    #  ingressAllowedPods:
+    #    - require: test
+    #    - client: test
+    #
   # -- The persistent storage class
   storageClass: webservices-nfs-client
   # -- Global value to pass down to database charts to set registry to pull images from
@@ -40,6 +45,9 @@ global:
   maintenanceGroups: []
   # -- Groups that are allowed to perform port forwarding
   portforwardGroups: []
+  webservicesDeploy:
+    # -- Create webservices deployment rolebinding
+    create: true
   dataDir:
     # -- Base path for storing MongoDB data
     path: ~
