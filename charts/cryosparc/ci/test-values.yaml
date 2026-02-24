@@ -4,8 +4,9 @@ global:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
   storageClass: standard
-maintenance:
-  groups:
+  debugGroups:
+    - foobar
+  maintenanceGroups:
     - foo
     - bar
 nodeSelector:
@@ -16,8 +17,6 @@ auth:
   oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
 alert:
   receiver: test
-debugGroups:
-  - foobar
 image:
   tag: latest
 ingress:

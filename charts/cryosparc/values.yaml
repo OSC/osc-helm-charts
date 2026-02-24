@@ -1,11 +1,42 @@
 global:
-  imagePullSecret:
-    name: osc-registry
-    registry: docker-registry.osc.edu
-    username: robot$webservices-read
-    password:
+  # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
+  oscServiceAccount: ""
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The OSC node role to use with nodeSelector
   nodeSelectorRole: webservices
+  imagePullSecret:
+    # -- Create the image pull secret
+    create: true
+    # -- imagePullSecret name
+    name: osc-registry
+    # -- imagePullSecret registry
+    registry: docker-registry.osc.edu
+    # -- imagePullSecret username
+    username: robot$webservices-read
+    # -- imagePullSecret password.
+    # This value will be set by OSC's Puppet.
+    # This value must be set to IMAGE-PULL-PASSWORD for CI tests.
+    password:
+  networkPolicy:
+    # -- Create the network policy
+    create: true
+    # -- Labels to allow Ingress from the same namespace
+    ingressLabels: {}
+    # -- Name of the Ingress namespace
+    ingressNamespace: ingress-nginx
+    # -- Name of the Prometheus namespace
+    prometheusNamespace: prometheus
+  # -- Groups that debug pods
+  debugGroups: []
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups: []
+  # -- Groups that are allowed to perform port forwarding
+  portforwardGroups: []
+  # -- The persistent storage class
   storageClass: webservices-nfs-client
+
 slurmCluster: "ascend"
 license: ''
 project: ''
