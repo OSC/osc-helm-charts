@@ -8,16 +8,20 @@ metadata:
 spec:
   podSelector:
     matchLabels:
+    {{- if .Values.global.networkPolicy.podSelector }}
+      {{- tpl (toYaml .Values.global.networkPolicy.podSelector) . | nindent 6 }}
+    {{- else }}
       {{- include "osc.common.selectorLabels" . | nindent 6 }}
+    {{- end }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
           {{- include "osc.common.selectorLabels" . | nindent 10 }}
-    {{- if .Values.global.networkPolicy.ingressLabels  }}
+    {{- range $labels := .Values.global.networkPolicy.ingressAllowedPods  }}
     - podSelector:
         matchLabels:
-          {{-  .Values.global.networkPolicy.ingressLabels | toYaml | nindent 10 }}
+          {{-  tpl (toYaml $labels) $ | nindent 10 }}
     {{- end }}
     {{- if .Values.global.networkPolicy.ingressNamespace }}
     - namespaceSelector:

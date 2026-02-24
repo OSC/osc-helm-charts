@@ -22,8 +22,19 @@ global:
   networkPolicy:
     # -- Create the network policy
     create: true
-    # -- Labels to allow Ingress from the same namespace
-    ingressLabels: {}
+    # -- Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"`
+    podSelector: ~
+    # Example define podSelector labels
+    #  podSelector:
+    #    app.kubernetes.io/name: test
+    #
+    # -- Labels of pods allowed to Ingress from the same namespace
+    ingressAllowedPods: []
+    # Example additional ingress labels
+    #  ingressAllowedPods:
+    #    - require: test
+    #    - client: test
+    #
     # -- Name of the Ingress namespace
     ingressNamespace: ingress-nginx
     # -- Name of the Prometheus namespace
@@ -34,3 +45,10 @@ global:
   maintenanceGroups: []
   # -- Groups that are allowed to perform port forwarding
   portforwardGroups: []
+  webservicesDeploy:
+    # -- Create webservices deployment rolebinding
+    create: true
+    # -- OSC managed webservices-deploy ClusterRole name
+    clusterRole: webservices-deploy
+    # -- OSC managed webservices-deploy ServiceAccount name
+    serviceAccount: webservices-deploy

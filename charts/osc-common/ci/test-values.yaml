@@ -2,8 +2,11 @@
 global:
   nodeSelectorRole: test
   networkPolicy:
-    ingressLabels:
-      require: foo
+    podSelector:
+      app.kubernetes.io/name: test
+    ingressAllowedPods:
+      - require: foo
+      - app.kubernetes.io/name: '{{ include "osc.common.name" . }}'
   debugGroups:
     - testdebug
     - testdebug2
