@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -241,20 +241,6 @@ open-webui:
 | open-webui.ollama.resources.limits.cpu |  | `4` |
 | open-webui.ollama.resources.requests.memory |  | `"4Gi"` |
 | open-webui.ollama.resources.requests.cpu |  | `2` |
-| open-webui.ollama.initContainers[0].name |  | `"create-dirs"` |
-| open-webui.ollama.initContainers[0].image |  | `"docker-registry.osc.edu/kubernetes/busybox:latest"` |
-| open-webui.ollama.initContainers[0].imagePullPolicy |  | `"Always"` |
-| open-webui.ollama.initContainers[0].command[0] |  | `"sh"` |
-| open-webui.ollama.initContainers[0].command[1] |  | `"-c"` |
-| open-webui.ollama.initContainers[0].command[2] |  | `"mkdir -p /data/ollama-models /home/ollama/ollama-home"` |
-| open-webui.ollama.initContainers[0].volumeMounts[0].name |  | `"data"` |
-| open-webui.ollama.initContainers[0].volumeMounts[0].mountPath |  | `"/data"` |
-| open-webui.ollama.initContainers[0].volumeMounts[1].name |  | `"home"` |
-| open-webui.ollama.initContainers[0].volumeMounts[1].mountPath |  | `"/home/ollama"` |
-| open-webui.ollama.initContainers[0].securityContext.allowPrivilegeEscalation |  | `false` |
-| open-webui.ollama.initContainers[0].securityContext.capabilities.drop[0] |  | `"ALL"` |
-| open-webui.ollama.initContainers[0].securityContext.seccompProfile.type |  | `"RuntimeDefault"` |
-| open-webui.ollama.initContainers[0].securityContext.privileged |  | `false` |
 | open-webui.ollama.volumes |  | `[]` |
 | open-webui.ollama.volumeMounts[0].name |  | `"data"` |
 | open-webui.ollama.volumeMounts[0].mountPath |  | `"/data"` |
