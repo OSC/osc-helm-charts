@@ -59,6 +59,7 @@ open-webui:
         cpu: 500m
     podSecurityContext:
       runAsUser: 1000
+    initContainers: []
     volumes: []
     volumeMounts: []
     extraEnv: []

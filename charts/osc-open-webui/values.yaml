@@ -1,16 +1,53 @@
 global:
-  oscServiceAccount:
-  imagePullSecret:
-    name: osc-registry
-    registry: docker-registry.osc.edu
-    username: robot$webservices-read
-    password:
+  # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
+  oscServiceAccount: ""
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The nodeSelector role
   nodeSelectorRole: webservices
+  imagePullSecret:
+    # -- Create the image pull secret
+    create: true
+    # -- image pull secret name
+    name: osc-registry
+    # -- OSC registry address
+    registry: docker-registry.osc.edu
+    # -- The image pull secret password for database images
+    # @default -- **required**
+    password:
+  networkPolicy:
+    # -- Create the network policy
+    create: false
+    # -- Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"`
+    podSelector: ~
+    # Example define podSelector labels
+    #  podSelector:
+    #    app.kubernetes.io/name: test
+    #
+    # -- Labels of pods allowed to Ingress from the same namespace
+    ingressAllowedPods: []
+    # Example additional ingress labels
+    #  ingressAllowedPods:
+    #    - require: test
+    #    - client: test
+    #
+  # -- Groups that debug pods
+  debugGroups: []
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups: []
+  # -- Groups that are allowed to perform port forwarding
+  portforwardGroups: []
+  webservicesDeploy:
+    # -- Create webservices deployment rolebinding
+    create: true
   ingress:
     # Also pulled from global.env.$environment.ingress.host
     host: ""
     # Also pulled from global.env.$environment.ingress.hostAlias
     hostAlias: ""
+    # -- Additional Ingress annotations
+    annotations: ~
   auth:
     idpHost:
     clientID:
@@ -19,8 +56,6 @@ global:
     allowGroups: []
   alert:
     receiver:
-  maintenance:
-    groups:
   webui_secret_key:
 
 # Used for network policies
@@ -61,14 +96,22 @@ auth:
 
 open-webui:
   nameOverride: open-webui
+  # -- Set to force old names after upgrades
+  fullnameOverride: open-webui
+  serviceAccount:
+    # -- Set to force old names after upgrades
+    name: open-webui
+  openaiApiKey: false
   pipelines:
+    enabled: false
+  websocket:
     enabled: false
   podLabels: {}
   # Example service account label
   # osc.edu/service-account: TODO
   image:
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
-    tag: '0.6.30'
+    tag: '0.8.2'
   imagePullSecrets:
     - name: osc-registry
   resources:
@@ -97,10 +140,6 @@ open-webui:
   #   node-role.kubernetes.io/webservices: ''
   extraEnvVars: []
   commonEnvVars:
-    - name: WEBUI_AUTH_TRUSTED_EMAIL_HEADER
-      value: X-Auth-Request-Email
-    - name: WEBUI_AUTH_TRUSTED_NAME_HEADER
-      value: X-Auth-Request-Preferred-Username
     - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
       value: X-Auth-Request-Groups
     - name: ENABLE_OAUTH_GROUP_CREATION
@@ -117,6 +156,8 @@ open-webui:
       value: "True"
     - name: ENABLE_VERSION_UPDATE_CHECK
       value: "False"
+    - name: ENABLE_API_KEYS
+      value: "True"
   extraEnvFrom:
     - secretRef:
         name: osc-open-webui-secret
@@ -136,13 +177,17 @@ open-webui:
       type: RuntimeDefault
     privileged: false
   sso:
-    enabled: false
+    enabled: true
+    trustedHeader:
+      enabled: true
+      nameHeader: X-Auth-Request-Preferred-Username
+      emailHeader: X-Auth-Request-Email
   ollama:
     # Added so can be referenced
     fullnameOverride: open-webui-ollama
     image:
       repository: docker-registry.osc.edu/kubernetes/ollama/ollama
-      tag: '0.11.11'
+      tag: '0.16.1'
     imagePullSecrets:
       - name: osc-registry
     ollama:
@@ -185,12 +230,30 @@ open-webui:
       requests:
         memory: 4Gi
         cpu: 2
+    initContainers:
+      - name: create-dirs
+        image: docker-registry.osc.edu/kubernetes/busybox:latest
+        imagePullPolicy: Always
+        command: ['sh', '-c', 'mkdir -p /data/ollama-models /home/ollama/ollama-home']
+        volumeMounts:
+          - name: data
+            mountPath: /data
+          - name: home
+            mountPath: /home/ollama
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+          privileged: false
     volumes: []
     # Example ESS mount
     # volumes:
     # - name: data
     #   hostPath:
-    #     path: /fs/ess/TODO/ollama-models
+    #     path: /fs/ess/TODO
     #     type: Directory
     # - name: home
     #   hostPath:
@@ -199,8 +262,10 @@ open-webui:
     volumeMounts:
       - name: data
         mountPath: /data
+        subPath: ollama-models
       - name: home
         mountPath: /home/ollama
+        subPath: ollama-home
     extraEnv:
       - name: OLLAMA_MODELS
         value: /data
