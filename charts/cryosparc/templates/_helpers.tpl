@@ -169,18 +169,6 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
 {{- end }}
 {{- end }}
 
-{{- define "cryosparc.maintenance.groups" }}
-{{- if and .Values.maintenance .Values.maintenance.groups }}
-  {{- .Values.maintenance.groups | toJson | nindent 0 }}
-{{- else if .Values.global.env }}
-  {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
-    {{- if (index .Values.global.env (include "osc.common.environment" .) "maintenance") }}
-      {{- index .Values.global.env (include "osc.common.environment" .) "maintenance" "groups" | toJson | nindent 0 }}
-    {{- end }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
 {{- define "cryosparc.nodes" -}}
 {{- $nodeNames := list -}}
 {{- $nodes := (lookup "v1" "Node" "" "").items -}}

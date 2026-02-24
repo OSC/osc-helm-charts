@@ -1,3 +1,4 @@
+{{- if .Values.global.networkPolicy.create }}
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
@@ -19,3 +20,4 @@ spec:
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.prometheusName }}
+{{- end }}
