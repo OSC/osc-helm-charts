@@ -16,12 +16,20 @@ global:
     host: EXTERNAL-DATA
     hostAlias: EXTERNAL-DATA
   webui_secret_key: EXTERNAL-SECRET
+  alert:
+    receiver: sciapps
 osc-open-webui:
   open-webui:
+    extraLabels:
+      receiver: sciapps
     podLabels:
       osc.edu/service-account: ouollama
+      receiver: sciapps
     nodeSelector:
       node-role.kubernetes.io/webservices: ''
+    service:
+      labels:
+        receiver: sciapps
     ollama:
       nodeSelector:
         # EXTERNAL-DATA
@@ -30,8 +38,10 @@ osc-open-webui:
       deployment:
         labels:
           osc.edu/service-account: ouollama
+          receiver: sciapps
       podLabels:
         osc.edu/service-account: ouollama
+        receiver: sciapps
       volumes:
       - name: data
         hostPath:
@@ -41,3 +51,6 @@ osc-open-webui:
         hostPath:
           path: /users/PHS0375/ouollama
           type: Directory
+      service:
+        labels:
+          receiver: sciapps
