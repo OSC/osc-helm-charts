@@ -10,9 +10,8 @@ global:
     allowGroups:
       - PHS0375
       - oscall
-  maintenance:
-    groups:
-      - oscstaff
+  maintenanceGroups:
+    - oscstaff
   ingress:
     host: EXTERNAL-DATA
     hostAlias: EXTERNAL-DATA
@@ -36,9 +35,9 @@ osc-open-webui:
       volumes:
       - name: data
         hostPath:
-          path: /fs/ess/PHS0375/ollama-models
+          path: /fs/ess/PHS0375
           type: Directory
       - name: home
         hostPath:
-          path: /users/PHS0375/ouollama/ollama-home
+          path: /users/PHS0375/ouollama
           type: Directory
