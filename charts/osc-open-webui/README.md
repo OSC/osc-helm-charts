@@ -15,7 +15,7 @@ OSC Open Web UI deployment
 | Repository | Name | Version |
 |------------|------|---------|
 | https://helm.openwebui.com/ | open-webui | 12.3.0 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.8.1 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.0 |
 
 ## Usage
 
@@ -126,15 +126,14 @@ open-webui:
 | global.imagePullSecret.create | Create the image pull secret | `true` |
 | global.imagePullSecret.name | image pull secret name | `"osc-registry"` |
 | global.imagePullSecret.registry | OSC registry address | `"docker-registry.osc.edu"` |
-| global.imagePullSecret.username | OSC registry username | `"robot$webservices-read"` |
 | global.imagePullSecret.password | The image pull secret password for database images | **required** |
 | global.networkPolicy.create | Create the network policy | `false` |
-| global.networkPolicy.ingressLabels | Labels to allow Ingress from the same namespace | `{}` |
-| global.networkPolicy.ingressNamespace | Name of the Ingress namespace | `"ingress-nginx"` |
-| global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
+| global.networkPolicy.podSelector | Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"` | `nil` |
+| global.networkPolicy.ingressAllowedPods | Labels of pods allowed to Ingress from the same namespace | `[]` |
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
 | global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
+| global.webservicesDeploy.create | Create webservices deployment rolebinding | `true` |
 | global.ingress.host |  | `""` |
 | global.ingress.hostAlias |  | `""` |
 | global.ingress.annotations | Additional Ingress annotations | `nil` |
