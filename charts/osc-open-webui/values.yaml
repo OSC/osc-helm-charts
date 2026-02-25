@@ -225,8 +225,8 @@ open-webui:
       privileged: false
     resources:
       limits:
-        memory: 8Gi
-        cpu: 4
+        memory: 16Gi
+        cpu: 8
       requests:
         memory: 4Gi
         cpu: 2

@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -237,8 +237,8 @@ open-webui:
 | open-webui.ollama.securityContext.capabilities.drop[0] |  | `"ALL"` |
 | open-webui.ollama.securityContext.seccompProfile.type |  | `"RuntimeDefault"` |
 | open-webui.ollama.securityContext.privileged |  | `false` |
-| open-webui.ollama.resources.limits.memory |  | `"8Gi"` |
-| open-webui.ollama.resources.limits.cpu |  | `4` |
+| open-webui.ollama.resources.limits.memory |  | `"16Gi"` |
+| open-webui.ollama.resources.limits.cpu |  | `8` |
 | open-webui.ollama.resources.requests.memory |  | `"4Gi"` |
 | open-webui.ollama.resources.requests.cpu |  | `2` |
 | open-webui.ollama.volumes |  | `[]` |
