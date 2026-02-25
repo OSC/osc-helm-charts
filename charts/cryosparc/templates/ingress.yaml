@@ -14,10 +14,8 @@ metadata:
     {{- with .Values.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
-    {{- if .Values.auth.enable }}
     {{- with .Values.auth.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
-    {{- end }}
     {{- end }}
     {{- if (include "cryosparc.ingressHostAlias" .) }}
     nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "cryosparc.ingressHostAlias" .) . }}

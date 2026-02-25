@@ -1,4 +1,3 @@
-{{ if .Values.auth.enable }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,4 +40,3 @@ spec:
     name: metrics
   selector:
     {{- include "cryosparc.auth.selectorLabels" . | nindent 4 }}
-{{ end }}
