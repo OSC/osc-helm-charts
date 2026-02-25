@@ -66,13 +66,6 @@ spec:
           - --skip-provider-button
           - --silence-ping-logging
         {{- $root := . }}
-        {{- range $idx, $container := .Values.containers }}
-          {{- $path := "" }}
-          {{- if ne $container.ingressPath "/" }}
-            {{- $path = $container.ingressPath }}
-          {{- end }}
-          - --upstream=http://{{ include "cryosparc.name" $root }}.{{ $root.Release.Namespace }}.svc.cluster.local:{{ $container.port | default (add $root.Values.service.port $idx) }}{{ $path }}
-        {{- end }}
           - --metrics-address=:{{ .Values.auth.metricsService.port }}
           {{- if (include "cryosparc.idpHost" .) }}
           - --whitelist-domain=$(IDP_HOST)

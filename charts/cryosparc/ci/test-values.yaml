@@ -3,7 +3,6 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
-  storageClass: standard
   debugGroups:
     - foobar
   maintenanceGroups:
@@ -29,3 +28,7 @@ service:
   basePort: 31010
 license: xxx-xxx-xxx
 project: PAS0710
+adminSciapps:
+  email: oscsoft@osc.edu
+  username: oscsoft
+  password: qwer1234
