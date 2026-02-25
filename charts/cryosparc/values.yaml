@@ -36,6 +36,7 @@ global:
 slurmCluster: "ascend"
 license: ''
 project: ''
+homeDir: '{{ .Values.project }}'
 workingDir: /opt/cryosparc_master
 
 image:
@@ -44,8 +45,8 @@ image:
   pullPolicy: IfNotPresent
 
 mounts:
-  home: /users/{{ .Values.project }}/{{ include "osc.common.serviceAccountValue" . }}
-  project: /fs/ess/{{ .Values.project }}
+  home: /users/{{ tpl .Values.homeDir . }}/{{ include "osc.common.serviceAccountValue" . }}
+  project: /fs/ess/{{ required "Project must be provided" .Values.project }}
   slurm_conf: /etc/slurm
   munge_socket: /var/run/munge/munge.socket.2
 
@@ -66,6 +67,7 @@ podSecurityContext:
     type: RuntimeDefault
   privileged: false
 
+# CryoSPARC Master Node Requirements
 # https://guide.cryosparc.com/setup-configuration-and-management/hardware-and-system-requirements#cryosparc-master-node-requirements
 podResources:
   limits:
@@ -74,9 +76,6 @@ podResources:
   requests:
     cpu: 4
     memory: 16Gi
-
-# Also pulled from global.env.$environment.replicas
-# replicas: 1
 
 podDistributionBudget:
   minAvailable: 1
@@ -90,37 +89,6 @@ alert:
 
 service:
   basePort: 31000
-
-probes:
-  type: ~
-  path: /
-startupProbe:
-  httpGet:
-    path: '{{ .probePath | default .Values.probes.path }}'
-    port: '{{ .portName | default .name }}'
-  tcpSocket:
-    port: '{{ .portName | default .name }}'
-  failureThreshold: 12
-  periodSeconds: 10
-  timeoutSeconds: 5
-livenessProbe:
-  httpGet:
-    path: '{{ .probePath | default .Values.probes.path }}'
-    port: '{{ .portName | default .name }}'
-  tcpSocket:
-    port: '{{ .portName | default .name }}'
-  failureThreshold: 6
-  periodSeconds: 10
-  timeoutSeconds: 5
-readinessProbe:
-  httpGet:
-    path: '{{ .probePath | default .Values.probes.path }}'
-    port: '{{ .portName | default .name }}'
-  tcpSocket:
-    port: '{{ .portName | default .name }}'
-  failureThreshold: 6
-  periodSeconds: 10
-  timeoutSeconds: 5
 
 ingress:
   # Also pulled from global.env.$environment.ingress.host
@@ -174,11 +142,6 @@ auth:
   # replicas: 1
   podDistributionBudget:
     minAvailable: 1
-
-hook:
-  image:
-    repository: docker-registry.osc.edu/kubernetes/bitnami/kubectl
-    tag: '1.27.14'
 
 # Used for network policies
 ingressName: ingress-nginx
