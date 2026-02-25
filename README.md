@@ -8,6 +8,8 @@ Charts for deploying OSC specific Kubernetes services using Helm
   - [webservice](#webservice)
   - [osc-open-webui](#osc-open-webui)
   - [database](#database)
+- [Helm Chart Values Patterns](#helm-chart-values-patterns)
+  - [Environment-Specific Values](#environment-specific-values)
 - [Infrastructure charts](#infrastructure-charts)
   - [prometheus](#prometheus)
   - [kubernetes-dashboard-proxy](#kubernetes-dashboard-proxy)
@@ -59,6 +61,93 @@ The [database](charts/database/README.md) chart provides database service deploy
 - Redis
 
 It includes integration with osc-common for consistent security and configuration practices.
+
+## Helm Chart Values Patterns
+
+When using the OSC Puppet infrastructure, some values are automatically added to Helm charts, particularly for webservices.
+
+For easier deployments it's best to rely on these auto-generated values when writing Helm charts.
+
+Common values added
+
+```yaml
+global:
+  environment: production  # or test, etc.
+  imagePullSecret:
+    password: <pull_secret_value>
+```
+
+All non-infrastructure services deployed at OSC need to set the service account that will run the service.
+
+```yaml
+global:
+  oscServiceAccount: <username>
+```
+
+Webservice specific values when `webservice => true` is set:
+
+```yaml
+webservice:
+  ingress:
+    host: <name>.<env k8 domain>
+    hostAlias: <name>.osc.edu
+```
+
+Authentication values when `keycloak_auth => true` is set:
+
+```yaml
+webservice:
+  auth:
+    idpHost: <ENV specific IDP host>
+    clientID: kubernetes-<name>-production
+    clientSecret: <secret_value>
+    cookieSecret: <cookie_value>
+```
+
+Global webservice configuration when `webservice_key => global` is set:
+
+```yaml
+global:
+  ingress:
+    host: <name>.<env k8 domain>
+    hostAlias: <name>.osc.edu
+  auth: # if keycloak_auth => true
+    idpHost: <ENV specific IDP host>
+    clientID: kubernetes-<name>-production
+    clientSecret: <secret_value>
+    cookieSecret: <cookie_value>
+```
+
+### Environment-Specific Values
+
+Environment-specific values are configured using the `global.env` section in Helm chart values. The example from [charts-private/emthub/values.yaml](./charts-private/emthub/values.yaml) shows how to set different configurations for different environments:
+
+```yaml
+global:
+  imageTag: v0.1.0
+  env:
+    production:
+      replicas: 2
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    test:
+      replicas: 2
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    dev:
+      replicas: 1
+      image:
+        tag: latest
+      podResources:
+        limits:
+          cpu: 2
+          memory: 2Gi
+        requests:
+          cpu: 500m
+          memory: 265Mi
+```
+
+Note that the `dev` environment should the only environment using `tag: latest` as it's intended for development purposes. Production and test environments should use tagged versions for consistency and stability.
 
 ## Infrastructure charts
 
