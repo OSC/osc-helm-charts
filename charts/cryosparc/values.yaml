@@ -32,18 +32,12 @@ global:
   debugGroups: []
   # -- Groups that can perform maintenance operations
   maintenanceGroups: []
-  # -- Groups that are allowed to perform port forwarding
-  portforwardGroups: []
-  # -- The persistent storage class
-  storageClass: webservices-nfs-client
 
 slurmCluster: "ascend"
 license: ''
 project: ''
 workingDir: /opt/cryosparc_master
-env: []
-defaultCommand: {}
-containers: {}
+
 image:
   repository: docker-registry.osc.edu/sciapps/cryosparc
   tag:
@@ -55,11 +49,24 @@ mounts:
   slurm_conf: /etc/slurm
   munge_socket: /var/run/munge/munge.socket.2
 
+adminSciApps:
+  email: ''
+  username: ''
+  password: ''
+
 nodeSelector: {}
 
 podSecurityContext:
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  seccompProfile:
+    type: RuntimeDefault
+  privileged: false
 
+# https://guide.cryosparc.com/setup-configuration-and-management/hardware-and-system-requirements#cryosparc-master-node-requirements
 podResources:
   limits:
     cpu: 8
@@ -76,8 +83,6 @@ podDistributionBudget:
 
 secrets: {}
 envSecrets: {}
-
-debugGroups: []
 
 alert:
   # Also pulled from global.env.$environment.alert.receiver
@@ -116,16 +121,6 @@ readinessProbe:
   failureThreshold: 6
   periodSeconds: 10
   timeoutSeconds: 5
-
-initContainers: {}
-init:
-  podResources:
-    limits:
-      cpu: 1
-      memory: 1Gi
-    requests:
-      cpu: 200m
-      memory: 256Mi
 
 ingress:
   # Also pulled from global.env.$environment.ingress.host
@@ -184,6 +179,7 @@ hook:
   image:
     repository: docker-registry.osc.edu/kubernetes/bitnami/kubectl
     tag: '1.27.14'
+
 # Used for network policies
 ingressName: ingress-nginx
 prometheusName: prometheus
