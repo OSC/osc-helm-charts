@@ -14,6 +14,7 @@ Charts for deploying OSC specific Kubernetes services using Helm
   - [paas](#paas)
   - [kyverno-policies](#kyverno-policies)
 - [Docker Images](#docker-images)
+  - [Adding New Docker Images](#adding-new-docker-images)
 
 ## Charts
 
