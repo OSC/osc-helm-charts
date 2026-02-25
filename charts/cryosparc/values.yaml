@@ -101,7 +101,6 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 
 auth:
-  enable: true
   clientID: kubernetes-{{ include "cryosparc.name" . }}
   clientSecret:
   cookieSecret:
