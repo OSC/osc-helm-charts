@@ -1,11 +1,12 @@
 global:
-  # -- The service account used by OSC deployments.
+  # -- The service account used by OSC deployments. **required**
   # Also pulled from global.env.<env>.serviceAccount
   oscServiceAccount: ""
-  # -- The deployment's OSC environment
+  # -- The deployment's OSC environment.
+  # Value is set by Puppet when deployed to OSC.
   environment: production
   # -- The OSC node role to use with nodeSelector
-  nodeSelectorRole: ""
+  nodeSelectorRole: webservices
   imagePullSecret:
     # -- Create the image pull secret
     create: true

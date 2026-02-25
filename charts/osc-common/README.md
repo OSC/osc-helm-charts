@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.9.0](https://img.shields.io/badge/Version-0.9.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.9.1](https://img.shields.io/badge/Version-0.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -29,9 +29,9 @@ OSC common Helm Chart
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| global.oscServiceAccount | The service account used by OSC deployments. Also pulled from global.env.<env>.serviceAccount | `""` |
-| global.environment | The deployment's OSC environment | `"production"` |
-| global.nodeSelectorRole | The OSC node role to use with nodeSelector | `""` |
+| global.oscServiceAccount | The service account used by OSC deployments. **required** Also pulled from global.env.<env>.serviceAccount | `""` |
+| global.environment | The deployment's OSC environment. Value is set by Puppet when deployed to OSC. | `"production"` |
+| global.nodeSelectorRole | The OSC node role to use with nodeSelector | `"webservices"` |
 | global.imagePullSecret.create | Create the image pull secret | `true` |
 | global.imagePullSecret.name | imagePullSecret name | `"osc-registry"` |
 | global.imagePullSecret.registry | imagePullSecret registry | `"docker-registry.osc.edu"` |
