@@ -13,6 +13,7 @@ Charts for deploying OSC specific Kubernetes services using Helm
   - [kubernetes-dashboard-proxy](#kubernetes-dashboard-proxy)
   - [paas](#paas)
   - [kyverno-policies](#kyverno-policies)
+- [Docker Images](#docker-images)
 
 ## Charts
 
@@ -79,3 +80,47 @@ The [paas](charts/paas/README.md) chart provides a bootstrap Helm chart for OSC'
 
 ### kyverno-policies
 The [kyverno-policies](charts/kyverno-policies) chart deploys Kyverno policies for Kubernetes cluster management with OSC-specific configurations.
+
+## Docker Images
+
+Docker images are built under the [docker-images](./docker-images/) directory for some of the charts managed by OSC. These images include:
+
+- [dcgm-exporter](./docker-images/dcgm-exporter/) - NVIDIA DCGM exporter for GPU metrics
+- [mariadb](./docker-images/mariadb/) - MariaDB database image
+- [postgresql](./docker-images/postgresql/) - PostgreSQL database image
+- [nominatim](./docker-images/nominatim/) - Nominatim geocoding service image
+- [postgresql-nominatim](./docker-images/postgresql-nominatim/) - PostgreSQL image with Nominatim support
+
+These images are used by various Helm charts in this repository and are built with OSC-specific configurations and security standards.
+
+### Adding New Docker Images
+
+To add a new docker image build, follow this pattern:
+
+1. Create a new directory under [docker-images](./docker-images/) with the name of your image
+2. Add a [Dockerfile](./docker-images/postgresql/Dockerfile) in that directory with your image definition
+3. Add a [Makefile](./docker-images/postgresql/Makefile) in that directory with build, push, and kind-load targets
+4. Update the [release_docker.yaml](.github/workflows/release_docker.yaml) workflow to include your new image in the matrix
+5. Update the [test.yaml](.github/workflows/test.yaml) workflow to build and load your image before chart tests
+
+Example structure:
+```
+docker-images/
+└── example-image/
+    ├── Dockerfile
+    └── Makefile
+```
+
+The Makefile should include targets for building, pushing, and loading the image into kind:
+```
+build:
+	docker build --build-arg VERSION=$(VERSION) -t $(TAG) $(ROOT_DIR)
+
+push:
+	docker push $(TAG)
+
+kind-load:
+	kind load docker-image $(TAG)
+```
+
+The workflow will automatically detect changes to your image directory and build/push it when changes are pushed to the main branch. The test workflow will also build and load your image into the kind cluster before running chart tests.
