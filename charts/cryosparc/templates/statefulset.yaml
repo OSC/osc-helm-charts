@@ -61,25 +61,31 @@ spec:
           printenv MY_NODE_NAME;
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
           cryosparcm start;
-          # Fix rollout restart issue
-          cryosparcm restart;
-          # Add Sciapps admin account
-          cryosparcm listusers |grep "$ADMIN_USERNAME";
-          if [ $? -ne 0 ]; then
-            cryosparcm createuser --email "$ADMIN_EMAIL" --username "$ADMIN_USERNAME" --firstname "SciApps" --lastname "Admin" --password "$ADMIN_PASSWORD";
-            cryosparcm updateuser --email "$ADMIN_EMAIL" --admin "true" --password "$ADMIN_PASSWORD";
-          fi
-          unset ADMIN_EMAIL ADMIN_USERNAME ADMIN_PASSWORD
-          # Update cluster lanes
-          ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
-            cd $x;
-            cryosparcm cluster connect;
-          done;
+          cryosparcm restart;           # Fix rollout restart issue
           cryosparcm status;
           # Keep the pod running
           while true; do 
             sleep 3600;
           done;
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - "sh"
+              - "-c"
+              - |
+                cryosparcm listusers |grep "$ADMIN_USERNAME";
+                if [ $? -ne 0 ]; then
+                  echo "Adding Sciapps admin role";
+                  cryosparcm createuser --email "$ADMIN_EMAIL" --username "$ADMIN_USERNAME" --firstname "SciApps" --lastname "Admin" --password "$ADMIN_PASSWORD";
+                  cryosparcm updateuser --email "$ADMIN_EMAIL" --admin "true" --password "$ADMIN_PASSWORD";
+                fi
+                unset ADMIN_EMAIL ADMIN_USERNAME ADMIN_PASSWORD
+                echo "Updating cluster lanes";
+                ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
+                  cd $x;
+                  cryosparcm cluster connect;
+                done;
         workingDir: {{ .Values.workingDir }}
         env:
         - name: SLURM_CONF
