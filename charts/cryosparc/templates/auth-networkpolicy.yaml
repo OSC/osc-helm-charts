@@ -13,8 +13,8 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.ingressName }}
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.ingressNamespace }}
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.prometheusName }}
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
 {{ end }}
