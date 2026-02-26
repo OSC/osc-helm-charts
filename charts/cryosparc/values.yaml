@@ -1,7 +1,7 @@
 global:
   # -- The service account used by OSC deployments.
   # Also pulled from global.env.<env>.serviceAccount
-  oscServiceAccount: ""
+  oscServiceAccount: '{{ include "cryosparc.name" . }}'
   # -- The deployment's OSC environment
   environment: production
   # -- The OSC node role to use with nodeSelector
@@ -43,6 +43,8 @@ global:
         requests:
           cpu: 4
           memory: 16Gi
+      auth:
+        replicas: 2
     test:
       podResources:
         limits:
@@ -51,6 +53,8 @@ global:
         requests:
           cpu: 1
           memory: 256Mi
+      auth:
+        replicas: 2
     dev:
       podResources:
         limits:
@@ -59,6 +63,8 @@ global:
         requests:
           cpu: 1
           memory: 256Mi
+      auth:
+        replicas: 1
 # -- The CryoSPARC license ID
 license: ''
 # -- The CryoSPARC version
@@ -88,22 +94,13 @@ adminSciApps:
 
 nodeSelector: {}
 
+# @ignored
 podSecurityContext:
   runAsNonRoot: true
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  seccompProfile:
-    type: RuntimeDefault
-  privileged: false
-
-podDistributionBudget:
-  minAvailable: 1
 
 alert:
   # Also pulled from global.env.$environment.alert.receiver
-  receiver:
+  receiver: sciapps
 
 service:
   basePort: 31000
@@ -155,8 +152,7 @@ auth:
     className: ~
     annotations:
       prometheus.io/probe_path: /ping
-  # Also pulled from global.env.$environment.auth.replicas
+  # Pulled from global.env.$environment.auth.replicas
   # replicas: 1
   podDistributionBudget:
     minAvailable: 1
-

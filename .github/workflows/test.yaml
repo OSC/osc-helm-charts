@@ -114,6 +114,16 @@ jobs:
         run: |
           helm repo add jetstack https://charts.jetstack.io
           helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.14.4 --set installCRDs=true
+      - name: Setup Environment
+        if: matrix.chart == 'cryosparc'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y munge
+          sudo -u munge mungekey --verbose
+          sudo systemctl start munge
+          sudo mkdir -p /etc/slurm
+          sudo mkdir -p /fs/ess/PAS0710
+          sudo mkdir -p /users/PAS0710/cryosciapps
       - name: Add namespaces
         run: kubectl create namespace ${{ matrix.chart }}
       - name: Run chart-testing (install)
