@@ -35,22 +35,24 @@ spec:
       {{- end }}
       initContainers:
       - name: {{ include "cryosparc.name" . }}-init
-        image: {{ .Values.image.repository }}:{{ tpl (include "cryosparc.imageTag" .) . }}
+        image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
         command: ["sh", "-c"]
         args:
         - |
+          # Create the required subpaths
           mkdir -p /cryosparc_home/lanes;
           mkdir -p /cryosparc_home/database;
+          mkdir -p /cryosparc_home/run;
         volumeMounts:
         - name: cryosparc-home
           mountPath: /cryosparc_home
         resources:
           requests:
             cpu: 1
-            memory: 2Gi
+            memory: 256Mi
       containers:
       - name: {{ include "cryosparc.name" . }}
-        image: {{ .Values.image.repository }}:{{ tpl (include "cryosparc.imageTag" .) . }}
+        image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         envFrom:
         - configMapRef:
@@ -86,10 +88,9 @@ spec:
                   cd $x;
                   cryosparcm cluster connect;
                 done;
-        workingDir: {{ .Values.workingDir }}
         env:
         - name: SLURM_CONF
-          value: {{ printf "/etc/slurm/slurm-%s.conf" .Values.slurmCluster }}
+          value: {{ .Values.slurmConf }}
         - name: MY_NODE_NAME
           valueFrom:
             fieldRef:
@@ -116,13 +117,14 @@ spec:
               key: password
         volumeMounts:
         - name: cryosparc-home
-          mountPath: /cryosparc_home
-        - name: cryosparc-home
           mountPath: /opt/cryosparc_master/database
           subPath: database
         - name: cryosparc-home
           mountPath: /opt/cryosparc_master/lanes
           subPath: lanes
+        - name: cryosparc-home
+          mountPath: /opt/cryosparc_master/run
+          subPath: run
         - name: project
           mountPath: {{ tpl .Values.mounts.project . }}
           readOnly: false
@@ -131,12 +133,12 @@ spec:
           readOnly: true
         - name: munge-socket
           mountPath: {{ .Values.mounts.munge_socket }}
-        resources: {{ toYaml .Values.podResources | nindent 10 }}
+        resources: {{ toYaml (index .Values.global.env (include "osc.common.environment" .) "podResources") | nindent 10 }}
       nodeSelector: 
         {{ include "osc.common.nodeSelectorRole" . }}
-      {{- with .Values.nodeSelector }}
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- with .Values.nodeSelector }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       volumes:
       - name: cryosparc-home
         hostPath:
