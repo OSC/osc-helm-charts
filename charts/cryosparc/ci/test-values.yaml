@@ -30,4 +30,3 @@ podSecurityContext:
   fsGroup: 3333
 service:
   basePort: 31010
-
