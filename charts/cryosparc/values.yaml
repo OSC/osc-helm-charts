@@ -160,6 +160,3 @@ auth:
   podDistributionBudget:
     minAvailable: 1
 
-# Used for network policies
-ingressName: ingress-nginx
-prometheusName: prometheus
