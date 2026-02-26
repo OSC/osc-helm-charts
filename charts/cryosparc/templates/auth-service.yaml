@@ -27,6 +27,9 @@ metadata:
   name: {{ include "cryosparc.auth.name" . }}-metrics
   labels:
     {{- include "cryosparc.auth.labels" . | nindent 4 }}
+  {{- if (include "cryosparc.alert.receiver" .) }}
+    receiver: {{ include "cryosparc.alert.receiver" . }}
+  {{- end }}
   {{- with .Values.auth.metricsService.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
