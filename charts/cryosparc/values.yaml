@@ -32,16 +32,47 @@ global:
   debugGroups: []
   # -- Groups that can perform maintenance operations
   maintenanceGroups: []
-
-slurmCluster: "ascend"
+  env:
+    production:
+      # CryoSPARC Master Node Requirements
+      # https://guide.cryosparc.com/setup-configuration-and-management/hardware-and-system-requirements#cryosparc-master-node-requirements
+      podResources:
+        limits:
+          cpu: 8
+          memory: 32Gi
+        requests:
+          cpu: 4
+          memory: 16Gi
+    test:
+      podResources:
+        limits:
+          cpu: 1
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+    dev:
+      podResources:
+        limits:
+          cpu: 1
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+# -- The CryoSPARC license ID
 license: ''
+# -- The CryoSPARC version
+version: ''
+# -- The revision used by the CryoSPARC container image
+revision: 1
+# -- The service project
 project: ''
 homeDir: '{{ .Values.project }}'
-workingDir: /opt/cryosparc_master
+slurmConf: /etc/slurm/slurm-ascend.conf
 
 image:
-  repository: docker-registry.osc.edu/sciapps/cryosparc
-  tag:
+  repository: docker-registry.osc.edu/webservices/cryosparc-{{ include "osc.common.serviceAccountValue" . }}
+  tag: '{{ required "Version must be provided" .Values.version }}-r{{ .Values.revision }}'
   pullPolicy: IfNotPresent
 
 mounts:
@@ -67,21 +98,8 @@ podSecurityContext:
     type: RuntimeDefault
   privileged: false
 
-# CryoSPARC Master Node Requirements
-# https://guide.cryosparc.com/setup-configuration-and-management/hardware-and-system-requirements#cryosparc-master-node-requirements
-podResources:
-  limits:
-    cpu: 8
-    memory: 32Gi
-  requests:
-    cpu: 4
-    memory: 16Gi
-
 podDistributionBudget:
   minAvailable: 1
-
-secrets: {}
-envSecrets: {}
 
 alert:
   # Also pulled from global.env.$environment.alert.receiver
