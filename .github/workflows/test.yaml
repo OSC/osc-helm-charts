@@ -86,6 +86,11 @@ jobs:
         run: |
           make -f docker-images/dcgm-exporter/Makefile build
           make -f docker-images/dcgm-exporter/Makefile kind-load
+      - name: Build and Load images
+        if: matrix.chart == 'cryosparc'
+        run: |
+          make -f docker-images/cryosparc/Makefile build
+          make -f docker-images/cryosparc/Makefile kind-load
       - name: Label kind nodes
         run: |
           kubectl label node kind-worker node-role.kubernetes.io/test=''
