@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "cryosparc.name" . }}
+  labels:
+    {{ include "osc.common.serviceAccount" . }}
+    {{- include "cryosparc.labels" . | nindent 4 }}
+  {{- if (include "cryosparc.alert.receiver" .) }}
+    receiver: {{ include "cryosparc.alert.receiver" . }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "cryosparc.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "osc.common.serviceAccount" . }}
+        {{- include "cryosparc.selectorLabels" . | nindent 8 }}
+      {{- if (include "cryosparc.alert.receiver" .) }}
+        receiver: {{ include "cryosparc.alert.receiver" . }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "cryosparc.name" . }}
+      securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
+      hostNetwork: false
+      hostIPC: false
+      hostPID: false
+      {{- $nodes := include "cryosparc.nodes" . | fromJsonArray }}
+      {{- if $nodes }}
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        {{- $nodes | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+      - name: {{ include "cryosparc.name" . }}-init
+        image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
+        command: ["sh", "-c"]
+        args:
+        - |
+          # Create the required subpaths
+          mkdir -p /cryosparc_home/lanes;
+          mkdir -p /cryosparc_home/database;
+          mkdir -p /cryosparc_home/run;
+        volumeMounts:
+        - name: cryosparc-home
+          mountPath: /cryosparc_home
+        resources:
+          requests:
+            cpu: 1
+            memory: 256Mi
+      containers:
+      - name: {{ include "cryosparc.name" . }}
+        image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "cryosparc.name" . }}-config
+        command: ["sh", "-c"]
+        args:
+        - |
+          printenv MY_NODE_NAME;
+          export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
+          cryosparcm start;
+          cryosparcm restart;           # Fix rollout restart issue
+          cryosparcm status;
+          # Keep the pod running
+          while true; do 
+            sleep 3600;
+          done;
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - "sh"
+              - "-c"
+              - |
+                cryosparcm listusers |grep "$ADMIN_USERNAME";
+                if [ $? -ne 0 ]; then
+                  echo "Adding Sciapps admin role";
+                  cryosparcm createuser --email "$ADMIN_EMAIL" --username "$ADMIN_USERNAME" --firstname "SciApps" --lastname "Admin" --password "$ADMIN_PASSWORD";
+                  cryosparcm updateuser --email "$ADMIN_EMAIL" --admin "true" --password "$ADMIN_PASSWORD";
+                fi
+                unset ADMIN_EMAIL ADMIN_USERNAME ADMIN_PASSWORD
+                echo "Updating cluster lanes";
+                ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
+                  cd $x;
+                  cryosparcm cluster connect;
+                done;
+        env:
+        - name: SLURM_CONF
+          value: {{ .Values.slurmConf }}
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: CRYOSPARC_LICENSE_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: license
+        - name: ADMIN_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: email
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: username
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cryosparc.name" . }}
+              key: password
+        volumeMounts:
+        - name: cryosparc-home
+          mountPath: /opt/cryosparc_master/database
+          subPath: database
+        - name: cryosparc-home
+          mountPath: /opt/cryosparc_master/lanes
+          subPath: lanes
+        - name: cryosparc-home
+          mountPath: /opt/cryosparc_master/run
+          subPath: run
+        - name: project
+          mountPath: {{ tpl .Values.mounts.project . }}
+          readOnly: false
+        - name: slurm-conf
+          mountPath: {{ .Values.mounts.slurm_conf }}
+          readOnly: true
+        - name: munge-socket
+          mountPath: {{ .Values.mounts.munge_socket }}
+        resources: {{ toYaml (index .Values.global.env (include "osc.common.environment" .) "podResources") | nindent 10 }}
+      nodeSelector: 
+        {{ include "osc.common.nodeSelectorRole" . }}
+        {{- with .Values.nodeSelector }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      volumes:
+      - name: cryosparc-home
+        hostPath:
+          path: {{ tpl .Values.mounts.home . }}
+          type: Directory
+      - name: project
+        hostPath:
+          path: {{ tpl .Values.mounts.project . }}
+          type: Directory
+      - name: slurm-conf
+        hostPath:
+          path: {{ .Values.mounts.slurm_conf }}
+          type: Directory
+      - name: munge-socket
+        hostPath:
+          path: {{ .Values.mounts.munge_socket }}
+          type: Socket

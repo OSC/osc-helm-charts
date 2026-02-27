@@ -1,0 +1,18 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "cryosparc.auth.name" . }}
+  labels:
+    {{- include "cryosparc.auth.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "cryosparc.auth.selectorLabels" . | nindent 6 }}
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.ingressNamespace }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}

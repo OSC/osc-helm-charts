@@ -1,0 +1,32 @@
+global:
+  environment: dev
+  oscServiceAccount: cryosciapps
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  debugGroups:
+    - foobar
+  maintenanceGroups:
+    - foo
+    - bar
+license: xxx-xxx-xxx
+version: 4.7.1
+project: PAS0710
+adminSciapps:
+  email: osc1234@osc.edu
+  username: osc1234
+  password: qwer1234
+nodeSelector:
+  kubernetes.io/os: linux
+auth:
+  clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
+  cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
+  oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
+ingress:
+  host: cryosciapps.osc.edu
+podSecurityContext:
+  runAsUser: 12345
+  runAsGroup: 3333
+  fsGroup: 3333
+service:
+  basePort: 31010

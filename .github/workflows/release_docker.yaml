@@ -20,6 +20,7 @@ jobs:
           - postgresql
           - nominatim
           - postgresql-nominatim
+          - cryosparc
     name: Release ${{ matrix.image }} Docker image
     steps:
       - name: Checkout
