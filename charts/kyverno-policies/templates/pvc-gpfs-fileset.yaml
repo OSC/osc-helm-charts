@@ -36,11 +36,8 @@ spec:
             kinds:
             - PersistentVolumeClaim
             namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - webservice
+              matchLabels:
+                osc.edu/role: webservice
     context:
     - name: userGroupMap
       configMap:
@@ -60,11 +57,8 @@ spec:
           kinds:
           - PersistentVolumeClaim
           namespaceSelector:
-            matchExpressions:
-            - key: osc.edu/role
-              operator: In
-              values:
-              - paas
+            matchLabels:
+              osc.edu/role: paas
     preconditions:
     - key: "{{`{{ request.operation }}`}}"
       operator: In
