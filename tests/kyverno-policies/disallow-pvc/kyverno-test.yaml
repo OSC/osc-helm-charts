@@ -13,42 +13,38 @@ results:
     rule: user-no-pvc
     resources:
       - pvc-skip
-      - pvc-skip-paas-staff
+      - pvc-skip-paas
     kind: PersistentVolumeClaim
     result: skip
   - policy: disallow-pvc
     rule: user-no-pvc
     resources:
       - test-pass
-      - paas-pass
     kind: Pod
     result: pass
   - policy: disallow-pvc
     rule: user-no-pvc
     resources:
       - pvc-fail
-      - pvc-paas-fail
     kind: PersistentVolumeClaim
     result: fail
   - policy: disallow-pvc
     rule: disallow-pvc
     resources:
       - test-skip
-      - paas-staff-skip
+      - paas-skip
     kind: Pod
     result: skip
   - policy: disallow-pvc
     rule: disallow-pvc
     resources:
       - test-pass
-      - paas-pass
     kind: Pod
     result: pass
   - policy: disallow-pvc
     rule: disallow-pvc
     resources:
       - test-fail
-      - paas-fail
     kind: Pod
     result: fail
   - policy: disallow-pvc
@@ -62,13 +58,11 @@ results:
     rule: disallow-statefulset-pvc
     resources:
       - test-statefulset-pass
-      - paas-statefulset-pass
     kind: StatefulSet
     result: pass
   - policy: disallow-pvc
     rule: disallow-statefulset-pvc
     resources:
       - test-statefulset-fail
-      - paas-statefulset-fail
     kind: StatefulSet
     result: fail
