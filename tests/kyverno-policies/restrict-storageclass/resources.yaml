@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: paas-pvc-skip
+  name: paas-staff-pvc-skip
   namespace: paas-staff
 spec:
   accessModes:
@@ -67,7 +67,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: paas-pvc-pass
+  name: paas-staff-pvc-pass
   namespace: paas-staff
 spec:
   accessModes:
@@ -80,7 +80,33 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: paas-pvc-pass-local
+  name: paas-pvc-pass
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: gpfs-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paas-pvc-fail
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: paas-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paas-staff-pvc-pass-local
   namespace: paas-staff
 spec:
   accessModes:
@@ -93,7 +119,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: paas-pvc-pass-local-path
+  name: paas-staff-pvc-pass-local-path
   namespace: paas-staff
 spec:
   accessModes:
@@ -106,7 +132,7 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: paas-statefulset-skip
+  name: paas-staff-statefulset-skip
   namespace: paas-staff
 spec:
   volumeClaimTemplates:
@@ -118,7 +144,7 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: paas-statefulset-pass
+  name: paas-staff-statefulset-pass
   namespace: paas-staff
 spec:
   volumeClaimTemplates:
@@ -130,7 +156,31 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: paas-statefulset-pass-local
+  name: paas-statefulset-pass
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: gpfs-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-fail
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: paas-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-staff-statefulset-pass-local
   namespace: paas-staff
 spec:
   volumeClaimTemplates:
@@ -142,7 +192,7 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: paas-statefulset-pass-local-path
+  name: paas-staff-statefulset-pass-local-path
   namespace: paas-staff
 spec:
   volumeClaimTemplates:

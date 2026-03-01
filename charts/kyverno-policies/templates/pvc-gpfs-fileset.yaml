@@ -1,0 +1,87 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pvc-gpfs-fileset
+spec:
+  background: false
+  validationFailureAction: Enforce
+  rules:
+  - name: validate-webservice-service-account
+    match:
+      any:
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.metadata.annotations.\"nfs.io/fileset\" || '' }}`}}"
+          operator: NotEquals
+          value: ""
+    validate:
+      message: "PVC with nfs.io/fileset requires {{ include "osc.common.serviceAccountKey" . }} label be set."
+      pattern:
+        metadata:
+          labels:
+            {{ include "osc.common.serviceAccountKey" . }}: "?*"
+  - name: validate-webservice-fileset-annotation
+    match:
+      any:
+        - resources:
+            kinds:
+            - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+    context:
+    - name: userGroupMap
+      configMap:
+        name: user-groups-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: "PVC annotation 'nfs.io/fileset' is not authorized for this webservice"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.metadata.annotations.\"nfs.io/fileset\" }}`}}"
+          operator: AnyNotIn
+          value: "{{`{{ userGroupMap.data.\"user-{{ request.object.metadata.labels.\"osc.edu/service-account\" || '' }}\" }}`}}"
+  - name: validate-paas-fileset-annotation
+    match:
+      any:
+      - resources:
+          kinds:
+          - PersistentVolumeClaim
+          namespaceSelector:
+            matchLabels:
+              osc.edu/role: paas
+    preconditions:
+    - key: "{{`{{ request.operation }}`}}"
+      operator: In
+      value: ["CREATE","UPDATE"]
+    - key: "{{`{{ request.object.metadata.annotations.\"nfs.io/fileset\" || '' }}`}}"
+      operator: NotEquals
+      value: ""
+    - key: "{{`{{ serviceAccount }}`}}"
+      operator: NotEquals
+      value: ""
+    context:
+    - name: serviceAccount
+      apiCall:
+        urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+        jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" || ''"
+    - name: userGroupMap
+      configMap:
+        name: user-groups-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: "PVC annotation 'nfs.io/fileset' is not authorized for this namespace"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.metadata.annotations.\"nfs.io/fileset\" }}`}}"
+          operator: AnyNotIn
+          value: "{{`{{ userGroupMap.data.\"user-{{ serviceAccount }}\" }}`}}"
