@@ -2,6 +2,51 @@ apiVersion: cli.kyverno.io/v1alpha1
 kind: Values
 metadata:
   name: values
+policies:
+  - name: restrict-storageclass
+    rules:
+      - name: paas-pvc-storageclass
+        values:
+          allowed.paas: ["gpfs-nfs-client"]
+          allowed.paas-staff: ["gpfs-nfs-client", "local-path", "paas-nfs-client"]
+      - name: paas-statefulset-storageclass
+        values:
+          allowed.paas: ["gpfs-nfs-client"]
+          allowed.paas-staff: ["gpfs-nfs-client", "local-path", "paas-nfs-client"]
+    resources:
+      - name: paas-staff-pvc-pass
+        values:
+          paasName: paas-staff
+      - name: paas-pvc-pass
+        values:
+          paasName: paas
+      - name: paas-staff-pvc-pass-local
+        values:
+          paasName: paas-staff
+      - name: paas-staff-pvc-pass-local-path
+        values:
+          paasName: paas-staff
+      - name: paas-staff-pvc-skip
+        values:
+          paasName: paas-staff
+      - name: paas-pvc-fail
+        values:
+          paasName: paas
+      - name: paas-staff-statefulset-pass
+        values:
+          paasName: paas-staff
+      - name: paas-statefulset-pass
+        values:
+          paasName: paas
+      - name: paas-statefulset-fail
+        values:
+          paasName: paas
+      - name: paas-staff-statefulset-pass-local
+        values:
+          paasName: paas-staff
+      - name: paas-staff-statefulset-pass-local-path
+        values:
+          paasName: paas-staff
 namespaceSelector:
   - name: webservice
     labels:
