@@ -1,0 +1,46 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+  - name: pvc-gpfs-fileset
+    rules:
+      - name: validate-webservice-fileset-annotation
+        values:
+          userGroupMap.data.user-test: '["user-test-fileset","user-test-fileset2"]'
+      - name: validate-paas-fileset-annotation
+        values:
+          userGroupMap.data.user-test: '["user-test-fileset","user-test-fileset2"]'
+          userGroupMap.data.user-foo: '[]'
+    resources:
+      - name: pvc-webservice-skip
+        values:
+          request.operation: CREATE
+      - name: pvc-webservice-pass
+        values:
+          request.operation: CREATE
+      - name: pvc-webservice-fail
+        values:
+          request.operation: CREATE
+      - name: pvc-paas-skip
+        values:
+          request.operation: CREATE
+      - name: pvc-paas-pass
+        values:
+          request.operation: CREATE
+          serviceAccount: test
+      - name: pvc-paas-fail
+        values:
+          request.operation: CREATE
+          serviceAccount: foo
+namespaceSelector:
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test
+  - name: user-test
+    labels:
+      account: test

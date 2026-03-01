@@ -1,0 +1,66 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pvc-gpfs-fileset
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: pvc-gpfs-fileset
+    rule: validate-webservice-service-account
+    resources:
+      - pvc-webservice-skip
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: validate-webservice-service-account
+    resources:
+      - pvc-webservice-pass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: validate-webservice-service-account
+    resources:
+      - pvc-webservice-fail-no-sa
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: validate-webservice-fileset-annotation
+    resources:
+      - pvc-webservice-skip
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: validate-webservice-fileset-annotation
+    resources:
+      - pvc-webservice-pass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: validate-webservice-fileset-annotation
+    resources:
+      - pvc-webservice-fail
+      - pvc-webservice-fail-no-sa
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: validate-paas-fileset-annotation
+    resources:
+      - pvc-paas-skip
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: validate-paas-fileset-annotation
+    resources:
+      - pvc-paas-pass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: validate-paas-fileset-annotation
+    resources:
+      - pvc-paas-fail
+    kind: PersistentVolumeClaim
+    result: fail
