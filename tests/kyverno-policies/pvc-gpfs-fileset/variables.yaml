@@ -15,23 +15,17 @@ policies:
     resources:
       - name: pvc-webservice-skip
         values:
-          request.operation: CREATE
       - name: pvc-webservice-pass
         values:
-          request.operation: CREATE
       - name: pvc-webservice-fail
         values:
-          request.operation: CREATE
       - name: pvc-paas-skip
         values:
-          request.operation: CREATE
       - name: pvc-paas-pass
         values:
-          request.operation: CREATE
           serviceAccount: test
       - name: pvc-paas-fail
         values:
-          request.operation: CREATE
           serviceAccount: foo
 namespaceSelector:
   - name: webservice
