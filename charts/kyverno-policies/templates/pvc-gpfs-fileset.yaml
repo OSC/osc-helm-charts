@@ -6,6 +6,62 @@ spec:
   background: false
   validationFailureAction: Enforce
   rules:
+  - name: pvc-add-scratch-user-webservice
+    match:
+      any:
+        - resources:
+            kinds:
+            - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-scratch
+        - key: "{{`{{ serviceAccount }}`}}"
+          operator: NotEquals
+          value: ""
+    context:
+      - name: serviceAccount
+        variable:
+          jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
+          default: ''
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          annotations:
+            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+  - name: pvc-add-scratch-user-paas
+    match:
+      any:
+        - resources:
+            kinds:
+            - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-scratch
+        - key: "{{`{{ serviceAccount }}`}}"
+          operator: NotEquals
+          value: ""
+    context:
+      - name: serviceAccount
+        apiCall:
+          urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+          jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" || ''"
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          annotations:
+            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
   - name: validate-webservice-service-account
     match:
       any:
@@ -20,15 +76,51 @@ spec:
               - UPDATE
     preconditions:
       all:
-        - key: "{{`{{ request.object.metadata.annotations.\"osc.edu/fileset\" || '' }}`}}"
-          operator: NotEquals
-          value: ""
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
     validate:
       message: "PVC with osc.edu/fileset requires {{ include "osc.common.serviceAccountKey" . }} label be set."
       pattern:
         metadata:
           labels:
             {{ include "osc.common.serviceAccountKey" . }}: "?*"
+  - name: pvc-validate-fileset-set
+    match:
+      any:
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+    validate:
+      message: "PVC requires the osc.edu/fileset annotation to be set to a valid fileset name"
+      pattern:
+        metadata:
+          annotations:
+            osc.edu/fileset: "?*"
   - name: validate-webservice-fileset-annotation
     match:
       any:

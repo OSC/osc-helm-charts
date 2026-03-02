@@ -13,6 +13,12 @@ policies:
           userGroupMap.data.user-test: '["user-test-fileset","user-test-fileset2"]'
           userGroupMap.data.user-foo: '[]'
     resources:
+      - name: pvc-webservice-scratch
+        values:
+          serviceAccount: test
+      - name: pvc-paas-scratch
+        values:
+          serviceAccount: test
       - name: pvc-webservice-skip
         values:
       - name: pvc-webservice-pass

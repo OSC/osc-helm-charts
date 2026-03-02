@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-scratch
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+    osc.edu/scratch-user: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch

@@ -10,6 +10,32 @@ resources:
 variables: variables.yaml
 results:
   - policy: pvc-gpfs-fileset
+    rule: pvc-add-scratch-user-webservice
+    resources:
+      - pvc-webservice-scratch
+    patchedResources: pvc-webservice-scratch.yaml
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: pvc-add-scratch-user-webservice
+    resources:
+      - pvc-webservice-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: pvc-add-scratch-user-paas
+    resources:
+      - pvc-paas-scratch
+    patchedResources: pvc-paas-scratch.yaml
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: pvc-add-scratch-user-paas
+    resources:
+      - pvc-paas-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
     rule: validate-webservice-service-account
     resources:
       - pvc-webservice-skip
@@ -27,6 +53,36 @@ results:
       - pvc-webservice-fail-no-sa
     kind: PersistentVolumeClaim
     result: fail
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-webservice-fail-no-fileset
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-webservice-skip-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-webservice-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-paas-fail-no-fileset
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-paas-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: pass
   - policy: pvc-gpfs-fileset
     rule: validate-webservice-fileset-annotation
     resources:

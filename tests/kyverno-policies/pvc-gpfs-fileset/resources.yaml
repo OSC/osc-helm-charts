@@ -26,6 +26,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
+  storageClassName: local-ess
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -96,3 +97,104 @@ spec:
   resources:
     requests:
       storage: 8Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-fail-no-fileset
+  namespace: webservice
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-skip-storageclass
+  namespace: webservice
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-pass-storageclass
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-no-fileset
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-pass-storageclass
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-scratch
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-scratch
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
