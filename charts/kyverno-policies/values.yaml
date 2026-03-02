@@ -30,7 +30,7 @@ webservices:
     - infrastructure
     - webservices
   validStorageClass:
-    - ess-nfs-client
+    - local-ess
     - local-path
     - webservices-nfs-client
 paas:
@@ -52,9 +52,9 @@ paas:
   ingressClassName: nginx
   validStorageClass:
     paas:
-      - ess-nfs-client
+      - local-ess
     paasStaff:
-      - ess-nfs-client
+      - local-ess
       - local-path
       - paas-nfs-client
 validationFailureAction: {}
