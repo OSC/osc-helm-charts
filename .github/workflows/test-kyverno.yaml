@@ -23,9 +23,9 @@ jobs:
           go-version: '1.18'
           cache: false
       - name: Set up Helm
-        uses: azure/setup-helm@v3
+        uses: azure/setup-helm@v4
         with:
-          version: v3.12.0
+          version: v4.1.1
       - name: Test Kyverno policies
         run: |
           helm dependency update charts/kyverno-policies

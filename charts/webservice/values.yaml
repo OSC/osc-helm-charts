@@ -214,9 +214,9 @@ database:
   imagePullSecret:
     enable: false
   host: '{{ include "webservice.name" . }}-mariadb'
-  user: '{{ .Values.database.mariadb.auth.username }}'
-  password: '{{ .Values.database.mariadb.auth.password }}'
-  name: '{{ .Values.database.mariadb.auth.database }}'
+  user: ''
+  password: ''
+  name: ''
   url: mysql2://{{ tpl .Values.database.user . }}:$(DATABASE_PASSWORD)@{{ tpl .Values.database.host . }}:3306/{{ tpl .Values.database.name . }}
   mariadb:
     enable: false
