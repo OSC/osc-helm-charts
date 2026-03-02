@@ -88,7 +88,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: gpfs-nfs-client
+  storageClassName: ess-nfs-client
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -163,7 +163,7 @@ spec:
     - metadata:
         name: paas-statefulset-pass
       spec:
-        storageClassName: gpfs-nfs-client
+        storageClassName: ess-nfs-client
 ---
 apiVersion: apps/v1
 kind: StatefulSet

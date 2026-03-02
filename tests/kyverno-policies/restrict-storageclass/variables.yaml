@@ -7,12 +7,12 @@ policies:
     rules:
       - name: paas-pvc-storageclass
         values:
-          allowed.paas: ["gpfs-nfs-client"]
-          allowed.paas-staff: ["gpfs-nfs-client", "local-path", "paas-nfs-client"]
+          allowed.paas: ["ess-nfs-client"]
+          allowed.paas-staff: ["ess-nfs-client", "local-path", "paas-nfs-client"]
       - name: paas-statefulset-storageclass
         values:
-          allowed.paas: ["gpfs-nfs-client"]
-          allowed.paas-staff: ["gpfs-nfs-client", "local-path", "paas-nfs-client"]
+          allowed.paas: ["ess-nfs-client"]
+          allowed.paas-staff: ["ess-nfs-client", "local-path", "paas-nfs-client"]
     resources:
       - name: paas-staff-pvc-pass
         values:

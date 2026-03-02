@@ -53,9 +53,9 @@ paas:
   ingressClassName: nginx
   validStorageClass:
     paas:
-      - gpfs-nfs-client
+      - ess-nfs-client
     paasStaff:
-      - gpfs-nfs-client
+      - ess-nfs-client
       - local-path
       - local-storage
       - paas-nfs-client
