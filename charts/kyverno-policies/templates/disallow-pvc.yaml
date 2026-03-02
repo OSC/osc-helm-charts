@@ -19,19 +19,6 @@ spec:
             - PersistentVolumeClaim
           namespaces:
             - "user-?*"
-      - resources:
-          kinds:
-            - PersistentVolumeClaim
-          namespaceSelector:
-            matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - paas
-              - key: app.kubernetes.io/name
-                operator: NotIn
-                values:
-                - paas-staff
     validate:
       message: "PersistentVolumeClaim is not allowed."
       deny: {}
@@ -43,19 +30,6 @@ spec:
           - Pod
           namespaces:
           - "user-?*"
-      - resources:
-          kinds:
-            - PersistentVolumeClaim
-          namespaceSelector:
-            matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - paas
-              - key: app.kubernetes.io/name
-                operator: NotIn
-                values:
-                - paas-staff
     validate:
       message: >-
         persistentVolumeClaims is not allowed
@@ -71,19 +45,6 @@ spec:
           - StatefulSet
           namespaces:
           - "user-?*"
-      - resources:
-          kinds:
-            - StatefulSet
-          namespaceSelector:
-            matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - paas
-              - key: app.kubernetes.io/name
-                operator: NotIn
-                values:
-                - paas-staff
     validate:
       message: >-
         volumeClaimTemplates is not allowed

@@ -7,8 +7,3 @@ namespaceSelector:
     labels:
       osc.edu/role: paas
       app.kubernetes.io/name: paas
-  - name: paas-staff
-    labels:
-      osc.edu/role: paas
-      app.kubernetes.io/name: paas-staff
-      

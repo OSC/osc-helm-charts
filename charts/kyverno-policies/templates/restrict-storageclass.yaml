@@ -39,15 +39,24 @@ spec:
               namespaceSelector:
                 matchLabels:
                   osc.edu/role: paas
-                  app.kubernetes.io/name: paas-staff
               operations:
                 - CREATE
                 - UPDATE
+      context:
+        - name: paasName
+          apiCall:
+            urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+            jmesPath: "metadata.labels.\"app.kubernetes.io/name\" || ''"
+        - name: allowed
+          variable:
+            value:
+              paas: "{{ join " | " .Values.paas.validStorageClass.paas }}"
+              paas-staff: "{{ join " | " .Values.paas.validStorageClass.paasStaff }}"
       validate:
-        message: PVC storageClassName must be one of {{ join " , " .Values.paas.validStorageClass }}
+        message: "PVC storageClassName must be one of {{`{{ allowed.\"{{ paasName }}\" }}`}}"
         pattern:
           spec:
-            <(storageClassName): "{{ join " | " .Values.paas.validStorageClass }}"
+            <(storageClassName): "{{`{{ allowed.\"{{ paasName }}\" }}`}}"
     - name: webservice-statefulset-storageclass
       match:
         any:
@@ -76,14 +85,23 @@ spec:
               namespaceSelector:
                 matchLabels:
                   osc.edu/role: paas
-                  app.kubernetes.io/name: paas-staff
               operations:
                 - CREATE
                 - UPDATE
+      context:
+        - name: paasName
+          apiCall:
+            urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+            jmesPath: "metadata.labels.\"app.kubernetes.io/name\" || ''"
+        - name: allowed
+          variable:
+            value:
+              paas: "{{ join " | " .Values.paas.validStorageClass.paas }}"
+              paas-staff: "{{ join " | " .Values.paas.validStorageClass.paasStaff }}"
       validate:
-        message: StatefulSet storageClassName must be one of {{ join " , " .Values.paas.validStorageClass }}
+        message: "StatefulSet storageClassName must be one of {{`{{ allowed.\"{{ paasName }}\" }}`}}"
         pattern:
           spec:
             "=(volumeClaimTemplates)":
               - spec:
-                  <(storageClassName): "{{ join " | " .Values.paas.validStorageClass }}"
+                  <(storageClassName): "{{`{{ allowed.\"{{ paasName }}\" }}`}}"
