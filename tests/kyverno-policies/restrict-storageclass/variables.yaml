@@ -20,9 +20,6 @@ policies:
       - name: paas-pvc-pass
         values:
           paasName: paas
-      - name: paas-staff-pvc-pass-local
-        values:
-          paasName: paas-staff
       - name: paas-staff-pvc-pass-local-path
         values:
           paasName: paas-staff
@@ -41,9 +38,6 @@ policies:
       - name: paas-statefulset-fail
         values:
           paasName: paas
-      - name: paas-staff-statefulset-pass-local
-        values:
-          paasName: paas-staff
       - name: paas-staff-statefulset-pass-local-path
         values:
           paasName: paas-staff

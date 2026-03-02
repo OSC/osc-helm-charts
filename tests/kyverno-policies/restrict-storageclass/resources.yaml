@@ -28,19 +28,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: webservice-pvc-pass-local
-  namespace: webservice
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 8Gi
-  storageClassName: local-storage
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: webservice-pvc-pass-local-path
   namespace: webservice
 spec:
@@ -106,19 +93,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: paas-staff-pvc-pass-local
-  namespace: paas-staff
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 8Gi
-  storageClassName: local-storage
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: paas-staff-pvc-pass-local-path
   namespace: paas-staff
 spec:
@@ -176,18 +150,6 @@ spec:
         name: paas-statefulset-pass
       spec:
         storageClassName: paas-nfs-client
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: paas-staff-statefulset-pass-local
-  namespace: paas-staff
-spec:
-  volumeClaimTemplates:
-    - metadata:
-        name: paas-statefulset-pass
-      spec:
-        storageClassName: local-storage
 ---
 apiVersion: apps/v1
 kind: StatefulSet
