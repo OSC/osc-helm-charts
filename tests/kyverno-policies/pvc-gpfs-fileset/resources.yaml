@@ -166,3 +166,71 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-scratch-pass
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+    osc.edu/scratch-user: test
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-scratch-fail
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+    osc.edu/scratch-user: wronguser
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-scratch-pass
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+    osc.edu/scratch-user: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-scratch-fail
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+    osc.edu/scratch-user: wronguser
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch

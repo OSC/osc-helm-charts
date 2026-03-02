@@ -27,6 +27,18 @@ policies:
       - name: pvc-paas-fail
         values:
           serviceAccount: foo
+      - name: pvc-webservice-scratch-pass
+        values:
+          serviceAccount: test
+      - name: pvc-webservice-scratch-fail
+        values:
+          serviceAccount: test
+      - name: pvc-paas-scratch-pass
+        values:
+          serviceAccount: test
+      - name: pvc-paas-scratch-fail
+        values:
+          serviceAccount: test
 namespaceSelector:
   - name: webservice
     labels:

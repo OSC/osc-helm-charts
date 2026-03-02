@@ -58,6 +58,42 @@ results:
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-gpfs-fileset
+    rule: pvc-validate-scratch-user-set-webservice
+    resources:
+      - pvc-webservice-scratch-pass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-scratch-user-set-webservice
+    resources:
+      - pvc-webservice-scratch-fail
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-scratch-user-set-webservice
+    resources:
+      - pvc-paas-scratch-fail
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-scratch-user-set-paas
+    resources:
+      - pvc-paas-scratch-pass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-scratch-user-set-paas
+    resources:
+      - pvc-paas-scratch-fail
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-scratch-user-set-paas
+    resources:
+      - pvc-webservice-scratch-fail
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
     rule: validate-webservice-fileset-annotation
     resources:
       - pvc-webservice-skip
