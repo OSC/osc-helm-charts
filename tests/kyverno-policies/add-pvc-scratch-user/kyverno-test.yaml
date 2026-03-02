@@ -1,0 +1,37 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: add-pvc-scratch-user
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: add-pvc-scratch-user
+    rule: pvc-add-scratch-user-webservice
+    resources:
+      - pvc-webservice-scratch
+    patchedResources: pvc-webservice-scratch.yaml
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: add-pvc-scratch-user
+    rule: pvc-add-scratch-user-webservice
+    resources:
+      - pvc-webservice-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: add-pvc-scratch-user
+    rule: pvc-add-scratch-user-paas
+    resources:
+      - pvc-paas-scratch
+    patchedResources: pvc-paas-scratch.yaml
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: add-pvc-scratch-user
+    rule: pvc-add-scratch-user-paas
+    resources:
+      - pvc-paas-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: skip

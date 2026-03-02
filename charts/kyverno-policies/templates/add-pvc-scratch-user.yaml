@@ -1,0 +1,64 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-pvc-scratch-user
+spec:
+  background: false
+  validationFailureAction: Enforce
+  rules:
+  - name: pvc-add-scratch-user-webservice
+    match:
+      any:
+        - resources:
+            kinds:
+            - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-scratch
+        - key: "{{`{{ serviceAccount }}`}}"
+          operator: NotEquals
+          value: ""
+    context:
+      - name: serviceAccount
+        variable:
+          jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
+          default: ''
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          annotations:
+            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+  - name: pvc-add-scratch-user-paas
+    match:
+      any:
+        - resources:
+            kinds:
+            - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-scratch
+        - key: "{{`{{ serviceAccount }}`}}"
+          operator: NotEquals
+          value: ""
+    context:
+      - name: serviceAccount
+        apiCall:
+          urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+          jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" || ''"
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          annotations:
+            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"

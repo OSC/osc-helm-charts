@@ -1,0 +1,21 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+  - name: add-pvc-scratch-user
+    resources:
+      - name: pvc-webservice-scratch
+        values:
+          serviceAccount: test
+      - name: pvc-paas-scratch
+        values:
+          serviceAccount: test
+namespaceSelector:
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test
