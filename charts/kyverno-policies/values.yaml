@@ -30,9 +30,8 @@ webservices:
     - infrastructure
     - webservices
   validStorageClass:
-    - gpfs-nfs-client
+    - ess-nfs-client
     - local-path
-    - local-storage
     - webservices-nfs-client
 paas:
   allowHostPaths:
@@ -57,7 +56,6 @@ paas:
     paasStaff:
       - ess-nfs-client
       - local-path
-      - local-storage
       - paas-nfs-client
 validationFailureAction: {}
 kyverno-policies:
