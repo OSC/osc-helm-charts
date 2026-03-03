@@ -30,10 +30,12 @@ spec:
           jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
           default: ''
     mutate:
-      patchStrategicMerge:
-        metadata:
-          annotations:
-            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+      foreach:
+        - list: "request.object.spec.volumeClaimTemplates[]"
+          patchesJson6902: |-
+            - path: /spec/volumeClaimTemplates/{{`{{elementIndex}}`}}/metadata/annotations/osc.edu~1scratch-user
+              op: add
+              value: {{`{{ serviceAccount }}`}}
   - name: statefulset-add-scratch-user-paas
     match:
       any:
@@ -58,7 +60,9 @@ spec:
           urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
           jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" || ''"
     mutate:
-      patchStrategicMerge:
-        metadata:
-          annotations:
-            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+      foreach:
+        - list: "request.object.spec.volumeClaimTemplates[]"
+          patchesJson6902: |-
+            - path: /spec/volumeClaimTemplates/{{`{{elementIndex}}`}}/metadata/annotations/osc.edu~1scratch-user
+              op: add
+              value: {{`{{ serviceAccount }}`}}
