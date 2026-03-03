@@ -6,7 +6,7 @@ spec:
   background: false
   validationFailureAction: Enforce
   rules:
-  - name: validate-webservice-service-account
+  - name: validate-service-account
     match:
       any:
         - resources:
@@ -18,6 +18,15 @@ spec:
             operations:
               - CREATE
               - UPDATE
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+            operations:
+              - CREATE
+              - UPDATE
     preconditions:
       all:
         - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
@@ -26,7 +35,7 @@ spec:
           - local-ess
           - local-scratch
     validate:
-      message: "PVC with osc.edu/fileset requires {{ include "osc.common.serviceAccountKey" . }} label be set."
+      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} label be set."
       pattern:
         metadata:
           labels:

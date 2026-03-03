@@ -55,6 +55,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
+  storageClassName: local-ess
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -75,6 +76,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: pvc-paas-pass
   namespace: paas
+  labels:
+    osc.edu/service-account: user-test
   annotations:
     osc.edu/fileset: user-test-fileset
 spec:
@@ -83,6 +86,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
+  storageClassName: local-ess
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -97,6 +101,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
+  storageClassName: local-ess
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

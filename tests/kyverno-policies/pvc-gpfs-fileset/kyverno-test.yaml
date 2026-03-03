@@ -10,21 +10,24 @@ resources:
 variables: variables.yaml
 results:
   - policy: pvc-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - pvc-webservice-skip
+      - pvc-paas-skip
     kind: PersistentVolumeClaim
     result: skip
   - policy: pvc-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - pvc-webservice-pass
+      - pvc-paas-pass
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - pvc-webservice-fail-no-sa
+      - pvc-paas-fail
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-gpfs-fileset

@@ -6,7 +6,7 @@ spec:
   background: false
   validationFailureAction: Enforce
   rules:
-  - name: validate-webservice-service-account
+  - name: validate-service-account
     match:
       any:
         - resources:
@@ -18,6 +18,15 @@ spec:
             operations:
               - CREATE
               - UPDATE
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+            operations:
+              - CREATE
+              - UPDATE
     preconditions:
       all:
         - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
@@ -26,11 +35,15 @@ spec:
           - local-ess
           - local-scratch
     validate:
-      message: "StatefulSet using PVC with osc.edu/fileset requires {{ include "osc.common.serviceAccountKey" . }} label be set."
+      message: "StatefulSet using PVC with local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} label be set."
       pattern:
-        metadata:
-          labels:
-            {{ include "osc.common.serviceAccountKey" . }}: "?*"
+        spec:
+          =(volumeClaimTemplates):
+            - (spec):
+                (storageClassName): "local-ess | local-scratch"
+              metadata:
+                labels:
+                  {{ include "osc.common.serviceAccountKey" . }}: "?*"
   - name: statefulset-validate-fileset-set
     match:
       any:

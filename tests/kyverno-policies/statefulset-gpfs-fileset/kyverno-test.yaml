@@ -10,23 +10,23 @@ resources:
 variables: variables.yaml
 results:
   - policy: statefulset-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - webservice-statefulset-local-ess
+      - paas-statefulset-local-ess
     kind: StatefulSet
     result: pass
   - policy: statefulset-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - webservice-statefulset-without-service-account
+      - paas-statefulset-without-service-account
     kind: StatefulSet
     result: fail
   - policy: statefulset-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - webservice-statefulset-with-nfs-storage
-      - paas-statefulset-local-ess
-      - paas-statefulset-without-service-account
     kind: StatefulSet
     result: skip
   - policy: statefulset-gpfs-fileset
