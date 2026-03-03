@@ -171,3 +171,58 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-pass-uid-gid
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-fail-uid-gid-wrong
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+    osc.edu/service-account-uid: "2000"
+    osc.edu/service-account-gid: "2001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-fail-uid-gid-missing
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess

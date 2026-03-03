@@ -40,6 +40,85 @@ spec:
         metadata:
           labels:
             {{ include "osc.common.serviceAccountKey" . }}: "?*"
+  - name: validate-service-account-uid-gid-webservice
+    match:
+      any:
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+    context:
+      - name: serviceAccount
+        variable:
+          jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
+          default: ''
+      - name: uidMap
+        configMap:
+          name: user-uid-map
+          namespace: k8-ldap-configmap
+      - name: gidMap
+        configMap:
+          name: user-gid-map
+          namespace: k8-ldap-configmap
+    validate:
+      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} labels be set to the correct UID and GID."
+      pattern:
+        metadata:
+          labels:
+            osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
+            osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
+  - name: validate-service-account-uid-gid-paas
+    match:
+      any:
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+    context:
+      - name: serviceAccount
+        apiCall:
+          urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+          jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\""
+      - name: uidMap
+        configMap:
+          name: user-uid-map
+          namespace: k8-ldap-configmap
+      - name: gidMap
+        configMap:
+          name: user-gid-map
+          namespace: k8-ldap-configmap
+    validate:
+      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} labels be set to the correct UID and GID."
+      pattern:
+        metadata:
+          labels:
+            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+            osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
+            osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
   - name: pvc-validate-fileset-set
     match:
       any:
