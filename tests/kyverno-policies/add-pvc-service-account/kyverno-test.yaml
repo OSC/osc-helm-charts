@@ -1,0 +1,24 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: add-pvc-service-account
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: add-pvc-service-account
+    rule: pvc-add-service-account-paas
+    resources:
+      - pvc-paas-scratch
+    patchedResources: pvc-paas-scratch.yaml
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: add-pvc-service-account
+    rule: pvc-add-service-account-paas
+    resources:
+      - pvc-paas-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: skip

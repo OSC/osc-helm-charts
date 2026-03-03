@@ -3,11 +3,8 @@ kind: Values
 metadata:
   name: values
 policies:
-  - name: add-pvc-scratch-user
+  - name: add-pvc-service-account
     resources:
-      - name: pvc-webservice-scratch
-        values:
-          serviceAccount: test
       - name: pvc-paas-scratch
         values:
           serviceAccount: test

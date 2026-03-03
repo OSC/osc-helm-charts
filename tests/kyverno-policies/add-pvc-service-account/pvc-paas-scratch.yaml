@@ -2,13 +2,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-webservice-scratch
-  namespace: webservice
-  annotations:
-    osc.edu/fileset: user-test-fileset
-    osc.edu/scratch-user: test
+  name: pvc-paas-scratch
+  namespace: paas
   labels:
     osc.edu/service-account: test
+  annotations:
+    osc.edu/fileset: user-test-fileset
 spec:
   accessModes:
   - ReadWriteOnce
