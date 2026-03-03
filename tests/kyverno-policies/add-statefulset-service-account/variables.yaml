@@ -5,6 +5,15 @@ metadata:
   name: values
 policies:
   - name: add-statefulset-service-account
+    rules:
+      - name: statefulset-add-service-account-webservice
+        values:
+          uidMap.data.user-test-user: '1000'
+          gidMap.data.user-test-user: '1001'
+      - name: statefulset-add-service-account-paas
+        values:
+          uidMap.data.user-test-user: '1000'
+          gidMap.data.user-test-user: '1001'
     resources:
       - name: webservice-statefulset-without-scratch-user
         values:

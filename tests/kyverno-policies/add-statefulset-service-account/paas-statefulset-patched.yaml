@@ -12,6 +12,8 @@ spec:
           osc.edu/fileset: "test-fileset"
         labels:
           osc.edu/service-account: "test-user"
+          osc.edu/service-account-uid: "1000"
+          osc.edu/service-account-gid: "1001"
       spec:
         storageClassName: local-scratch
 ---
@@ -28,5 +30,7 @@ spec:
           osc.edu/fileset: "test-fileset"
         labels:
           osc.edu/service-account: "test-user"
+          osc.edu/service-account-uid: "1000"
+          osc.edu/service-account-gid: "1001"
       spec:
         storageClassName: local-ess
