@@ -112,13 +112,14 @@ metadata:
   namespace: webservice
   labels:
     osc.edu/service-account: "test-user"
+  annotations:
+    osc.edu/scratch-user: "test-user"
 spec:
   volumeClaimTemplates:
     - metadata:
         name: webservice-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
-          osc.edu/scratch-user: "test-user"
       spec:
         storageClassName: local-scratch
 ---
@@ -135,7 +136,6 @@ spec:
         name: webservice-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
-          # Missing osc.edu/scratch-user annotation
       spec:
         storageClassName: local-scratch
 ---
@@ -146,13 +146,14 @@ metadata:
   namespace: paas
   labels:
     osc.edu/service-account: "test-user"
+  annotations:
+    osc.edu/scratch-user: "test-user"
 spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
-          osc.edu/scratch-user: "test-user"
       spec:
         storageClassName: local-scratch
 ---
@@ -169,7 +170,6 @@ spec:
         name: paas-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
-          # Missing osc.edu/scratch-user annotation
       spec:
         storageClassName: local-scratch
 ---

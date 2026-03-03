@@ -1,0 +1,29 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+  - name: add-statefulset-scratch-user
+    resources:
+      - name: webservice-statefulset-without-scratch-user
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-without-scratch-user
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-ess
+        values:
+          serviceAccount: test-user
+namespaceSelector:
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test-user
+

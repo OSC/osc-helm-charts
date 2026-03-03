@@ -98,13 +98,9 @@ spec:
     validate:
       message: "StatefulSet PVC requires the osc.edu/scratch-user annotation to be set to a valid user name"
       pattern:
-        spec:
-          =(volumeClaimTemplates):
-            - (spec):
-                (storageClassName): "local-scratch"
-              metadata:
-                annotations:
-                  osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+        metadata:
+          annotations:
+            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
   - name: statefulset-validate-scratch-user-set-paas
     match:
       any:
@@ -131,13 +127,9 @@ spec:
     validate:
       message: "StatefulSet PVC requires the osc.edu/scratch-user annotation to be set to a valid user name"
       pattern:
-        spec:
-          =(volumeClaimTemplates):
-            - (spec):
-                (storageClassName): "local-scratch"
-              metadata:
-                annotations:
-                  osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+        metadata:
+          annotations:
+            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
   - name: validate-webservice-fileset-annotation
     match:
       any:
