@@ -1,0 +1,238 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-local-ess
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-without-service-account
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-local-ess
+  namespace: paas
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-without-service-account
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-with-nfs-storage
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: webservices-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-without-fileset
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        # annotations:
+          # Missing osc.edu/fileset annotation
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-without-fileset
+  namespace: paas
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        # annotations:
+          # Missing osc.edu/fileset annotation
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-with-scratch-user
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+          osc.edu/scratch-user: "test-user"
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-without-scratch-user
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+          # Missing osc.edu/scratch-user annotation
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-with-scratch-user
+  namespace: paas
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+          osc.edu/scratch-user: "test-user"
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-without-scratch-user
+  namespace: paas
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+          # Missing osc.edu/scratch-user annotation
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-with-invalid-fileset
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "invalid-fileset"
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-with-valid-fileset
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-with-valid-fileset
+  namespace: paas
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-with-invalid-fileset
+  namespace: paas
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "invalid-fileset"
+      spec:
+        storageClassName: local-ess

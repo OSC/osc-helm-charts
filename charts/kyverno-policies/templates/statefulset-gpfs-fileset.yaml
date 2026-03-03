@@ -1,0 +1,207 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: statefulset-gpfs-fileset
+spec:
+  background: false
+  validationFailureAction: Enforce
+  rules:
+  - name: validate-webservice-service-account
+    match:
+      any:
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+    validate:
+      message: "StatefulSet using PVC with osc.edu/fileset requires {{ include "osc.common.serviceAccountKey" . }} label be set."
+      pattern:
+        metadata:
+          labels:
+            {{ include "osc.common.serviceAccountKey" . }}: "?*"
+  - name: statefulset-validate-fileset-set
+    match:
+      any:
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+    validate:
+      message: "StatefulSet with a PVC requires the osc.edu/fileset annotation to be set to a valid fileset name"
+      pattern:
+        spec:
+          =(volumeClaimTemplates):
+            - (spec):
+                (storageClassName): "local-ess | local-scratch"
+              metadata:
+                annotations:
+                  osc.edu/fileset: "?*"
+  - name: statefulset-validate-scratch-user-set-webservice
+    match:
+      any:
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-scratch
+        - key: "{{`{{ serviceAccount }}`}}"
+          operator: NotEquals
+          value: ""
+    context:
+      - name: serviceAccount
+        variable:
+          jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
+          default: ''
+    validate:
+      message: "StatefulSet PVC requires the osc.edu/scratch-user annotation to be set to a valid user name"
+      pattern:
+        spec:
+          =(volumeClaimTemplates):
+            - (spec):
+                (storageClassName): "local-scratch"
+              metadata:
+                annotations:
+                  osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+  - name: statefulset-validate-scratch-user-set-paas
+    match:
+      any:
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-scratch
+    context:
+      - name: serviceAccount
+        apiCall:
+          urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+          jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\""
+    validate:
+      message: "StatefulSet PVC requires the osc.edu/scratch-user annotation to be set to a valid user name"
+      pattern:
+        spec:
+          =(volumeClaimTemplates):
+            - (spec):
+                (storageClassName): "local-scratch"
+              metadata:
+                annotations:
+                  osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+  - name: validate-webservice-fileset-annotation
+    match:
+      any:
+        - resources:
+            kinds:
+            - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+    context:
+    - name: userGroupMap
+      configMap:
+        name: user-all-groups-map
+        namespace: k8-ldap-configmap
+    - name: serviceAccount
+      variable:
+        jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
+        default: ''
+    preconditions:
+    - key: "{{`{{ serviceAccount }}`}}"
+      operator: NotEquals
+      value: ""
+    validate:
+      message: "StatefulSet PVC annotation 'osc.edu/fileset' is not authorized for this webservice"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].metadata.annotations.\"osc.edu/fileset\" }}`}}"
+          operator: AnyNotIn
+          value: "{{`{{ userGroupMap.data.\"user-{{ serviceAccount }}\" }}`}}"
+  - name: validate-paas-fileset-annotation
+    match:
+      any:
+      - resources:
+          kinds:
+          - StatefulSet
+          namespaceSelector:
+            matchLabels:
+              osc.edu/role: paas
+          operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+    - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].metadata.annotations.\"osc.edu/fileset\" || '' }}`}}"
+      operator: NotEquals
+      value: ""
+    - key: "{{`{{ serviceAccount }}`}}"
+      operator: NotEquals
+      value: ""
+    context:
+    - name: serviceAccount
+      apiCall:
+        urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+        jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\" || ''"
+    - name: userGroupMap
+      configMap:
+        name: user-all-groups-map
+        namespace: k8-ldap-configmap
+    validate:
+      message: "StatefulSet PVC annotation 'osc.edu/fileset' is not authorized for this namespace"
+      deny:
+        conditions:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].metadata.annotations.\"osc.edu/fileset\" }}`}}"
+          operator: AnyNotIn
+          value: "{{`{{ userGroupMap.data.\"user-{{ serviceAccount }}\" }}`}}"

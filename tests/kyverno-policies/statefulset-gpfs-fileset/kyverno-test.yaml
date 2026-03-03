@@ -1,0 +1,136 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: statefulset-gpfs-fileset
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: statefulset-gpfs-fileset
+    rule: validate-webservice-service-account
+    resources:
+      - webservice-statefulset-local-ess
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: validate-webservice-service-account
+    resources:
+      - webservice-statefulset-without-service-account
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: validate-webservice-service-account
+    resources:
+      - webservice-statefulset-with-nfs-storage
+      - paas-statefulset-local-ess
+      - paas-statefulset-without-service-account
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-fileset-set
+    resources:
+      - webservice-statefulset-local-ess
+      - paas-statefulset-local-ess
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-fileset-set
+    resources:
+      - webservice-statefulset-without-fileset
+      - paas-statefulset-without-fileset
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-fileset-set
+    resources:
+      - webservice-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-scratch-user-set-paas
+    resources:
+      - paas-statefulset-with-scratch-user
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-scratch-user-set-paas
+    resources:
+      - paas-statefulset-without-scratch-user
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-scratch-user-set-paas
+    resources:
+      - paas-statefulset-local-ess
+      - webservice-statefulset-local-ess
+      - webservice-statefulset-without-service-account
+      - webservice-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-scratch-user-set-webservice
+    resources:
+      - webservice-statefulset-with-scratch-user
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-scratch-user-set-webservice
+    resources:
+      - webservice-statefulset-without-scratch-user
+      - webservice-statefulset-without-service-account
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-validate-scratch-user-set-webservice
+    resources:
+      - paas-statefulset-local-ess
+      - webservice-statefulset-local-ess
+      - webservice-statefulset-with-nfs-storage
+      - paas-statefulset-without-fileset
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-gpfs-fileset
+    rule: validate-webservice-fileset-annotation
+    resources:
+      - webservice-statefulset-with-valid-fileset
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: validate-webservice-fileset-annotation
+    resources:
+      - webservice-statefulset-with-invalid-fileset
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: validate-webservice-fileset-annotation
+    resources:
+      - paas-statefulset-local-ess
+      - paas-statefulset-with-scratch-user
+      - paas-statefulset-without-scratch-user
+      - paas-statefulset-without-fileset
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-gpfs-fileset
+    rule: validate-paas-fileset-annotation
+    resources:
+      - paas-statefulset-with-valid-fileset
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: validate-paas-fileset-annotation
+    resources:
+      - paas-statefulset-with-invalid-fileset
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: validate-paas-fileset-annotation
+    resources:
+      - paas-statefulset-without-fileset
+      - webservice-statefulset-without-service-account
+      - webservice-statefulset-without-fileset
+      - webservice-statefulset-with-invalid-fileset
+    kind: StatefulSet
+    result: skip
