@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+        labels:
+          osc.edu/service-account: "test-user"
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-ess
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+        labels:
+          osc.edu/service-account: "test-user"
+      spec:
+        storageClassName: local-ess

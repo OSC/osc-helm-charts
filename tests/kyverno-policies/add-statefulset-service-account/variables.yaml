@@ -4,7 +4,7 @@ kind: Values
 metadata:
   name: values
 policies:
-  - name: add-statefulset-scratch-user
+  - name: add-statefulset-service-account
     resources:
       - name: webservice-statefulset-without-scratch-user
         values:

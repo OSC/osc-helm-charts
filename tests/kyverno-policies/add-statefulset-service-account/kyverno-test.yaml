@@ -2,39 +2,39 @@
 apiVersion: cli.kyverno.io/v1alpha1
 kind: Test
 metadata:
-  name: add-statefulset-scratch-user
+  name: add-statefulset-service-account
 policies:
   - policy.yaml
 resources:
   - resources.yaml
 variables: variables.yaml
 results:
-  - policy: add-statefulset-scratch-user
-    rule: statefulset-add-scratch-user-webservice
+  - policy: add-statefulset-service-account
+    rule: statefulset-add-service-account-webservice
     resources:
       - webservice-statefulset
+      - webservice-statefulset-ess
     patchedResources: webservice-statefulset-patched.yaml
     kind: StatefulSet
     result: pass
-  - policy: add-statefulset-scratch-user
-    rule: statefulset-add-scratch-user-webservice
+  - policy: add-statefulset-service-account
+    rule: statefulset-add-service-account-webservice
     resources:
-      - webservice-statefulset-ess
       - webservice-statefulset-without-service-account
       - paas-statefulset
     kind: StatefulSet
     result: skip
-  - policy: add-statefulset-scratch-user
-    rule: statefulset-add-scratch-user-paas
+  - policy: add-statefulset-service-account
+    rule: statefulset-add-service-account-paas
     resources:
       - paas-statefulset
+      - paas-statefulset-ess
     patchedResources: paas-statefulset-patched.yaml
     kind: StatefulSet
     result: pass
-  - policy: add-statefulset-scratch-user
-    rule: statefulset-add-scratch-user-paas
+  - policy: add-statefulset-service-account
+    rule: statefulset-add-service-account-paas
     resources:
-      - paas-statefulset-ess
       - webservice-statefulset
       - webservice-statefulset-ess
       - webservice-statefulset-without-service-account
