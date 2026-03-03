@@ -65,6 +65,7 @@ global:
           memory: 256Mi
       auth:
         replicas: 1
+
 # -- The CryoSPARC license ID
 license: ''
 # -- The CryoSPARC version
@@ -74,20 +75,19 @@ revision: 1
 # -- The service project
 project: ''
 homeDir: '{{ .Values.project }}'
+# -- Slurm configuration of the cluster used for service
 slurmConf: /etc/slurm/slurm-ascend.conf
 
 image:
-  repository: docker-registry.osc.edu/webservices/cryosparc-{{ include "osc.common.serviceAccountValue" . }}
+  repository: docker-registry.osc.edu/webservices/cryosparc
   tag: '{{ required "Version must be provided" .Values.version }}-r{{ .Values.revision }}'
   pullPolicy: IfNotPresent
 
 mounts:
   home: /users/{{ tpl .Values.homeDir . }}/{{ include "osc.common.serviceAccountValue" . }}
   project: /fs/ess/{{ required "Project must be provided" .Values.project }}
-  slurm_conf: /etc/slurm
-  munge_socket: /var/run/munge/munge.socket.2
 
-adminSciApps:
+admin:
   email: ''
   username: ''
   password: ''

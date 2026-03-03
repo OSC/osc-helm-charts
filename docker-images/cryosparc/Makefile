@@ -3,7 +3,7 @@ LICENSE_ID = "This is a secret"
 VERSION = 4.7.1
 REVISION = 1
 
-TAG = docker-registry.osc.edu/webservices/cryosparc-$(OSC_USER):$(VERSION)-$(REVISION)
+TAG = docker-registry.osc.edu/webservices/cryosparc:$(VERSION)-$(REVISION)
 
 build:
 	docker build \
