@@ -134,6 +134,10 @@ spec:
             operations:
               - CREATE
               - UPDATE
+    preconditions:
+    - key: "{{`{{ request.object.metadata.annotations.\"osc.edu/fileset\" || '' }}`}}"
+      operator: NotEquals
+      value: ""
     context:
     - name: userGroupMap
       configMap:
