@@ -16,6 +16,10 @@ policies:
         values:
           uidMap.data.user-test: "1000"
           gidMap.data.user-test: "1001"
+      - name: validate-service-account-uid-gid-paas
+        values:
+          uidMap.data.user-test: "1000"
+          gidMap.data.user-test: "1001"
     resources:
       - name: pvc-webservice-skip
         values:
@@ -40,6 +44,15 @@ policies:
       - name: pvc-webservice-fail-uid-gid-missing
         values:
           serviceAccount: test
+      - name: pvc-paas-pass-uid-gid
+        values:
+          serviceAccount: test
+      - name: pvc-paas-fail-uid-gid-wrong
+        values:
+          serviceAccount: test
+      - name: pvc-paas-fail-uid-gid-missing
+        values:
+          serviceAccount: test
 namespaceSelector:
   - name: webservice
     labels:
@@ -51,3 +64,4 @@ namespaceSelector:
   - name: user-test
     labels:
       account: test
+

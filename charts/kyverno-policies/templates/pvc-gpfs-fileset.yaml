@@ -87,7 +87,7 @@ spec:
               - PersistentVolumeClaim
             namespaceSelector:
               matchLabels:
-                osc.edu/role: webservice
+                osc.edu/role: paas
             operations:
               - CREATE
               - UPDATE

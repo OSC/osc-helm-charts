@@ -50,6 +50,25 @@ results:
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - pvc-paas-skip-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - pvc-paas-pass-uid-gid
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - pvc-paas-fail-uid-gid-wrong
+      - pvc-paas-fail-uid-gid-missing
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
     rule: pvc-validate-fileset-set
     resources:
       - pvc-webservice-fail-no-fileset
@@ -116,3 +135,4 @@ results:
       - pvc-paas-fail
     kind: PersistentVolumeClaim
     result: fail
+
