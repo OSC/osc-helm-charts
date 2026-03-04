@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.5.4](https://img.shields.io/badge/Version-0.5.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -75,6 +75,7 @@ Below is an example of PAAS usage:
 ```yaml
 ---
 global:
+  oscServiceAccount: <USERNAME>
   imagePullSecret:
     create: false
   ingress:
@@ -174,7 +175,7 @@ open-webui:
 | open-webui.websocket.enabled |  | `false` |
 | open-webui.podLabels |  | `{}` |
 | open-webui.image.repository |  | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
-| open-webui.image.tag |  | `"0.8.2"` |
+| open-webui.image.tag |  | `"0.8.8"` |
 | open-webui.imagePullSecrets[0].name |  | `"osc-registry"` |
 | open-webui.resources.limits.memory |  | `"4Gi"` |
 | open-webui.resources.limits.cpu |  | `2` |
