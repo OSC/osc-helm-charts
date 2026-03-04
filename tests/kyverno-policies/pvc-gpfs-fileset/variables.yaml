@@ -44,6 +44,15 @@ policies:
       - name: pvc-webservice-fail-uid-gid-missing
         values:
           serviceAccount: test
+      - name: pvc-webservice-fail-service-account-missing
+        values:
+          serviceAccount: test
+      - name: pvc-paas-fail-service-account-missing
+        values:
+          serviceAccount: test
+      - name: pvc-paas-fail-service-account-wrong
+        values:
+          serviceAccount: test
       - name: pvc-paas-pass-uid-gid
         values:
           serviceAccount: test

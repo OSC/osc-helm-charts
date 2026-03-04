@@ -15,12 +15,6 @@ policies:
           uidMap.data.user-test-user: '1000'
           gidMap.data.user-test-user: '1001'
     resources:
-      - name: webservice-statefulset-without-scratch-user
-        values:
-          serviceAccount: test-user
-      - name: paas-statefulset-without-scratch-user
-        values:
-          serviceAccount: test-user
       - name: paas-statefulset
         values:
           serviceAccount: test-user

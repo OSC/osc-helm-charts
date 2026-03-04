@@ -116,7 +116,7 @@ spec:
       pattern:
         metadata:
           labels:
-            osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
+            osc.edu/service-account: "{{`{{ serviceAccount }}`}}"
             osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
             osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
   - name: pvc-validate-fileset-set

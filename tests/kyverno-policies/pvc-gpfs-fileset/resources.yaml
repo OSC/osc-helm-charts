@@ -243,13 +243,30 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: pvc-webservice-fail-service-account-missing
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: pvc-paas-pass-uid-gid
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
   labels:
     osc.edu/service-account: test
-    osc.edu/scratch-user: "test"
     osc.edu/service-account-uid: "1000"
     osc.edu/service-account-gid: "1001"
 spec:
@@ -269,7 +286,6 @@ metadata:
     osc.edu/fileset: user-test-fileset
   labels:
     osc.edu/service-account: test
-    osc.edu/scratch-user: "test"
     osc.edu/service-account-uid: "2000"
     osc.edu/service-account-gid: "2001"
 spec:
@@ -289,7 +305,6 @@ metadata:
     osc.edu/fileset: user-test-fileset
   labels:
     osc.edu/service-account: test
-    osc.edu/scratch-user: "test"
 spec:
   accessModes:
   - ReadWriteOnce
@@ -297,4 +312,40 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: local-scratch
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-service-account-missing
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-service-account-wrong
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: foo
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch

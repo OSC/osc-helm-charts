@@ -47,6 +47,7 @@ results:
     resources:
       - pvc-webservice-fail-uid-gid-wrong
       - pvc-webservice-fail-uid-gid-missing
+      - pvc-webservice-fail-service-account-missing
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-gpfs-fileset
@@ -66,6 +67,8 @@ results:
     resources:
       - pvc-paas-fail-uid-gid-wrong
       - pvc-paas-fail-uid-gid-missing
+      - pvc-paas-fail-service-account-missing
+      - pvc-paas-fail-service-account-wrong
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-gpfs-fileset
