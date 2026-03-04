@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-scratch
+  namespace: paas
+  labels:
+    osc.edu/service-account: test
+    osc.edu/service-account-uid: '1000'
+    osc.edu/service-account-gid: '1001'
+  annotations:
+    osc.edu/fileset: user-test-fileset
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch

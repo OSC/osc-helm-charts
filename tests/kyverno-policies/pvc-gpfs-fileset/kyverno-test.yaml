@@ -10,23 +10,97 @@ resources:
 variables: variables.yaml
 results:
   - policy: pvc-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - pvc-webservice-skip
+      - pvc-paas-skip
     kind: PersistentVolumeClaim
     result: skip
   - policy: pvc-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - pvc-webservice-pass
+      - pvc-paas-pass
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-gpfs-fileset
-    rule: validate-webservice-service-account
+    rule: validate-service-account
     resources:
       - pvc-webservice-fail-no-sa
+      - pvc-paas-fail
     kind: PersistentVolumeClaim
     result: fail
+  - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-webservice
+    resources:
+      - pvc-webservice-skip-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-webservice
+    resources:
+      - pvc-webservice-pass-uid-gid
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-webservice
+    resources:
+      - pvc-webservice-fail-uid-gid-wrong
+      - pvc-webservice-fail-uid-gid-missing
+      - pvc-webservice-fail-service-account-missing
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - pvc-paas-skip-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - pvc-paas-pass-uid-gid
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - pvc-paas-fail-uid-gid-wrong
+      - pvc-paas-fail-uid-gid-missing
+      - pvc-paas-fail-service-account-missing
+      - pvc-paas-fail-service-account-wrong
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-webservice-fail-no-fileset
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-webservice-skip-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-webservice-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-paas-fail-no-fileset
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-gpfs-fileset
+    rule: pvc-validate-fileset-set
+    resources:
+      - pvc-paas-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: pass
   - policy: pvc-gpfs-fileset
     rule: validate-webservice-fileset-annotation
     resources:
@@ -64,3 +138,4 @@ results:
       - pvc-paas-fail
     kind: PersistentVolumeClaim
     result: fail
+

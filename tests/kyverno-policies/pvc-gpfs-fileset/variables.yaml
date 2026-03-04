@@ -12,6 +12,14 @@ policies:
         values:
           userGroupMap.data.user-test: '["user-test-fileset","user-test-fileset2"]'
           userGroupMap.data.user-foo: '[]'
+      - name: validate-service-account-uid-gid-webservice
+        values:
+          uidMap.data.user-test: "1000"
+          gidMap.data.user-test: "1001"
+      - name: validate-service-account-uid-gid-paas
+        values:
+          uidMap.data.user-test: "1000"
+          gidMap.data.user-test: "1001"
     resources:
       - name: pvc-webservice-skip
         values:
@@ -27,6 +35,33 @@ policies:
       - name: pvc-paas-fail
         values:
           serviceAccount: foo
+      - name: pvc-webservice-pass-uid-gid
+        values:
+          serviceAccount: test
+      - name: pvc-webservice-fail-uid-gid-wrong
+        values:
+          serviceAccount: test
+      - name: pvc-webservice-fail-uid-gid-missing
+        values:
+          serviceAccount: test
+      - name: pvc-webservice-fail-service-account-missing
+        values:
+          serviceAccount: test
+      - name: pvc-paas-fail-service-account-missing
+        values:
+          serviceAccount: test
+      - name: pvc-paas-fail-service-account-wrong
+        values:
+          serviceAccount: test
+      - name: pvc-paas-pass-uid-gid
+        values:
+          serviceAccount: test
+      - name: pvc-paas-fail-uid-gid-wrong
+        values:
+          serviceAccount: test
+      - name: pvc-paas-fail-uid-gid-missing
+        values:
+          serviceAccount: test
 namespaceSelector:
   - name: webservice
     labels:
@@ -38,3 +73,4 @@ namespaceSelector:
   - name: user-test
     labels:
       account: test
+

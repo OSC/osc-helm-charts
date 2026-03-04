@@ -26,6 +26,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
+  storageClassName: local-ess
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -54,6 +55,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
+  storageClassName: local-ess
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -74,6 +76,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: pvc-paas-pass
   namespace: paas
+  labels:
+    osc.edu/service-account: user-test
   annotations:
     osc.edu/fileset: user-test-fileset
 spec:
@@ -82,6 +86,7 @@ spec:
   resources:
     requests:
       storage: 8Gi
+  storageClassName: local-ess
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -96,3 +101,251 @@ spec:
   resources:
     requests:
       storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-fail-no-fileset
+  namespace: webservice
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-skip-storageclass
+  namespace: webservice
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-skip-storageclass
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-pass-storageclass
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-no-fileset
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-pass-storageclass
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-pass-uid-gid
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-fail-uid-gid-wrong
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+    osc.edu/service-account-uid: "2000"
+    osc.edu/service-account-gid: "2001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-fail-uid-gid-missing
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-fail-service-account-missing
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-pass-uid-gid
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-uid-gid-wrong
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+    osc.edu/service-account-uid: "2000"
+    osc.edu/service-account-gid: "2001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-uid-gid-missing
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-service-account-missing
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-service-account-wrong
+  namespace: paas
+  annotations:
+    osc.edu/fileset: user-test-fileset
+  labels:
+    osc.edu/service-account: foo
+    osc.edu/service-account-uid: "1000"
+    osc.edu/service-account-gid: "1001"
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch

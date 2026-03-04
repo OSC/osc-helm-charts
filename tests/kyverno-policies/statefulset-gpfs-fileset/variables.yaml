@@ -1,0 +1,100 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+  - name: statefulset-gpfs-fileset
+    rules:
+      - name: validate-webservice-fileset-annotation
+        values:
+          userGroupMap.data.user-test-user: '["test-fileset","another-fileset"]'
+      - name: validate-paas-fileset-annotation
+        values:
+          userGroupMap.data.user-test-user: '["test-fileset","another-fileset"]'
+      - name: validate-service-account-uid-gid-webservice
+        values:
+          uidMap.data.user-test-user: "1000"
+          gidMap.data.user-test-user: "1001"
+      - name: validate-service-account-uid-gid-paas
+        values:
+          uidMap.data.user-test-user: "1000"
+          gidMap.data.user-test-user: "1001"
+    resources:
+      - name: webservice-statefulset-local-ess
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-with-invalid-fileset
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-with-valid-fileset
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-with-valid-fileset
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-with-invalid-fileset
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-ess-with-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-scratch-with-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-scratch-with-wrong-service-account
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-ess-with-wrong-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-scratch-with-wrong-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-ess-without-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-scratch-without-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-with-nfs-storage
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-with-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-scratch-with-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-with-wrong-service-account
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-without-service-account
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-with-wrong-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-scratch-with-wrong-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-without-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-scratch-without-uid-gid
+        values:
+          serviceAccount: test-user
+namespaceSelector:
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      app.kubernetes.io/name: paas
+  - name: paas-staff
+    labels:
+      osc.edu/role: paas
+      app.kubernetes.io/name: paas-staff

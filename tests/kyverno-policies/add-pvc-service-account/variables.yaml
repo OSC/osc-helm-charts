@@ -1,0 +1,27 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+  - name: add-pvc-service-account
+    rules:
+      - name: pvc-add-service-account-webservice
+        values:
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+      - name: pvc-add-service-account-paas
+        values:
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+    resources:
+      - name: pvc-paas-scratch
+        values:
+          serviceAccount: test
+namespaceSelector:
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test

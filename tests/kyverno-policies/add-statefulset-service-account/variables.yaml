@@ -1,0 +1,32 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+  - name: add-statefulset-service-account
+    rules:
+      - name: statefulset-add-service-account-webservice
+        values:
+          uidMap.data.user-test-user: '1000'
+          gidMap.data.user-test-user: '1001'
+      - name: statefulset-add-service-account-paas
+        values:
+          uidMap.data.user-test-user: '1000'
+          gidMap.data.user-test-user: '1001'
+    resources:
+      - name: paas-statefulset
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-ess
+        values:
+          serviceAccount: test-user
+namespaceSelector:
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test-user
+
