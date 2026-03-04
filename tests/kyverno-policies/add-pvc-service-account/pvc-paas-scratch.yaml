@@ -4,11 +4,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: pvc-paas-scratch
   namespace: paas
-  labels:
+  annotations:
     osc.edu/service-account: test
     osc.edu/service-account-uid: '1000'
     osc.edu/service-account-gid: '1001'
-  annotations:
     osc.edu/fileset: user-test-fileset
 spec:
   accessModes:

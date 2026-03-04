@@ -4,7 +4,7 @@ kind: StatefulSet
 metadata:
   name: webservice-statefulset
   namespace: webservice
-  labels:
+  annotations:
     osc.edu/service-account: "test-user"
 spec:
   volumeClaimTemplates:
@@ -12,7 +12,6 @@ spec:
         name: webservice-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
-        labels:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
@@ -24,7 +23,7 @@ kind: StatefulSet
 metadata:
   name: webservice-statefulset-ess
   namespace: webservice
-  labels:
+  annotations:
     osc.edu/service-account: "test-user"
 spec:
   volumeClaimTemplates:
@@ -32,7 +31,6 @@ spec:
         name: webservice-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
-        labels:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"

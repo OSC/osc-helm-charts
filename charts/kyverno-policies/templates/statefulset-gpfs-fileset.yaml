@@ -35,14 +35,14 @@ spec:
           - local-ess
           - local-scratch
     validate:
-      message: "StatefulSet using PVC with local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} label be set."
+      message: "StatefulSet using PVC with local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} annotation be set."
       pattern:
         spec:
           =(volumeClaimTemplates):
             - (spec):
                 (storageClassName): "local-ess | local-scratch"
               metadata:
-                labels:
+                annotations:
                   {{ include "osc.common.serviceAccountKey" . }}: "?*"
   - name: validate-service-account-uid-gid-webservice
     match:
@@ -77,14 +77,14 @@ spec:
           name: user-gid-map
           namespace: k8-ldap-configmap
     validate:
-      message: "StatefulSet PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} labels be set to the correct UID and GID."
+      message: "StatefulSet PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} annotations be set to the correct UID and GID."
       pattern:
         spec:
           =(volumeClaimTemplates):
             - (spec):
                 (storageClassName): "local-ess | local-scratch"
               metadata:
-                labels:
+                annotations:
                   osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
                   osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
   - name: validate-service-account-uid-gid-paas
@@ -120,14 +120,14 @@ spec:
           name: user-gid-map
           namespace: k8-ldap-configmap
     validate:
-      message: "StatefulSet PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} labels be set to the correct UID and GID."
+      message: "StatefulSet PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} annotations be set to the correct UID and GID."
       pattern:
         spec:
           =(volumeClaimTemplates):
             - (spec):
                 (storageClassName): "local-ess | local-scratch"
               metadata:
-                labels:
+                annotations:
                   osc.edu/service-account: "{{`{{ serviceAccount }}`}}"
                   osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
                   osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
