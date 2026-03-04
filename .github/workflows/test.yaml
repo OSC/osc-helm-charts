@@ -74,6 +74,13 @@ jobs:
           cluster_name: kind
           node_image: kindest/node:v1.25.3@sha256:f52781bc0d7a19fb6c405c2af83abfeb311f130707a0e219175677e366cc45d1
           config: .github/config/kind.yaml
+      - name: Login to OSC registry
+        if: matrix.chart == 'cryosparc'
+        uses: docker/login-action@v2
+        with:
+          registry: docker-registry.osc.edu
+          username: ${{ secrets.OSC_REGISTRY_ROBOT_OSC_USERNAME }}
+          password: ${{ secrets.OSC_REGISTRY_ROBOT_READ_TOKEN }}
       - name: Build and Load images
         if: matrix.chart == 'database' || matrix.chart == 'webservice'
         run: |
