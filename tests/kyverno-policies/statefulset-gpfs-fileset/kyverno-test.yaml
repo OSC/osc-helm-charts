@@ -50,49 +50,6 @@ results:
     kind: StatefulSet
     result: skip
   - policy: statefulset-gpfs-fileset
-    rule: statefulset-validate-scratch-user-set-paas
-    resources:
-      - paas-statefulset-with-scratch-user
-    kind: StatefulSet
-    result: pass
-  - policy: statefulset-gpfs-fileset
-    rule: statefulset-validate-scratch-user-set-paas
-    resources:
-      - paas-statefulset-without-scratch-user
-    kind: StatefulSet
-    result: fail
-  - policy: statefulset-gpfs-fileset
-    rule: statefulset-validate-scratch-user-set-paas
-    resources:
-      - paas-statefulset-local-ess
-      - webservice-statefulset-local-ess
-      - webservice-statefulset-without-service-account
-      - webservice-statefulset-with-nfs-storage
-    kind: StatefulSet
-    result: skip
-  - policy: statefulset-gpfs-fileset
-    rule: statefulset-validate-scratch-user-set-webservice
-    resources:
-      - webservice-statefulset-with-scratch-user
-    kind: StatefulSet
-    result: pass
-  - policy: statefulset-gpfs-fileset
-    rule: statefulset-validate-scratch-user-set-webservice
-    resources:
-      - webservice-statefulset-without-scratch-user
-      - webservice-statefulset-without-service-account
-    kind: StatefulSet
-    result: fail
-  - policy: statefulset-gpfs-fileset
-    rule: statefulset-validate-scratch-user-set-webservice
-    resources:
-      - paas-statefulset-local-ess
-      - webservice-statefulset-local-ess
-      - webservice-statefulset-with-nfs-storage
-      - paas-statefulset-without-fileset
-    kind: StatefulSet
-    result: skip
-  - policy: statefulset-gpfs-fileset
     rule: validate-webservice-fileset-annotation
     resources:
       - webservice-statefulset-with-valid-fileset
@@ -108,8 +65,6 @@ results:
     rule: validate-webservice-fileset-annotation
     resources:
       - paas-statefulset-local-ess
-      - paas-statefulset-with-scratch-user
-      - paas-statefulset-without-scratch-user
       - paas-statefulset-without-fileset
     kind: StatefulSet
     result: skip
@@ -132,5 +87,54 @@ results:
       - webservice-statefulset-without-service-account
       - webservice-statefulset-without-fileset
       - webservice-statefulset-with-invalid-fileset
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-gpfs-fileset
+    rule: validate-service-account-uid-gid-webservice
+    resources:
+      - webservice-statefulset-local-ess-with-uid-gid
+      - webservice-statefulset-local-scratch-with-uid-gid
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: validate-service-account-uid-gid-webservice
+    resources:
+      - webservice-statefulset-local-scratch-with-wrong-service-account
+      - webservice-statefulset-local-ess-with-wrong-uid-gid
+      - webservice-statefulset-local-scratch-with-wrong-uid-gid
+      - webservice-statefulset-local-ess-without-uid-gid
+      - webservice-statefulset-local-scratch-without-uid-gid
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: validate-service-account-uid-gid-webservice
+    resources:
+      - webservice-statefulset-with-nfs-storage
+      - paas-statefulset-without-fileset
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - paas-statefulset-local-ess-with-uid-gid
+      - paas-statefulset-local-scratch-with-uid-gid
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - paas-statefulset-local-ess-with-wrong-service-account
+      - paas-statefulset-local-ess-without-service-account
+      - paas-statefulset-local-ess-with-wrong-uid-gid
+      - paas-statefulset-local-scratch-with-wrong-uid-gid
+      - paas-statefulset-local-ess-without-uid-gid
+      - paas-statefulset-local-scratch-without-uid-gid
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: validate-service-account-uid-gid-paas
+    resources:
+      - paas-statefulset-with-nfs-storage
+      - webservice-statefulset-without-fileset
     kind: StatefulSet
     result: skip

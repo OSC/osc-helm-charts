@@ -44,6 +44,93 @@ spec:
               metadata:
                 labels:
                   {{ include "osc.common.serviceAccountKey" . }}: "?*"
+  - name: validate-service-account-uid-gid-webservice
+    match:
+      any:
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+    context:
+      - name: serviceAccount
+        variable:
+          jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
+          default: ''
+      - name: uidMap
+        configMap:
+          name: user-uid-map
+          namespace: k8-ldap-configmap
+      - name: gidMap
+        configMap:
+          name: user-gid-map
+          namespace: k8-ldap-configmap
+    validate:
+      message: "StatefulSet PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} labels be set to the correct UID and GID."
+      pattern:
+        spec:
+          =(volumeClaimTemplates):
+            - (spec):
+                (storageClassName): "local-ess | local-scratch"
+              metadata:
+                labels:
+                  osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
+                  osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
+  - name: validate-service-account-uid-gid-paas
+    match:
+      any:
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+    context:
+      - name: serviceAccount
+        apiCall:
+          urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+          jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\""
+      - name: uidMap
+        configMap:
+          name: user-uid-map
+          namespace: k8-ldap-configmap
+      - name: gidMap
+        configMap:
+          name: user-gid-map
+          namespace: k8-ldap-configmap
+    validate:
+      message: "StatefulSet PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} labels be set to the correct UID and GID."
+      pattern:
+        spec:
+          =(volumeClaimTemplates):
+            - (spec):
+                (storageClassName): "local-ess | local-scratch"
+              metadata:
+                labels:
+                  osc.edu/service-account: "{{`{{ serviceAccount }}`}}"
+                  osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
+                  osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
   - name: statefulset-validate-fileset-set
     match:
       any:
@@ -82,75 +169,6 @@ spec:
               metadata:
                 annotations:
                   osc.edu/fileset: "?*"
-  - name: statefulset-validate-scratch-user-set-webservice
-    match:
-      any:
-        - resources:
-            kinds:
-              - StatefulSet
-            namespaceSelector:
-              matchLabels:
-                osc.edu/role: webservice
-            operations:
-              - CREATE
-              - UPDATE
-    preconditions:
-      all:
-        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
-          operator: AnyIn
-          value:
-          - local-scratch
-        - key: "{{`{{ serviceAccount }}`}}"
-          operator: NotEquals
-          value: ""
-    context:
-      - name: serviceAccount
-        variable:
-          jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
-          default: ''
-    validate:
-      message: "StatefulSet PVC requires the osc.edu/scratch-user annotation to be set to a valid user name"
-      pattern:
-        spec:
-          =(volumeClaimTemplates):
-            - (spec):
-                (storageClassName): "local-scratch"
-              metadata:
-                annotations:
-                  osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
-  - name: statefulset-validate-scratch-user-set-paas
-    match:
-      any:
-        - resources:
-            kinds:
-              - StatefulSet
-            namespaceSelector:
-              matchLabels:
-                osc.edu/role: paas
-            operations:
-              - CREATE
-              - UPDATE
-    preconditions:
-      all:
-        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
-          operator: AnyIn
-          value:
-          - local-scratch
-    context:
-      - name: serviceAccount
-        apiCall:
-          urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
-          jmesPath: "metadata.labels.\"{{ include "osc.common.serviceAccountKey" . }}\""
-    validate:
-      message: "StatefulSet PVC requires the osc.edu/scratch-user annotation to be set to a valid user name"
-      pattern:
-        spec:
-          =(volumeClaimTemplates):
-            - (spec):
-                (storageClassName): "local-scratch"
-              metadata:
-                annotations:
-                  osc.edu/scratch-user: "{{`{{ serviceAccount }}`}}"
   - name: validate-webservice-fileset-annotation
     match:
       any:

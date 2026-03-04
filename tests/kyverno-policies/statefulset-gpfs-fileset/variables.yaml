@@ -11,23 +11,19 @@ policies:
       - name: validate-paas-fileset-annotation
         values:
           userGroupMap.data.user-test-user: '["test-fileset","another-fileset"]'
+      - name: validate-service-account-uid-gid-webservice
+        values:
+          uidMap.data.user-test-user: "1000"
+          gidMap.data.user-test-user: "1001"
+      - name: validate-service-account-uid-gid-paas
+        values:
+          uidMap.data.user-test-user: "1000"
+          gidMap.data.user-test-user: "1001"
     resources:
       - name: webservice-statefulset-local-ess
         values:
           serviceAccount: test-user
       - name: paas-statefulset-local-ess
-        values:
-          serviceAccount: test-user
-      - name: paas-statefulset-with-scratch-user
-        values:
-          serviceAccount: test-user
-      - name: paas-statefulset-without-scratch-user
-        values:
-          serviceAccount: test-user
-      - name: webservice-statefulset-with-scratch-user
-        values:
-          serviceAccount: test-user
-      - name: webservice-statefulset-without-scratch-user
         values:
           serviceAccount: test-user
       - name: webservice-statefulset-with-invalid-fileset
@@ -40,6 +36,54 @@ policies:
         values:
           serviceAccount: test-user
       - name: paas-statefulset-with-invalid-fileset
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-ess-with-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-scratch-with-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-scratch-with-wrong-service-account
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-ess-with-wrong-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-scratch-with-wrong-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-ess-without-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-scratch-without-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-with-nfs-storage
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-with-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-scratch-with-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-with-wrong-service-account
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-without-service-account
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-with-wrong-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-scratch-with-wrong-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-ess-without-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-scratch-without-uid-gid
         values:
           serviceAccount: test-user
 namespaceSelector:
