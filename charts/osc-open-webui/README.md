@@ -75,6 +75,7 @@ Below is an example of PAAS usage:
 ```yaml
 ---
 global:
+  oscServiceAccount: <USERNAME>
   imagePullSecret:
     create: false
   ingress:
