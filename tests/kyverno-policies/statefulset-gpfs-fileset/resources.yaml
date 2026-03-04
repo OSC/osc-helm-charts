@@ -8,9 +8,8 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: webservice-statefulset-pvc
-        labels:
-          osc.edu/service-account: "test-user"
         annotations:
+          osc.edu/service-account: "test-user"
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -38,9 +37,8 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
-          osc.edu/service-account: "test-user"
         annotations:
+          osc.edu/service-account: "test-user"
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -180,11 +178,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: webservice-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -204,11 +201,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: webservice-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-scratch
@@ -228,11 +224,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: webservice-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "999"
           osc.edu/service-account-gid: "999"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -248,11 +243,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: webservice-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: foo
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-scratch
@@ -269,11 +263,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: webservice-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "999"
           osc.edu/service-account-gid: "999"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-scratch
@@ -321,11 +314,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -341,11 +333,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-scratch
@@ -361,11 +352,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: foo
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -381,11 +371,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "999"
           osc.edu/service-account-gid: "999"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -401,11 +390,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account: test-user
           osc.edu/service-account-uid: "999"
           osc.edu/service-account-gid: "999"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-scratch
@@ -421,10 +409,9 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
+        annotations:
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
-        annotations:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -440,9 +427,8 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
-          osc.edu/service-account: test-user
         annotations:
+          osc.edu/service-account: test-user
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
@@ -458,9 +444,8 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
-        labels:
-          osc.edu/service-account: test-user
         annotations:
+          osc.edu/service-account: test-user
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-scratch

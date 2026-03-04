@@ -35,10 +35,10 @@ spec:
           - local-ess
           - local-scratch
     validate:
-      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} label be set."
+      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} annotation to be set."
       pattern:
         metadata:
-          labels:
+          annotations:
             {{ include "osc.common.serviceAccountKey" . }}: "?*"
   - name: validate-service-account-uid-gid-webservice
     match:
@@ -62,7 +62,7 @@ spec:
     context:
       - name: serviceAccount
         variable:
-          jmesPath: request.object.metadata.labels."{{ include "osc.common.serviceAccountKey" . }}"
+          jmesPath: request.object.metadata.annotations."{{ include "osc.common.serviceAccountKey" . }}"
           default: ''
       - name: uidMap
         configMap:
@@ -73,10 +73,10 @@ spec:
           name: user-gid-map
           namespace: k8-ldap-configmap
     validate:
-      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} labels be set to the correct UID and GID."
+      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} annotations be set to the correct UID and GID."
       pattern:
         metadata:
-          labels:
+          annotations:
             osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
             osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
   - name: validate-service-account-uid-gid-paas
@@ -112,10 +112,10 @@ spec:
           name: user-gid-map
           namespace: k8-ldap-configmap
     validate:
-      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} labels be set to the correct UID and GID."
+      message: "PVC using local-ess or local-scratch requires {{ include "osc.common.serviceAccountKey" . }} annotations be set to the correct UID and GID."
       pattern:
         metadata:
-          labels:
+          annotations:
             osc.edu/service-account: "{{`{{ serviceAccount }}`}}"
             osc.edu/service-account-uid: '{{`{{`}} uidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
             osc.edu/service-account-gid: '{{`{{`}} gidMap.data."user-{{`{{`}} serviceAccount {{`}}`}}" {{`}}`}}'
@@ -180,7 +180,7 @@ spec:
         conditions:
         - key: "{{`{{ request.object.metadata.annotations.\"osc.edu/fileset\" }}`}}"
           operator: AnyNotIn
-          value: "{{`{{ userGroupMap.data.\"user-{{ request.object.metadata.labels.\"osc.edu/service-account\" || '' }}\" }}`}}"
+          value: "{{`{{ userGroupMap.data.\"user-{{ request.object.metadata.annotations.\"osc.edu/service-account\" || '' }}\" }}`}}"
   - name: validate-paas-fileset-annotation
     match:
       any:

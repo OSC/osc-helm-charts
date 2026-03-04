@@ -18,7 +18,6 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: test
 spec:
   accessModes:
@@ -76,9 +75,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: pvc-paas-pass
   namespace: paas
-  labels:
-    osc.edu/service-account: user-test
   annotations:
+    osc.edu/service-account: user-test
     osc.edu/fileset: user-test-fileset
 spec:
   accessModes:
@@ -192,7 +190,6 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: test
     osc.edu/service-account-uid: "1000"
     osc.edu/service-account-gid: "1001"
@@ -211,7 +208,6 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: test
     osc.edu/service-account-uid: "2000"
     osc.edu/service-account-gid: "2001"
@@ -230,7 +226,6 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: test
 spec:
   accessModes:
@@ -247,7 +242,6 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account-uid: "1000"
     osc.edu/service-account-gid: "1001"
 spec:
@@ -265,7 +259,6 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: test
     osc.edu/service-account-uid: "1000"
     osc.edu/service-account-gid: "1001"
@@ -284,7 +277,6 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: test
     osc.edu/service-account-uid: "2000"
     osc.edu/service-account-gid: "2001"
@@ -303,7 +295,6 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: test
 spec:
   accessModes:
@@ -320,7 +311,6 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account-uid: "1000"
     osc.edu/service-account-gid: "1001"
 spec:
@@ -338,7 +328,6 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: foo
     osc.edu/service-account-uid: "1000"
     osc.edu/service-account-gid: "1001"

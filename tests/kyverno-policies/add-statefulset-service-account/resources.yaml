@@ -4,7 +4,7 @@ kind: StatefulSet
 metadata:
   name: webservice-statefulset
   namespace: webservice
-  labels:
+  annotations:
     osc.edu/service-account: "test-user"
 spec:
   volumeClaimTemplates:
@@ -20,7 +20,7 @@ kind: StatefulSet
 metadata:
   name: webservice-statefulset-ess
   namespace: webservice
-  labels:
+  annotations:
     osc.edu/service-account: "test-user"
 spec:
   volumeClaimTemplates:

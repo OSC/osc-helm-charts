@@ -6,7 +6,6 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-  labels:
     osc.edu/service-account: test
     osc.edu/service-account-uid: '1000'
     osc.edu/service-account-gid: '1001'
