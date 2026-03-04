@@ -16,10 +16,8 @@ webservice:
   ingress:
     host: test.local
   mounts:
-    rwDir:
-      webmo: null
-    roDir:
-      slurm-conf: null
+    rwDir: null
+    roDir: null
     socket: null
   readinessProbe:
     httpGet:
