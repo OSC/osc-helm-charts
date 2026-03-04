@@ -29,7 +29,7 @@ spec:
         message: PVC storageClassName must be one of {{ join " , " .Values.webservices.validStorageClass }}
         pattern:
           spec:
-            <(storageClassName): "{{ join " | " .Values.webservices.validStorageClass }}"
+            storageClassName: "{{ join " | " .Values.webservices.validStorageClass }}"
     - name: paas-pvc-storageclass
       match:
         any:
@@ -56,7 +56,7 @@ spec:
         message: "PVC storageClassName must be one of {{`{{ allowed.\"{{ paasName }}\" }}`}}"
         pattern:
           spec:
-            <(storageClassName): "{{`{{ allowed.\"{{ paasName }}\" }}`}}"
+            storageClassName: "{{`{{ allowed.\"{{ paasName }}\" }}`}}"
     - name: webservice-statefulset-storageclass
       match:
         any:
@@ -75,7 +75,7 @@ spec:
           spec:
             "=(volumeClaimTemplates)":
               - spec:
-                  <(storageClassName): "{{ join " | " .Values.webservices.validStorageClass }}"
+                  storageClassName: "{{ join " | " .Values.webservices.validStorageClass }}"
     - name: paas-statefulset-storageclass
       match:
         any:
@@ -104,4 +104,4 @@ spec:
           spec:
             "=(volumeClaimTemplates)":
               - spec:
-                  <(storageClassName): "{{`{{ allowed.\"{{ paasName }}\" }}`}}"
+                  storageClassName: "{{`{{ allowed.\"{{ paasName }}\" }}`}}"
