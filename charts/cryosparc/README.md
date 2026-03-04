@@ -20,7 +20,7 @@ OSC CryoSPARC bootstrap Helm Chart
 
 Define necessary values:
 
-````yaml
+```yaml
 global:
   oscServiceAccount: cryosciapps
   imagePullSecret:
