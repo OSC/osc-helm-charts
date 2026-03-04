@@ -88,6 +88,8 @@ jobs:
           make -f docker-images/dcgm-exporter/Makefile kind-load
       - name: Build and Load images
         if: matrix.chart == 'cryosparc'
+        env:
+          LICENSE_ID: ${{ secrets.CRYOSPARC_LICENSE_ID }}
         run: |
           make -f docker-images/cryosparc/Makefile build
           make -f docker-images/cryosparc/Makefile kind-load
