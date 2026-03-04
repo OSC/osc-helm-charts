@@ -38,7 +38,7 @@ spec:
   - host: {{ tpl (include "webservice.ingressHost" .) . | quote }}
     http:
       paths:
-      {{ $root := . }}
+      {{- $root := . }}
       {{- range $idx, $container := .Values.containers }}
       - path: {{ $container.ingressPath }}
         pathType: Prefix
