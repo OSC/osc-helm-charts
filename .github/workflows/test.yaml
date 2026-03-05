@@ -128,7 +128,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y munge
-          sudo -u munge mungekey --verbose
+          sudo -u munge mungekey --verbose --force
           sudo systemctl start munge
           sudo mkdir -p /etc/slurm
           sudo mkdir -p /fs/ess/PAS0710
