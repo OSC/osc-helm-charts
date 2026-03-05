@@ -40,6 +40,7 @@ results:
     rule: statefulset-validate-fileset-set
     resources:
       - webservice-statefulset-without-fileset
+      - webservice-statefulset-with-pde-fileset
       - paas-statefulset-without-fileset
     kind: StatefulSet
     result: fail
@@ -47,6 +48,28 @@ results:
     rule: statefulset-validate-fileset-set
     resources:
       - webservice-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-disallow-pde-fileset-permissions
+    resources:
+      - webservice-statefulset-with-pde-fileset
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-disallow-pde-fileset-permissions
+    resources:
+      - webservice-statefulset-with-pde-fileset-permissions
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-gpfs-fileset
+    rule: statefulset-disallow-pde-fileset-permissions
+    resources:
+      - webservice-statefulset-with-nfs-storage
+      - webservice-statefulset-local-ess
+      - webservice-statefulset-without-fileset
+      - paas-statefulset-local-ess
+      - paas-statefulset-without-fileset
     kind: StatefulSet
     result: skip
   - policy: statefulset-gpfs-fileset

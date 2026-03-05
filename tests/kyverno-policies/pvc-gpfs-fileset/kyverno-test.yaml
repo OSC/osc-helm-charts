@@ -75,6 +75,7 @@ results:
     rule: pvc-validate-fileset-set
     resources:
       - pvc-webservice-fail-no-fileset
+      - pvc-paas-fail-no-fileset
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-gpfs-fileset
@@ -86,19 +87,31 @@ results:
   - policy: pvc-gpfs-fileset
     rule: pvc-validate-fileset-set
     resources:
+      - pvc-paas-pass-storageclass
       - pvc-webservice-pass-storageclass
+      - pvc-webservice-pde-fileset
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-gpfs-fileset
-    rule: pvc-validate-fileset-set
+    rule: pvc-disallow-pde-fileset-permissions
     resources:
-      - pvc-paas-fail-no-fileset
+      - pvc-webservice-pde-fileset-permission
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-gpfs-fileset
-    rule: pvc-validate-fileset-set
+    rule: pvc-disallow-pde-fileset-permissions
     resources:
+      - pvc-webservice-skip-storageclass
+      - pvc-webservice-fail-no-fileset
+      - pvc-paas-fail-no-fileset
       - pvc-paas-pass-storageclass
+      - pvc-webservice-pass-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-gpfs-fileset
+    rule: pvc-disallow-pde-fileset-permissions
+    resources:
+      - pvc-webservice-pde-fileset
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-gpfs-fileset
@@ -138,4 +151,3 @@ results:
       - pvc-paas-fail
     kind: PersistentVolumeClaim
     result: fail
-

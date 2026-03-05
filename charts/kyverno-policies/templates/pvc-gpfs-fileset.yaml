@@ -153,6 +153,43 @@ spec:
         metadata:
           annotations:
             osc.edu/fileset: "?*"
+  - name: pvc-disallow-pde-fileset-permissions
+    match:
+      any:
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+        - resources:
+            kinds:
+              - PersistentVolumeClaim
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+        - key: "{{`{{ request.object.metadata.annotations.\"osc.edu/fileset\" || '' }}`}}"
+          operator: Equals
+          value: "PDE*"
+    validate:
+      message: "PVC osc.edu/fileset annotation cannot be a PDE fileset and set osc.edu/volume-permission"
+      pattern:
+        metadata:
+          annotations:
+            X(osc.edu/volume-permission): "null"
   - name: validate-webservice-fileset-annotation
     match:
       any:
