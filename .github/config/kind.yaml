@@ -4,4 +4,22 @@ apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
 - role: control-plane
 - role: worker
+  extraMounts:
+  - hostPath: /fs
+    containerPath: /fs
+  - hostPath: /users
+    containerPath: /users
+  - hostPath: /etc/slurm
+    containerPath: /etc/slurm
+  - hostPath: /var/run/munge
+    containerPath: /var/run/munge
 - role: worker
+  extraMounts:
+  - hostPath: /fs
+    containerPath: /fs
+  - hostPath: /users
+    containerPath: /users
+  - hostPath: /etc/slurm
+    containerPath: /etc/slurm
+  - hostPath: /var/run/munge
+    containerPath: /var/run/munge
