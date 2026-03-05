@@ -1,10 +1,18 @@
 ---
 global:
   imagePullSecret:
+    # -- Do not create osc-common image pull secret
+    create: false
     # -- Image pull secret name for PAAS namespaces
     name: osc-registry
     # -- Registry for image pull secret added to all PAAS namespaces
     registry: docker-registry.osc.edu
+  # @ignored
+  networkPolicy:
+    create: false
+  # @ignored
+  webservicesDeploy:
+    create: false
 # -- Define PAAS namespaces
 namespaces: {}
 # Example defining PAAS namespace
