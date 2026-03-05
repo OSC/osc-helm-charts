@@ -117,6 +117,37 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: pvc-webservice-pde-fileset
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: PDE0001
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-pde-fileset-permission
+  namespace: webservice
+  annotations:
+    osc.edu/fileset: PDE0001
+    osc.edu/volume-permission: '0750'
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: pvc-webservice-skip-storageclass
   namespace: webservice
 spec:
@@ -147,6 +178,7 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
+    osc.edu/volume-permission: '0750'
 spec:
   accessModes:
   - ReadWriteOnce
@@ -175,6 +207,7 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
+    osc.edu/volume-permission: '0750'
 spec:
   accessModes:
   - ReadWriteOnce

@@ -169,6 +169,48 @@ spec:
               metadata:
                 annotations:
                   osc.edu/fileset: "?*"
+  - name: statefulset-disallow-pde-fileset-permissions
+    match:
+      any:
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+            operations:
+              - CREATE
+              - UPDATE
+        - resources:
+            kinds:
+              - StatefulSet
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+            operations:
+              - CREATE
+              - UPDATE
+    preconditions:
+      all:
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].spec.storageClassName || '' }}`}}"
+          operator: AnyIn
+          value:
+          - local-ess
+          - local-scratch
+        - key: "{{`{{ request.object.spec.volumeClaimTemplates[*].metadata.annotations.\"osc.edu/fileset\" || '' }}`}}"
+          operator: AnyIn
+          value:
+          - "PDE*"
+    validate:
+      message: "StatefulSet with a PVC does not allow the osc.edu/fileset annotation to be a PDE fileset and set osc.edu/volume-permission"
+      pattern:
+        spec:
+          =(volumeClaimTemplates):
+            - (spec):
+                (storageClassName): "local-ess | local-scratch"
+              metadata:
+                annotations:
+                  X(osc.edu/volume-permission): "null"
   - name: validate-webservice-fileset-annotation
     match:
       any:
