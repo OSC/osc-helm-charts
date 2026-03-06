@@ -13,6 +13,10 @@ nodes:
     containerPath: /etc/slurm
   - hostPath: /var/run/munge
     containerPath: /var/run/munge
+  - hostPath: /var/lib/sss/pipes
+    containerPath: /var/lib/sss/pipes
+  - hostPath: /etc/sssd
+    containerPath: /etc/sssd
 - role: worker
   extraMounts:
   - hostPath: /fs
@@ -23,3 +27,7 @@ nodes:
     containerPath: /etc/slurm
   - hostPath: /var/run/munge
     containerPath: /var/run/munge
+  - hostPath: /var/lib/sss/pipes
+    containerPath: /var/lib/sss/pipes
+  - hostPath: /etc/sssd
+    containerPath: /etc/sssd
