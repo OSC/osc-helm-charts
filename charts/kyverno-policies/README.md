@@ -46,7 +46,7 @@ OSC Kyverno policies deployment
 
 ### Pod policies
 
-#### Validating policies
+#### Validating policies {#pod-policies-validating-policies}
 
 * [authorized-registries](templates/authorized-registries.yaml)
   * Rules
@@ -138,7 +138,7 @@ OSC Kyverno policies deployment
     * Validates that Pods cannot use images from the docker.io registry
   * Applies to: Pod
 
-#### Mutate policies
+#### Mutate policies {#pod-policies-mutate-policies}
 
 * [add-account](templates/add-account.yaml)
   * Rules
@@ -170,7 +170,7 @@ OSC Kyverno policies deployment
 
 ### PersistentVolumeClaim policies
 
-#### Validating policies
+#### Validating policies {#persistentvolumeclaim-policies-validating-policies}
 
 * [pvc-gpfs-fileset](templates/pvc-gpfs-fileset.yaml)
   * Rules
@@ -190,7 +190,7 @@ OSC Kyverno policies deployment
     * Validates that StatefulSet in PAAS namespaces must use valid storage classes
   * Applies to: PersistentVolumeClaim and StatefulSet in webservice and PAAS namespaces
 
-#### Mutate policies
+#### Mutate policies {#persistentvolumeclaim-policies-mutate-policies}
 
 * [add-pvc-service-account](templates/add-pvc-service-account.yaml)
   * Rules
@@ -200,7 +200,7 @@ OSC Kyverno policies deployment
 
 ### StatefulSet policies
 
-#### Validating policies
+#### Validating policies {#statefulset-policies-validating-policies}
 
 * [statefulset-gpfs-fileset](templates/statefulset-gpfs-fileset.yaml)
   * Rules
@@ -212,7 +212,7 @@ OSC Kyverno policies deployment
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a valid fileset annotation for PAAS namespaces
   * Applies to: StatefulSet in webservice and PAAS namespaces with local-ess or local-scratch storage classes
 
-#### Mutate policies
+#### Mutate policies {#statefulset-policies-mutate-policies}
 
 * [add-statefulset-service-account](templates/add-statefulset-service-account.yaml)
   * Rules
@@ -222,14 +222,14 @@ OSC Kyverno policies deployment
 
 ### Ingress policies
 
-#### Mutate policies
+#### Mutate policies {#ingress-policies-mutate-policies}
 
 * [add-ingress-class-name](templates/add-ingress-class-name.yaml)
   * Rules
     * Adds ingress class name to ingresses in PAAS namespace
   * Applies to: Ingress in PAAS namespace
 
-#### Validating policies
+#### Validating policies {#ingress-policies-validating-policies}
 
 * [ingress-allowed-dns](templates/ingress-allowed-dns.yaml)
   * Rules
@@ -253,7 +253,7 @@ OSC Kyverno policies deployment
 
 ### Service policies
 
-#### Validating policies
+#### Validating policies {#service-policies-validating-policies}
 
 * [no-localhost-service](templates/no-localhost-service.yaml)
   * Rules
@@ -274,7 +274,7 @@ OSC Kyverno policies deployment
 
 ### Namespace policies
 
-#### Validating policies
+#### Validating policies {#namespace-policies-validating-policies}
 
 * [namespace-account](templates/namespace-account.yaml)
   * Rules
@@ -294,7 +294,7 @@ OSC Kyverno policies deployment
 
 ### PAAS policies
 
-#### Mutate policies
+#### Mutate policies {#paas-policies-mutate-policies}
 
 * [add-annotations](templates/add-annotations.yaml)
   * Rules
@@ -307,7 +307,7 @@ OSC Kyverno policies deployment
     * Adds osc.edu/role=paas label to PAAS pods, services, and ingresses
   * Applies to: Pod, Service, Ingress in PAAS namespace
 
-#### Validating policies
+#### Validating policies {#paas-policies-validating-policies}
 
 * [role-validation](templates/role-validation.yaml)
   * Rules
@@ -316,7 +316,7 @@ OSC Kyverno policies deployment
 
 ### User policies
 
-#### Validating policies
+#### Validating policies {#user-policies-validating-policies}
 
 * [disallow-pvc](templates/disallow-pvc.yaml)
   * Rules
@@ -327,7 +327,7 @@ OSC Kyverno policies deployment
 
 ### Infrastructure policies
 
-#### Mutate policies
+#### Mutate policies {#infrastructure-policies-mutate-policies}
 
 * [mutate-calico-registry](templates/mutate-calico-registry.yaml)
   * Rules
