@@ -130,9 +130,11 @@ jobs:
           sudo -u munge mungekey --verbose --force
           sudo systemctl start munge
           sudo mkdir -p /etc/slurm
-          sudo mkdir -p /fs/ess/PAS0710
-          sudo mkdir -p /users/PAS0710/cryosciapps
           sudo mkdir -p /var/lib/sss/pipes /etc/sssd
+          sudo mkdir -p /fs/ess
+          sudo install -d -o 1000 -g 1000 -m 0750 /fs/ess/PAS0710
+          sudo mkdir -p /users/PAS0710
+          sudo install -d -o 1000 -g 1000 -m 0700 /users/PAS0710/cryosciapps
       - name: Add namespaces
         run: kubectl create namespace ${{ matrix.chart }}
       - name: Run chart-testing (install)

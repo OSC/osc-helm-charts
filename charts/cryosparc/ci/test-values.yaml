@@ -26,8 +26,8 @@ auth:
 ingress:
   host: cryosciapps.osc.edu
 podSecurityContext:
-  runAsUser: 12345
-  runAsGroup: 3333
-  fsGroup: 3333
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
 service:
   basePort: 31010
