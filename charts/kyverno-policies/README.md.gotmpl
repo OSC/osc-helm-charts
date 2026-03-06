@@ -26,51 +26,127 @@
 * [Ingress policies](#ingress-policies)
   * [Mutate policies](#ingress-policies-mutate-policies)
   * [Validating policies](#ingress-policies-validating-policies)
+* [Service policies](#service-policies)
+  * [Validating policies](#service-policies-validating-policies)
+* [Namespace policies](#namespace-policies)
+  * [Validating policies](#namespace-policies-validating-policies)
 * [PAAS policies](#paas-policies)
   * [Mutate policies](#paas-policies-mutate-policies)
 * [User policies](#user-policies)
   * [Validating policies](#user-policies-validating-policies)
+* [Infrastructure policies](#infrastructure-policies)
+  * [Mutate policies](#infrastructure-policies-mutate-policies)
 
 ### Pod policies
 
 #### Validating policies
 
 * [authorized-registries](templates/authorized-registries.yaml)
-  * Validates that images come from authorized registries based on namespace
+  * Rules
+    * Validates that images come from authorized registries for user namespaces
+    * Validates that images come from authorized registries for webservice namespaces
+    * Validates that images come from authorized registries for PAAS namespaces
   * Applies to: Pod in user-?* namespaces, webservice namespaces, and PAAS namespaces
 
 * [block-images-with-volumes](templates/block-images-with-volumes.yaml)
-  * Blocks pods that use images containing built-in volumes
+  * Rules
+    * Blocks pods that use images containing built-in volumes
   * Applies to: Pod
 
 * [disallow-container-sock-mounts](templates/disallow-container-sock-mounts.yaml)
-  * Disallows mounting container daemon sockets (docker, containerd, crio)
+  * Rules
+    * Validates that Docker Unix socket is not mounted
+    * Validates that Containerd Unix socket is not mounted
+    * Validates that CRI-O Unix socket is not mounted
   * Applies to: Pod
 
 * [disallow-nfs](templates/disallow-nfs.yaml)
-  * Disallows use of NFS volumes in pods
+  * Rules
+    * Validates that NFS volumes are not used in pods
   * Applies to: Pod
+
+* [pod-account-validation](templates/pod-account-validation.yaml)
+  * Rules
+    * Validates pod account labels and authorization for user namespaces
+    * Validates pod account authorization for PAAS namespaces
+  * Applies to: Pod in user-?* namespaces and PAAS namespaces
+
+* [pod-groups-validation](templates/pod-groups-validation.yaml)
+  * Rules
+    * Validates pod supplemental groups authorization for user namespaces
+  * Applies to: Pod in user-?* namespaces
+
+* [pod-host-port](templates/pod-host-port.yaml)
+  * Rules
+    * Blocks pods with host port configuration in user namespaces
+    * Blocks pods with host port configuration in PAAS namespaces
+  * Applies to: Pod in user-?* namespaces and PAAS namespaces
+
+* [pod-lifetime](templates/pod-lifetime.yaml)
+  * Rules
+    * Validates pod lifetime annotation requirement for user namespaces
+    * Validates pod lifetime does not exceed 24h limit for user namespaces
+  * Applies to: Pod in user-?* namespaces
+
+* [pod-nodeselector](templates/pod-nodeselector.yaml)
+  * Rules
+    * Validates pod node selector for user namespaces
+    * Validates pod node selector for webservice namespaces
+    * Validates pod node selector for PAAS namespaces
+  * Applies to: Pod in user-?* namespaces, webservice namespaces, and PAAS namespaces
+
+* [pod-resources](templates/pod-resources.yaml)
+  * Rules
+    * Validates pod resource requests and limits for user namespaces
+    * Validates pod resource limits do not exceed maximum for user namespaces
+    * Validates pod resource requests and limits for webservice namespaces
+    * Validates pod resource limits do not exceed maximum for webservice namespaces
+  * Applies to: Pod in user-?* namespaces and webservice namespaces
+
+* [pod-service-account-validation](templates/pod-service-account-validation.yaml)
+  * Rules
+    * Validates webservice pods require a service account for access
+    * Validates webservice pods have valid service account UID/GID
+    * Validates webservice pods have valid service account groups
+    * Validates PAAS pods have valid service account UID/GID
+    * Validates PAAS pods have valid service account groups
+  * Applies to: Pod in webservice and PAAS namespaces
+
+* [pod-user-validation](templates/pod-user-validation.yaml)
+  * Rules
+    * Validates pod has valid user UID for user namespaces
+    * Validates pod has valid user GID for user namespaces
+    * Validates pod has valid group GID for user namespaces
+  * Applies to: Pod in user-?* namespaces
 
 #### Mutate policies
 
 * [add-account](templates/add-account.yaml)
-  * Adds account label to pods in PAAS namespace
+  * Rules
+    * Adds account label to pods in PAAS namespace
   * Applies to: PAAS namespace
 
 * [add-gpu-nodeselector](templates/add-gpu-nodeselector.yaml)
-  * Adds GPU nodeselector to pods that request GPU resources
+  * Rules
+    * Adds GPU nodeselector to pods that request GPU resources
+    * Removes GPU nodeselector from pods that no longer request GPU resources
   * Applies to: Pod
 
 * [add-image-pull-secret](templates/add-image-pull-secret.yaml)
-  * Adds image pull secret to pods in PAAS namespace
+  * Rules
+    * Adds image pull secret to pods in PAAS namespace
   * Applies to: PAAS namespace
 
 * [add-nodeselector](templates/add-nodeselector.yaml)
-  * Adds nodeselector to pods based on namespace role (ondemand or paas)
+  * Rules
+    * Adds ondemand nodeselector to pods in user namespaces
+    * Adds paas nodeselector to pods in PAAS namespaces
   * Applies to: Pod in user-?* namespaces or PAAS namespaces
 
 * [add-service-account](templates/add-service-account.yaml)
-  * Adds service account security context to pods in webservice and PAAS namespaces
+  * Rules
+    * Adds service account security context to webservice pods
+    * Adds service account security context to PAAS pods
   * Applies to: Pod in webservice and PAAS namespaces
 
 ### PersistentVolumeClaim policies
@@ -111,6 +187,34 @@
   * Validates that ingresses have TLS configured
   * Applies to: Ingress
 
+* [no-ingress](templates/no-ingress.yaml)
+  * Blocks ingress in user namespaces
+  * Applies to: Ingress in user-?* namespaces
+
+### Service policies
+
+#### Validating policies
+
+* [no-localhost-service](templates/no-localhost-service.yaml)
+  * Blocks ExternalName services pointing to localhost
+  * Applies to: Service of type ExternalName
+
+### Namespace policies
+
+#### Validating policies
+
+* [namespace-account](templates/namespace-account.yaml)
+  * Validates that namespaces have an account label set when they have the paas role
+  * Applies to: Namespace with paas role
+
+* [namespace-role](templates/namespace-role.yaml)
+  * Validates that namespaces have a role label set
+  * Applies to: Namespace (excluding default, user-*, and kube-* namespaces)
+
+* [namespace-service-account](templates/namespace-service-account.yaml)
+  * Validates that namespaces have a service account label set when they have the paas role
+  * Applies to: Namespace with paas role
+
 ### PAAS policies
 
 #### Mutate policies
@@ -130,6 +234,14 @@
 * [disallow-pvc](templates/disallow-pvc.yaml)
   * Disallows use of persistent volume claims in pods and statefulsets and disallows PersistentVolumeClaims
   * Applies to: Pod, PersistentVolumeClaim, and StatefulSet in user-?* namespaces
+
+### Infrastructure policies
+
+#### Mutate policies
+
+* [mutate-calico-registry](templates/mutate-calico-registry.yaml)
+  * Mutates calico container images to use the internal registry and adds image pull secrets
+  * Applies to: Pod in kube-system namespace with calico-* k8s-app label
 
 {{ define "chart.valuesTable" -}}
 | Key | Description | Default |
