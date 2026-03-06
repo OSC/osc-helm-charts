@@ -21,10 +21,10 @@ OSC Kyverno policies deployment
 
 ### Table of Contents
 * [Pod policies](#pod-policies)
-  * [Validating policies](#pod-policies-validating-policies)
+  * [Validating policies](#validating-policies)
   * [Mutate policies](#pod-policies-mutate-policies)
 * [PersistentVolumeClaim policies](#persistentvolumeclaim-policies)
-  * [Validating policies](#persistentvolumeclaim-policies-validating-policies)
+  * [Validating policies](#validating-policies-1)
   * [Mutate policies](#persistentvolumeclaim-policies-mutate-policies)
 * [StatefulSet policies](#statefulset-policies)
   * [Validating policies](#statefulset-policies-validating-policies)
@@ -46,7 +46,7 @@ OSC Kyverno policies deployment
 
 ### Pod policies
 
-#### Validating policies {#pod-policies-validating-policies}
+#### Validating policies
 
 * [authorized-registries](templates/authorized-registries.yaml)
   * Rules
@@ -170,7 +170,7 @@ OSC Kyverno policies deployment
 
 ### PersistentVolumeClaim policies
 
-#### Validating policies {#persistentvolumeclaim-policies-validating-policies}
+#### Validating policies
 
 * [pvc-gpfs-fileset](templates/pvc-gpfs-fileset.yaml)
   * Rules
