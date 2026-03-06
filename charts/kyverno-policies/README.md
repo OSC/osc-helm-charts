@@ -24,8 +24,10 @@ OSC Kyverno policies deployment
   * [Validating policies](#pod-policies-validating-policies)
   * [Mutate policies](#pod-policies-mutate-policies)
 * [PersistentVolumeClaim policies](#persistentvolumeclaim-policies)
+  * [Validating policies](#persistentvolumeclaim-policies-validating-policies)
   * [Mutate policies](#persistentvolumeclaim-policies-mutate-policies)
 * [StatefulSet policies](#statefulset-policies)
+  * [Validating policies](#statefulset-policies-validating-policies)
   * [Mutate policies](#statefulset-policies-mutate-policies)
 * [Ingress policies](#ingress-policies)
   * [Mutate policies](#ingress-policies-mutate-policies)
@@ -35,6 +37,7 @@ OSC Kyverno policies deployment
 * [Namespace policies](#namespace-policies)
   * [Validating policies](#namespace-policies-validating-policies)
 * [PAAS policies](#paas-policies)
+  * [Validating policies](#paas-policies-validating-policies)
   * [Mutate policies](#paas-policies-mutate-policies)
 * [User policies](#user-policies)
   * [Validating policies](#user-policies-validating-policies)
@@ -123,6 +126,18 @@ OSC Kyverno policies deployment
     * Validates pod has valid group GID for user namespaces
   * Applies to: Pod in user-?* namespaces
 
+* [restrict-host-path](templates/restrict-host-path.yaml)
+  * Rules
+    * Validates that HostPath volumes are not allowed in user namespaces
+    * Validates that HostPath volumes are not allowed in webservice namespaces
+    * Validates that HostPath volumes are not allowed in PAAS namespaces
+  * Applies to: Pod in user-?* namespaces, webservice namespaces, and PAAS namespaces
+
+* [restrict-registries](templates/restrict-registries.yaml)
+  * Rules
+    * Validates that Pods cannot use images from the docker.io registry
+  * Applies to: Pod
+
 #### Mutate policies
 
 * [add-account](templates/add-account.yaml)
@@ -155,18 +170,54 @@ OSC Kyverno policies deployment
 
 ### PersistentVolumeClaim policies
 
+#### Validating policies
+
+* [pvc-gpfs-fileset](templates/pvc-gpfs-fileset.yaml)
+  * Rules
+    * Validates that PVC using local-ess or local-scratch storage classes require a service account annotation to be set
+    * Validates that PVC using local-ess or local-scratch storage classes require correct UID and GID annotations
+    * Validates that PVC using local-ess or local-scratch storage classes require a fileset annotation to be set
+    * Validates that PVC using local-ess or local-scratch storage classes cannot use PDE filesets with volume permissions
+    * Validates that PVC using local-ess or local-scratch storage classes require a valid fileset annotation for webservice namespaces
+    * Validates that PVC using local-ess or local-scratch storage classes require a valid fileset annotation for PAAS namespaces
+  * Applies to: PersistentVolumeClaim in webservice and PAAS namespaces with local-ess or local-scratch storage classes
+
+* [restrict-storageclass](templates/restrict-storageclass.yaml)
+  * Rules
+    * Validates that PVC in webservice namespaces must use valid storage classes
+    * Validates that PVC in PAAS namespaces must use valid storage classes
+    * Validates that StatefulSet in webservice namespaces must use valid storage classes
+    * Validates that StatefulSet in PAAS namespaces must use valid storage classes
+  * Applies to: PersistentVolumeClaim and StatefulSet in webservice and PAAS namespaces
+
 #### Mutate policies
 
 * [add-pvc-service-account](templates/add-pvc-service-account.yaml)
-  * Adds service account annotations to persistent volume claims in webservice and PAAS namespaces
+  * Rules
+    * Adds service account annotations to persistent volume claims in webservice namespaces
+    * Adds service account annotations to persistent volume claims in PAAS namespaces
   * Applies to: PersistentVolumeClaim in webservice and PAAS namespaces
 
 ### StatefulSet policies
 
+#### Validating policies
+
+* [statefulset-gpfs-fileset](templates/statefulset-gpfs-fileset.yaml)
+  * Rules
+    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a service account annotation to be set
+    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require correct UID and GID annotations
+    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a fileset annotation to be set
+    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes cannot use PDE filesets with volume permissions
+    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a valid fileset annotation for webservice namespaces
+    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a valid fileset annotation for PAAS namespaces
+  * Applies to: StatefulSet in webservice and PAAS namespaces with local-ess or local-scratch storage classes
+
 #### Mutate policies
 
 * [add-statefulset-service-account](templates/add-statefulset-service-account.yaml)
-  * Adds service account annotations to statefulset volume claim templates in webservice and PAAS namespaces
+  * Rules
+    * Adds service account annotations to statefulset volume claim templates in webservice namespaces
+    * Adds service account annotations to statefulset volume claim templates in PAAS namespaces
   * Applies to: StatefulSet in webservice and PAAS namespaces
 
 ### Ingress policies
@@ -174,25 +225,30 @@ OSC Kyverno policies deployment
 #### Mutate policies
 
 * [add-ingress-class-name](templates/add-ingress-class-name.yaml)
-  * Adds ingress class name to ingresses in PAAS namespace
+  * Rules
+    * Adds ingress class name to ingresses in PAAS namespace
   * Applies to: Ingress in PAAS namespace
 
 #### Validating policies
 
 * [ingress-allowed-dns](templates/ingress-allowed-dns.yaml)
-  * Validates that ingress DNS hosts are in the allowed list
+  * Rules
+    * Validates that ingress DNS hosts are in the allowed list
   * Applies to: Ingress in PAAS namespace
 
 * [ingress-annotations](templates/ingress-annotations.yaml)
-  * Validates that external-dns annotations are not used
+  * Rules
+    * Validates that external-dns annotations are not used
   * Applies to: Ingress in PAAS namespace
 
 * [ingress-require-tls](templates/ingress-require-tls.yaml)
-  * Validates that ingresses have TLS configured
+  * Rules
+    * Validates that ingresses have TLS configured
   * Applies to: Ingress
 
 * [no-ingress](templates/no-ingress.yaml)
-  * Blocks ingress in user namespaces
+  * Rules
+    * Blocks ingress in user namespaces
   * Applies to: Ingress in user-?* namespaces
 
 ### Service policies
@@ -200,23 +256,40 @@ OSC Kyverno policies deployment
 #### Validating policies
 
 * [no-localhost-service](templates/no-localhost-service.yaml)
-  * Blocks ExternalName services pointing to localhost
+  * Rules
+    * Blocks ExternalName services pointing to localhost
   * Applies to: Service of type ExternalName
+
+* [restrict-external-ips](templates/restrict-external-ips.yaml)
+  * Rules
+    * Validates that Services cannot use externalIPs
+  * Applies to: Service
+
+* [service-types](templates/service-types.yaml)
+  * Rules
+    * Validates that Services in all namespaces cannot be of type LoadBalancer (except in ingress-nginx namespace)
+    * Validates that Services in PAAS namespaces cannot be of type ExternalName
+    * Validates that Services in PAAS namespaces cannot be of type NodePort (unless explicitly allowed)
+  * Applies to: Service
 
 ### Namespace policies
 
 #### Validating policies
 
 * [namespace-account](templates/namespace-account.yaml)
-  * Validates that namespaces have an account label set when they have the paas role
+  * Rules
+    * Validates that namespaces have an account label set when they have the paas role
+    * Validates that namespaces have valid account authorization when they have the paas role
   * Applies to: Namespace with paas role
 
 * [namespace-role](templates/namespace-role.yaml)
-  * Validates that namespaces have a role label set
+  * Rules
+    * Validates that namespaces have a role label set
   * Applies to: Namespace (excluding default, user-*, and kube-* namespaces)
 
 * [namespace-service-account](templates/namespace-service-account.yaml)
-  * Validates that namespaces have a service account label set when they have the paas role
+  * Rules
+    * Validates that namespaces have a service account label set when they have the paas role
   * Applies to: Namespace with paas role
 
 ### PAAS policies
@@ -224,19 +297,32 @@ OSC Kyverno policies deployment
 #### Mutate policies
 
 * [add-annotations](templates/add-annotations.yaml)
-  * Adds annotations to PAAS pods, services, and ingresses
+  * Rules
+    * Adds prometheus.io/scrape=false annotation to PAAS pods and services
+    * Adds cert-manager.io/cluster-issuer annotation to PAAS ingresses
   * Applies to: Pod, Service in PAAS namespace and Ingress in PAAS namespace
 
 * [add-role](templates/add-role.yaml)
-  * Adds osc.edu/role label to pods, services, and ingresses in PAAS namespace
+  * Rules
+    * Adds osc.edu/role=paas label to PAAS pods, services, and ingresses
   * Applies to: Pod, Service, Ingress in PAAS namespace
+
+#### Validating policies
+
+* [role-validation](templates/role-validation.yaml)
+  * Rules
+    * Validates that pods, services, and ingresses in PAAS namespaces must have the role label set to 'paas'
+  * Applies to: Pod, Service, and Ingress in PAAS namespaces
 
 ### User policies
 
 #### Validating policies
 
 * [disallow-pvc](templates/disallow-pvc.yaml)
-  * Disallows use of persistent volume claims in pods and statefulsets and disallows PersistentVolumeClaims
+  * Rules
+    * Blocks PersistentVolumeClaim creation in user namespaces
+    * Blocks Pod usage of PersistentVolumeClaims in user namespaces
+    * Blocks StatefulSet usage of volumeClaimTemplates in user namespaces
   * Applies to: Pod, PersistentVolumeClaim, and StatefulSet in user-?* namespaces
 
 ### Infrastructure policies
@@ -244,7 +330,10 @@ OSC Kyverno policies deployment
 #### Mutate policies
 
 * [mutate-calico-registry](templates/mutate-calico-registry.yaml)
-  * Mutates calico container images to use the internal registry and adds image pull secrets
+  * Rules
+    * Mutates calico container images to use the internal registry in kube-system namespace
+    * Mutates calico initContainer images to use the internal registry in kube-system namespace
+    * Adds image pull secrets to calico containers in kube-system namespace
   * Applies to: Pod in kube-system namespace with calico-* k8s-app label
 
 ## Values
