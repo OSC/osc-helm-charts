@@ -89,7 +89,6 @@ mounts:
 
 admin:
   email: ''
-  username: ''
   password: ''
 
 nodeSelector: {}

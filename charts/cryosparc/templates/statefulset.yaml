@@ -107,15 +107,13 @@ spec:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: license
+        - name: ADMIN_USERNAME
+          value: "oscsoft"
         - name: ADMIN_EMAIL
           valueFrom:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: email
-        - name: ADMIN_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "cryosparc.name" . }}
               key: username
         - name: ADMIN_PASSWORD
           valueFrom:
