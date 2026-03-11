@@ -14,5 +14,7 @@ RUN cd /opt/cryosparc_master && ./install.sh --license $LICENSE_ID --hostname lo
 
 RUN cd /opt/cryosparc_master && truncate -s 0 config.sh
 
+RUN rm -rf /tmp/*
+
 ENV PATH="/opt/cryosparc_master/bin:${PATH}"
 WORKDIR /opt/cryosparc_master
