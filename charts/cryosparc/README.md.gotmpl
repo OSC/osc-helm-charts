@@ -1,0 +1,63 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+## Usage
+
+Define necessary values:
+
+```yaml
+global:
+  oscServiceAccount: cryosciapps
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  debugGroups:
+    - foobar
+  maintenanceGroups:
+    - foo
+    - bar
+
+license: xxx-xxx-xxx
+version: 4.7.1
+revision: 1
+project: PAS0710
+admin:
+  email: qwer1234@osc.edu
+  username: qwer1234
+  password: qwer1234
+nodeSelector:
+  kubernetes.io/os: linux
+auth:
+  clientSecret: client-secret
+  cookieSecret: secret
+ingress:
+  host: cryosciapps.osc.edu
+podSecurityContext:
+  runAsUser: 12345
+  runAsGroup: 3333
+  fsGroup: 3333
+service:
+  basePort: 31010
+```
+
+{{ define "chart.valuesTable" -}}
+| Key | Description | Default |
+|-----|-------------|---------|
+{{- range .Values }}
+| {{ .Key }} | {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }} | {{ if .Default }}{{ .Default }}{{ else }}{{ .AutoDefault }}{{ end }} |
+{{- end }}
+{{- end -}}
+
+{{ template "chart.valuesSection" . }}

@@ -51,6 +51,7 @@ jobs:
           - kyverno-policies
           - paas
           - osc-open-webui
+          - cryosparc
     name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
@@ -73,6 +74,13 @@ jobs:
           cluster_name: kind
           node_image: kindest/node:v1.25.3@sha256:f52781bc0d7a19fb6c405c2af83abfeb311f130707a0e219175677e366cc45d1
           config: .github/config/kind.yaml
+      - name: Login to OSC registry
+        if: matrix.chart == 'cryosparc'
+        uses: docker/login-action@v2
+        with:
+          registry: docker-registry.osc.edu
+          username: ${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}
+          password: ${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}
       - name: Build and Load images
         if: matrix.chart == 'database' || matrix.chart == 'webservice'
         run: |
@@ -85,6 +93,13 @@ jobs:
         run: |
           make -f docker-images/dcgm-exporter/Makefile build
           make -f docker-images/dcgm-exporter/Makefile kind-load
+      - name: Build and Load images
+        if: matrix.chart == 'cryosparc'
+        env:
+          LICENSE_ID: ${{ secrets.CRYOSPARC_LICENSE_ID }}
+        run: |
+          make -f docker-images/cryosparc/Makefile build
+          make -f docker-images/cryosparc/Makefile kind-load
       - name: Label kind nodes
         run: |
           kubectl label node kind-worker node-role.kubernetes.io/test=''
@@ -108,6 +123,18 @@ jobs:
         run: |
           helm repo add jetstack https://charts.jetstack.io
           helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.14.4 --set installCRDs=true
+      - name: Setup Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y munge
+          sudo -u munge mungekey --verbose --force
+          sudo systemctl start munge
+          sudo mkdir -p /etc/slurm
+          sudo mkdir -p /var/lib/sss/pipes /etc/sssd
+          sudo mkdir -p /fs/ess
+          sudo install -d -o 1000 -g 1000 -m 0750 /fs/ess/PAS0710
+          sudo mkdir -p /users/PAS0710
+          sudo install -d -o 1000 -g 1000 -m 0700 /users/PAS0710/cryosciapps
       - name: Add namespaces
         run: kubectl create namespace ${{ matrix.chart }}
       - name: Run chart-testing (install)
