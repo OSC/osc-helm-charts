@@ -1,6 +1,5 @@
 global:
   environment: dev
-  oscServiceAccount: cryosciapps
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
