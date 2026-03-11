@@ -109,7 +109,7 @@ service:
 | ingress.hostAlias |  | `""` |
 | ingress.className |  | `"nginx"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"8k"` |
-| ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" |  | `"false"` |
+| ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" |  | `"true"` |
 | auth.clientID |  | `"kubernetes-{{ include \"cryosparc.name\" . }}"` |
 | auth.clientSecret |  | `nil` |
 | auth.cookieSecret |  | `nil` |
