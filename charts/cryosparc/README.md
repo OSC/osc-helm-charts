@@ -97,7 +97,7 @@ service:
 | image.repository |  | `"docker-registry.osc.edu/webservices/cryosparc"` |
 | image.tag |  | `"{{ required \"Version must be provided\" .Values.version }}-r{{ .Values.revision }}"` |
 | image.pullPolicy |  | `"IfNotPresent"` |
-| mounts.home |  | `"/users/{{ tpl .Values.homeDir . }}/{{ include \"osc.common.serviceAccountValue\" . }}"` |
+| mounts.home |  | `"/users/{{ tpl .Values.homeDir . }}/{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}"` |
 | mounts.project |  | `"/fs/ess/{{ required \"Project must be provided\" .Values.project }}"` |
 | admin.email |  | `""` |
 | admin.password |  | `""` |
@@ -112,7 +112,7 @@ service:
 | auth.clientID |  | `"kubernetes-{{ include \"cryosparc.name\" . }}"` |
 | auth.clientSecret |  | `nil` |
 | auth.cookieSecret |  | `nil` |
-| auth.cookieName |  | `"_{{ include \"osc.common.serviceAccountValue\" . }}{{ include \"osc.common.environment\" . }}"` |
+| auth.cookieName |  | `"_{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}{{ include \"osc.common.environment\" . }}"` |
 | auth.idpHost |  | `nil` |
 | auth.oidcIssuerURL |  | `"https://$(IDP_HOST)/realms/osc"` |
 | auth.allowGroups |  | `nil` |
