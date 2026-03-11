@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "cryosparc.auth.name" . }}
   labels:
-    {{ include "osc.common.serviceAccount" . }}
+    {{ tpl (include "osc.common.serviceAccount" .) . }}
     {{- include "cryosparc.auth.labels" . | nindent 4 }}
   {{- if (include "cryosparc.alert.receiver" .) }}
     receiver: {{ include "cryosparc.alert.receiver" . }}
@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       labels:
-        {{ include "osc.common.serviceAccount" . }}
+        {{ tpl (include "osc.common.serviceAccount" .) . }}
         {{- include "cryosparc.auth.selectorLabels" . | nindent 8 }}
       {{- if (include "cryosparc.alert.receiver" .) }}
         receiver: {{ include "cryosparc.alert.receiver" . }}

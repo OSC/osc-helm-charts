@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   name: {{ include "cryosparc.name" . }}
   labels:
-    {{ include "osc.common.serviceAccount" . }}
+    {{ tpl (include "osc.common.serviceAccount" .) . }}
     {{- include "cryosparc.labels" . | nindent 4 }}
   {{- if (include "cryosparc.alert.receiver" .) }}
     receiver: {{ include "cryosparc.alert.receiver" . }}
@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        {{ include "osc.common.serviceAccount" . }}
+        {{ tpl (include "osc.common.serviceAccount" .) . }}
         {{- include "cryosparc.selectorLabels" . | nindent 8 }}
       {{- if (include "cryosparc.alert.receiver" .) }}
         receiver: {{ include "cryosparc.alert.receiver" . }}
