@@ -114,7 +114,6 @@ spec:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: email
-              key: username
         - name: ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
