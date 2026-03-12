@@ -35,6 +35,12 @@ jobs:
         uses: helm/chart-testing-action@v2.6.1
       - name: Run chart-testing (lint)
         run: ct lint --config .github/config/cf.yaml --chart-dirs charts
+      - name: Run Helm lint
+        run: |
+          for chart in $(ct list-changed --config .github/config/cf.yaml); do
+            echo "Processing $chart..."
+            helm lint $chart
+          done
 
   test-helm:
     needs: [test-helm-lint]

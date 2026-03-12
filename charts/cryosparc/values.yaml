@@ -84,7 +84,7 @@ image:
   pullPolicy: IfNotPresent
 
 mounts:
-  home: /users/{{ tpl .Values.homeDir . }}/{{ include "osc.common.serviceAccountValue" . }}
+  home: /users/{{ tpl .Values.homeDir . }}/{{ tpl (include "osc.common.serviceAccountValue" .) . }}
   project: /fs/ess/{{ required "Project must be provided" .Values.project }}
 
 admin:
@@ -118,7 +118,7 @@ auth:
   clientID: kubernetes-{{ include "cryosparc.name" . }}
   clientSecret:
   cookieSecret:
-  cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
+  cookieName: _{{ tpl (include "osc.common.serviceAccountValue" .) . }}{{ include "osc.common.environment" . }}
   # Also pulled from global.env.$environment.auth.idpHost
   idpHost:
   oidcIssuerURL: https://$(IDP_HOST)/realms/osc
