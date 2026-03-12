@@ -21,6 +21,7 @@ mounts:
 nodeSelector:
   kubernetes.io/os: linux
 auth:
+  clientID: test
   clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
   cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
   oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master

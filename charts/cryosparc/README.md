@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -116,10 +116,10 @@ service:
 | ingress.className |  | `"nginx"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"16k"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" |  | `"true"` |
-| auth.clientID | Keycloak client ID. Also pulled from global.auth.clientID | `"kubernetes-{{ include \"cryosparc.name\" . }}"` |
+| auth.clientID | Keycloak client ID. Also pulled from global.auth.clientID | `nil` |
 | auth.clientSecret | Keycloak client secret. Also pulled from global.auth.clientSecret | `nil` |
 | auth.cookieSecret | Keycloak cookie secret. Also pulled from global.auth.cookieSecret | `nil` |
-| auth.cookieName |  | `"_{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}{{ include \"osc.common.environment\" . }}"` |
+| auth.cookieName |  | `"_{{ include \"cryosparc.name\" . }}{{ include \"osc.common.environment\" . }}"` |
 | auth.idpHost | Keycloak IDP host. Also pulled from global.auth.idpHost | `nil` |
 | auth.oidcIssuerURL |  | `"https://$(IDP_HOST)/realms/osc"` |
 | auth.allowGroupsBase | Base groups allowed to login | `["sappstf","sysstf","{{ .Values.project }}"]` |
