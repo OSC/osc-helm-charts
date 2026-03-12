@@ -141,16 +141,6 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
 {{- end }}
 {{- end }}
 
-{{- define "cryosparc.accessGroup" }}
-{{- if .Values.auth.accessGroup }}
-{{- .Values.auth.accessGroup }}
-{{- else if .Values.global.env }}
-  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
-    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "accessGroup" }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
 {{- define "cryosparc.ingressHost" }}
 {{- if .Values.ingress.host }}
   {{- .Values.ingress.host }}

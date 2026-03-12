@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -109,11 +109,12 @@ service:
 | admin.password |  | `""` |
 | nodeSelector |  | `{}` |
 | alert.receiver |  | `"sciapps"` |
+| service.port |  | `80` |
 | service.basePort |  | `31000` |
 | ingress.host | Ingress host. Also pulled from global.ingress.host | `""` |
 | ingress.hostAlias | Ingress host alias.  Also pulled from global.ingress.hostAlias | `""` |
 | ingress.className |  | `"nginx"` |
-| ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"8k"` |
+| ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"16k"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" |  | `"true"` |
 | auth.clientID | Keycloak client ID. Also pulled from global.auth.clientID | `"kubernetes-{{ include \"cryosparc.name\" . }}"` |
 | auth.clientSecret | Keycloak client secret. Also pulled from global.auth.clientSecret | `nil` |
@@ -121,7 +122,8 @@ service:
 | auth.cookieName |  | `"_{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}{{ include \"osc.common.environment\" . }}"` |
 | auth.idpHost | Keycloak IDP host. Also pulled from global.auth.idpHost | `nil` |
 | auth.oidcIssuerURL |  | `"https://$(IDP_HOST)/realms/osc"` |
-| auth.allowGroups |  | `nil` |
+| auth.allowGroupsBase | Base groups allowed to login | `["sappstf","sysstf","{{ .Values.project }}"]` |
+| auth.allowGroups | Additional groups allowed to login | `[]` |
 | auth.skipAuthRoute |  | `nil` |
 | auth.image.repository |  | `"quay.io/oauth2-proxy/oauth2-proxy"` |
 | auth.image.tag |  | `"v7.1.3"` |

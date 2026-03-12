@@ -64,13 +64,12 @@ spec:
           - --insecure-oidc-allow-unverified-email=true
           - --skip-provider-button
           - --silence-ping-logging
-        {{- $root := . }}
           - --metrics-address=:{{ .Values.auth.metricsService.port }}
           {{- if (include "cryosparc.idpHost" .) }}
           - --whitelist-domain=$(IDP_HOST)
           {{- end }}
-          {{- if (include "cryosparc.accessGroup" .) }}
-          - --allowed-group={{ include "cryosparc.accessGroup" . }}
+          {{- range .Values.auth.allowGroupsBase }}
+          - --allowed-group={{ tpl . $ }}
           {{- end }}
           {{- range .Values.auth.allowGroups }}
           - --allowed-group={{ tpl . $ }}
@@ -78,6 +77,7 @@ spec:
           {{- if .Values.auth.skipAuthRoute }}
           - --skip-auth-route="{{ .Values.auth.skipAuthRoute }}"
           {{- end }}
+          - --upstream=http://{{ include "cryosparc.name" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
         ports:
         - containerPort: {{ .Values.auth.service.port }}
           name: http
