@@ -73,6 +73,12 @@ service:
 | global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
+| global.auth.idpHost | Keycloak IDP host.  Default if auth.idpHost not defined | `nil` |
+| global.auth.clientID | Keycloak client ID.  Default if auth.clientID not defined | `nil` |
+| global.auth.clientSecret | Keycloak client secret.  Default if auth.clientSecret not defined | `nil` |
+| global.auth.cookieSecret | Keycloak cookie secret.  Default if auth.cookieSecret not defined | `nil` |
+| global.ingress.host | Ingress host.  Default if ingress.host not defined | `nil` |
+| global.ingress.hostAlias | Ingress host alias.  Default if ingress.hostAlias not defined | `nil` |
 | global.env.production.podResources.limits.cpu |  | `8` |
 | global.env.production.podResources.limits.memory |  | `"32Gi"` |
 | global.env.production.podResources.requests.cpu |  | `4` |
@@ -104,16 +110,16 @@ service:
 | nodeSelector |  | `{}` |
 | alert.receiver |  | `"sciapps"` |
 | service.basePort |  | `31000` |
-| ingress.host |  | `""` |
-| ingress.hostAlias |  | `""` |
+| ingress.host | Ingress host. Also pulled from global.ingress.host | `""` |
+| ingress.hostAlias | Ingress host alias.  Also pulled from global.ingress.hostAlias | `""` |
 | ingress.className |  | `"nginx"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"8k"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" |  | `"true"` |
-| auth.clientID |  | `"kubernetes-{{ include \"cryosparc.name\" . }}"` |
-| auth.clientSecret |  | `nil` |
-| auth.cookieSecret |  | `nil` |
+| auth.clientID | Keycloak client ID. Also pulled from global.auth.clientID | `"kubernetes-{{ include \"cryosparc.name\" . }}"` |
+| auth.clientSecret | Keycloak client secret. Also pulled from global.auth.clientSecret | `nil` |
+| auth.cookieSecret | Keycloak cookie secret. Also pulled from global.auth.cookieSecret | `nil` |
 | auth.cookieName |  | `"_{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}{{ include \"osc.common.environment\" . }}"` |
-| auth.idpHost |  | `nil` |
+| auth.idpHost | Keycloak IDP host. Also pulled from global.auth.idpHost | `nil` |
 | auth.oidcIssuerURL |  | `"https://$(IDP_HOST)/realms/osc"` |
 | auth.allowGroups |  | `nil` |
 | auth.skipAuthRoute |  | `nil` |

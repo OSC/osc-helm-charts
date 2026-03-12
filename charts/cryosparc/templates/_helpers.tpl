@@ -111,11 +111,33 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
 
 {{- define "cryosparc.idpHost" }}
 {{- if .Values.auth.idpHost }}
-{{- .Values.auth.idpHost }}
-{{- else if .Values.global.env }}
-  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
-    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "idpHost" }}
-  {{- end }}
+  {{- .Values.auth.idpHost }}
+{{- else if .Values.global.auth.idpHost }}
+  {{- .Values.global.auth.idpHost }}
+{{- end }}
+{{- end }}
+
+{{- define "cryosparc.clientID" }}
+{{- if .Values.auth.clientID }}
+  {{- .Values.auth.clientID }}
+{{- else if .Values.global.auth.clientID }}
+  {{- .Values.global.auth.clientID }}
+{{- end }}
+{{- end }}
+
+{{- define "cryosparc.clientSecret" }}
+{{- if .Values.auth.clientSecret }}
+  {{- .Values.auth.clientSecret }}
+{{- else if .Values.global.auth.clientSecret }}
+  {{- .Values.global.auth.clientSecret }}
+{{- end }}
+{{- end }}
+
+{{- define "cryosparc.cookieSecret" }}
+{{- if .Values.auth.cookieSecret }}
+  {{- .Values.auth.cookieSecret }}
+{{- else if .Values.global.auth.cookieSecret }}
+  {{- .Values.global.auth.cookieSecret }}
 {{- end }}
 {{- end }}
 
@@ -131,25 +153,17 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
 
 {{- define "cryosparc.ingressHost" }}
 {{- if .Values.ingress.host }}
-{{- .Values.ingress.host }}
-{{- else if and .Values.global.env }}
-  {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
-    {{- if (index .Values.global.env (include "osc.common.environment" .) "ingress") }}
-      {{- index .Values.global.env (include "osc.common.environment" .) "ingress" "host" }}
-    {{- end }}
-  {{- end }}
+  {{- .Values.ingress.host }}
+{{- else if and .Values.global.ingress.host }}
+  {{- .Values.global.ingress.host }}
 {{- end }}
 {{- end }}
 
 {{- define "cryosparc.ingressHostAlias" }}
 {{- if .Values.ingress.hostAlias }}
-{{- .Values.ingress.hostAlias }}
-{{- else if and .Values.global.env }}
-  {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
-    {{- if (index .Values.global.env (include "osc.common.environment" .) "ingress") }}
-      {{- index .Values.global.env (include "osc.common.environment" .) "ingress" "hostAlias" }}
-    {{- end }}
-  {{- end }}
+  {{- .Values.ingress.hostAlias }}
+{{- else if and .Values.global.ingress.hostAlias }}
+  {{- .Values.global.ingress.hostAlias }}
 {{- end }}
 {{- end }}
 

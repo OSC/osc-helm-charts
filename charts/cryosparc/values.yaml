@@ -32,6 +32,20 @@ global:
   debugGroups: []
   # -- Groups that can perform maintenance operations
   maintenanceGroups: []
+  auth:
+    # -- Keycloak IDP host.  Default if auth.idpHost not defined
+    idpHost:
+    # -- Keycloak client ID.  Default if auth.clientID not defined
+    clientID:
+    # -- Keycloak client secret.  Default if auth.clientSecret not defined
+    clientSecret:
+    # -- Keycloak cookie secret.  Default if auth.cookieSecret not defined
+    cookieSecret:
+  ingress:
+    # -- Ingress host.  Default if ingress.host not defined
+    host:
+    # -- Ingress host alias.  Default if ingress.hostAlias not defined
+    hostAlias:
   env:
     production:
       # CryoSPARC Master Node Requirements
@@ -105,9 +119,9 @@ service:
   basePort: 31000
 
 ingress:
-  # Also pulled from global.env.$environment.ingress.host
+  # -- Ingress host. Also pulled from global.ingress.host
   host: ""
-  # Also pulled from global.env.$environment.ingress.hostAlias
+  # -- Ingress host alias.  Also pulled from global.ingress.hostAlias
   hostAlias: ""
   className: "nginx"
   annotations:
@@ -115,11 +129,14 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 
 auth:
+  # -- Keycloak client ID. Also pulled from global.auth.clientID
   clientID: kubernetes-{{ include "cryosparc.name" . }}
+  # -- Keycloak client secret. Also pulled from global.auth.clientSecret
   clientSecret:
+  # -- Keycloak cookie secret. Also pulled from global.auth.cookieSecret
   cookieSecret:
   cookieName: _{{ tpl (include "osc.common.serviceAccountValue" .) . }}{{ include "osc.common.environment" . }}
-  # Also pulled from global.env.$environment.auth.idpHost
+  # -- Keycloak IDP host. Also pulled from global.auth.idpHost
   idpHost:
   oidcIssuerURL: https://$(IDP_HOST)/realms/osc
   # Also pulled from global.env.$environment.auth.accessGroup
