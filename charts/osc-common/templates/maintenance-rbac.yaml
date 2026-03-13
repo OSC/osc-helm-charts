@@ -45,13 +45,17 @@ rules:
     resources:
       - deployments
       - replicasets
+      - statefulsets
     verbs:
       - get
       - list
   - apiGroups:
       - apps
     resources:
+      - deployments/rollback
       - deployments/scale
+      - replicasets/scale
+      - statefulsets/scale
     verbs:
       - get
       - patch
