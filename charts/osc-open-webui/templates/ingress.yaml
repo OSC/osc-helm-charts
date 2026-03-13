@@ -21,6 +21,9 @@ metadata:
     {{- with .Values.global.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
+    {{- with .Values.global.ingress.auth.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   ingressClassName: nginx
   tls:
@@ -76,6 +79,9 @@ metadata:
     {{- with .Values.global.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
+    {{- with (index .Values.global.ingress "open-webui" "annotations") }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   ingressClassName: nginx
 {{- if not .Values.auth.enable }}
@@ -117,6 +123,9 @@ metadata:
     nginx.ingress.kubernetes.io/server-alias: {{ include "osc-open-webui.api.hostAlias" . | quote }}
     {{- end }}
     {{- with .Values.global.ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.global.ingress.api.annotations }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:

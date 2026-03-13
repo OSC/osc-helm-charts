@@ -46,8 +46,17 @@ global:
     host: ""
     # Also pulled from global.env.$environment.ingress.hostAlias
     hostAlias: ""
-    # -- Additional Ingress annotations
+    # -- Additional Ingress annotations for all Ingress resources
     annotations: ~
+    api:
+      # -- Additional Ingress annotations for the API ingress
+      annotations: ~
+    auth:
+      # -- Additional Ingress annotations for the Auth ingress
+      annotations: ~
+    open-webui:
+      # -- Additional Ingress annotations for the Open WebUI Ingress
+      annotations: ~
   auth:
     idpHost:
     clientID:

@@ -137,7 +137,10 @@ open-webui:
 | global.webservicesDeploy.create | Create webservices deployment rolebinding | `true` |
 | global.ingress.host |  | `""` |
 | global.ingress.hostAlias |  | `""` |
-| global.ingress.annotations | Additional Ingress annotations | `nil` |
+| global.ingress.annotations | Additional Ingress annotations for all Ingress resources | `nil` |
+| global.ingress.api.annotations | Additional Ingress annotations for the API ingress | `nil` |
+| global.ingress.auth.annotations | Additional Ingress annotations for the Auth ingress | `nil` |
+| global.ingress.open-webui.annotations | Additional Ingress annotations for the Open WebUI Ingress | `nil` |
 | global.auth.idpHost |  | `nil` |
 | global.auth.clientID |  | `nil` |
 | global.auth.clientSecret |  | `nil` |
