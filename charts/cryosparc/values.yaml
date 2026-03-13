@@ -21,7 +21,7 @@ global:
     password:
   # @ignored
   networkPolicy:
-    create: true
+    create: false
     ingressAllowedPods:
       - app.kubernetes.io/instance: '{{ .Release.Name }}'
         app.kubernetes.io/name: '{{ include "cryosparc.auth.name" . }}'
