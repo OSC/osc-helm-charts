@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.5.4](https://img.shields.io/badge/Version-0.5.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.5.5](https://img.shields.io/badge/Version-0.5.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -15,7 +15,7 @@ OSC Open Web UI deployment
 | Repository | Name | Version |
 |------------|------|---------|
 | https://helm.openwebui.com/ | open-webui | 12.3.0 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.2 |
 
 ## Usage
 
