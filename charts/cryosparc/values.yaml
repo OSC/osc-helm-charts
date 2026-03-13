@@ -19,15 +19,17 @@ global:
     # This value will be set by OSC's Puppet.
     # This value must be set to IMAGE-PULL-PASSWORD for CI tests.
     password:
+  # @ignored
   networkPolicy:
-    # -- Create the network policy
     create: true
-    # -- Labels to allow Ingress from the same namespace
-    ingressLabels: {}
-    # -- Name of the Ingress namespace
+    ingressAllowedPods:
+      - app.kubernetes.io/instance: '{{ .Release.Name }}'
+        app.kubernetes.io/name: '{{ include "cryosparc.auth.name" . }}'
     ingressNamespace: ingress-nginx
-    # -- Name of the Prometheus namespace
     prometheusNamespace: prometheus
+  # @ignored
+  webservicesDeploy:
+    create: false
   # -- Groups that debug pods
   debugGroups: []
   # -- Groups that can perform maintenance operations
