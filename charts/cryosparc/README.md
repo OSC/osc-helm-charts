@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -14,7 +14,7 @@ OSC CryoSPARC bootstrap Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.8.1 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.2 |
 
 ## Usage
 
@@ -67,10 +67,6 @@ service:
 | global.imagePullSecret.registry | imagePullSecret registry | `"docker-registry.osc.edu"` |
 | global.imagePullSecret.username | imagePullSecret username | `"robot$webservices-read"` |
 | global.imagePullSecret.password | imagePullSecret password. This value will be set by OSC's Puppet. This value must be set to IMAGE-PULL-PASSWORD for CI tests. | `nil` |
-| global.networkPolicy.create | Create the network policy | `true` |
-| global.networkPolicy.ingressLabels | Labels to allow Ingress from the same namespace | `{}` |
-| global.networkPolicy.ingressNamespace | Name of the Ingress namespace | `"ingress-nginx"` |
-| global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
 | global.auth.idpHost | Keycloak IDP host.  Default if auth.idpHost not defined | `nil` |
