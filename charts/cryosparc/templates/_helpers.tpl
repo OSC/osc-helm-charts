@@ -87,10 +87,10 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
 {{- else if .Values.global.env }}
   {{- if (index .Values.global.env (include "osc.common.environment" .) "image" "tag") }}
     {{- index .Values.global.env (include "osc.common.environment" .) "image" "tag" }}
-{{- end }}
+  {{- end }}
 {{- else if .Chart.AppVersion }}
   {{- .Chart.AppVersion }}
-{{- end}}
+{{- end }}
 {{- end }}
 
 {{- define "cryosparc.replicas" }}
