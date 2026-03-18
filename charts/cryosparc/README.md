@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r2](https://img.shields.io/badge/AppVersion-4.7.1--r2-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -80,24 +80,25 @@ service:
 | global.env.production.podResources.requests.cpu |  | `4` |
 | global.env.production.podResources.requests.memory |  | `"16Gi"` |
 | global.env.production.auth.replicas |  | `2` |
+| global.env.production.image.tag |  | `""` |
 | global.env.test.podResources.limits.cpu |  | `1` |
 | global.env.test.podResources.limits.memory |  | `"4Gi"` |
 | global.env.test.podResources.requests.cpu |  | `1` |
 | global.env.test.podResources.requests.memory |  | `"256Mi"` |
 | global.env.test.auth.replicas |  | `2` |
+| global.env.test.image.tag |  | `""` |
 | global.env.dev.podResources.limits.cpu |  | `1` |
 | global.env.dev.podResources.limits.memory |  | `"4Gi"` |
 | global.env.dev.podResources.requests.cpu |  | `1` |
 | global.env.dev.podResources.requests.memory |  | `"256Mi"` |
 | global.env.dev.auth.replicas |  | `1` |
+| global.env.dev.image.tag |  | `""` |
 | license | The CryoSPARC license ID | `""` |
-| version | The CryoSPARC version | `""` |
-| revision | The revision used by the CryoSPARC container image | `1` |
 | project | The service project | `""` |
 | homeDir |  | `"{{ .Values.project }}"` |
 | slurmConf | Slurm configuration of the cluster used for service | `"/etc/slurm/slurm-ascend.conf"` |
-| image.repository |  | `"docker-registry.osc.edu/webservices/cryosparc"` |
-| image.tag |  | `"{{ required \"Version must be provided\" .Values.version }}-r{{ .Values.revision }}"` |
+| image.repository | The CryoSPARC image URL | `"docker-registry.osc.edu/webservices/cryosparc"` |
+| image.tag | The CryoSPARC image tag | `""` |
 | image.pullPolicy |  | `"IfNotPresent"` |
 | mounts.home |  | `"/users/{{ tpl .Values.homeDir . }}/{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}"` |
 | mounts.project |  | `"/fs/ess/{{ required \"Project must be provided\" .Values.project }}"` |
