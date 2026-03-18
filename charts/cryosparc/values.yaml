@@ -84,10 +84,6 @@ global:
 
 # -- The CryoSPARC license ID
 license: ''
-# -- The CryoSPARC version
-version: ''
-# -- The revision used by the CryoSPARC container image
-revision: 1
 # -- The service project
 project: ''
 homeDir: '{{ .Values.project }}'
@@ -95,8 +91,10 @@ homeDir: '{{ .Values.project }}'
 slurmConf: /etc/slurm/slurm-ascend.conf
 
 image:
+  # -- The CryoSPARC image URL
   repository: docker-registry.osc.edu/webservices/cryosparc
-  tag: '{{ required "Version must be provided" .Values.version }}-r{{ .Values.revision }}'
+  # -- The CryoSPARC image tag
+  tag: ''
   pullPolicy: IfNotPresent
 
 mounts:

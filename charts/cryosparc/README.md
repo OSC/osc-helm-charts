@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r2](https://img.shields.io/badge/AppVersion-4.7.1--r2-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -91,13 +91,11 @@ service:
 | global.env.dev.podResources.requests.memory |  | `"256Mi"` |
 | global.env.dev.auth.replicas |  | `1` |
 | license | The CryoSPARC license ID | `""` |
-| version | The CryoSPARC version | `""` |
-| revision | The revision used by the CryoSPARC container image | `1` |
 | project | The service project | `""` |
 | homeDir |  | `"{{ .Values.project }}"` |
 | slurmConf | Slurm configuration of the cluster used for service | `"/etc/slurm/slurm-ascend.conf"` |
-| image.repository |  | `"docker-registry.osc.edu/webservices/cryosparc"` |
-| image.tag |  | `"{{ required \"Version must be provided\" .Values.version }}-r{{ .Values.revision }}"` |
+| image.repository | The CryoSPARC image URL | `"docker-registry.osc.edu/webservices/cryosparc"` |
+| image.tag | The CryoSPARC image tag | `""` |
 | image.pullPolicy |  | `"IfNotPresent"` |
 | mounts.home |  | `"/users/{{ tpl .Values.homeDir . }}/{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}"` |
 | mounts.project |  | `"/fs/ess/{{ required \"Project must be provided\" .Values.project }}"` |

@@ -9,8 +9,6 @@ global:
     - foo
     - bar
 license: xxx-xxx-xxx
-version: 4.7.1
-revision: 1
 project: PAS0710
 admin:
   email: qwer1234@osc.edu
