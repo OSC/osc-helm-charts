@@ -61,6 +61,8 @@ global:
           memory: 16Gi
       auth:
         replicas: 2
+      image:
+        tag: ''
     test:
       podResources:
         limits:
@@ -71,6 +73,8 @@ global:
           memory: 256Mi
       auth:
         replicas: 2
+      image:
+        tag: ''
     dev:
       podResources:
         limits:
@@ -81,6 +85,8 @@ global:
           memory: 256Mi
       auth:
         replicas: 1
+      image:
+        tag: ''
 
 # -- The CryoSPARC license ID
 license: ''

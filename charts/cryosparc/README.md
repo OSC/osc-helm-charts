@@ -80,16 +80,19 @@ service:
 | global.env.production.podResources.requests.cpu |  | `4` |
 | global.env.production.podResources.requests.memory |  | `"16Gi"` |
 | global.env.production.auth.replicas |  | `2` |
+| global.env.production.image.tag |  | `""` |
 | global.env.test.podResources.limits.cpu |  | `1` |
 | global.env.test.podResources.limits.memory |  | `"4Gi"` |
 | global.env.test.podResources.requests.cpu |  | `1` |
 | global.env.test.podResources.requests.memory |  | `"256Mi"` |
 | global.env.test.auth.replicas |  | `2` |
+| global.env.test.image.tag |  | `""` |
 | global.env.dev.podResources.limits.cpu |  | `1` |
 | global.env.dev.podResources.limits.memory |  | `"4Gi"` |
 | global.env.dev.podResources.requests.cpu |  | `1` |
 | global.env.dev.podResources.requests.memory |  | `"256Mi"` |
 | global.env.dev.auth.replicas |  | `1` |
+| global.env.dev.image.tag |  | `""` |
 | license | The CryoSPARC license ID | `""` |
 | project | The service project | `""` |
 | homeDir |  | `"{{ .Values.project }}"` |
