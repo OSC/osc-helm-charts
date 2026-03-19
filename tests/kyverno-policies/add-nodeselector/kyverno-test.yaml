@@ -16,6 +16,13 @@ results:
     kind: Pod
     result: pass
   - policy: add-nodeselector
+    rule: webservice-nodeselector
+    resources:
+      - test-webservice-nodeselector
+    patchedResource: webservice-nodeselector-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: add-nodeselector
     rule: paas-nodeselector
     resources:
       - test-paas-nodeselector
@@ -25,6 +32,6 @@ results:
   - policy: add-nodeselector
     rule: paas-nodeselector
     resources:
-      - test-paas-skip
+      - test-webservice-nodeselector
     kind: Pod
     result: skip

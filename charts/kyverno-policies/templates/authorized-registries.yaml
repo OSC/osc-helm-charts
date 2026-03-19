@@ -32,15 +32,8 @@ spec:
             kinds:
             - Pod
             namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - webservice
-    exclude:
-      any:
-        - resources:
-            name: "cm-acme-http-solver-*"
+              matchLabels:
+                osc.edu/role: webservice
     validate:
       message: >-
         Images must come from {{ join " or " .Values.webservices.authorizedRegistries }}
@@ -59,15 +52,8 @@ spec:
             kinds:
             - Pod
             namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - paas
-    exclude:
-      any:
-        - resources:
-            name: "cm-acme-http-solver-*"
+              matchLabels:
+                osc.edu/role: paas
     validate:
       message: >-
         Images must come from {{ join " or " .Values.paas.authorizedRegistries }}
