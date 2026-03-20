@@ -90,8 +90,8 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 21.2.0 \
-            --set image.repository=bitnamilegacy/keycloak --set postgresql.image.repository=bitnamilegacy/postgresql \
-            --set auth.adminUser=admin --set auth.adminPassword=secret --wait --timeout 300s
+            -f .github/config/keycloak-values.yaml \
+            --wait --timeout 300s
       - name: Install cert-manager
         run: |
           helm repo add jetstack https://charts.jetstack.io
