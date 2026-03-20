@@ -13,6 +13,9 @@ spec:
     - podSelector:
         matchLabels:
           {{- include "webservice.auth.selectorLabels" . | nindent 10 }}
+    - podSelector:
+        matchLabels:
+          {{- include "webservice.selectorLabels" . | nindent 10 }}
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.ingressName }}
