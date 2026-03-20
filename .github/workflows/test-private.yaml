@@ -63,9 +63,13 @@ jobs:
       - name: Create kind cluster
         uses: helm/kind-action@v1
         with:
-          version: v0.31.0
+          # TODO: Upgrade once webservice tests will work
+          # version: v0.31.0
+          version: v0.17.0
           cluster_name: kind
-          node_image: kindest/node:v1.31.14@sha256:6f86cf509dbb42767b6e79debc3f2c32e4ee01386f0489b3b2be24b0a55aac2b
+          # TODO: Upgrade once webservice tests will work
+          # node_image: kindest/node:v1.31.14@sha256:6f86cf509dbb42767b6e79debc3f2c32e4ee01386f0489b3b2be24b0a55aac2b
+          node_image: kindest/node:v1.25.3@sha256:f52781bc0d7a19fb6c405c2af83abfeb311f130707a0e219175677e366cc45d1
           config: .github/config/kind.yaml
       - name: Label kind nodes
         run: |
