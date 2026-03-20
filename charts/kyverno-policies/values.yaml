@@ -1,3 +1,13 @@
+global:
+  # @ignored
+  imagePullSecret:
+    create: false
+  # @ignored
+  networkPolicy:
+    create: false
+  # @ignored
+  webservicesDeploy:
+    create: false
 users:
   allowHostPaths:
     - /var/lib/sss/pipes
