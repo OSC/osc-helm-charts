@@ -120,6 +120,8 @@ data:
       - target_label: __address__
         replacement: {{ .Values.blackboxExporter.name }}.{{ .Release.Namespace }}.svc.{{ .Values.dnsDomain }}:{{ .Values.blackboxExporter.service.port }}
       - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe_module]
+        regex: "(.+)"
+        replacement: "$1"
         target_label: __param_module
       - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe_scheme,__param_target]
         regex: "(.+);(.+)"
