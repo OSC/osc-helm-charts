@@ -1,0 +1,144 @@
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: paas-pass-list
+  namespace: paas
+spec:
+  redirectUris:
+    - https://web.osc.edu/oauth2/callback
+    - https://bar.osc.edu/*
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: paas-fail-list
+  namespace: paas
+spec:
+  redirectUris:
+    - https://web.osc.edu/oauth2/callback
+    - https://example.com/*
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: paas-pass-wildcard
+  namespace: paas
+spec:
+  redirectUris:
+    - https://test-web.osc.edu/oauth2/callback
+    - https://test.osc.edu/*
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: paas-fail-wildcard
+  namespace: paas
+spec:
+  redirectUris:
+    - https://foo.osc.edu/oauth2/callback
+    - https://foo.osc.edu/*
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: paas-pass-single
+  namespace: paas
+spec:
+  redirectUris:
+    - https://foo.osc.edu/oauth2/callback
+    - https://foo.osc.edu/*
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: paas-fail-single
+  namespace: paas
+spec:
+  redirectUris:
+    - https://bar.osc.edu/oauth2/callback
+    - https://bar.osc.edu/*
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: paas-fail-dne
+  namespace: paas
+spec:
+  redirectUris:
+    - https://bar.osc.edu/oauth2/callback
+    - https://bar.osc.edu/*
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: skip
+  namespace: webservice
+spec:
+  redirectUris:
+    - https://bar.osc.edu/oauth2/callback
+    - https://bar.osc.edu/*
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
