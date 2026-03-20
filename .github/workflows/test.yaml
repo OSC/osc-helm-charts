@@ -76,9 +76,9 @@ jobs:
       - name: Create kind cluster
         uses: helm/kind-action@v1
         with:
-          version: v0.17.0
+          version: v0.31.0
           cluster_name: kind
-          node_image: kindest/node:v1.25.3@sha256:f52781bc0d7a19fb6c405c2af83abfeb311f130707a0e219175677e366cc45d1
+          node_image: kindest/node:v1.31.14@sha256:6f86cf509dbb42767b6e79debc3f2c32e4ee01386f0489b3b2be24b0a55aac2b
           config: .github/config/kind.yaml
       - name: Login to OSC registry
         if: matrix.chart == 'cryosparc'
@@ -108,10 +108,8 @@ jobs:
           make -f docker-images/cryosparc/Makefile kind-load
       - name: Label kind nodes
         run: |
-          kubectl label node kind-worker node-role.kubernetes.io/test=''
-          kubectl label node kind-worker node-role.kubernetes.io/webservices=''
-          kubectl label node kind-worker2 node-role.kubernetes.io/test=''
-          kubectl label node kind-worker2 node-role.kubernetes.io/webservices=''
+          kubectl label node kind-control-plane node-role.kubernetes.io/test=''
+          kubectl label node kind-control-plane node-role.kubernetes.io/webservices=''
       - name: Set image pull secret
         run: |
           sed -i 's|OSC-IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_READ_TOKEN}}|g' charts/*/ci/*.yaml
@@ -119,7 +117,9 @@ jobs:
       - name: Install Keycloak
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 21.2.0 --set image.repository=bitnamilegacy/keycloak --set postgresql.image.repository=bitnamilegacy/postgresql
+          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 21.2.0 \
+            -f .github/config/keycloak-values.yaml \
+            --wait --timeout 300s
       - name: Install Kyverno
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
@@ -127,10 +127,15 @@ jobs:
           timeout 240 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{.items[0].status.phase}" | grep Running ; do echo "Waiting for Kyverno" ; sleep 10 ; done' || exit 0
           sleep 60
       - name: Install cert-manager
-        if: matrix.chart == 'paas'
         run: |
           helm repo add jetstack https://charts.jetstack.io
-          helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.14.4 --set installCRDs=true
+          helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.18.1 \
+            --set crds.enabled=true --wait --timeout 300s
+      - name: Install keycloak-cr-operator
+        run: |
+          helm repo add keycloak-cr-operator https://osc.github.io/keycloak-cr-operator/
+          helm install keycloak-cr-operator keycloak-cr-operator/keycloak-cr-operator -n keycloak-cr-operator --create-namespace \
+            -f .github/config/keycloak-cr-operator-values.yaml --version v0.0.2
       - name: Setup Environment
         run: |
           sudo apt-get update
@@ -151,7 +156,13 @@ jobs:
       - name: Debug failure
         if: failure()
         run: |
+          set +e
           kubectl describe pod -A
           kubectl describe service -A
           kubectl describe daemonset -A
+      - name: Get logs
+        if: failure()
+        run: |
+          set +e
           kubectl logs -n kyverno -l app.kubernetes.io/component=admission-controller
+          kubectl logs -n keycloak -l app.kubernetes.io/instance=keycloak --tail=200

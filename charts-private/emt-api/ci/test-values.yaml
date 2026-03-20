@@ -3,6 +3,15 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
+  env:
+    dev:
+      podResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 128m
+          memory: 265Mi
 webservice:
   mounts:
     rwDir: null

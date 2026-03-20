@@ -74,3 +74,6 @@ database:
         requests:
           cpu: 200m
           memory: 256Mi
+networkPolicy:
+  allowedPodLabels:
+    - app.kubernetes.io/purpose: test

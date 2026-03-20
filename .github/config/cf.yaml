@@ -9,4 +9,5 @@ chart-repos:
   - osc=https://osc.github.io/osc-helm-charts/
   - robjuz-helm-charts=https://treydock.github.io/robjuz-helm-charts/
   - open-webui=https://helm.openwebui.com/
+  - keycloak-cr-operator=https://osc.github.io/keycloak-cr-operator/
 helm-extra-args: '--timeout 600s'
