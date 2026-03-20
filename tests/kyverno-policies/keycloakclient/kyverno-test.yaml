@@ -20,6 +20,7 @@ results:
   - policy: keycloakclient
     rule: pass-redirecturi
     resources:
+      - paas-pass-no-redirects
       - skip
     kind: KeycloakClient
     result: skip

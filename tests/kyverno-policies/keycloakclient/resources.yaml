@@ -128,6 +128,21 @@ spec:
 apiVersion: keycloak.osc.edu/v1alpha1
 kind: KeycloakClient
 metadata:
+  name: paas-pass-no-redirects
+  namespace: paas
+spec:
+  defaultClientScopes:
+    - web-origins
+    - profile
+    - email
+  clientSecretRef:
+    name: secret
+  configMap:
+    name: config
+---
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
   name: skip
   namespace: webservice
 spec:

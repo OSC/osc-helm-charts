@@ -23,6 +23,9 @@ policies:
     - name: paas-fail-single
       values:
         allowed: 'foo.osc.edu'
+    - name: paas-pass-no-redirects
+      values:
+        allowed: 'test.osc.edu'
     - name: paas-fail-dne
       values:
         allowed: ''
