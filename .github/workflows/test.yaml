@@ -108,10 +108,8 @@ jobs:
           make -f docker-images/cryosparc/Makefile kind-load
       - name: Label kind nodes
         run: |
-          kubectl label node kind-worker node-role.kubernetes.io/test=''
-          kubectl label node kind-worker node-role.kubernetes.io/webservices=''
-          kubectl label node kind-worker2 node-role.kubernetes.io/test=''
-          kubectl label node kind-worker2 node-role.kubernetes.io/webservices=''
+          kubectl label node kind-control-plane node-role.kubernetes.io/test=''
+          kubectl label node kind-control-plane node-role.kubernetes.io/webservices=''
       - name: Set image pull secret
         run: |
           sed -i 's|OSC-IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_READ_TOKEN}}|g' charts/*/ci/*.yaml
