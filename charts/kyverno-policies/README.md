@@ -159,8 +159,9 @@ OSC Kyverno policies deployment
 * [add-nodeselector](templates/add-nodeselector.yaml)
   * Rules
     * Adds ondemand nodeselector to pods in user namespaces
+    * Adds webservices nodeselector to pods in webservice namespaces
     * Adds paas nodeselector to pods in PAAS namespaces
-  * Applies to: Pod in user-?* namespaces or PAAS namespaces
+  * Applies to: Pod in user-?* namespaces, webservice namespaces or PAAS namespaces
 
 * [add-service-account](templates/add-service-account.yaml)
   * Rules
@@ -291,6 +292,15 @@ OSC Kyverno policies deployment
   * Rules
     * Validates that namespaces have a service account label set when they have the paas role
   * Applies to: Namespace with paas role
+
+### KeycloakClient policies
+
+#### Validating policies
+
+* [keycloakclient](templates/keycloakclient.yaml)
+  * Rules
+    * Validates the PAAS KeycloakClient redirectUris are allowed based on the PAAS namespace allowedDNS
+  * Applies to: KeycloakClient resources in PAAS namespaces
 
 ### PAAS policies
 
