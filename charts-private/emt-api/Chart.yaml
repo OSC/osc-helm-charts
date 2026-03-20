@@ -2,7 +2,7 @@ apiVersion: v2
 name: emt-api
 description: OSC emt-api web service
 type: application
-version: 0.4.2
+version: 0.4.3
 appVersion: v0.1.0
 maintainers:
   - name: treydock
