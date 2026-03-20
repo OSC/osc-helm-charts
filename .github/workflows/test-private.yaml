@@ -70,7 +70,9 @@ jobs:
       - name: Label kind nodes
         run: |
           kubectl label node kind-worker node-role.kubernetes.io/test=''
+          kubectl label node kind-worker node-role.kubernetes.io/webservices=''
           kubectl label node kind-worker2 node-role.kubernetes.io/test=''
+          kubectl label node kind-worker2 node-role.kubernetes.io/webservices=''
       - name: Build and Load nominatim images
         if: matrix.chart == 'nominatim'
         run: |
