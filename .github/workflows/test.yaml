@@ -154,7 +154,7 @@ jobs:
         run: kubectl create namespace ${{ matrix.chart }}
       - name: Run chart-testing (install)
         run: |
-          ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }} --skip-clean-up
+          ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }}
       - name: Debug failure
         if: failure()
         run: |
