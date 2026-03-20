@@ -6,20 +6,34 @@ spec:
   validationFailureAction: Enforce
   background: true
   rules:
-  - name: paas-add-role
+  - name: paas-add-role-pod
     match:
       any:
         - resources:
             kinds:
             - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          labels:
+            osc.edu/role: paas
+  - name: paas-add-role-all
+    match:
+      any:
+        - resources:
+            kinds:
+            - Deployment
+            - Job
+            - StatefulSet
+            - ReplicaSet
             - Service
             - Ingress
             namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - paas
+              matchLabels:
+                osc.edu/role: paas
     mutate:
       patchStrategicMerge:
         metadata:
