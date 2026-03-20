@@ -130,7 +130,12 @@ jobs:
         if: matrix.chart == 'paas'
         run: |
           helm repo add jetstack https://charts.jetstack.io
-          helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.14.4 --set installCRDs=true
+          helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.20.0 --set crds.enabled=true
+      - name: Install keycloak-cr-operator
+        run: |
+          helm repo add keycloak-cr-operator https://osc.github.io/keycloak-cr-operator/
+          helm install keycloak-cr-operator keycloak-cr-operator/keycloak-cr-operator -n keycloak-cr-operator --create-namespace \
+            -f .github/config/keycloak-cr-operator-values.yaml --version v0.0.2
       - name: Setup Environment
         run: |
           sudo apt-get update
