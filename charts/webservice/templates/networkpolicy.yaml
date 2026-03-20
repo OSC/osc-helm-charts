@@ -13,9 +13,11 @@ spec:
     - podSelector:
         matchLabels:
           {{- include "webservice.auth.selectorLabels" . | nindent 10 }}
+    {{- range .Values.networkPolicy.allowedPodLabels }}
     - podSelector:
         matchLabels:
-          {{- include "webservice.selectorLabels" . | nindent 10 }}
+          {{- toYaml . | nindent 10 }}
+    {{- end }}
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.ingressName }}

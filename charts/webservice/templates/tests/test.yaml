@@ -5,6 +5,7 @@ metadata:
   labels:
     {{ include "osc.common.serviceAccount" . }}
     {{- include "webservice.labels" . | nindent 4 }}
+    app.kubernetes.io/purpose: test
   annotations:
     "helm.sh/hook": test
 spec:

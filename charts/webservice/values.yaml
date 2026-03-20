@@ -240,3 +240,6 @@ hook:
 # Used for network policies
 ingressName: ingress-nginx
 prometheusName: prometheus
+networkPolicy:
+  # -- Additional pod labels to allow for the NetworkPolicy
+  allowedPodLabels: []
