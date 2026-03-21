@@ -74,6 +74,7 @@ spec:
           {{- range .Values.global.auth.allowGroups }}
           - --allowed-group={{ tpl . $ }}
           {{- end }}
+          - --skip-auth-route=^/api($|/.*),^/ollama($|/.*),^/docs($|/.*)
         ports:
         - containerPort: {{ .Values.auth.service.port }}
           name: http
