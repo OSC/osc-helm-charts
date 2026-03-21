@@ -187,3 +187,21 @@ results:
       - pvc-webservice-pass-home-invalid
     kind: PersistentVolumeClaim
     result: fail
+  - policy: pvc-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - pvc-paas-skip
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - pvc-paas-pass-home
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - pvc-paas-pass-home-invalid
+    kind: PersistentVolumeClaim
+    result: fail

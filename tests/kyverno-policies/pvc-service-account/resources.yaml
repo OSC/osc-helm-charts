@@ -415,3 +415,33 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: local-home
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-pass-home
+  namespace: paas
+  annotations:
+    osc.edu/home: project/test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-home
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-pass-home-invalid
+  namespace: paas
+  annotations:
+    osc.edu/home: project/foo
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-home

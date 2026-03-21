@@ -76,6 +76,12 @@ policies:
       - name: pvc-webservice-pass-home-invalid
         values:
           serviceAccount: test
+      - name: pvc-paas-pass-home
+        values:
+          serviceAccount: test
+      - name: pvc-paas-pass-home-invalid
+        values:
+          serviceAccount: test
 namespaceSelector:
   - name: webservice
     labels:
