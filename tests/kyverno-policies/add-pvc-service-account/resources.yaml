@@ -6,6 +6,7 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
+  labels:
     osc.edu/service-account: test
 spec:
   accessModes:
@@ -18,11 +19,26 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: pvc-webservice-home
+  namespace: webservice
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-home
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: pvc-webservice-pass-storageclass
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-  annotations:
+  labels:
     osc.edu/service-account: test
 spec:
   accessModes:
@@ -46,6 +62,19 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-home
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-home
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

@@ -10,15 +10,20 @@ policies:
         values:
           uidMap.data.user-test-user: '1000'
           gidMap.data.user-test-user: '1001'
+          homeMap.data.user-test-user: '/users/project/test'
       - name: statefulset-add-service-account-paas
         values:
           uidMap.data.user-test-user: '1000'
           gidMap.data.user-test-user: '1001'
+          homeMap.data.user-test-user: '/users/project/test'
     resources:
       - name: paas-statefulset
         values:
           serviceAccount: test-user
       - name: paas-statefulset-ess
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-home
         values:
           serviceAccount: test-user
 namespaceSelector:

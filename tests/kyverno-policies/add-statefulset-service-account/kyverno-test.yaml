@@ -14,6 +14,7 @@ results:
     resources:
       - webservice-statefulset
       - webservice-statefulset-ess
+      - webservice-statefulset-home
     patchedResources: webservice-statefulset-patched.yaml
     kind: StatefulSet
     result: pass
@@ -29,6 +30,7 @@ results:
     resources:
       - paas-statefulset
       - paas-statefulset-ess
+      - paas-statefulset-home
     patchedResources: paas-statefulset-patched.yaml
     kind: StatefulSet
     result: pass
@@ -37,6 +39,7 @@ results:
     resources:
       - webservice-statefulset
       - webservice-statefulset-ess
+      - webservice-statefulset-home
       - webservice-statefulset-without-service-account
     kind: StatefulSet
     result: skip

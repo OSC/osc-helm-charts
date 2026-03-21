@@ -2,47 +2,47 @@
 apiVersion: cli.kyverno.io/v1alpha1
 kind: Test
 metadata:
-  name: pvc-gpfs-fileset
+  name: pvc-service-account
 policies:
   - policy.yaml
 resources:
   - resources.yaml
 variables: variables.yaml
 results:
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account
     resources:
       - pvc-webservice-skip
       - pvc-paas-skip
+      - pvc-paas-pass
+      - pvc-paas-fail
     kind: PersistentVolumeClaim
     result: skip
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account
     resources:
       - pvc-webservice-pass
-      - pvc-paas-pass
     kind: PersistentVolumeClaim
     result: pass
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account
     resources:
       - pvc-webservice-fail-no-sa
-      - pvc-paas-fail
     kind: PersistentVolumeClaim
     result: fail
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account-uid-gid-webservice
     resources:
       - pvc-webservice-skip-storageclass
     kind: PersistentVolumeClaim
     result: skip
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account-uid-gid-webservice
     resources:
       - pvc-webservice-pass-uid-gid
     kind: PersistentVolumeClaim
     result: pass
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account-uid-gid-webservice
     resources:
       - pvc-webservice-fail-uid-gid-wrong
@@ -50,41 +50,39 @@ results:
       - pvc-webservice-fail-service-account-missing
     kind: PersistentVolumeClaim
     result: fail
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account-uid-gid-paas
     resources:
       - pvc-paas-skip-storageclass
     kind: PersistentVolumeClaim
     result: skip
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account-uid-gid-paas
     resources:
       - pvc-paas-pass-uid-gid
     kind: PersistentVolumeClaim
     result: pass
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-service-account-uid-gid-paas
     resources:
       - pvc-paas-fail-uid-gid-wrong
       - pvc-paas-fail-uid-gid-missing
-      - pvc-paas-fail-service-account-missing
-      - pvc-paas-fail-service-account-wrong
     kind: PersistentVolumeClaim
     result: fail
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: pvc-validate-fileset-set
     resources:
       - pvc-webservice-fail-no-fileset
       - pvc-paas-fail-no-fileset
     kind: PersistentVolumeClaim
     result: fail
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: pvc-validate-fileset-set
     resources:
       - pvc-webservice-skip-storageclass
     kind: PersistentVolumeClaim
     result: skip
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: pvc-validate-fileset-set
     resources:
       - pvc-paas-pass-storageclass
@@ -92,13 +90,33 @@ results:
       - pvc-webservice-pde-fileset
     kind: PersistentVolumeClaim
     result: pass
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
+    rule: pvc-validate-home-set
+    resources:
+      - pvc-paas-fail-home
+      - pvc-webservice-fail-home
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-service-account
+    rule: pvc-validate-home-set
+    resources:
+      - pvc-webservice-skip-storageclass
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-service-account
+    rule: pvc-validate-home-set
+    resources:
+      - pvc-paas-pass-home
+      - pvc-webservice-pass-home
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-service-account
     rule: pvc-disallow-pde-fileset-permissions
     resources:
       - pvc-webservice-pde-fileset-permission
     kind: PersistentVolumeClaim
     result: fail
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: pvc-disallow-pde-fileset-permissions
     resources:
       - pvc-webservice-skip-storageclass
@@ -108,46 +126,64 @@ results:
       - pvc-webservice-pass-storageclass
     kind: PersistentVolumeClaim
     result: skip
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: pvc-disallow-pde-fileset-permissions
     resources:
       - pvc-webservice-pde-fileset
     kind: PersistentVolumeClaim
     result: pass
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-webservice-fileset-annotation
     resources:
+      - pvc-webservice-fail-no-sa
       - pvc-webservice-skip
     kind: PersistentVolumeClaim
     result: skip
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - pvc-webservice-pass
     kind: PersistentVolumeClaim
     result: pass
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - pvc-webservice-fail
-      - pvc-webservice-fail-no-sa
     kind: PersistentVolumeClaim
     result: fail
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-paas-fileset-annotation
     resources:
       - pvc-paas-skip
     kind: PersistentVolumeClaim
     result: skip
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-paas-fileset-annotation
     resources:
       - pvc-paas-pass
     kind: PersistentVolumeClaim
     result: pass
-  - policy: pvc-gpfs-fileset
+  - policy: pvc-service-account
     rule: validate-paas-fileset-annotation
     resources:
       - pvc-paas-fail
+    kind: PersistentVolumeClaim
+    result: fail
+  - policy: pvc-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - pvc-webservice-skip
+    kind: PersistentVolumeClaim
+    result: skip
+  - policy: pvc-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - pvc-webservice-pass-home
+    kind: PersistentVolumeClaim
+    result: pass
+  - policy: pvc-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - pvc-webservice-pass-home-invalid
     kind: PersistentVolumeClaim
     result: fail
