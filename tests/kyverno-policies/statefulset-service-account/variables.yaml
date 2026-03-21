@@ -3,7 +3,7 @@ kind: Values
 metadata:
   name: values
 policies:
-  - name: statefulset-gpfs-fileset
+  - name: statefulset-service-account
     rules:
       - name: validate-webservice-fileset-annotation
         values:
