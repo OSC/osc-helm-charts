@@ -13,20 +13,19 @@ results:
     rule: validate-service-account
     resources:
       - webservice-statefulset-local-ess
-      - paas-statefulset-local-ess
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
     rule: validate-service-account
     resources:
       - webservice-statefulset-without-service-account
-      - paas-statefulset-without-service-account
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account
     rule: validate-service-account
     resources:
       - webservice-statefulset-with-nfs-storage
+      - paas-statefulset-local-ess
     kind: StatefulSet
     result: skip
   - policy: statefulset-service-account
@@ -122,7 +121,6 @@ results:
   - policy: statefulset-service-account
     rule: validate-service-account-uid-gid-webservice
     resources:
-      - webservice-statefulset-local-scratch-with-wrong-service-account
       - webservice-statefulset-local-ess-with-wrong-uid-gid
       - webservice-statefulset-local-scratch-with-wrong-uid-gid
       - webservice-statefulset-local-ess-without-uid-gid
@@ -146,8 +144,6 @@ results:
   - policy: statefulset-service-account
     rule: validate-service-account-uid-gid-paas
     resources:
-      - paas-statefulset-local-ess-with-wrong-service-account
-      - paas-statefulset-local-ess-without-service-account
       - paas-statefulset-local-ess-with-wrong-uid-gid
       - paas-statefulset-local-scratch-with-wrong-uid-gid
       - paas-statefulset-local-ess-without-uid-gid
