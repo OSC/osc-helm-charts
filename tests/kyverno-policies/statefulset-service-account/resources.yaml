@@ -464,6 +464,10 @@ spec:
           osc.edu/home: "project/test"
       spec:
         storageClassName: local-home
+    - metadata:
+        name: paas-statefulset-pvc-test
+      spec:
+        storageClassName: local-ess
 ---
 apiVersion: apps/v1
 kind: StatefulSet
