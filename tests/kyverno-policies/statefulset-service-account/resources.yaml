@@ -417,7 +417,7 @@ spec:
     - metadata:
         name: webservice-statefulset-pvc
         annotations:
-          osc.edu/home: "project/test"
+          osc.edu/home: project/test
       spec:
         storageClassName: local-home
 ---
@@ -432,6 +432,22 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: webservice-statefulset-pvc
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-local-home-invalid
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/home: project/foo
       spec:
         storageClassName: local-home
 ---
@@ -458,5 +474,19 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: paas-statefulset-pvc
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-local-home-invalid
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/home: "project/foo"
       spec:
         storageClassName: local-home

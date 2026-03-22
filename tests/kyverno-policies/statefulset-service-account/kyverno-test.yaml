@@ -177,3 +177,40 @@ results:
       - webservice-statefulset-with-nfs-storage
     kind: StatefulSet
     result: skip
+  - policy: statefulset-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - webservice-statefulset-local-home
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - webservice-statefulset-local-home-invalid
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - webservice-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - paas-statefulset-local-home
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - paas-statefulset-local-home-invalid
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - paas-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
+
