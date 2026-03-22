@@ -404,3 +404,59 @@ spec:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: paas-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-local-home
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/home: "project/test"
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-local-home-missing-home
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-local-home
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/home: "project/test"
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-local-home-missing-home
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+      spec:
+        storageClassName: local-home

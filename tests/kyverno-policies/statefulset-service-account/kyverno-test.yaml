@@ -157,3 +157,23 @@ results:
       - webservice-statefulset-without-fileset
     kind: StatefulSet
     result: skip
+  - policy: statefulset-service-account
+    rule: statefulset-validate-home-set
+    resources:
+      - webservice-statefulset-local-home
+      - paas-statefulset-local-home
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-service-account
+    rule: statefulset-validate-home-set
+    resources:
+      - webservice-statefulset-local-home-missing-home
+      - paas-statefulset-local-home-missing-home
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-service-account
+    rule: statefulset-validate-home-set
+    resources:
+      - webservice-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
