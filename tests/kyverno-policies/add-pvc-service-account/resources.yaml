@@ -6,6 +6,7 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
+    osc.edu/home: foo
   labels:
     osc.edu/service-account: test
 spec:

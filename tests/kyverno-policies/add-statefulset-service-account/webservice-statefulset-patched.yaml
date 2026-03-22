@@ -13,7 +13,6 @@ spec:
         annotations:
           osc.edu/fileset: "test-fileset"
           osc.edu/home: project/test
-          osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
       spec:
@@ -33,7 +32,6 @@ spec:
         annotations:
           osc.edu/fileset: "test-fileset"
           osc.edu/home: project/test
-          osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
       spec:
@@ -52,7 +50,6 @@ spec:
         name: webservice-statefulset-pvc
         annotations:
           osc.edu/home: project/test
-          osc.edu/service-account: test-user
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
       spec:
