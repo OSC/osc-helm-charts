@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.34.2](https://img.shields.io/badge/Version-0.34.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.13.2](https://img.shields.io/badge/AppVersion-v1.13.2-informational?style=flat-square)
+![Version: 0.37.1](https://img.shields.io/badge/Version-0.37.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.13.2](https://img.shields.io/badge/AppVersion-v1.13.2-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -15,7 +15,7 @@ OSC Kyverno policies deployment
 | Repository | Name | Version |
 |------------|------|---------|
 | https://kyverno.github.io/kyverno/ | kyverno-policies | 3.3.2 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.7.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.2 |
 
 ## Policies
 
@@ -173,15 +173,18 @@ OSC Kyverno policies deployment
 
 #### Validating policies
 
-* [pvc-gpfs-fileset](templates/pvc-gpfs-fileset.yaml)
+* [pvc-service-account](templates/pvc-service-account.yaml)
   * Rules
-    * Validates that PVC using local-ess or local-scratch storage classes require a service account annotation to be set
-    * Validates that PVC using local-ess or local-scratch storage classes require correct UID and GID annotations
+    * Validates that PVC using local-home, local-ess or local-scratch storage classes require a service account label to be set for webservices
+    * Validates that PVC using local-home, local-ess or local-scratch storage classes require correct UID and GID annotations
     * Validates that PVC using local-ess or local-scratch storage classes require a fileset annotation to be set
+    * Validates that PVC using local-home storage classes require a home annotation to be set
     * Validates that PVC using local-ess or local-scratch storage classes cannot use PDE filesets with volume permissions
     * Validates that PVC using local-ess or local-scratch storage classes require a valid fileset annotation for webservice namespaces
     * Validates that PVC using local-ess or local-scratch storage classes require a valid fileset annotation for PAAS namespaces
-  * Applies to: PersistentVolumeClaim in webservice and PAAS namespaces with local-ess or local-scratch storage classes
+    * Validates that PVC using local-home storage classes require a valid home annotation for webservice namespaces
+    * Validates that PVC using local-home  storage classes require a valid home annotation for PAAS namespaces
+  * Applies to: PersistentVolumeClaim in webservice and PAAS namespaces with local-home, local-ess or local-scratch storage classes
 
 * [restrict-storageclass](templates/restrict-storageclass.yaml)
   * Rules
@@ -203,15 +206,18 @@ OSC Kyverno policies deployment
 
 #### Validating policies
 
-* [statefulset-gpfs-fileset](templates/statefulset-gpfs-fileset.yaml)
+* [statefulset-service-account](templates/statefulset-service-account.yaml)
   * Rules
-    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a service account annotation to be set
-    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require correct UID and GID annotations
+    * Validates that StatefulSet using PVC with local-home, local-ess or local-scratch storage classes require a service account label to be set for webservices
+    * Validates that StatefulSet using PVC with local-home, local-ess or local-scratch storage classes require correct UID and GID annotations
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a fileset annotation to be set
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes cannot use PDE filesets with volume permissions
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a valid fileset annotation for webservice namespaces
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a valid fileset annotation for PAAS namespaces
-  * Applies to: StatefulSet in webservice and PAAS namespaces with local-ess or local-scratch storage classes
+    * Validates that StatefulSet using PVC with local-home storage classes require a home annotation to be set
+    * Validates that StatefulSet using PVC with local-home storage classes require a valid home annotation for webservice namespaces
+    * Validates that StatefulSet using PVC with local-home storage classes require a valid home annotation for PAAS namespaces
+  * Applies to: StatefulSet in webservice and PAAS namespaces with local-home, local-ess or local-scratch storage classes
 
 #### Mutate policies
 
@@ -314,8 +320,8 @@ OSC Kyverno policies deployment
 
 * [add-role](templates/add-role.yaml)
   * Rules
-    * Adds osc.edu/role=paas label to PAAS pods, services, and ingresses
-  * Applies to: Pod, Service, Ingress in PAAS namespace
+    * Adds osc.edu/role=paas label to PAAS pods, deployments, statefulsets, jobs, services, and ingresses
+  * Applies to: Pod, Deployment, StatefulSet, Job, Service, Ingress in PAAS namespace
 
 #### Validating policies
 
@@ -350,6 +356,7 @@ OSC Kyverno policies deployment
 
 | Key | Description | Default |
 |-----|-------------|---------|
+| global |  | `{}` |
 | users.allowHostPaths | Allowed host paths for user namespaces | `["/var/lib/sss/pipes","/etc/sssd","/etc/nsswitch.conf","/etc/pam.d","/etc/slurm","/var/run/munge/munge.socket.2","/users/?*","/fs/?*","/apps/?*","/nfsroot/?*"]` |
 | users.authorizedRegistries | Authorized registries for user namespaces | `["docker-registry.osc.edu","docker-registry-test.osc.edu"]` |
 | webservices.allowHostPaths | Allowed host paths for webservices | `["/var/lib/sss/pipes","/etc/sssd","/etc/nsswitch.conf","/etc/slurm","/var/run/munge/munge.socket.2","/users/?*","/fs/?*"]` |

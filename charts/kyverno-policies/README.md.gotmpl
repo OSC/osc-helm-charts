@@ -169,15 +169,18 @@
 
 #### Validating policies
 
-* [pvc-gpfs-fileset](templates/pvc-gpfs-fileset.yaml)
+* [pvc-service-account](templates/pvc-service-account.yaml)
   * Rules
-    * Validates that PVC using local-ess or local-scratch storage classes require a service account annotation to be set
-    * Validates that PVC using local-ess or local-scratch storage classes require correct UID and GID annotations
+    * Validates that PVC using local-home, local-ess or local-scratch storage classes require a service account label to be set for webservices
+    * Validates that PVC using local-home, local-ess or local-scratch storage classes require correct UID and GID annotations
     * Validates that PVC using local-ess or local-scratch storage classes require a fileset annotation to be set
+    * Validates that PVC using local-home storage classes require a home annotation to be set
     * Validates that PVC using local-ess or local-scratch storage classes cannot use PDE filesets with volume permissions
     * Validates that PVC using local-ess or local-scratch storage classes require a valid fileset annotation for webservice namespaces
     * Validates that PVC using local-ess or local-scratch storage classes require a valid fileset annotation for PAAS namespaces
-  * Applies to: PersistentVolumeClaim in webservice and PAAS namespaces with local-ess or local-scratch storage classes
+    * Validates that PVC using local-home storage classes require a valid home annotation for webservice namespaces
+    * Validates that PVC using local-home  storage classes require a valid home annotation for PAAS namespaces
+  * Applies to: PersistentVolumeClaim in webservice and PAAS namespaces with local-home, local-ess or local-scratch storage classes
 
 * [restrict-storageclass](templates/restrict-storageclass.yaml)
   * Rules
@@ -199,15 +202,18 @@
 
 #### Validating policies
 
-* [statefulset-gpfs-fileset](templates/statefulset-gpfs-fileset.yaml)
+* [statefulset-service-account](templates/statefulset-service-account.yaml)
   * Rules
-    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a service account annotation to be set
-    * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require correct UID and GID annotations
+    * Validates that StatefulSet using PVC with local-home, local-ess or local-scratch storage classes require a service account label to be set for webservices
+    * Validates that StatefulSet using PVC with local-home, local-ess or local-scratch storage classes require correct UID and GID annotations
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a fileset annotation to be set
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes cannot use PDE filesets with volume permissions
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a valid fileset annotation for webservice namespaces
     * Validates that StatefulSet using PVC with local-ess or local-scratch storage classes require a valid fileset annotation for PAAS namespaces
-  * Applies to: StatefulSet in webservice and PAAS namespaces with local-ess or local-scratch storage classes
+    * Validates that StatefulSet using PVC with local-home storage classes require a home annotation to be set
+    * Validates that StatefulSet using PVC with local-home storage classes require a valid home annotation for webservice namespaces
+    * Validates that StatefulSet using PVC with local-home storage classes require a valid home annotation for PAAS namespaces
+  * Applies to: StatefulSet in webservice and PAAS namespaces with local-home, local-ess or local-scratch storage classes
 
 #### Mutate policies
 
@@ -310,8 +316,8 @@
 
 * [add-role](templates/add-role.yaml)
   * Rules
-    * Adds osc.edu/role=paas label to PAAS pods, services, and ingresses
-  * Applies to: Pod, Service, Ingress in PAAS namespace
+    * Adds osc.edu/role=paas label to PAAS pods, deployments, statefulsets, jobs, services, and ingresses
+  * Applies to: Pod, Deployment, StatefulSet, Job, Service, Ingress in PAAS namespace
 
 #### Validating policies
 
