@@ -2,41 +2,40 @@
 apiVersion: cli.kyverno.io/v1alpha1
 kind: Test
 metadata:
-  name: statefulset-gpfs-fileset
+  name: statefulset-service-account
 policies:
   - policy.yaml
 resources:
   - resources.yaml
 variables: variables.yaml
 results:
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account
     resources:
       - webservice-statefulset-local-ess
-      - paas-statefulset-local-ess
     kind: StatefulSet
     result: pass
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account
     resources:
       - webservice-statefulset-without-service-account
-      - paas-statefulset-without-service-account
     kind: StatefulSet
     result: fail
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account
     resources:
       - webservice-statefulset-with-nfs-storage
+      - paas-statefulset-local-ess
     kind: StatefulSet
     result: skip
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: statefulset-validate-fileset-set
     resources:
       - webservice-statefulset-local-ess
       - paas-statefulset-local-ess
     kind: StatefulSet
     result: pass
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: statefulset-validate-fileset-set
     resources:
       - webservice-statefulset-without-fileset
@@ -44,25 +43,25 @@ results:
       - paas-statefulset-without-fileset
     kind: StatefulSet
     result: fail
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: statefulset-validate-fileset-set
     resources:
       - webservice-statefulset-with-nfs-storage
     kind: StatefulSet
     result: skip
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: statefulset-disallow-pde-fileset-permissions
     resources:
       - webservice-statefulset-with-pde-fileset
     kind: StatefulSet
     result: pass
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: statefulset-disallow-pde-fileset-permissions
     resources:
       - webservice-statefulset-with-pde-fileset-permissions
     kind: StatefulSet
     result: fail
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: statefulset-disallow-pde-fileset-permissions
     resources:
       - webservice-statefulset-with-nfs-storage
@@ -72,38 +71,38 @@ results:
       - paas-statefulset-without-fileset
     kind: StatefulSet
     result: skip
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - webservice-statefulset-with-valid-fileset
     kind: StatefulSet
     result: pass
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - webservice-statefulset-with-invalid-fileset
     kind: StatefulSet
     result: fail
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - paas-statefulset-local-ess
       - paas-statefulset-without-fileset
     kind: StatefulSet
     result: skip
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-paas-fileset-annotation
     resources:
       - paas-statefulset-with-valid-fileset
     kind: StatefulSet
     result: pass
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-paas-fileset-annotation
     resources:
       - paas-statefulset-with-invalid-fileset
     kind: StatefulSet
     result: fail
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-paas-fileset-annotation
     resources:
       - paas-statefulset-without-fileset
@@ -112,52 +111,106 @@ results:
       - webservice-statefulset-with-invalid-fileset
     kind: StatefulSet
     result: skip
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account-uid-gid-webservice
     resources:
       - webservice-statefulset-local-ess-with-uid-gid
       - webservice-statefulset-local-scratch-with-uid-gid
     kind: StatefulSet
     result: pass
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account-uid-gid-webservice
     resources:
-      - webservice-statefulset-local-scratch-with-wrong-service-account
       - webservice-statefulset-local-ess-with-wrong-uid-gid
       - webservice-statefulset-local-scratch-with-wrong-uid-gid
       - webservice-statefulset-local-ess-without-uid-gid
       - webservice-statefulset-local-scratch-without-uid-gid
     kind: StatefulSet
     result: fail
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account-uid-gid-webservice
     resources:
       - webservice-statefulset-with-nfs-storage
       - paas-statefulset-without-fileset
     kind: StatefulSet
     result: skip
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account-uid-gid-paas
     resources:
       - paas-statefulset-local-ess-with-uid-gid
       - paas-statefulset-local-scratch-with-uid-gid
     kind: StatefulSet
     result: pass
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account-uid-gid-paas
     resources:
-      - paas-statefulset-local-ess-with-wrong-service-account
-      - paas-statefulset-local-ess-without-service-account
       - paas-statefulset-local-ess-with-wrong-uid-gid
       - paas-statefulset-local-scratch-with-wrong-uid-gid
       - paas-statefulset-local-ess-without-uid-gid
       - paas-statefulset-local-scratch-without-uid-gid
     kind: StatefulSet
     result: fail
-  - policy: statefulset-gpfs-fileset
+  - policy: statefulset-service-account
     rule: validate-service-account-uid-gid-paas
     resources:
       - paas-statefulset-with-nfs-storage
       - webservice-statefulset-without-fileset
     kind: StatefulSet
     result: skip
+  - policy: statefulset-service-account
+    rule: statefulset-validate-home-set
+    resources:
+      - webservice-statefulset-local-home
+      - paas-statefulset-local-home
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-service-account
+    rule: statefulset-validate-home-set
+    resources:
+      - webservice-statefulset-local-home-missing-home
+      - paas-statefulset-local-home-missing-home
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-service-account
+    rule: statefulset-validate-home-set
+    resources:
+      - webservice-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - webservice-statefulset-local-home
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - webservice-statefulset-local-home-invalid
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-service-account
+    rule: validate-webservice-home-annotation
+    resources:
+      - webservice-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
+  - policy: statefulset-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - paas-statefulset-local-home
+    kind: StatefulSet
+    result: pass
+  - policy: statefulset-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - paas-statefulset-local-home-invalid
+    kind: StatefulSet
+    result: fail
+  - policy: statefulset-service-account
+    rule: validate-paas-home-annotation
+    resources:
+      - paas-statefulset-with-nfs-storage
+    kind: StatefulSet
+    result: skip
+

@@ -4,7 +4,7 @@ kind: StatefulSet
 metadata:
   name: webservice-statefulset
   namespace: webservice
-  annotations:
+  labels:
     osc.edu/service-account: "test-user"
 spec:
   volumeClaimTemplates:
@@ -20,7 +20,7 @@ kind: StatefulSet
 metadata:
   name: webservice-statefulset-ess
   namespace: webservice
-  annotations:
+  labels:
     osc.edu/service-account: "test-user"
 spec:
   volumeClaimTemplates:
@@ -30,6 +30,20 @@ spec:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-home
+  namespace: webservice
+  labels:
+    osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+      spec:
+        storageClassName: local-home
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -56,6 +70,7 @@ spec:
         name: paas-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
+          osc.edu/home: foo
       spec:
         storageClassName: local-scratch
 ---
@@ -72,4 +87,15 @@ spec:
           osc.edu/fileset: "test-fileset"
       spec:
         storageClassName: local-ess
-
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-home
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+      spec:
+        storageClassName: local-home

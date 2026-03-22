@@ -18,6 +18,7 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
+  labels:
     osc.edu/service-account: test
 spec:
   accessModes:
@@ -34,6 +35,8 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset2
+  labels:
+    osc.edu/service-account: test
 spec:
   accessModes:
   - ReadWriteOnce
@@ -76,7 +79,6 @@ metadata:
   name: pvc-paas-pass
   namespace: paas
   annotations:
-    osc.edu/service-account: user-test
     osc.edu/fileset: user-test-fileset
 spec:
   accessModes:
@@ -223,9 +225,10 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-    osc.edu/service-account: test
     osc.edu/service-account-uid: "1000"
     osc.edu/service-account-gid: "1001"
+  labels:
+    osc.edu/service-account: test
 spec:
   accessModes:
   - ReadWriteOnce
@@ -241,9 +244,10 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
-    osc.edu/service-account: test
     osc.edu/service-account-uid: "2000"
     osc.edu/service-account-gid: "2001"
+  labels:
+    osc.edu/service-account: test
 spec:
   accessModes:
   - ReadWriteOnce
@@ -259,6 +263,7 @@ metadata:
   namespace: webservice
   annotations:
     osc.edu/fileset: user-test-fileset
+  labels:
     osc.edu/service-account: test
 spec:
   accessModes:
@@ -292,7 +297,6 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
-    osc.edu/service-account: test
     osc.edu/service-account-uid: "1000"
     osc.edu/service-account-gid: "1001"
 spec:
@@ -310,7 +314,6 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
-    osc.edu/service-account: test
     osc.edu/service-account-uid: "2000"
     osc.edu/service-account-gid: "2001"
 spec:
@@ -328,6 +331,33 @@ metadata:
   namespace: paas
   annotations:
     osc.edu/fileset: user-test-fileset
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-scratch
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-fail-home
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-home
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-fail-home
+  namespace: webservice
+  labels:
     osc.edu/service-account: test
 spec:
   accessModes:
@@ -335,39 +365,83 @@ spec:
   resources:
     requests:
       storage: 8Gi
-  storageClassName: local-scratch
+  storageClassName: local-home
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-paas-fail-service-account-missing
+  name: pvc-paas-pass-home
   namespace: paas
   annotations:
-    osc.edu/fileset: user-test-fileset
-    osc.edu/service-account-uid: "1000"
-    osc.edu/service-account-gid: "1001"
+    osc.edu/home: project/test
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 8Gi
-  storageClassName: local-scratch
+  storageClassName: local-home
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-paas-fail-service-account-wrong
-  namespace: paas
+  name: pvc-webservice-pass-home
+  namespace: webservice
   annotations:
-    osc.edu/fileset: user-test-fileset
-    osc.edu/service-account: foo
-    osc.edu/service-account-uid: "1000"
-    osc.edu/service-account-gid: "1001"
+    osc.edu/home: project/test
+  labels:
+    osc.edu/service-account: test
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 8Gi
-  storageClassName: local-scratch
+  storageClassName: local-home
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-pass-home-invalid
+  namespace: webservice
+  annotations:
+    osc.edu/home: project/foo
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-home
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-pass-home
+  namespace: paas
+  annotations:
+    osc.edu/home: project/test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-home
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-paas-pass-home-invalid
+  namespace: paas
+  annotations:
+    osc.edu/home: project/foo
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-home

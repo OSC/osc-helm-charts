@@ -3,14 +3,14 @@ kind: Values
 metadata:
   name: values
 policies:
-  - name: pvc-gpfs-fileset
+  - name: pvc-service-account
     rules:
       - name: validate-webservice-fileset-annotation
         values:
-          userGroupMap.data.user-test: '["user-test-fileset","user-test-fileset2"]'
+          userGroupMap.data.user-test: '["user-test-fileset"]'
       - name: validate-paas-fileset-annotation
         values:
-          userGroupMap.data.user-test: '["user-test-fileset","user-test-fileset2"]'
+          userGroupMap.data.user-test: '["user-test-fileset"]'
           userGroupMap.data.user-foo: '[]'
       - name: validate-service-account-uid-gid-webservice
         values:
@@ -20,13 +20,21 @@ policies:
         values:
           uidMap.data.user-test: "1000"
           gidMap.data.user-test: "1001"
+      - name: validate-webservice-home-annotation
+        values:
+          homeMap.data.user-test: '/users/project/test'
+      - name: validate-paas-home-annotation
+        values:
+          homeMap.data.user-test: '/users/project/test'
     resources:
       - name: pvc-webservice-skip
         values:
       - name: pvc-webservice-pass
         values:
+          serviceAccount: test
       - name: pvc-webservice-fail
         values:
+          serviceAccount: test
       - name: pvc-paas-skip
         values:
       - name: pvc-paas-pass
@@ -60,6 +68,18 @@ policies:
         values:
           serviceAccount: test
       - name: pvc-paas-fail-uid-gid-missing
+        values:
+          serviceAccount: test
+      - name: pvc-webservice-pass-home
+        values:
+          serviceAccount: test
+      - name: pvc-webservice-pass-home-invalid
+        values:
+          serviceAccount: test
+      - name: pvc-paas-pass-home
+        values:
+          serviceAccount: test
+      - name: pvc-paas-pass-home-invalid
         values:
           serviceAccount: test
 namespaceSelector:

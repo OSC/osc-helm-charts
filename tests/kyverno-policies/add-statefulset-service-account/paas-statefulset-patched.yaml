@@ -10,7 +10,7 @@ spec:
         name: paas-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
-          osc.edu/service-account: "test-user"
+          osc.edu/home: project/test
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
       spec:
@@ -27,8 +27,24 @@ spec:
         name: paas-statefulset-pvc
         annotations:
           osc.edu/fileset: "test-fileset"
-          osc.edu/service-account: "test-user"
+          osc.edu/home: project/test
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
       spec:
         storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-home
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pvc
+        annotations:
+          osc.edu/home: project/test
+          osc.edu/service-account-uid: "1000"
+          osc.edu/service-account-gid: "1001"
+      spec:
+        storageClassName: local-home

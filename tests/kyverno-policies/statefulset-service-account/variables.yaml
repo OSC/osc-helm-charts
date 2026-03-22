@@ -3,7 +3,7 @@ kind: Values
 metadata:
   name: values
 policies:
-  - name: statefulset-gpfs-fileset
+  - name: statefulset-service-account
     rules:
       - name: validate-webservice-fileset-annotation
         values:
@@ -19,6 +19,12 @@ policies:
         values:
           uidMap.data.user-test-user: "1000"
           gidMap.data.user-test-user: "1001"
+      - name: validate-webservice-home-annotation
+        values:
+          homeMap.data.user-test-user: '/users/project/test'
+      - name: validate-paas-home-annotation
+        values:
+          homeMap.data.user-test-user: '/users/project/test'
     resources:
       - name: webservice-statefulset-local-ess
         values:
@@ -84,6 +90,24 @@ policies:
         values:
           serviceAccount: test-user
       - name: paas-statefulset-local-scratch-without-uid-gid
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-home
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-home-missing-home
+        values:
+          serviceAccount: test-user
+      - name: webservice-statefulset-local-home-invalid
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-home
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-home-missing-home
+        values:
+          serviceAccount: test-user
+      - name: paas-statefulset-local-home-invalid
         values:
           serviceAccount: test-user
 namespaceSelector:
