@@ -169,7 +169,7 @@ The [paas](charts/paas/README.md) chart provides a bootstrap Helm chart for OSC'
 - Integration with osc-common for consistent configurations
 
 ### kyverno-policies
-The [kyverno-policies](charts/kyverno-policies) chart deploys Kyverno policies for Kubernetes cluster management with OSC-specific configurations.
+The [kyverno-policies](charts/kyverno-policies/README.md) chart deploys Kyverno policies for Kubernetes cluster management with OSC-specific configurations.
 
 ## Docker Images
 
