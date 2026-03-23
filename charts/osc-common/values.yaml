@@ -95,6 +95,7 @@ global:
 oauth2-proxy:
   image:
     # -- The OSC registry
+    # @default -- The OSC registry hostname
     registry: '{{ .Values.global.imagePullSecret.registry }}'
     # -- Path to oauth2-proxy on the OSC registry
     repository: kubernetes/oauth2-proxy
@@ -112,13 +113,14 @@ oauth2-proxy:
       {{- if ((((.Values).global).auth).allowGroups) }}
       allowed_groups = {{ .Values.global.auth.allowGroups | toToml }}
       {{- end }}
-    # @ignored
+  # @ignored
   customLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
   # @ignored
   envFrom:
     - configMapRef:
         name: '{{ include "osc.common.auth.configmap.name" . }}'
+  # @ignored
   extraArgs:
     provider: oidc
     reverse-proxy: true
@@ -139,13 +141,16 @@ oauth2-proxy:
   # @ignored
   podSecurityContext:
     runAsNonRoot: true
-  # -- Resources limits for the oauth2-proxy
   resources:
     limits:
+      # -- CPU limit for OAuth2 Proxy pods
       cpu: 200m
+      # -- Memory limit for OAuth2 Proxy pods
       memory: 128Mi
     requests:
+      # -- CPU request for OAuth2 Proxy pods
       cpu: 100m
+      # -- Memory request for OAuth2 Proxy pods
       memory: 64Mi
 
   # @ignored

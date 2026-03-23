@@ -33,6 +33,9 @@ jobs:
           python-version: 3.9
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.1
+      - name: Helm login
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}' --password-stdin
       - name: Run chart-testing (lint)
         run: ct lint --config .github/config/cf.yaml --chart-dirs charts
       - name: Run Helm lint
