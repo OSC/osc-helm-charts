@@ -18,6 +18,11 @@ spec:
     - podSelector:
         matchLabels:
           {{- include "osc.common.selectorLabels" . | nindent 10 }}
+    {{- if .Values.global.auth.enable }}
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/component: authentication-proxy
+    {{- end }}
     {{- range $labels := .Values.global.networkPolicy.ingressAllowedPods  }}
     - podSelector:
         matchLabels:

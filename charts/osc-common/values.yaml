@@ -53,3 +53,117 @@ global:
     clusterRole: webservices-deploy
     # -- OSC managed webservices-deploy ServiceAccount name
     serviceAccount: webservices-deploy
+  auth:
+    # -- Enable auth management
+    enable: false
+    # -- The upstream service for the OAuth2 proxy. **required** when auth is enabled
+    upstream: ""
+    # -- Routes to skip auth
+    skipAuthRoutes: []
+    # -- Restrict access to these groups
+    allowGroups: []
+    # -- Default client scopes for the Keycloak client
+    defaultClientScopes:
+      - web-origins
+      - roles
+      - profile
+      - groups
+      - osc-oidc-clients
+      - basic
+      - email
+    # -- Extra default client scopes for the Keycloak client
+    extraDefaultClientScropes: []
+    keycloakClient:
+      # -- Force creating KeycloakClient when Oauth2 Proxy management is disabled
+      forceCreate: false
+      secret:
+        # -- The secret name for the Keycloak Client secret
+        # @default <Release name>-secret
+        name: ""
+      configmap:
+        # -- The configmap name for the Keycloak Client config
+        # @default <Release name>-config
+        name: ""
+      ## -- Additional Keycloak Client configs
+      config: {}
+  ingress:
+    # -- Ingress host value
+    host: ""
+    # -- Ingress host alias
+    hostAlias: ""
+
+oauth2-proxy:
+  image:
+    # -- The OSC registry
+    registry: '{{ .Values.global.imagePullSecret.registry }}'
+    # -- Path to oauth2-proxy on the OSC registry
+    repository: kubernetes/oauth2-proxy
+    # -- oauth2-proxy image tag.  **must be replicated to the OSC registry**
+    tag: v7.15.0
+    pullPolicy: IfNotPresent
+  # @ignored
+  config:
+    existingSecret: '{{ include "osc.common.auth.secret.name" . }}'
+    cookieName: _{{ include "osc.common.name" . }}{{ include "osc.common.environment" . }}
+    configFile: |-
+      {{- if ((((.Values).global).auth).skipAuthRoutes) }}
+      skip_auth_routes = {{ .Values.global.auth.skipAuthRoutes | toToml }}
+      {{- end }}
+      {{- if ((((.Values).global).auth).allowGroups) }}
+      allowed_groups = {{ .Values.global.auth.allowGroups | toToml }}
+      {{- end }}
+    # @ignored
+  customLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+  # @ignored
+  envFrom:
+    - configMapRef:
+        name: '{{ include "osc.common.auth.configmap.name" . }}'
+  extraArgs:
+    provider: oidc
+    reverse-proxy: true
+    oidc-issuer-url: $(ISSUER_URL)
+    cookie-httponly: false
+    cookie-secure: true
+    cookie-samesite: none
+    cookie-refresh: 180s
+    email-domain: '*'
+    insecure-oidc-allow-unverified-email: true
+    skip-provider-button: true
+    silence-ping-logging: true
+    whitelist-domain: $(KEYCLOAK_HOST)
+    upstream: '{{ required "Upstream value is required" (tpl ((((.Values).global).auth).upstream) .) }}'
+  # @ignored
+  imagePullSecrets:
+    - name: '{{ include "osc.common.imagePullSecret.name" . }}'
+  # @ignored
+  podSecurityContext:
+    runAsNonRoot: true
+  # -- Resources limits for the oauth2-proxy
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+  # @ignored
+  service:
+    annotations:
+      prometheus.io/probe_module: http-healthz
+      prometheus.io/probe_path: /ping
+      prometheus.io/scrape: 'true'
+      prometheus.io/match_metrics: 'true'
+      prometheus.io/path: /metrics
+  # @ignored
+  networkPolicy:
+    create: true
+    ingress:
+      - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: '{{ .Values.global.networkPolicy.ingressNamespace }}'
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: '{{ .Values.global.networkPolicy.prometheusNamespace }}'

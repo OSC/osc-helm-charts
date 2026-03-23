@@ -50,6 +50,7 @@ jobs:
       matrix:
         chart:
           - osc-common
+          - auth
           - database
           - webservice
           - prometheus
@@ -87,6 +88,10 @@ jobs:
           registry: docker-registry.osc.edu
           username: ${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}
           password: ${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}
+      - name: Helm login
+        if: matrix.chart == 'osc-common'
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}' --password-stdin
       - name: Build and Load images
         if: matrix.chart == 'database' || matrix.chart == 'webservice'
         run: |

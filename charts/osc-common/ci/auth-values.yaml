@@ -1,0 +1,5 @@
+global:
+  oscServiceAccount: test
+  auth:
+    enable: true
+    upstream: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80

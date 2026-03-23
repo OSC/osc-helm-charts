@@ -1,0 +1,17 @@
+global:
+  oscServiceAccount: test
+  auth:
+    enable: true
+    upstream: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80
+    skipAuthRoutes:
+      - '/api($|/.*)'
+      - '^/ollama($|/.*)'
+      - '^/docs($|/.*)'
+    allowGroups:
+      - group1
+      - group2
+  ingress:
+    host: test.example.com
+keycloakClient:
+  config:
+    publicClient: true
