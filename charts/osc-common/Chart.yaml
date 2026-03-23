@@ -10,8 +10,8 @@ dependencies:
   - name: oauth2-proxy
     # TODO: Use upstream once merged and released
     # https://github.com/oauth2-proxy/manifests/pull/398
-    #version: 10.3.0
-    #repository: https://oauth2-proxy.github.io/manifests
+    # version: 10.3.0
+    # repository: https://oauth2-proxy.github.io/manifests
     version: 10.2.0-osc-r1
     repository: oci://docker-registry.osc.edu/kubernetes
     condition: global.auth.enable
