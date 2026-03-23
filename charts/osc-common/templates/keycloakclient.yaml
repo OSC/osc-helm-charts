@@ -30,6 +30,5 @@ spec:
     envVarKeys: false
   configMap:
     name: {{ include "osc.common.auth.configmap.name" . }}
-    create: true
     envVarKeys: true
 {{- end }}
