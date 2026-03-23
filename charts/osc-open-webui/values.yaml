@@ -149,8 +149,6 @@ open-webui:
   #   node-role.kubernetes.io/webservices: ''
   extraEnvVars: []
   commonEnvVars:
-    - name: WEBUI_AUTH_TRUSTED_GROUPS_HEADER
-      value: X-Auth-Request-Groups
     - name: ENABLE_OAUTH_GROUP_CREATION
       value: "True"
     - name: DEFAULT_USER_ROLE
@@ -158,9 +156,9 @@ open-webui:
     - name: ENABLE_SIGNUP
       value: "True"
     - name: ENABLE_OAUTH_SIGNUP
-      value: "False"
-    - name: ENABLE_LOGIN_FORM
       value: "True"
+    - name: ENABLE_LOGIN_FORM
+      value: "False"
     - name: WEBUI_AUTH
       value: "True"
     - name: ENABLE_VERSION_UPDATE_CHECK
@@ -187,10 +185,22 @@ open-webui:
     privileged: false
   sso:
     enabled: true
-    trustedHeader:
+    mergeAccountsByEmail: true
+    enableRoleManagement: true
+    enableGroupManagement: true
+    oidc:
       enabled: true
-      nameHeader: X-Auth-Request-Preferred-Username
-      emailHeader: X-Auth-Request-Email
+      clientId: ""
+      clientSecret: ""
+      providerUrl: ""
+      providerName: "OSC SSO"
+      scopes: "openid email profile groups basic osc-oidc-clients"
+    roleManagement:
+      rolesClaim: groups
+      allowedRoles: ""
+      adminRoles: sysstf,sappstf
+    trustedHeader:
+      enabled: false
   ollama:
     # Added so can be referenced
     fullnameOverride: open-webui-ollama
