@@ -142,7 +142,7 @@ jobs:
         run: |
           helm repo add keycloak-cr-operator https://osc.github.io/keycloak-cr-operator/
           helm install keycloak-cr-operator keycloak-cr-operator/keycloak-cr-operator -n keycloak-cr-operator --create-namespace \
-            -f .github/config/keycloak-cr-operator-values.yaml --version v0.0.2
+            -f .github/config/keycloak-cr-operator-values.yaml --version v0.0.3 --wait --timeout 300s
       - name: Setup Environment
         run: |
           sudo apt-get update
