@@ -77,10 +77,6 @@ global:
   # @default -- **required**
   webui_secret_key:
 
-# TODO - Remove
-auth:
-  enable: false
-
 ollama:
   networkPolicy:
     # -- Array of additional pod labels to allow
