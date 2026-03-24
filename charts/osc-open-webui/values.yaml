@@ -81,6 +81,11 @@ global:
 auth:
   enable: false
 
+ollama:
+  networkPolicy:
+    # -- Array of additional pod labels to allow
+    allowedPodLabels: []
+
 open-webui:
   # @ignored
   nameOverride: open-webui

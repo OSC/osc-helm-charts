@@ -12,6 +12,10 @@ global:
   maintenance:
     groups:
       - testgroup
+ollama:
+  networkPolicy:
+    allowedPodLabels:
+      - app.kubernetes.io/name: ollama
 
 open-webui:
   persistence:

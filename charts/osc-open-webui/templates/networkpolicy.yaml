@@ -34,6 +34,11 @@ spec:
     - podSelector:
         matchLabels:
           app.kubernetes.io/name: {{ index .Values "open-webui" "nameOverride" }}
+    {{- range .Values.ollama.networkPolicy.allowedPodLabels }}
+    - podSelector:
+        matchLabels:
+          {{- tpl (toYaml .) $ | nindent 10 }}
+    {{- end }}
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.global.networkPolicy.ingressNamespace }}
