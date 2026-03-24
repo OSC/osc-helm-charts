@@ -32,20 +32,10 @@ spec:
   - host: {{ tpl .Values.global.ingress.host . | quote }}
     http:
       paths:
-    {{- if .Values.auth.enable }}
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: {{ include "osc-open-webui.auth.name" . }}
-            port:
-              number: {{ .Values.auth.service.port }}
-    {{- else }}
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ index .Values "open-webui" "nameOverride" }}
+            name: {{ include "open-webui.fullname" . }}
             port:
               name: http
-    {{- end }}

@@ -32,6 +32,10 @@ global:
     #    - require: test
     #    - client: test
     #
+    # @ignored
+    ingressNamespace: ingress-nginx
+    # @ignored
+    prometheusNamespace: prometheus
   # -- Groups that debug pods
   debugGroups: []
   # -- Groups that can perform maintenance operations
@@ -42,97 +46,83 @@ global:
     # -- Create webservices deployment rolebinding
     create: true
   ingress:
-    # Also pulled from global.env.$environment.ingress.host
+    # -- Ingress host
+    # @default -- **required**
     host: ""
-    # Also pulled from global.env.$environment.ingress.hostAlias
+    # -- Ingress host alias
+    # @default -- **required**
     hostAlias: ""
-    # -- Additional Ingress annotations for all Ingress resources
+    # -- Additional Ingress annotations for the Ingress resource
     annotations: ~
-    api:
-      # -- Additional Ingress annotations for the API ingress
-      annotations: ~
-    auth:
-      # -- Additional Ingress annotations for the Auth ingress
-      annotations: ~
-    open-webui:
-      # -- Additional Ingress annotations for the Open WebUI Ingress
-      annotations: ~
   auth:
-    idpHost:
-    clientID:
-    clientSecret:
-    cookieSecret:
+    # @ignored
+    enable: false
+    # @ignored
+    keycloakClient:
+      forceCreate: true
+      # Set secret name to ensure rendered the same for osc-common and dependenc open-webui chart
+      # @ignored
+      secret:
+        name: "{{ .Release.Name }}-auth-secret"
+      # Set configmap name to ensure rendered the same for osc-common and dependenc open-webui chart
+      # @ignored
+      configmap:
+        name: "{{ .Release.Name }}-auth-config"
+    # -- Restrict access to these groups
     allowGroups: []
   alert:
+    # -- The alert receiver
     receiver:
+  # The Open WebUI secret key
+  # @default -- **required**
   webui_secret_key:
 
-# Used for network policies
-ingressName: ingress-nginx
-prometheusName: prometheus
-
+# TODO - Remove
 auth:
   enable: false
-  cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
-  oidcIssuerURL: https://$(IDP_HOST)/realms/osc
-  image:
-    repository: quay.io/oauth2-proxy/oauth2-proxy
-    tag: v7.1.3
-    pullPolicy: IfNotPresent
-  podSecurityContext:
-    runAsNonRoot: true
-  service:
-    port: 4180
-    annotations:
-      prometheus.io/probe_module: http-healthz
-      prometheus.io/probe_path: /ping
-  metricsService:
-    type: ClusterIP
-    port: 8080
-    annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
-  podResources:
-    limits:
-      cpu: 200m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 64Mi
-  replicas: 1
-  podDistributionBudget:
-    minAvailable: 1
 
 open-webui:
+  # @ignored
   nameOverride: open-webui
-  # -- Set to force old names after upgrades
-  fullnameOverride: open-webui
-  serviceAccount:
-    # -- Set to force old names after upgrades
-    name: open-webui
+  # @ignored
   openaiApiKey: false
+  # @ignored
   pipelines:
     enabled: false
+  # @ignored
   websocket:
     enabled: false
-  podLabels: {}
-  # Example service account label
-  # osc.edu/service-account: TODO
+  # @ignored
+  extraLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    receiver: '{{ .Values.global.alert.receiver }}'
+  # @ignored
+  podLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    receiver: '{{ .Values.global.alert.receiver }}'
   image:
+    # -- OSC registry location for Open WebUI image
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
     # Use custom build until released:
     # https://github.com/open-webui/open-webui/commit/6d7744c21903ec5a9ad951770dea76e9ba19cbcc
     # tag: '0.8.8'
+    # -- The Open WebUI image tag.  Must be synced to OSC registry
     tag: 0.8.9-osc-r1
+  # @ignored
   imagePullSecrets:
-    - name: osc-registry
+    - name: '{{ .Values.global.imagePullSecret.name }}'
   resources:
     limits:
+      # -- Open WebUI pod memory limit
       memory: 4Gi
+      # -- Open WebUI pod CPU limit
       cpu: 2
     requests:
+      # -- Open WebUI pod memory request
       memory: 2Gi
+      # -- Open WebUI pod CPU request
       cpu: 1
+  # @ignored
   copyAppData:
     resources:
       limits:
@@ -141,16 +131,20 @@ open-webui:
       requests:
         memory: 500Mi
         cpu: 500m
+  # @ignored
   ingress:
     enabled: false
   persistence:
+    # @ignored
     size: 10Gi
+    # -- The Open WebUI persistent storage class
     storageClass: webservices-nfs-client
-  nodeSelector: {}
-  # Example node selector
-  # nodeSelector:
-  #   node-role.kubernetes.io/webservices: ''
+  # @ignored
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+  # -- Additional Open WebUI environment variables
   extraEnvVars: []
+  # @ignored
   commonEnvVars:
     - name: ENABLE_OAUTH_GROUP_CREATION
       value: "True"
@@ -170,16 +164,22 @@ open-webui:
       value: "True"
     - name: USER_PERMISSIONS_FEATURES_API_KEYS
       value: "True"
+  # @ignored
   extraEnvFrom:
     - secretRef:
         name: osc-open-webui-secret
+  # @ignored
   service:
     port: 80
+    labels:
+      receiver: '{{ .Values.global.alert.receiver }}'
     annotations:
       prometheus.io/probe_module: http
       prometheus.io/probe_scheme: http
+  # @ignored
   podSecurityContext:
     runAsNonRoot: true
+  # @ignored
   containerSecurityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -189,26 +189,35 @@ open-webui:
       type: RuntimeDefault
     privileged: false
   sso:
+    # @ignored
     enabled: true
+    # @ignored
     mergeAccountsByEmail: true
+    # -- Enables role access controls in Open WebUI
     enableRoleManagement: true
+    # @ignored
     enableGroupManagement: true
+    # @ignored
     oidc:
       enabled: true
-      clientId: ""
-      clientSecret: ""
-      providerUrl: ""
+      clientExistingSecret: '{{ tpl .Values.global.auth.keycloakClient.secret.name . }}'
+      clientIdExistingSecretKey: client-id
+      clientExistingSecretKey: client-secret
+      existingConfig: '{{ tpl .Values.global.auth.keycloakClient.configmap.name . }}'
+      existingConfigProviderUrlKey: PROVIDER_URL
       providerName: "OSC SSO"
       scopes: "openid email profile groups basic osc-oidc-clients"
+    # @ignored
     roleManagement:
       rolesClaim: groups
-      allowedRoles: ""
+      allowedRoles: '{{ join "," .Values.global.allowGroups }}'
       adminRoles: sysstf,sappstf
+    # @ignored
     trustedHeader:
       enabled: false
   ollama:
     # Added so can be referenced
-    fullnameOverride: open-webui-ollama
+    nameOverride: ollama
     image:
       repository: docker-registry.osc.edu/kubernetes/ollama/ollama
       tag: '0.16.1'
