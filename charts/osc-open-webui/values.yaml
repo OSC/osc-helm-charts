@@ -165,6 +165,8 @@ open-webui:
       value: "False"
     - name: ENABLE_API_KEYS
       value: "True"
+    - name: USER_PERMISSIONS_FEATURES_API_KEYS
+      value: "True"
   extraEnvFrom:
     - secretRef:
         name: osc-open-webui-secret
