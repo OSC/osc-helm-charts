@@ -33,6 +33,9 @@ jobs:
           python-version: 3.9
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.1
+      - name: Helm login
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}' --password-stdin
       - name: Run chart-testing (lint)
         run: ct lint --config .github/config/cf.yaml --chart-dirs charts
       - name: Run Helm lint
@@ -87,6 +90,10 @@ jobs:
           registry: docker-registry.osc.edu
           username: ${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}
           password: ${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}
+      - name: Helm login
+        if: matrix.chart == 'osc-common'
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}' --password-stdin
       - name: Build and Load images
         if: matrix.chart == 'database' || matrix.chart == 'webservice'
         run: |
@@ -135,7 +142,7 @@ jobs:
         run: |
           helm repo add keycloak-cr-operator https://osc.github.io/keycloak-cr-operator/
           helm install keycloak-cr-operator keycloak-cr-operator/keycloak-cr-operator -n keycloak-cr-operator --create-namespace \
-            -f .github/config/keycloak-cr-operator-values.yaml --version v0.0.2
+            -f .github/config/keycloak-cr-operator-values.yaml --version v0.0.3 --wait --timeout 300s
       - name: Setup Environment
         run: |
           sudo apt-get update

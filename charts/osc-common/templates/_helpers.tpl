@@ -85,3 +85,11 @@ osc.edu/role
 {{- printf "{\"auths\":{\"%s\":{\"auth\":\"%s\"}}}" .registry (printf "%s:%s" .username .password | b64enc) | b64enc }}
 {{- end }}
 {{- end }}
+
+{{- define "osc.common.auth.secret.name" -}}
+{{- .Values.global.auth.keycloakClient.secret.name | default (printf "%s-auth-secret" (include "osc.common.name" .)) }}
+{{- end }}
+
+{{- define "osc.common.auth.configmap.name" -}}
+{{- .Values.global.auth.keycloakClient.configmap.name | default (printf "%s-auth-config" (include "osc.common.name" .)) }}
+{{- end }}

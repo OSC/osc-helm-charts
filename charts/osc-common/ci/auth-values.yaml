@@ -1,0 +1,7 @@
+global:
+  oscServiceAccount: test
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  auth:
+    enable: true
+    upstream: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80

@@ -21,13 +21,13 @@ jobs:
         uses: azure/setup-helm@v4
         with:
           version: v4.1.1
+      - name: Helm login
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}' --password-stdin
       - name: Publish Helm charts
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Helm login
-        run: |
-          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}' --password-stdin
       - name: Publish private Helm charts
         run: |
           for chart in $(find charts-private -maxdepth 1 -mindepth 1 -type d); do

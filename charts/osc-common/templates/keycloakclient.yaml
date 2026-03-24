@@ -1,0 +1,34 @@
+{{- if or .Values.global.auth.enable .Values.global.auth.keycloakClient.forceCreate }}
+apiVersion: keycloak.osc.edu/v1alpha1
+kind: KeycloakClient
+metadata:
+  labels:
+    {{- include "osc.common.labels" . | nindent 4 }}
+  name: {{ include "osc.common.name" . | quote }}
+spec:
+  {{- if or (default "" ((((.Values).global).ingress).host)) (default "" ((((.Values).global).ingress).hostAlias)) }}
+  redirectUris:
+    - https://{{ tpl .Values.global.ingress.host . }}/*
+  {{- if .Values.global.ingress.hostAlias }}
+    - https://{{ tpl .Values.global.ingress.hostAlias . }}/*
+  {{- end }}
+  {{- end }}
+  defaultClientScopes:
+  {{- range .Values.global.auth.defaultClientScopes }}
+    - {{ . }}
+  {{- end }}
+  {{- range .Values.global.auth.extraDefaultClientScropes }}
+    - {{ . }}
+  {{- end }}
+  {{- if .Values.global.auth.keycloakClient.config }}
+  {{- tpl (toYaml .Values.global.auth.keycloakClient.config) . | nindent 2 }}
+  {{- end }}
+  clientSecretRef:
+    name: {{ include "osc.common.auth.secret.name" . }}
+    key: client-secret
+    create: true
+    envVarKeys: false
+  configMap:
+    name: {{ include "osc.common.auth.configmap.name" . }}
+    envVarKeys: true
+{{- end }}
