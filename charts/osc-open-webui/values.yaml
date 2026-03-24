@@ -72,7 +72,7 @@ ingressName: ingress-nginx
 prometheusName: prometheus
 
 auth:
-  enable: true
+  enable: false
   cookieName: _{{ include "osc.common.serviceAccountValue" . }}{{ include "osc.common.environment" . }}
   oidcIssuerURL: https://$(IDP_HOST)/realms/osc
   image:
@@ -120,7 +120,10 @@ open-webui:
   # osc.edu/service-account: TODO
   image:
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
-    tag: '0.8.8'
+    # Use custom build until released:
+    # https://github.com/open-webui/open-webui/commit/6d7744c21903ec5a9ad951770dea76e9ba19cbcc
+    # tag: '0.8.8'
+    tag: 0.8.9-osc-r1
   imagePullSecrets:
     - name: osc-registry
   resources:
