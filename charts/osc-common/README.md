@@ -16,6 +16,22 @@ OSC common Helm Chart
 |------------|------|---------|
 | https://oauth2-proxy.github.io/manifests | oauth2-proxy | 10.3.0 |
 
+## Usage
+
+### Auth with OAuth2 Proxy
+
+To use OAuth2 Proxy the following is the minimal configuration:
+
+```yaml
+global:
+  oscServiceAccount: username
+  auth:
+    enable: true
+    upstream: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80
+  ingress:
+    host: test.example.com
+```
+
 ## Helpers
 
 | Key | Description| Source |
@@ -63,13 +79,12 @@ OSC common Helm Chart
 | global.auth.keycloakClient.forceCreate | Force creating KeycloakClient when Oauth2 Proxy management is disabled | `false` |
 | global.auth.keycloakClient.secret.name | The secret name for the Keycloak Client secret @default <Release name>-secret | `""` |
 | global.auth.keycloakClient.configmap.name | The configmap name for the Keycloak Client config @default <Release name>-config | `""` |
-| global.auth.keycloakClient.config |  | `{}` |
+| global.auth.keycloakClient.config | Additional Keycloak Client configs | `{}` |
 | global.ingress.host | Ingress host value | `""` |
 | global.ingress.hostAlias | Ingress host alias | `""` |
 | oauth2-proxy.image.registry | The OSC registry | The OSC registry hostname |
 | oauth2-proxy.image.repository | Path to oauth2-proxy on the OSC registry | `"kubernetes/oauth2-proxy"` |
 | oauth2-proxy.image.tag | oauth2-proxy image tag.  **must be replicated to the OSC registry** | `"v7.15.0"` |
-| oauth2-proxy.image.pullPolicy |  | `"IfNotPresent"` |
 | oauth2-proxy.resources.limits.cpu | CPU limit for OAuth2 Proxy pods | `"200m"` |
 | oauth2-proxy.resources.limits.memory | Memory limit for OAuth2 Proxy pods | `"128Mi"` |
 | oauth2-proxy.resources.requests.cpu | CPU request for OAuth2 Proxy pods | `"100m"` |

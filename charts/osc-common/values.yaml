@@ -84,7 +84,7 @@ global:
         # -- The configmap name for the Keycloak Client config
         # @default <Release name>-config
         name: ""
-      ## -- Additional Keycloak Client configs
+      # -- Additional Keycloak Client configs
       config: {}
   ingress:
     # -- Ingress host value
@@ -101,7 +101,6 @@ oauth2-proxy:
     repository: kubernetes/oauth2-proxy
     # -- oauth2-proxy image tag.  **must be replicated to the OSC registry**
     tag: v7.15.0
-    pullPolicy: IfNotPresent
   # @ignored
   config:
     existingSecret: '{{ include "osc.common.auth.secret.name" . }}'

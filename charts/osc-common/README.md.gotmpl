@@ -13,6 +13,22 @@
 
 {{ template "chart.requirementsSection" . }}
 
+## Usage
+
+### Auth with OAuth2 Proxy
+
+To use OAuth2 Proxy the following is the minimal configuration:
+
+```yaml
+global:
+  oscServiceAccount: username
+  auth:
+    enable: true
+    upstream: http://{{`{{ .Release.Name }}`}}.{{`{{ .Release.Namespace }}`}}.svc.cluster.local:80
+  ingress:
+    host: test.example.com
+```
+
 ## Helpers
 
 | Key | Description| Source |
