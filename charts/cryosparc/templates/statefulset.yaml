@@ -145,13 +145,13 @@ spec:
           mountPath: /etc/sssd
         resources: {{ toYaml (index .Values.global.env (include "osc.common.environment" .) "podResources") | nindent 10 }}
         ports:
-          - containerPort: {{ .Values.service.basePort }}
+          - containerPort: {{ .Values.global.basePort }}
             name: http
-          - containerPort: {{ add .Values.service.basePort 1 }}
+          - containerPort: {{ add .Values.global.basePort 1 }}
             name: mongod
-          - containerPort: {{ add .Values.service.basePort 2 }}
+          - containerPort: {{ add .Values.global.basePort 2 }}
             name: cmd-server
-          - containerPort: {{ add .Values.service.basePort 5 }}
+          - containerPort: {{ add .Values.global.basePort 5 }}
             name: rtp-server
       nodeSelector: 
         {{ include "osc.common.nodeSelectorRole" . }}

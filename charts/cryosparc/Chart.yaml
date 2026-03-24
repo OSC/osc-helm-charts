@@ -2,11 +2,12 @@ apiVersion: v2
 name: cryosparc
 description: OSC CryoSPARC bootstrap Helm Chart
 type: application
-version: 0.2.0
+version: 0.3.0
 appVersion: "4.7.1-r2"
 maintainers:
   - name: zyou
 dependencies:
   - name: osc-common
-    version: 0.9.2
+    version: 0.12.1
     repository: https://osc.github.io/osc-helm-charts/
+    # repository: file://../osc-common

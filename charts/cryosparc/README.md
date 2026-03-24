@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r2](https://img.shields.io/badge/AppVersion-4.7.1--r2-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r2](https://img.shields.io/badge/AppVersion-4.7.1--r2-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -14,7 +14,7 @@ OSC CryoSPARC bootstrap Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.2 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.12.1 |
 
 ## Usage
 
@@ -31,35 +31,24 @@ global:
   maintenanceGroups:
     - foo
     - bar
+  ingress:
+    host: cryosciapps.k8.osc.edu
+    hostAlias: cryosciapps.osc.edu
+  basePort: 31010
 
 license: xxx-xxx-xxx
-version: 4.7.1
-revision: 1
 project: PAS0710
 admin:
   email: qwer1234@osc.edu
   username: qwer1234
   password: qwer1234
-nodeSelector:
-  kubernetes.io/os: linux
-auth:
-  clientSecret: client-secret
-  cookieSecret: secret
-ingress:
-  host: cryosciapps.osc.edu
-podSecurityContext:
-  runAsUser: 12345
-  runAsGroup: 3333
-  fsGroup: 3333
-service:
-  basePort: 31010
 ```
 
 ## Values
 
 | Key | Description | Default |
 |-----|-------------|---------|
-| global.oscServiceAccount | The service account used by OSC deployments. Also pulled from global.env.<env>.serviceAccount | `"{{ include \"cryosparc.name\" . }}"` |
+| global.oscServiceAccount | The service account used by OSC deployments. | The chart's release name |
 | global.environment | The deployment's OSC environment | `"production"` |
 | global.nodeSelectorRole | The OSC node role to use with nodeSelector | `"webservices"` |
 | global.imagePullSecret.create | Create the image pull secret | `true` |
@@ -69,30 +58,12 @@ service:
 | global.imagePullSecret.password | imagePullSecret password. This value will be set by OSC's Puppet. This value must be set to IMAGE-PULL-PASSWORD for CI tests. | `nil` |
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
-| global.auth.idpHost | Keycloak IDP host.  Default if auth.idpHost not defined | `nil` |
-| global.auth.clientID | Keycloak client ID.  Default if auth.clientID not defined | `nil` |
-| global.auth.clientSecret | Keycloak client secret.  Default if auth.clientSecret not defined | `nil` |
-| global.auth.cookieSecret | Keycloak cookie secret.  Default if auth.cookieSecret not defined | `nil` |
-| global.ingress.host | Ingress host.  Default if ingress.host not defined | `nil` |
-| global.ingress.hostAlias | Ingress host alias.  Default if ingress.hostAlias not defined | `nil` |
-| global.env.production.podResources.limits.cpu |  | `8` |
-| global.env.production.podResources.limits.memory |  | `"32Gi"` |
-| global.env.production.podResources.requests.cpu |  | `4` |
-| global.env.production.podResources.requests.memory |  | `"16Gi"` |
-| global.env.production.auth.replicas |  | `2` |
-| global.env.production.image.tag |  | `""` |
-| global.env.test.podResources.limits.cpu |  | `1` |
-| global.env.test.podResources.limits.memory |  | `"4Gi"` |
-| global.env.test.podResources.requests.cpu |  | `1` |
-| global.env.test.podResources.requests.memory |  | `"256Mi"` |
-| global.env.test.auth.replicas |  | `2` |
-| global.env.test.image.tag |  | `""` |
-| global.env.dev.podResources.limits.cpu |  | `1` |
-| global.env.dev.podResources.limits.memory |  | `"4Gi"` |
-| global.env.dev.podResources.requests.cpu |  | `1` |
-| global.env.dev.podResources.requests.memory |  | `"256Mi"` |
-| global.env.dev.auth.replicas |  | `1` |
-| global.env.dev.image.tag |  | `""` |
+| global.auth.commonAllowGroups | Base groups allowed to login | `["sappstf","sysstf","{{ .Values.project }}"]` |
+| global.auth.allowGroups | Additional groups allowed to login | `[]` |
+| global.ingress.host | Ingress host. | **required** |
+| global.ingress.hostAlias | Ingress host alias. | **required** |
+| global.alert.receiver |  | `"sciapps"` |
+| global.basePort | The base service port. Must be unique for each CryoSPARC instance | **required** |
 | license | The CryoSPARC license ID | `""` |
 | project | The service project | `""` |
 | homeDir |  | `"{{ .Values.project }}"` |
@@ -105,37 +76,7 @@ service:
 | admin.email |  | `""` |
 | admin.password |  | `""` |
 | nodeSelector |  | `{}` |
-| alert.receiver |  | `"sciapps"` |
 | service.port |  | `80` |
-| service.basePort |  | `31000` |
-| ingress.host | Ingress host. Also pulled from global.ingress.host | `""` |
-| ingress.hostAlias | Ingress host alias.  Also pulled from global.ingress.hostAlias | `""` |
 | ingress.className |  | `"nginx"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"16k"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" |  | `"true"` |
-| auth.clientID | Keycloak client ID. Also pulled from global.auth.clientID | `nil` |
-| auth.clientSecret | Keycloak client secret. Also pulled from global.auth.clientSecret | `nil` |
-| auth.cookieSecret | Keycloak cookie secret. Also pulled from global.auth.cookieSecret | `nil` |
-| auth.cookieName |  | `"_{{ include \"cryosparc.name\" . }}{{ include \"osc.common.environment\" . }}"` |
-| auth.idpHost | Keycloak IDP host. Also pulled from global.auth.idpHost | `nil` |
-| auth.oidcIssuerURL |  | `"https://$(IDP_HOST)/realms/osc"` |
-| auth.allowGroupsBase | Base groups allowed to login | `["sappstf","sysstf","{{ .Values.project }}"]` |
-| auth.allowGroups | Additional groups allowed to login | `[]` |
-| auth.skipAuthRoute |  | `nil` |
-| auth.image.repository |  | `"quay.io/oauth2-proxy/oauth2-proxy"` |
-| auth.image.tag |  | `"v7.1.3"` |
-| auth.image.pullPolicy |  | `"IfNotPresent"` |
-| auth.service.port |  | `4180` |
-| auth.service.annotations."prometheus.io/probe_module" |  | `"http-healthz"` |
-| auth.service.annotations."prometheus.io/probe_path" |  | `"/ping"` |
-| auth.metricsService.type |  | `"ClusterIP"` |
-| auth.metricsService.port |  | `8080` |
-| auth.metricsService.annotations."prometheus.io/scrape" |  | `"true"` |
-| auth.metricsService.annotations."prometheus.io/path" |  | `"/metrics"` |
-| auth.podResources.limits.cpu |  | `"200m"` |
-| auth.podResources.limits.memory |  | `"128Mi"` |
-| auth.podResources.requests.cpu |  | `"100m"` |
-| auth.podResources.requests.memory |  | `"64Mi"` |
-| auth.ingress.className |  | `nil` |
-| auth.ingress.annotations."prometheus.io/probe_path" |  | `"/ping"` |
-| auth.podDistributionBudget.minAvailable |  | `1` |

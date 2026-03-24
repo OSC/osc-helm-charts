@@ -6,13 +6,6 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
-Auth resource name
-*/}}
-{{- define "cryosparc.auth.name" -}}
-{{- printf "%s-auth" (include "cryosparc.name" .) }}
-{{- end }}
-
-{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -50,35 +43,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Auth labels
-*/}}
-{{- define "cryosparc.auth.labels" -}}
-helm.sh/chart: {{ include "cryosparc.chart" . }}
-{{ include "cryosparc.auth.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
 Selector labels
 */}}
 {{- define "cryosparc.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "cryosparc.name" . }}
-{{- end }}
-
-{{/*
-Auth Selector labels
-*/}}
-{{- define "cryosparc.auth.selectorLabels" -}}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
-{{- end }}
-
-{{- define "cryosparc.auth.secretName" }}
-{{- printf "%s-auth" (include "cryosparc.name" .) }}
 {{- end }}
 
 {{- define "cryosparc.imageTag" }}
@@ -98,48 +67,6 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
   {{- if (index .Values.global.env (include "osc.common.environment" .) "replicas") }}
     {{- index .Values.global.env (include "osc.common.environment" .) "replicas" }}
   {{- end }}
-{{- end }}
-{{- end }}
-
-{{- define "cryosparc.auth.replicas" }}
-{{- if .Values.auth.replicas }}
-{{- .Values.auth.replicas }}
-{{- else if .Values.global.env }}
-  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
-    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "replicas" }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
-{{- define "cryosparc.idpHost" }}
-{{- if .Values.auth.idpHost }}
-  {{- .Values.auth.idpHost }}
-{{- else if .Values.global.auth.idpHost }}
-  {{- .Values.global.auth.idpHost }}
-{{- end }}
-{{- end }}
-
-{{- define "cryosparc.clientID" }}
-{{- if .Values.auth.clientID }}
-  {{- .Values.auth.clientID }}
-{{- else if .Values.global.auth.clientID }}
-  {{- .Values.global.auth.clientID }}
-{{- end }}
-{{- end }}
-
-{{- define "cryosparc.clientSecret" }}
-{{- if .Values.auth.clientSecret }}
-  {{- .Values.auth.clientSecret }}
-{{- else if .Values.global.auth.clientSecret }}
-  {{- .Values.global.auth.clientSecret }}
-{{- end }}
-{{- end }}
-
-{{- define "cryosparc.cookieSecret" }}
-{{- if .Values.auth.cookieSecret }}
-  {{- .Values.auth.cookieSecret }}
-{{- else if .Values.global.auth.cookieSecret }}
-  {{- .Values.global.auth.cookieSecret }}
 {{- end }}
 {{- end }}
 
@@ -164,8 +91,8 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "cryosparc.name" .) }}
 {{- end }}
 
 {{- define "cryosparc.alert.receiver" }}
-{{- if .Values.alert.receiver }}
-  {{- .Values.alert.receiver }}
+{{- if .Values.global.alert.receiver }}
+  {{- .Values.global.alert.receiver }}
 {{- else if and .Values.global.env }}
   {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
     {{- if (index .Values.global.env (include "osc.common.environment" .) "alert") }}

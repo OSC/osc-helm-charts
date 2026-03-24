@@ -7,7 +7,7 @@ metadata:
 data:
   # Instance Configuration
   CRYOSPARC_DB_PATH: "/opt/cryosparc_master/database"
-  CRYOSPARC_BASE_PORT: {{ .Values.service.basePort | quote }}
+  CRYOSPARC_BASE_PORT: {{ .Values.global.basePort | quote }}
   CRYOSPARC_DB_CONNECTION_TIMEOUT_MS: "20000"
   # Security
   CRYOSPARC_INSECURE: "false"

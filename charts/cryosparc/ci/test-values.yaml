@@ -8,26 +8,20 @@ global:
   maintenanceGroups:
     - foo
     - bar
+  ingress:
+    host: cryosciapps.k8.osc.edu
+    hostAlias: cryosciapps.osc.edu
+  basePort: 31010
+  project: PAS0710
+
 license: xxx-xxx-xxx
-project: PAS0710
 admin:
   email: qwer1234@osc.edu
   password: qwer1234
 mounts:
   # Override the default as 'ct install' test uses randomized release name and we need to precreate the directory
   home: /users/PAS0710/cryosciapps
-nodeSelector:
-  kubernetes.io/os: linux
-auth:
-  clientID: test
-  clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
-  cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
-  oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
-ingress:
-  host: cryosciapps.osc.edu
 podSecurityContext:
   runAsUser: 1000
   runAsGroup: 1000
   fsGroup: 1000
-service:
-  basePort: 31010

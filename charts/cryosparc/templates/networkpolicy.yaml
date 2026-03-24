@@ -1,27 +1,3 @@
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: {{ include "cryosparc.name" . }}
-  labels:
-    {{- include "cryosparc.labels" . | nindent 4 }}
-spec:
-  podSelector:
-    matchLabels:
-      {{- include "cryosparc.selectorLabels" . | nindent 6 }}
-  ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          {{- include "cryosparc.auth.selectorLabels" . | nindent 10 }}
-    - namespaceSelector:
-        matchLabels:
-          app.kubernetes.io/name: {{ .Values.global.networkPolicy.ingressNamespace }}
-    - namespaceSelector:
-        matchLabels:
-          app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
-    ports:
-      - protocol: TCP
-        port: {{ .Values.service.basePort }}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
@@ -39,14 +15,14 @@ spec:
         cidr: 10.0.0.0/8
     - podSelector:
         matchLabels:
-          {{- include "cryosparc.auth.selectorLabels" . | nindent 10 }}
+          app.kubernetes.io/component: authentication-proxy
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
     ports:
       - protocol: TCP
-        port: {{ add .Values.service.basePort 1 }}
+        port: {{ add .Values.global.basePort 1 }}
       - protocol: TCP
-        port: {{ add .Values.service.basePort 2 }}
+        port: {{ add .Values.global.basePort 2 }}
       - protocol: TCP
-        port: {{ add .Values.service.basePort 5 }}
+        port: {{ add .Values.global.basePort 5 }}

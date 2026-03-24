@@ -13,7 +13,7 @@ spec:
   - name: http
     port: {{ .Values.service.port }}
     protocol: TCP
-    targetPort: {{ .Values.service.basePort }}
+    targetPort: {{ .Values.global.basePort }}
   selector:
     {{- include "cryosparc.selectorLabels" . | nindent 4 }}
   type: ClusterIP
@@ -34,17 +34,17 @@ spec:
   ports:
   - name: mongod
     protocol: TCP
-    port: {{ add .Values.service.basePort 1 }}
-    targetPort: {{ add .Values.service.basePort 1 }}
-    nodePort: {{ add .Values.service.basePort 1 }}
+    port: {{ add .Values.global.basePort 1 }}
+    targetPort: {{ add .Values.global.basePort 1 }}
+    nodePort: {{ add .Values.global.basePort 1 }}
   - name: cmd-server
     protocol: TCP
-    port: {{ add .Values.service.basePort 2 }}
-    targetPort: {{ add .Values.service.basePort 2 }}
-    nodePort: {{ add .Values.service.basePort 2 }}
+    port: {{ add .Values.global.basePort 2 }}
+    targetPort: {{ add .Values.global.basePort 2 }}
+    nodePort: {{ add .Values.global.basePort 2 }}
   - name: rtp-server
     protocol: TCP
-    port: {{ add .Values.service.basePort 5 }}
-    targetPort: {{ add .Values.service.basePort 5 }}
-    nodePort: {{ add .Values.service.basePort 5 }}
+    port: {{ add .Values.global.basePort 5 }}
+    targetPort: {{ add .Values.global.basePort 5 }}
+    nodePort: {{ add .Values.global.basePort 5 }}
   type: NodePort
