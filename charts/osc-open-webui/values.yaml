@@ -195,7 +195,7 @@ open-webui:
     # @ignored
     mergeAccountsByEmail: true
     # -- Enables role access controls in Open WebUI
-    enableRoleManagement: true
+    enableRoleManagement: false
     # @ignored
     enableGroupManagement: true
     # @ignored
@@ -211,7 +211,7 @@ open-webui:
     # @ignored
     roleManagement:
       rolesClaim: groups
-      allowedRoles: '{{ join "," .Values.global.allowGroups }}'
+      allowedRoles: '{{- if .Values.sso.enableRoleManagement }}{{ required "Allowed groups required when role management enabled" .Values.global.auth.allowGroups | join "," }}{{- end }}'
       adminRoles: sysstf,sappstf
     # @ignored
     trustedHeader:

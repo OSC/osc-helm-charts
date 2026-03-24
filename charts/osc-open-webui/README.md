@@ -43,10 +43,8 @@ global:
   webui_secret_key: SECRET
 
 open-webui:
-  podLabels:
-    osc.edu/service-account: testuser
-  nodeSelector:
-    node-role.kubernetes.io/webservices: ''
+  sso:
+    enableRoleManagement: true
   ollama:
     nodeSelector:
       nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
@@ -141,7 +139,6 @@ open-webui:
 | global.auth.allowGroups | Restrict access to these groups | `[]` |
 | global.alert.receiver | The alert receiver | `nil` |
 | global.webui_secret_key |  | `nil` |
-| auth.enable |  | `false` |
 | ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |
 | open-webui.image.repository | OSC registry location for Open WebUI image | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
 | open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"0.8.9-osc-r1"` |
@@ -151,7 +148,7 @@ open-webui:
 | open-webui.resources.requests.cpu | Open WebUI pod CPU request | `1` |
 | open-webui.persistence.storageClass | The Open WebUI persistent storage class | `"webservices-nfs-client"` |
 | open-webui.extraEnvVars | Additional Open WebUI environment variables | `[]` |
-| open-webui.sso.enableRoleManagement | Enables role access controls in Open WebUI | `true` |
+| open-webui.sso.enableRoleManagement | Enables role access controls in Open WebUI | `false` |
 | open-webui.ollama.nameOverride |  | `"ollama"` |
 | open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |
 | open-webui.ollama.image.tag |  | `"0.16.1"` |

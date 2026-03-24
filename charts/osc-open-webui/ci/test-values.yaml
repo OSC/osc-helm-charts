@@ -3,6 +3,10 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
+  auth:
+    allowGroups:
+      - test1
+      - test2
   ingress:
     host: webservice.k8.example.com
     hostAlias: webservice.example.com
@@ -30,6 +34,8 @@ open-webui:
       cpu: 500m
   podSecurityContext:
     runAsUser: 1000
+  sso:
+    enableRoleManagement: true
   ollama:
     ollama:
       gpu:
