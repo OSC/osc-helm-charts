@@ -9,11 +9,12 @@ maintainers:
 dependencies:
   - name: osc-common
     version: 0.10.1
-    # repository: https://osc.github.io/osc-helm-charts/
-    repository: file://../osc-common
+    repository: https://osc.github.io/osc-helm-charts/
+    # repository: file://../osc-common
   - name: open-webui
     # version: 12.3.0
     # repository: https://helm.openwebui.com/
-    # TODO: Use local version to test out changes
+    # TODO: Use local version until merged and released
+    # https://github.com/open-webui/helm-charts/pull/368
     version: 12.10.0-osc-r1
     repository: oci://docker-registry.osc.edu/kubernetes/open-webui
