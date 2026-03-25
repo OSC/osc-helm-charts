@@ -12,8 +12,10 @@ global:
     allowGroups:
       - group1
       - group2
+      - '{{ .Values.global.project }}'
   ingress:
     host: test.example.com
+  project: test1
 keycloakClient:
   config:
     publicClient: true

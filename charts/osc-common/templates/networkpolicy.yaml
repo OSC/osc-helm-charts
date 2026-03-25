@@ -57,6 +57,6 @@ spec:
     {{- range .Values.global.networkPolicy.ports }}
     ports:
       - protocol: TCP
-        port: {{ tpl . $ }}
+        port: {{ tpl (toString .) $ }}
     {{- end }}
 {{- end }}
