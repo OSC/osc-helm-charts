@@ -25,9 +25,15 @@ jobs:
         run: |
           echo -n '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}' --password-stdin
       - name: Publish Helm charts
-        uses: stefanprodan/helm-gh-pages@master
+        # TODO: Move this logic into this file maybe using
+        # https://github.com/helm/chart-releaser-action/issues/168#issuecomment-2015204236
+        uses: treydock/helm-gh-pages@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          login_registry: 'on'
+          registry_host: docker-registry.osc.edu
+          registry_username: '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}'
+          registry_password: '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}'
       - name: Publish private Helm charts
         run: |
           for chart in $(find charts-private -maxdepth 1 -mindepth 1 -type d); do
