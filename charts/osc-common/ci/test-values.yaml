@@ -8,7 +8,7 @@ global:
       - require: foo
       - app.kubernetes.io/name: '{{ include "osc.common.name" . }}'
     ports:
-      - 8080
+      - '{{ .Values.service.port }}'
   debugGroups:
     - testdebug
     - testdebug2
@@ -18,3 +18,5 @@ global:
   portforwardGroups:
     - portforward
     - portforward2
+service:
+  port: 8080
