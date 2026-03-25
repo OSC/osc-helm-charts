@@ -65,6 +65,8 @@ global:
     # -- Common groups to allow
     commonAllowGroups:
       - sysstf
+    # -- Path used for redirect URI
+    redirectUriPath: '/*'
     # -- Default client scopes for the Keycloak client
     defaultClientScopes:
       - web-origins
@@ -94,6 +96,8 @@ global:
     host: ""
     # -- Ingress host alias
     hostAlias: ""
+    # -- Ingress additional hosts
+    additionalHosts: []
 
 oauth2-proxy:
   image:

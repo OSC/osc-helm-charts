@@ -75,6 +75,7 @@ global:
 | global.auth.skipAuthRoutes | Routes to skip auth | `[]` |
 | global.auth.allowGroups | Restrict access to these groups | `[]` |
 | global.auth.commonAllowGroups | Common groups to allow | `["sysstf"]` |
+| global.auth.redirectUriPath | Path used for redirect URI | `"/*"` |
 | global.auth.defaultClientScopes | Default client scopes for the Keycloak client | `["web-origins","roles","profile","groups","osc-oidc-clients","basic","email"]` |
 | global.auth.extraDefaultClientScropes | Extra default client scopes for the Keycloak client | `[]` |
 | global.auth.keycloakClient.forceCreate | Force creating KeycloakClient when Oauth2 Proxy management is disabled | `false` |
@@ -83,6 +84,7 @@ global:
 | global.auth.keycloakClient.config | Additional Keycloak Client configs | `{}` |
 | global.ingress.host | Ingress host value | `""` |
 | global.ingress.hostAlias | Ingress host alias | `""` |
+| global.ingress.additionalHosts | Ingress additional hosts | `[]` |
 | oauth2-proxy.image.registry | The OSC registry | The OSC registry hostname |
 | oauth2-proxy.image.repository | Path to oauth2-proxy on the OSC registry | `"kubernetes/oauth2-proxy"` |
 | oauth2-proxy.image.tag | oauth2-proxy image tag.  **must be replicated to the OSC registry** | `"v7.15.0"` |
