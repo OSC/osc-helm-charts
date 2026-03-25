@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.10.2](https://img.shields.io/badge/Version-0.10.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -14,7 +14,7 @@ OSC common Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://oauth2-proxy.github.io/manifests | oauth2-proxy | 10.3.0 |
+| oci://docker-registry.osc.edu/kubernetes | oauth2-proxy | 10.4.0-osc-r1 |
 
 ## Usage
 
@@ -28,6 +28,19 @@ global:
   auth:
     enable: true
     upstream: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80
+  ingress:
+    host: test.example.com
+```
+
+For a service that does built-in OAuth you can disable OAuth2 Proxy but keep the necessary KeycloakClient configuration
+
+```yaml
+global:
+  oscServiceAccount: username
+  auth:
+    enable: false
+    keycloakClient:
+      forceCreate: true
   ingress:
     host: test.example.com
 ```
@@ -85,6 +98,7 @@ global:
 | global.ingress.host | Ingress host value | `""` |
 | global.ingress.hostAlias | Ingress host alias | `""` |
 | global.ingress.additionalHosts | Ingress additional hosts | `[]` |
+| global.alert.receiver | The alert receiver name | `""` |
 | oauth2-proxy.image.registry | The OSC registry | The OSC registry hostname |
 | oauth2-proxy.image.repository | Path to oauth2-proxy on the OSC registry | `"kubernetes/oauth2-proxy"` |
 | oauth2-proxy.image.tag | oauth2-proxy image tag.  **must be replicated to the OSC registry** | `"v7.15.0"` |
@@ -92,3 +106,4 @@ global:
 | oauth2-proxy.resources.limits.memory | Memory limit for OAuth2 Proxy pods | `"128Mi"` |
 | oauth2-proxy.resources.requests.cpu | CPU request for OAuth2 Proxy pods | `"100m"` |
 | oauth2-proxy.resources.requests.memory | Memory request for OAuth2 Proxy pods | `"64Mi"` |
+| oauth2-proxy.ingress.enabled | Enable OAuth2 Proxy Ingress | `true` |

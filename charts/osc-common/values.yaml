@@ -98,6 +98,9 @@ global:
     hostAlias: ""
     # -- Ingress additional hosts
     additionalHosts: []
+  alert:
+    # -- The alert receiver name
+    receiver: ""
 
 oauth2-proxy:
   image:
@@ -123,7 +126,8 @@ oauth2-proxy:
       allowed_groups = {{ concat $allowGroups .Values.global.auth.commonAllowGroups | toToml }}
   # @ignored
   customLabels:
-    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ tpl (include "osc.common.serviceAccountValue" .) . }}'
+    receiver: '{{ .Values.global.alert.receiver }}'
   # @ignored
   envFrom:
     - configMapRef:
@@ -180,3 +184,36 @@ oauth2-proxy:
         - namespaceSelector:
             matchLabels:
               app.kubernetes.io/name: '{{ .Values.global.networkPolicy.prometheusNamespace }}'
+  ingress:
+    # -- Enable OAuth2 Proxy Ingress
+    enabled: true
+    # @ignored
+    className: nginx
+    # @ignored
+    pathType: Prefix
+    # @ignored
+    path: /oauth2
+    # @ignored
+    annotations:
+      prometheus.io/probe_path: /ping
+      prometheus.io/probe_scheme: 'https'
+      cert-manager.io/cluster-issuer: letsencrypt
+      nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.hostAlias }}'
+    # @ignored
+    extraPaths:
+      - path: /ping
+        pathType: Prefix
+        backend:
+          service:
+            name: '{{ include "oauth2-proxy.fullname" . }}'
+            port:
+              name: '{{ .Values.httpScheme }}'
+    # @ignored
+    hosts:
+      - '{{ .Values.global.ingress.host }}'
+    # @ignored
+    tls:
+      - secretName: '{{ .Release.Name }}-cert'
+        hosts:
+          - '{{ .Values.global.ingress.host }}'
+          - '{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}'
