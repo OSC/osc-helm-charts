@@ -40,6 +40,8 @@ global:
     ingressNamespace: ingress-nginx
     # -- Name of the Prometheus namespace
     prometheusNamespace: prometheus
+    # -- Ports that should be used for the network policy
+    ports: []
   # -- Groups that debug pods
   debugGroups: []
   # -- Groups that can perform maintenance operations
