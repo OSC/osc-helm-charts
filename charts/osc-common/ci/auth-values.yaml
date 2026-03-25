@@ -5,3 +5,6 @@ global:
   auth:
     enable: true
     upstream: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80
+oauth2-proxy:
+  ingress:
+    enabled: false

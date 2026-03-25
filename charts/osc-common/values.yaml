@@ -216,4 +216,4 @@ oauth2-proxy:
       - secretName: '{{ .Release.Name }}-cert'
         hosts:
           - '{{ .Values.global.ingress.host }}'
-          - '{{ .Values.global.ingress.hostAlias }}'
+          - '{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}'
