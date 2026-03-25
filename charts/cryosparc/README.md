@@ -35,12 +35,11 @@ global:
     host: cryosciapps.k8.osc.edu
     hostAlias: cryosciapps.osc.edu
   basePort: 31010
+  project: PAS0710
 
 license: xxx-xxx-xxx
-project: PAS0710
 admin:
   email: qwer1234@osc.edu
-  username: qwer1234
   password: qwer1234
 ```
 
@@ -58,25 +57,24 @@ admin:
 | global.imagePullSecret.password | imagePullSecret password. This value will be set by OSC's Puppet. This value must be set to IMAGE-PULL-PASSWORD for CI tests. | `nil` |
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
-| global.auth.commonAllowGroups | Base groups allowed to login | `["sappstf","sysstf","{{ .Values.project }}"]` |
+| global.auth.commonAllowGroups | Base groups allowed to login | `["sappstf","sysstf","{{ .Values.global.project }}"]` |
 | global.auth.allowGroups | Additional groups allowed to login | `[]` |
 | global.ingress.host | Ingress host. | **required** |
 | global.ingress.hostAlias | Ingress host alias. | **required** |
 | global.alert.receiver |  | `"sciapps"` |
 | global.basePort | The base service port. Must be unique for each CryoSPARC instance | **required** |
+| global.project | The service project | **required** |
 | license | The CryoSPARC license ID | `""` |
-| project | The service project | `""` |
-| homeDir |  | `"{{ .Values.project }}"` |
+| homeDir |  | `"{{ .Values.global.project }}"` |
 | slurmConf | Slurm configuration of the cluster used for service | `"/etc/slurm/slurm-ascend.conf"` |
 | image.repository | The CryoSPARC image URL | `"docker-registry.osc.edu/webservices/cryosparc"` |
 | image.tag | The CryoSPARC image tag | `""` |
 | image.pullPolicy |  | `"IfNotPresent"` |
 | mounts.home |  | `"/users/{{ tpl .Values.homeDir . }}/{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}"` |
-| mounts.project |  | `"/fs/ess/{{ required \"Project must be provided\" .Values.project }}"` |
+| mounts.project |  | `"/fs/ess/{{ required \"Project must be provided\" .Values.global.project }}"` |
 | admin.email |  | `""` |
 | admin.password |  | `""` |
 | nodeSelector |  | `{}` |
-| service.port |  | `80` |
 | ingress.className |  | `"nginx"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"16k"` |
 | ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" |  | `"true"` |

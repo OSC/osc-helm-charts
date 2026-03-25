@@ -37,7 +37,7 @@ global:
     # @ignored
     enable: true
     # @ignored
-    upstream: http://{{ include "cryosparc.name" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+    upstream: http://{{ include "cryosparc.name" . }}.{{ .Release.Namespace }}.svc.cluster.local:80
     # -- Base groups allowed to login
     commonAllowGroups:
       - sappstf
@@ -123,6 +123,8 @@ nodeSelector: {}
 podSecurityContext:
   runAsNonRoot: true
 
+# The following should not be changed
+# @ignored
 service:
   port: 80
 
