@@ -29,6 +29,19 @@ global:
     host: test.example.com
 ```
 
+For a service that does built-in OAuth you can disable OAuth2 Proxy but keep the necessary KeycloakClient configuration
+
+```yaml
+global:
+  oscServiceAccount: username
+  auth:
+    enable: false
+    keycloakClient:
+      forceCreate: true
+  ingress:
+    host: test.example.com
+```
+
 ## Helpers
 
 | Key | Description| Source |
