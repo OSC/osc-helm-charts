@@ -122,10 +122,13 @@ oauth2-proxy:
       skip_auth_routes = {{ .Values.global.auth.skipAuthRoutes | toToml }}
       {{- end }}
       {{- $allowGroups := list }}
-      {{- if ((((.Values).global).auth).allowGroups) }}
-      {{- $allowGroups = .Values.global.auth.allowGroups }}
+      {{- range ((((.Values).global).auth).allowGroups) }}
+      {{- $allowGroups = append $allowGroups (tpl . $) }}
       {{- end }}
-      allowed_groups = {{ concat $allowGroups .Values.global.auth.commonAllowGroups | toToml }}
+      {{- range .Values.global.auth.commonAllowGroups }}
+      {{- $allowGroups = append $allowGroups (tpl . $) }}
+      {{- end }}
+      allowed_groups = {{ $allowGroups | toToml }}
   # @ignored
   customLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ tpl (include "osc.common.serviceAccountValue" .) . }}'
