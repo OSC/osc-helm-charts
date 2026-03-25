@@ -8,9 +8,12 @@ metadata:
 spec:
   {{- if or (default "" ((((.Values).global).ingress).host)) (default "" ((((.Values).global).ingress).hostAlias)) }}
   redirectUris:
-    - https://{{ tpl .Values.global.ingress.host . }}/*
+    - https://{{ tpl .Values.global.ingress.host . }}{{ .Values.global.auth.redirectUriPath }}
   {{- if .Values.global.ingress.hostAlias }}
-    - https://{{ tpl .Values.global.ingress.hostAlias . }}/*
+    - https://{{ tpl .Values.global.ingress.hostAlias . }}{{ .Values.global.auth.redirectUriPath }}
+  {{- end }}
+  {{- with .Values.global.ingress.additionalHosts }}
+    - https://{{ . }}{{ .Values.global.auth.redirectUriPath }}
   {{- end }}
   {{- end }}
   defaultClientScopes:

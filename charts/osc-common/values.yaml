@@ -62,6 +62,11 @@ global:
     skipAuthRoutes: []
     # -- Restrict access to these groups
     allowGroups: []
+    # -- Common groups to allow
+    commonAllowGroups:
+      - sysstf
+    # -- Path used for redirect URI
+    redirectUriPath: '/*'
     # -- Default client scopes for the Keycloak client
     defaultClientScopes:
       - web-origins
@@ -91,6 +96,8 @@ global:
     host: ""
     # -- Ingress host alias
     hostAlias: ""
+    # -- Ingress additional hosts
+    additionalHosts: []
 
 oauth2-proxy:
   image:
@@ -109,9 +116,11 @@ oauth2-proxy:
       {{- if ((((.Values).global).auth).skipAuthRoutes) }}
       skip_auth_routes = {{ .Values.global.auth.skipAuthRoutes | toToml }}
       {{- end }}
+      {{- $allowGroups := list }}
       {{- if ((((.Values).global).auth).allowGroups) }}
-      allowed_groups = {{ .Values.global.auth.allowGroups | toToml }}
+      {{- $allowGroups = .Values.global.auth.allowGroups }}
       {{- end }}
+      allowed_groups = {{ concat $allowGroups .Values.global.auth.commonAllowGroups | toToml }}
   # @ignored
   customLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
