@@ -54,4 +54,9 @@ spec:
           app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
         {{- end }}
     {{- end }}
+    {{- range .Values.global.networkPolicy.ports }}
+    ports:
+      - protocol: TCP
+        port: {{ . }}
+    {{- end }}
 {{- end }}

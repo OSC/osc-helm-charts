@@ -7,6 +7,8 @@ global:
     ingressAllowedPods:
       - require: foo
       - app.kubernetes.io/name: '{{ include "osc.common.name" . }}'
+    ports:
+      - 8080
   debugGroups:
     - testdebug
     - testdebug2

@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.12.0](https://img.shields.io/badge/Version-0.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -77,6 +77,7 @@ global:
 | global.networkPolicy.ingressAllowedPods | Labels of pods allowed to Ingress from the same namespace | `[]` |
 | global.networkPolicy.ingressNamespace | Name of the Ingress namespace | `"ingress-nginx"` |
 | global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
+| global.networkPolicy.ports | Ports that should be used for the network policy | `[]` |
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
 | global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
