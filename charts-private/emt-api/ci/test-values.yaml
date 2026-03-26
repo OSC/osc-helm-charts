@@ -12,11 +12,8 @@ global:
         requests:
           cpu: 128m
           memory: 265Mi
+  ingress:
+    host: test.local
 webservice:
   mounts:
     rwDir: null
-  auth:
-    oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
-    cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
-  ingress:
-    host: test.local
