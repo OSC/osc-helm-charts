@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.12.2](https://img.shields.io/badge/Version-0.12.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.13.0](https://img.shields.io/badge/Version-0.13.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -108,3 +108,4 @@ global:
 | oauth2-proxy.resources.requests.cpu | CPU request for OAuth2 Proxy pods | `"100m"` |
 | oauth2-proxy.resources.requests.memory | Memory request for OAuth2 Proxy pods | `"64Mi"` |
 | oauth2-proxy.ingress.enabled | Enable OAuth2 Proxy Ingress | `true` |
+| oauth2-proxy.ingress.extraPaths | Additional Ingress paths | `[]` |
