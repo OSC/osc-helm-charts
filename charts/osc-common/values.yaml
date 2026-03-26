@@ -169,7 +169,9 @@ oauth2-proxy:
       cpu: 100m
       # -- Memory request for OAuth2 Proxy pods
       memory: 64Mi
-
+  # @ignored
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   # @ignored
   service:
     annotations:

@@ -14,7 +14,7 @@ OSC common Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://docker-registry.osc.edu/kubernetes | oauth2-proxy | 10.4.0-osc-r1 |
+| oci://docker-registry.osc.edu/kubernetes | oauth2-proxy | 10.5.0-osc-r1 |
 
 ## Usage
 
