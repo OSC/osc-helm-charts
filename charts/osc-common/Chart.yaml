@@ -2,7 +2,7 @@ apiVersion: v2
 name: osc-common
 description: OSC common Helm Chart
 type: application
-version: 0.12.2
+version: 0.13.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
@@ -13,5 +13,5 @@ dependencies:
     # Use local copy until merged and released:
     # https://github.com/oauth2-proxy/manifests/pull/400
     repository: oci://docker-registry.osc.edu/kubernetes
-    version: 10.4.0-osc-r1
+    version: 10.5.0-osc-r1
     condition: global.auth.enable

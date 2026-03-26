@@ -169,7 +169,9 @@ oauth2-proxy:
       cpu: 100m
       # -- Memory request for OAuth2 Proxy pods
       memory: 64Mi
-
+  # @ignored
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   # @ignored
   service:
     annotations:
@@ -197,7 +199,7 @@ oauth2-proxy:
     # @ignored
     pathType: Prefix
     # @ignored
-    path: /oauth2
+    path: /
     # @ignored
     annotations:
       prometheus.io/probe_path: /ping
@@ -206,15 +208,8 @@ oauth2-proxy:
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
       nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.hostAlias }}'
-    # @ignored
-    extraPaths:
-      - path: /ping
-        pathType: Prefix
-        backend:
-          service:
-            name: '{{ include "oauth2-proxy.fullname" . }}'
-            port:
-              name: '{{ .Values.httpScheme }}'
+    # -- Additional Ingress paths
+    extraPaths: []
     # @ignored
     hosts:
       - '{{ .Values.global.ingress.host }}'
