@@ -22,13 +22,18 @@ global:
         requests:
           cpu: 100m
           memory: 128Mi
-      maintenance:
-        groups:
-          - wiagstf
-webservice:
-  appType: none
   auth:
     enable: false
+  service:
+    port: 8080
+  maintenanceGroups:
+    - wiagstf
+  debugGroups:
+    - wiagstf
+  alert:
+    receiver: gateways
+webservice:
+  appType: none
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/chatsqc
@@ -44,9 +49,3 @@ webservice:
   readinessProbe:
     httpGet:
       path: /healthz
-  service:
-    port: 8080
-  alert:
-    receiver: gateways
-  debugGroups:
-    - wiagstf
