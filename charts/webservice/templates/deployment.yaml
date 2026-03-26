@@ -65,7 +65,7 @@ spec:
         {{- if or $root.Values.env $root.Values.database.enable $root.Values.database.mariadb.enable $root.Values.envSecrets }}
         env:
         - name: PASSENGER_PORT
-          value: {{ $container.port | default (add $root.Values.service.port $idx) | quote }}
+          value: {{ $container.port | default (add $root.Values.global.service.port $idx) | quote }}
         {{- if and $root.Values.database.enable $root.Values.database.password }}
         - name: DATABASE_PASSWORD
           valueFrom:
@@ -90,7 +90,7 @@ spec:
         {{- end }}
         {{- end }}
         ports:
-        - containerPort: {{ $container.port | default (add $root.Values.service.port $idx) }}
+        - containerPort: {{ $container.port | default (add $root.Values.global.service.port $idx) }}
           name: {{ $container.portName | default (tpl $container.name $root)  }}
         {{- if or $root.Values.data.enable $root.Values.mounts.emptyDir $root.Values.mounts.data $root.Values.mounts.home $root.Values.mounts.roDir $root.Values.mounts.rwDir $root.Values.mounts.socket $root.Values.mounts.roFile }}
         volumeMounts:
