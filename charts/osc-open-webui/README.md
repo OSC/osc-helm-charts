@@ -141,7 +141,7 @@ open-webui:
 | global.webui_secret_key |  | `nil` |
 | ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |
 | open-webui.image.repository | OSC registry location for Open WebUI image | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
-| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"0.8.9-osc-r1"` |
+| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"0.8.11"` |
 | open-webui.resources.limits.memory | Open WebUI pod memory limit | `"4Gi"` |
 | open-webui.resources.limits.cpu | Open WebUI pod CPU limit | `2` |
 | open-webui.resources.requests.memory | Open WebUI pod memory request | `"2Gi"` |
