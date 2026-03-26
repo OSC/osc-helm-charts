@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r2](https://img.shields.io/badge/AppVersion-4.7.1--r2-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r2](https://img.shields.io/badge/AppVersion-4.7.1--r2-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -14,7 +14,7 @@ OSC CryoSPARC bootstrap Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.12.2 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.13.0 |
 
 ## Usage
 
@@ -75,6 +75,3 @@ admin:
 | admin.email |  | `""` |
 | admin.password |  | `""` |
 | nodeSelector |  | `{}` |
-| ingress.className |  | `"nginx"` |
-| ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"16k"` |
-| ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" |  | `"true"` |
