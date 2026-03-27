@@ -2,7 +2,7 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "osc-open-webui.name" . }}-{{ index .Values "open-webui" "nameOverride" }}
+  name: {{ include "osc-open-webui.name" . }}
   labels:
     {{- include "osc-open-webui.labels" . | nindent 4 }}
 spec:
@@ -11,34 +11,38 @@ spec:
       app.kubernetes.io/name: {{ index .Values "open-webui" "nameOverride" }}
   ingress:
   - from:
-    - podSelector:
-        matchLabels:
-          app.kubernetes.io/name: {{ include "osc-open-webui.auth.name" . }}
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.ingressName }}
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.ingressNamespace }}
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.prometheusName }}
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
+{{- if (index .Values "open-webui" "ollama" "enabled") }}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "osc-open-webui.name" . }}-{{ index .Values "open-webui" "ollama" "fullnameOverride" }}
+  name: {{ include "osc-open-webui.name" . }}-{{ index .Values "open-webui" "ollama" "nameOverride" }}
   labels:
     {{- include "osc-open-webui.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: {{ index .Values "open-webui" "ollama" "fullnameOverride" }}
+      app.kubernetes.io/name: {{ index .Values "open-webui" "ollama" "nameOverride" }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
           app.kubernetes.io/name: {{ index .Values "open-webui" "nameOverride" }}
+    {{- range .Values.ollama.networkPolicy.allowedPodLabels }}
+    - podSelector:
+        matchLabels:
+          {{- tpl (toYaml .) $ | nindent 10 }}
+    {{- end }}
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.ingressName }}
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.ingressNamespace }}
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.prometheusName }}
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
+{{- end }}
