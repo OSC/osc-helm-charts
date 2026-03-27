@@ -12,9 +12,9 @@ global:
         requests:
           cpu: 100m
           memory: 128Mi
-webservice:
   ingress:
     host: test.local
+webservice:
   mounts:
     rwDir: null
     roDir: null

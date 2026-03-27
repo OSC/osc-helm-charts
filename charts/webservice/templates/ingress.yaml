@@ -1,3 +1,4 @@
+{{- if not .Values.global.auth.enable }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -13,11 +14,6 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt
     {{- with .Values.ingress.annotations }}
       {{- toYaml . | nindent 4 }}
-    {{- end }}
-    {{- if .Values.auth.enable }}
-    {{- with .Values.auth.ingress.annotations }}
-      {{- toYaml . | nindent 4 }}
-    {{- end }}
     {{- end }}
     {{- if (include "webservice.ingressHostAlias" .) }}
     nginx.ingress.kubernetes.io/server-alias: {{ tpl (include "webservice.ingressHostAlias" .) . }}
@@ -44,13 +40,8 @@ spec:
         pathType: Prefix
         backend:
           service:
-          {{- if and (ne $container.auth false) (eq $root.Values.auth.enable true) }}
-            name: {{ include "webservice.auth.name" $root }}
-            port:
-              number: {{ $root.Values.auth.service.port }}
-          {{- else }}
             name: {{ include "webservice.name" $root }}
             port:
-              number: {{ $container.port | default (add $root.Values.service.port $idx) }}
-          {{- end }}
+              number: {{ $container.port | default (add $root.Values.global.service.port $idx) }}
       {{- end }}
+{{- end }}

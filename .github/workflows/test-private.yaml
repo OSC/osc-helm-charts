@@ -111,6 +111,14 @@ jobs:
           sleep 120
       - name: Add namespaces
         run: kubectl apply -f .github/config/namespaces.yaml
+      # TODO: Remove after webservice chart is published
+      - name: Get dependencies
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}' --password-stdin
+          helm repo add oauth2-proxy https://oauth2-proxy.github.io/manifests
+          helm repo add osc https://osc.github.io/osc-helm-charts/
+          helm dependency update charts/osc-common
+          helm dependency update charts/webservice
       - name: Run chart-testing (install)
         run: |
           ct install --config .github/config/cf.yaml --charts charts-private/${{ matrix.chart }} --namespace ${{ matrix.chart }}
@@ -125,4 +133,8 @@ jobs:
             kubectl describe job -A
             kubectl logs job.batch/$(kubectl get jobs -n nominatim -o jsonpath="{.items[0].metadata.name}") -n nominatim
           fi
-          kubectl logs -n kyverno -l app.kubernetes.io/component=admission-controller
+      - name: Get logs
+        if: failure()
+        run: |
+          set +e
+          kubectl logs -n kyverno -l app.kubernetes.io/component=admission-controller --tail=500

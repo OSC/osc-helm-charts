@@ -6,9 +6,9 @@ global:
   storageClass: standard
   # Local test
   # dbPath: /data/phylogatr.sqlite3
-webservice:
   ingress:
     host: test.local
+webservice:
   mounts:
     home: false
     roDir:
@@ -36,9 +36,6 @@ webservice:
 #    runAsUser: 33253
 #    runAsGroup: 6314
 #    fsGroup: 6314
-  auth:
-    oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
-    cookieSecret: KMdIWJeLDNssdLoaXxiLBw==
   data:
     size: 10Mi
     # Local test

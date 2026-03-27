@@ -33,14 +33,19 @@ global:
         requests:
           cpu: 1
           memory: 256Mi
-      maintenance:
-        groups:
-          - wiagstf
+  auth:
+    enable: false
+  service:
+    port: 8080
+  maintenanceGroups:
+    - wiagstf
+  debugGroups:
+    - wiagstf
+  alert:
+    receiver: gateways
 webservice:
   appType: none
   replicas: 1
-  auth:
-    enable: false
   image:
     repository: docker-registry.osc.edu/webservices/webmo-oberlin
   env:
@@ -64,12 +69,6 @@ webservice:
   readinessProbe:
     httpGet:
       path: /cgi-bin/login.cgi
-  service:
-    port: 8080
   ingress:
     annotations:
       nginx.ingress.kubernetes.io/app-root: /cgi-bin/login.cgi
-  alert:
-    receiver: gateways
-  debugGroups:
-    - wiagstf
