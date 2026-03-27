@@ -204,3 +204,7 @@ database:
         primaryAccessOnlyFrom:
           podSelector:
             app.kubernetes.io/name: '{{ include "webservice.name" . }}'
+hook:
+  image:
+    repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
+    tag: '2.39.0'
