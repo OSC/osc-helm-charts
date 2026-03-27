@@ -1,8 +1,13 @@
 global:
   imagePullSecret:
+    # @ignored
     name: osc-registry
+    # -- OSC container registry
     registry: docker-registry.osc.edu
+    # -- OSC container registry robot account
     username: robot$webservices-read
+    # -- Password for the robot account.
+    # @default -- **required**
     password:
   nodeSelectorRole: webservices
   storageClass: webservices-nfs-client
@@ -19,9 +24,9 @@ global:
     commonAllowGroups:
       - sysstf
   ingress:
-    # Also pulled from global.env.$environment.ingress.host
+    # -- Ingress host
     host: ""
-    # Also pulled from global.env.$environment.ingress.hostAlias
+    # -- Ingress host alias
     hostAlias: ""
   # -- Groups that debug pods
   debugGroups: []
@@ -31,6 +36,7 @@ global:
     # -- The alert receiver name. Also pulled from global.env.$environment.alert.receiver
     receiver: ""
   service:
+    # -- Service port
     port: 3000
 
 appType: rails
@@ -204,6 +210,7 @@ database:
         primaryAccessOnlyFrom:
           podSelector:
             app.kubernetes.io/name: '{{ include "webservice.name" . }}'
+# @ignored
 hook:
   image:
     repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
