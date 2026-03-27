@@ -181,13 +181,6 @@ data:
   storageSize: 10Gi
   path: /data
 
-# @ignored
-osc-common:
-  oauth2-proxy:
-    ingress:
-      path: /
-      extraPaths: []
-
 database:
   enable: false
   imagePullSecret:
