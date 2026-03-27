@@ -67,7 +67,9 @@ admin:
 | license | The CryoSPARC license ID | `""` |
 | homeDir |  | `"{{ .Values.global.project }}"` |
 | slurmConf | Slurm configuration of the cluster used for service | `"/etc/slurm/slurm-ascend.conf"` |
-| worker_bin_path | The CryoSPARC worker binary path for each lane | `{"ascend":"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw","cardinal":"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw","pitzer":"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"}` |
+| worker_bin_path.ascend | The CryoSPARC worker binary path for Ascend cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
+| worker_bin_path.cardinal | The CryoSPARC worker binary path for Cardinal cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
+| worker_bin_path.pitzer | The CryoSPARC worker binary path for Pitzer cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
 | storage.projectStorageClass |  | `"local-ess"` |
 | image.repository | The CryoSPARC image URL | `"docker-registry.osc.edu/webservices/cryosparc"` |
 | image.tag | The CryoSPARC image tag | `""` |

@@ -13,6 +13,8 @@ global:
     hostAlias: cryosciapps.osc.edu
   basePort: 31010
   project: PAS0710
+storage:
+  projectStorageClass: local-path
 
 license: xxx-xxx-xxx
 admin:

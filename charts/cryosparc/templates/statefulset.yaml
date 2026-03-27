@@ -33,6 +33,30 @@ spec:
         hostnames:
         {{- $nodes | toYaml | nindent 8 }}
       {{- end }}
+      initContainers:
+      - name: {{ include "cryosparc.name" . }}-init
+        image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
+        command: ["sh", "-c"]
+        args:
+        - |
+          # Create the required subpaths
+          mkdir -p /cryosparc_data/lanes;
+          mkdir -p /cryosparc_data/database;
+          mkdir -p /cryosparc_data/run;
+        volumeMounts:
+        - name: {{ include "cryosparc.name" . }}-data
+          mountPath: /cryosparc_data
+        - name: sssd-pipes
+          mountPath: /var/lib/sss/pipes
+        - name: sssd-conf
+          mountPath: /etc/sssd
+        resources:
+          limits:
+            cpu: 1
+            memory: 256Mi
+          requests:
+            cpu: 1
+            memory: 256Mi
       containers:
       - name: {{ include "cryosparc.name" . }}
         image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
@@ -93,15 +117,18 @@ spec:
               name: {{ include "cryosparc.name" . }}
               key: password
         volumeMounts:
-        - name: {{ include "cryosparc.name" . }}-database
-          mountPath: /opt/cryosparc_master/database
-        - name: {{ include "cryosparc.name" . }}-lanes
-          mountPath: /opt/cryosparc_master/lanes
-        - name: {{ include "cryosparc.name" . }}-run
-          mountPath: /opt/cryosparc_master/run
         - name: project
           mountPath: {{ tpl .Values.mounts.project . }}
           readOnly: false
+        - name: {{ include "cryosparc.name" . }}-data
+          mountPath: /opt/cryosparc_master/database
+          subPath: database
+        - name: {{ include "cryosparc.name" . }}-data
+          mountPath: /opt/cryosparc_master/lanes
+          subPath: lanes
+        - name: {{ include "cryosparc.name" . }}-data
+          mountPath: /opt/cryosparc_master/run
+          subPath: run
         - name: munge-socket
           mountPath: /var/run/munge/munge.socket.2
         - name: slurm-conf
@@ -110,6 +137,12 @@ spec:
           mountPath: /var/lib/sss/pipes
         - name: sssd-conf
           mountPath: /etc/sssd
+        - name: ascend-cluster-conf
+          mountPath: /opt/cryosparc_master/lanes/ascend
+        - name: pitzer-cluster-conf
+          mountPath: /opt/cryosparc_master/lanes/pitzer
+        - name: cardinal-cluster-conf
+          mountPath: /opt/cryosparc_master/lanes/cardinal
         resources: {{ toYaml (index .Values.global.env (include "osc.common.environment" .) "podResources") | nindent 10 }}
         ports:
           - containerPort: {{ .Values.global.basePort }}
@@ -179,7 +212,7 @@ spec:
     whenScaled: Retain
   volumeClaimTemplates:
   - metadata:
-      name: {{ include "cryosparc.name" . }}-database
+      name: {{ include "cryosparc.name" . }}-data
       annotations:
         {{ tpl (include "osc.common.serviceAccount" .) . }}
         osc.edu/fileset: '{{ .Values.global.project }}'
@@ -187,21 +220,6 @@ spec:
       storageClassName: {{ .Values.storage.projectStorageClass }}
       accessModes:
       - ReadWriteMany
-  - metadata:
-      name: {{ include "cryosparc.name" . }}-run
-      annotations:
-        {{ tpl (include "osc.common.serviceAccount" .) . }}
-        osc.edu/fileset: '{{ .Values.global.project }}'
-    spec:
-      storageClassName: {{ .Values.storage.projectStorageClass }}
-      accessModes:
-      - ReadWriteMany
-  - metadata:
-      name: {{ include "cryosparc.name" . }}-lanes
-      annotations:
-        {{ tpl (include "osc.common.serviceAccount" .) . }}
-        osc.edu/fileset: '{{ .Values.global.project }}'
-    spec:
-      storageClassName: {{ .Values.storage.projectStorageClass }}
-      accessModes:
-      - ReadWriteMany
+      resources:
+        requests:
+          storage: 500Gi
