@@ -6,13 +6,6 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
-Auth resource name
-*/}}
-{{- define "webservice.auth.name" -}}
-{{- printf "%s-auth" (include "webservice.name" .) }}
-{{- end }}
-
-{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -50,35 +43,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Auth labels
-*/}}
-{{- define "webservice.auth.labels" -}}
-helm.sh/chart: {{ include "webservice.chart" . }}
-{{ include "webservice.auth.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
 Selector labels
 */}}
 {{- define "webservice.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "webservice.name" . }}
-{{- end }}
-
-{{/*
-Auth Selector labels
-*/}}
-{{- define "webservice.auth.selectorLabels" -}}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
-{{- end }}
-
-{{- define "webservice.auth.secretName" }}
-{{- printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
 {{- define "webservice.imageTag" }}
@@ -99,39 +68,9 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 {{- end }}
 
-{{- define "webservice.auth.replicas" }}
-{{- if .Values.auth.replicas }}
-{{- .Values.auth.replicas }}
-{{- else if .Values.global.env }}
-  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
-    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "replicas" }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
-{{- define "webservice.idpHost" }}
-{{- if .Values.auth.idpHost }}
-{{- .Values.auth.idpHost }}
-{{- else if .Values.global.env }}
-  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
-    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "idpHost" }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
-{{- define "webservice.accessGroup" }}
-{{- if .Values.auth.accessGroup }}
-{{- .Values.auth.accessGroup }}
-{{- else if .Values.global.env }}
-  {{- if (index .Values.global.env (include "osc.common.environment" .) "auth") }}
-    {{- index .Values.global.env (include "osc.common.environment" .) "auth" "accessGroup" }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
 {{- define "webservice.ingressHost" }}
-{{- if .Values.ingress.host }}
-{{- .Values.ingress.host }}
+{{- if .Values.global.ingress.host }}
+{{- .Values.global.ingress.host }}
 {{- else if and .Values.global.env }}
   {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
     {{- if (index .Values.global.env (include "osc.common.environment" .) "ingress") }}
@@ -142,8 +81,8 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
 {{- define "webservice.ingressHostAlias" }}
-{{- if .Values.ingress.hostAlias }}
-{{- .Values.ingress.hostAlias }}
+{{- if .Values.global.ingress.hostAlias }}
+{{- .Values.global.ingress.hostAlias }}
 {{- else if and .Values.global.env }}
   {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
     {{- if (index .Values.global.env (include "osc.common.environment" .) "ingress") }}
@@ -158,8 +97,8 @@ app.kubernetes.io/name: {{ printf "%s-auth" (include "webservice.name" .) }}
 {{- end }}
 
 {{- define "webservice.alert.receiver" }}
-{{- if .Values.alert.receiver }}
-  {{- .Values.alert.receiver }}
+{{- if .Values.global.alert.receiver }}
+  {{- .Values.global.alert.receiver }}
 {{- else if and .Values.global.env }}
   {{- if and (index .Values.global.env (include "osc.common.environment" .)) }}
     {{- if (index .Values.global.env (include "osc.common.environment" .) "alert") }}
