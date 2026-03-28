@@ -219,7 +219,7 @@ spec:
     spec:
       storageClassName: {{ .Values.storage.projectStorageClass }}
       accessModes:
-      - ReadWriteMany
+      - {{ .Values.storage.accessModes }}
       resources:
         requests:
           storage: 500Gi

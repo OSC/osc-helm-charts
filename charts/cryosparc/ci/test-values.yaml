@@ -15,6 +15,7 @@ global:
   project: PAS0710
 storage:
   projectStorageClass: standard
+  accessModes: ReadWriteOnce
 
 license: xxx-xxx-xxx
 admin:

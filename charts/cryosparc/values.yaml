@@ -110,6 +110,7 @@ worker_bin_path:
   pitzer: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
 storage:
   projectStorageClass: local-ess
+  accessModes: ReadWriteMany
 
 image:
   # -- The CryoSPARC image URL
