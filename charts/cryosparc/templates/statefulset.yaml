@@ -63,7 +63,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         envFrom:
         - configMapRef:
-            name: {{ include "cryosparc.name" . }}-config
+            name: {{ include "cryosparc.name" . }}
         command: ["sh", "-c"]
         args:
         - |
@@ -185,7 +185,7 @@ spec:
           type: Directory
       - name: ascend-cluster-conf
         configMap:
-          name: cryosparc-config
+          name: {{ include "cryosparc.name" . }}
           items:
           - key: "ascend_cluster_info.json"
             path: "cluster_info.json"
@@ -193,7 +193,7 @@ spec:
             path: "cluster_script.sh"
       - name: pitzer-cluster-conf
         configMap:
-          name: cryosparc-config
+          name: {{ include "cryosparc.name" . }}
           items:
           - key: "pitzer_cluster_info.json"
             path: "cluster_info.json"
@@ -201,7 +201,7 @@ spec:
             path: "cluster_script.sh"
       - name: cardinal-cluster-conf
         configMap:
-          name: cryosparc-config
+          name: {{ include "cryosparc.name" . }}
           items:
           - key: "cardinal_cluster_info.json"
             path: "cluster_info.json"
