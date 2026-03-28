@@ -14,7 +14,7 @@ global:
   basePort: 31010
   project: PAS0710
 storage:
-  projectStorageClass: local-path
+  projectStorageClass: standard
 
 license: xxx-xxx-xxx
 admin:
