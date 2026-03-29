@@ -101,6 +101,16 @@ license: ''
 homeDir: '{{ .Values.global.project }}'
 # -- Slurm configuration of the cluster used for service
 slurmConf: /etc/slurm/slurm-ascend.conf
+worker_bin_path:
+  # -- The CryoSPARC worker binary path for Ascend cluster
+  ascend: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
+  # -- The CryoSPARC worker binary path for Cardinal cluster
+  cardinal: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
+  # -- The CryoSPARC worker binary path for Pitzer cluster
+  pitzer: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
+storage:
+  projectStorageClass: local-ess
+  accessModes: ReadWriteMany
 
 image:
   # -- The CryoSPARC image URL

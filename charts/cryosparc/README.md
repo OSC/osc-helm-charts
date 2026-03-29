@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r2](https://img.shields.io/badge/AppVersion-4.7.1--r2-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r2](https://img.shields.io/badge/AppVersion-4.7.1--r2-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -67,6 +67,11 @@ admin:
 | license | The CryoSPARC license ID | `""` |
 | homeDir |  | `"{{ .Values.global.project }}"` |
 | slurmConf | Slurm configuration of the cluster used for service | `"/etc/slurm/slurm-ascend.conf"` |
+| worker_bin_path.ascend | The CryoSPARC worker binary path for Ascend cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
+| worker_bin_path.cardinal | The CryoSPARC worker binary path for Cardinal cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
+| worker_bin_path.pitzer | The CryoSPARC worker binary path for Pitzer cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
+| storage.projectStorageClass |  | `"local-ess"` |
+| storage.accessModes |  | `"ReadWriteMany"` |
 | image.repository | The CryoSPARC image URL | `"docker-registry.osc.edu/webservices/cryosparc"` |
 | image.tag | The CryoSPARC image tag | `""` |
 | image.pullPolicy |  | `"IfNotPresent"` |
