@@ -33,30 +33,6 @@ spec:
         hostnames:
         {{- $nodes | toYaml | nindent 8 }}
       {{- end }}
-      initContainers:
-      - name: {{ include "cryosparc.name" . }}-init
-        image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
-        command: ["sh", "-c"]
-        args:
-        - |
-          # Create the required subpaths
-          mkdir -p /cryosparc_data/lanes;
-          mkdir -p /cryosparc_data/database;
-          mkdir -p /cryosparc_data/run;
-        volumeMounts:
-        - name: {{ include "cryosparc.name" . }}-data
-          mountPath: /cryosparc_data
-        - name: sssd-pipes
-          mountPath: /var/lib/sss/pipes
-        - name: sssd-conf
-          mountPath: /etc/sssd
-        resources:
-          limits:
-            cpu: 1
-            memory: 256Mi
-          requests:
-            cpu: 1
-            memory: 256Mi
       containers:
       - name: {{ include "cryosparc.name" . }}
         image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
@@ -67,6 +43,9 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
+          mkdir -p /cryosparc_data/lanes;
+          mkdir -p /cryosparc_data/database;
+          mkdir -p /cryosparc_data/run;
           printenv MY_NODE_NAME;
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
           cryosparcm start;
@@ -113,16 +92,8 @@ spec:
         volumeMounts:
         - name: project
           mountPath: {{ tpl .Values.mounts.project . }}
-          readOnly: false
         - name: {{ include "cryosparc.name" . }}-data
-          mountPath: /opt/cryosparc_master/database
-          subPath: database
-        - name: {{ include "cryosparc.name" . }}-data
-          mountPath: /opt/cryosparc_master/lanes
-          subPath: lanes
-        - name: {{ include "cryosparc.name" . }}-data
-          mountPath: /opt/cryosparc_master/run
-          subPath: run
+          mountPath: /cryosparc_data
         - name: munge-socket
           mountPath: /var/run/munge/munge.socket.2
         - name: slurm-conf
@@ -132,11 +103,11 @@ spec:
         - name: sssd-conf
           mountPath: /etc/sssd
         - name: ascend-cluster-conf
-          mountPath: /opt/cryosparc_master/lanes/ascend
+          mountPath: /cryosparc_data/lanes/ascend
         - name: pitzer-cluster-conf
-          mountPath: /opt/cryosparc_master/lanes/pitzer
+          mountPath: /cryosparc_data/lanes/pitzer
         - name: cardinal-cluster-conf
-          mountPath: /opt/cryosparc_master/lanes/cardinal
+          mountPath: /cryosparc_data/lanes/cardinal
         resources: {{ toYaml (index .Values.global.env (include "osc.common.environment" .) "podResources") | nindent 10 }}
         ports:
           - containerPort: {{ .Values.global.basePort }}
