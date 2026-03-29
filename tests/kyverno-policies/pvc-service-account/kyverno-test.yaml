@@ -34,6 +34,7 @@ results:
     rule: validate-service-account-uid-gid-webservice
     resources:
       - pvc-webservice-skip-storageclass
+      - pvc-webservice-fail-service-account-missing
     kind: PersistentVolumeClaim
     result: skip
   - policy: pvc-service-account
@@ -47,7 +48,6 @@ results:
     resources:
       - pvc-webservice-fail-uid-gid-wrong
       - pvc-webservice-fail-uid-gid-missing
-      - pvc-webservice-fail-service-account-missing
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-service-account

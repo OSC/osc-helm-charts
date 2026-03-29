@@ -39,7 +39,6 @@ results:
     rule: statefulset-validate-fileset-set
     resources:
       - webservice-statefulset-without-fileset
-      - webservice-statefulset-with-pde-fileset
       - paas-statefulset-without-fileset
     kind: StatefulSet
     result: fail
