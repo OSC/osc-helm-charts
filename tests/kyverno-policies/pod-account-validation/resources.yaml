@@ -51,7 +51,7 @@ metadata:
   name: test-fail
   namespace: user-test
   labels:
-    account: PZS0002
+    account: foobar
 spec: 
   containers:
   - name: nginx
@@ -63,7 +63,7 @@ metadata:
   name: test-fail-paas
   namespace: paas
   labels:
-    account: PZS0002
+    account: foobar
 spec: 
   containers:
   - name: nginx
