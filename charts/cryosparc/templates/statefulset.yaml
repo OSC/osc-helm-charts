@@ -71,6 +71,14 @@ spec:
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
           cryosparcm start;
           cryosparcm status;
+          echo "Creating an admin user";
+          cryosparcm cli "create_user('initial', '$ADMIN_EMAIL', '$ADMIN_PASSWORD', 'SciApps', 'Admin', True)";
+          unset ADMIN_EMAIL ADMIN_PASSWORD
+          echo "Updating cluster lanes";
+          ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
+            cd $x;
+            cryosparcm cluster connect;
+          done;
           echo "Keep CryoSPARC running";
           while true; do 
             sleep 3600;
@@ -79,20 +87,6 @@ spec:
           preStop:
             exec:
               command: ['cryosparcm', 'stop']   # Fix rollout restart issue
-          postStart:
-            exec:
-              command:
-              - "sh"
-              - "-c"
-              - |
-                echo "Creating an admin user";
-                cryosparcm cli "create_user('initial', '$ADMIN_EMAIL', '$ADMIN_PASSWORD', 'SciApps', 'Admin', True)";
-                unset ADMIN_EMAIL ADMIN_PASSWORD
-                echo "Updating cluster lanes";
-                ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
-                  cd $x;
-                  cryosparcm cluster connect;
-                done;
         workingDir: /opt/cryosparc_master
         env:
         - name: SLURM_CONF
