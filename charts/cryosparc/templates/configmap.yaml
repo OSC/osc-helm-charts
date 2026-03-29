@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "cryosparc.name" . }}
-  labels: 
+  name: {{ include "cryosparc.name" . }}-envs
+  labels:
     {{- include "cryosparc.labels" . | nindent 4 }}
 data:
   # Instance Configuration
@@ -25,7 +25,14 @@ data:
   CRYOSPARC_FORCE_USER: "true"
   # Skip the hostname check
   CRYOSPARC_FORCE_HOSTNAME: "true"
-
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cryosparc.name" . }}-lanes
+  labels:
+    {{- include "cryosparc.labels" . | nindent 4 }}
+data:
   ascend_cluster_info.json: |
     {
         "name": "ascend",

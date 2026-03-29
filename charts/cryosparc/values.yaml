@@ -108,6 +108,7 @@ worker_bin_path:
   cardinal: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
   # -- The CryoSPARC worker binary path for Pitzer cluster
   pitzer: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
+# @ignored
 storage:
   projectStorageClass: local-ess
   accessModes: ReadWriteMany

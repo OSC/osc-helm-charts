@@ -39,7 +39,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         envFrom:
         - configMapRef:
-            name: {{ include "cryosparc.name" . }}
+            name: {{ include "cryosparc.name" . }}-envs
         command: ["sh", "-c"]
         args:
         - |
@@ -90,10 +90,12 @@ spec:
               name: {{ include "cryosparc.name" . }}
               key: password
         volumeMounts:
-        - name: project
-          mountPath: {{ tpl .Values.mounts.project . }}
         - name: {{ include "cryosparc.name" . }}-data
           mountPath: /cryosparc_data
+        - name: project
+          mountPath: {{ tpl .Values.mounts.project . }}
+        - name: home
+          mountPath: {{ tpl .Values.mounts.home . }}
         - name: munge-socket
           mountPath: /var/run/munge/munge.socket.2
         - name: slurm-conf
@@ -150,7 +152,7 @@ spec:
           type: Directory
       - name: ascend-cluster-conf
         configMap:
-          name: {{ include "cryosparc.name" . }}
+          name: {{ include "cryosparc.name" . }}-lanes
           items:
           - key: "ascend_cluster_info.json"
             path: "cluster_info.json"
@@ -158,7 +160,7 @@ spec:
             path: "cluster_script.sh"
       - name: pitzer-cluster-conf
         configMap:
-          name: {{ include "cryosparc.name" . }}
+          name: {{ include "cryosparc.name" . }}-lanes
           items:
           - key: "pitzer_cluster_info.json"
             path: "cluster_info.json"
@@ -166,7 +168,7 @@ spec:
             path: "cluster_script.sh"
       - name: cardinal-cluster-conf
         configMap:
-          name: {{ include "cryosparc.name" . }}
+          name: {{ include "cryosparc.name" . }}-lanes
           items:
           - key: "cardinal_cluster_info.json"
             path: "cluster_info.json"
@@ -179,7 +181,6 @@ spec:
   - metadata:
       name: {{ include "cryosparc.name" . }}-data
       annotations:
-        {{ tpl (include "osc.common.serviceAccount" .) . }}
         osc.edu/fileset: '{{ .Values.global.project }}'
     spec:
       storageClassName: {{ .Values.storage.projectStorageClass }}

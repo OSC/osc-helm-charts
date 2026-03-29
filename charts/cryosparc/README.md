@@ -70,8 +70,6 @@ admin:
 | worker_bin_path.ascend | The CryoSPARC worker binary path for Ascend cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
 | worker_bin_path.cardinal | The CryoSPARC worker binary path for Cardinal cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
 | worker_bin_path.pitzer | The CryoSPARC worker binary path for Pitzer cluster | `"/apps/cryosparc-worker/{{ regexReplaceAll \"-r.*$\" (include \"cryosparc.imageTag\" .) \"\" }}/bin/cryosparcw"` |
-| storage.projectStorageClass |  | `"local-ess"` |
-| storage.accessModes |  | `"ReadWriteMany"` |
 | image.repository | The CryoSPARC image URL | `"docker-registry.osc.edu/webservices/cryosparc"` |
 | image.tag | The CryoSPARC image tag | `""` |
 | image.pullPolicy |  | `"IfNotPresent"` |
