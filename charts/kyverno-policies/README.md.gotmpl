@@ -295,6 +295,12 @@
     * Validates that namespaces have a service account label set when they have the paas role
   * Applies to: Namespace with paas role
 
+#### Generate policies
+
+* [sync-secrets](./templates/sync-secrets.yaml)
+  * Generate new secret by cloning the secret in `sync-secret` namespace label
+  * Applies to: Namespace with `sync-secret` label
+
 ### KeycloakClient policies
 
 #### Validating policies
