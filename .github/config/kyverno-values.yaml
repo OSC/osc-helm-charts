@@ -11,6 +11,19 @@ admissionController:
       loggingFormat: text
       exceptionNamespace: kyverno
       webhookTimeout: 30
+  rbac:
+    clusterRole:
+      extraResources:
+        - apiGroups: ['']
+          resources: ['secrets']
+          verbs: ['get', 'list']
+backgroundController:
+  rbac:
+    clusterRole:
+      extraResources:
+        - apiGroups: ['']
+          resources: ['secrets']
+          verbs: ['get', 'list', 'create', 'update', 'delete']
 config:
   resourceFiltersIncludeNamespaces:
   - local-path-storage
