@@ -154,25 +154,25 @@ spec:
         configMap:
           name: {{ include "cryosparc.name" . }}-lanes
           items:
-          - key: "ascend_cluster_info.json"
+          - key: "ascend_cluster_info"
             path: "cluster_info.json"
-          - key: "ascend_cluster_script.sh"
+          - key: "ascend_cluster_script"
             path: "cluster_script.sh"
       - name: pitzer-cluster-conf
         configMap:
           name: {{ include "cryosparc.name" . }}-lanes
           items:
-          - key: "pitzer_cluster_info.json"
+          - key: "pitzer_cluster_info"
             path: "cluster_info.json"
-          - key: "pitzer_cluster_script.sh"
+          - key: "pitzer_cluster_script"
             path: "cluster_script.sh"
       - name: cardinal-cluster-conf
         configMap:
           name: {{ include "cryosparc.name" . }}-lanes
           items:
-          - key: "cardinal_cluster_info.json"
+          - key: "cardinal_cluster_info"
             path: "cluster_info.json"
-          - key: "cardinal_cluster_script.sh"
+          - key: "cardinal_cluster_script"
             path: "cluster_script.sh"
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: Retain

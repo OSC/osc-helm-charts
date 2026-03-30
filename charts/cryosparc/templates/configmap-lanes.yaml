@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cryosparc.name" . }}-lanes
+  labels:
+    {{- include "cryosparc.labels" . | nindent 4 }}
+data:
+  pitzer_cluster_info: |
+{{ (.Files.Get "lanes/pitzer/cluster_info.json") | replace "REPLACE_ME_WORKER_BIN_PATH" (tpl .Values.worker_bin_path.pitzer .) | indent 4 }}
+  pitzer_cluster_script: |
+{{ (.Files.Get "lanes/pitzer/cluster_script.sh") | replace "REPLACE_ME_DEFAULT_ACCOUNT" (tpl .Values.global.project .) | indent 4 }}
+  ascend_cluster_info: |
+{{ (.Files.Get "lanes/ascend/cluster_info.json") | replace "REPLACE_ME_WORKER_BIN_PATH" (tpl .Values.worker_bin_path.ascend .) | indent 4 }}
+  ascend_cluster_script: |
+{{ (.Files.Get "lanes/ascend/cluster_script.sh") | replace "REPLACE_ME_DEFAULT_ACCOUNT" (tpl .Values.global.project .) | indent 4 }}
+  cardinal_cluster_info: |
+{{ (.Files.Get "lanes/cardinal/cluster_info.json") | replace "REPLACE_ME_WORKER_BIN_PATH" (tpl .Values.worker_bin_path.cardinal .) | indent 4 }}
+  cardinal_cluster_script: |
+{{ (.Files.Get "lanes/cardinal/cluster_script.sh") | replace "REPLACE_ME_DEFAULT_ACCOUNT" (tpl .Values.global.project .) | indent 4 }}
