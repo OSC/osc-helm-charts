@@ -198,6 +198,8 @@ spec:
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
           osc.edu/fileset: "test-fileset"
+        labels:
+          osc.edu/service-account: test-user
       spec:
         storageClassName: local-ess
     - metadata:
@@ -220,6 +222,8 @@ spec:
           osc.edu/service-account-uid: "1000"
           osc.edu/service-account-gid: "1001"
           osc.edu/fileset: "test-fileset"
+        labels:
+          osc.edu/service-account: test-user
       spec:
         storageClassName: local-scratch
     - metadata:

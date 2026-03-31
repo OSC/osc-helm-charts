@@ -182,6 +182,8 @@ spec:
       name: {{ include "cryosparc.name" . }}-data
       annotations:
         osc.edu/fileset: '{{ .Values.global.project }}'
+      labels:
+        {{ tpl (include "osc.common.serviceAccount" .) . }}
     spec:
       storageClassName: {{ .Values.storage.projectStorageClass }}
       accessModes:
