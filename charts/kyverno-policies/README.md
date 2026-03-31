@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.38.0](https://img.shields.io/badge/Version-0.38.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.14.5](https://img.shields.io/badge/AppVersion-v1.14.5-informational?style=flat-square)
+![Version: 0.39.0](https://img.shields.io/badge/Version-0.39.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.14.5](https://img.shields.io/badge/AppVersion-v1.14.5-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -298,6 +298,12 @@ OSC Kyverno policies deployment
   * Rules
     * Validates that namespaces have a service account label set when they have the paas role
   * Applies to: Namespace with paas role
+
+#### Generate policies
+
+* [sync-secrets](./templates/sync-secrets.yaml)
+  * Generate new secret by cloning the secret in `sync-secret` namespace label
+  * Applies to: Namespace with `sync-secret` label
 
 ### KeycloakClient policies
 
