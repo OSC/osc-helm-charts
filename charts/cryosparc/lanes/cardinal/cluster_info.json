@@ -1,0 +1,10 @@
+{
+    "name": "cardinal",
+    "worker_bin_path": "REPLACE_ME_WORKER_BIN_PATH",
+    "send_cmd_tpl": "{{ command }}",
+    "qsub_cmd_tpl": "sbatch -M cardinal {{ script_path_abs }}",
+    "qstat_cmd_tpl": "squeue -M cardinal -j {{ cluster_job_id }}",
+    "qdel_cmd_tpl": "scancel -M cardinal {{ cluster_job_id }}",
+    "qinfo_cmd_tpl": "sinfo -M cardinal",
+    "cache_path": "/tmp"
+}

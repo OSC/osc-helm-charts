@@ -33,45 +33,32 @@ spec:
         hostnames:
         {{- $nodes | toYaml | nindent 8 }}
       {{- end }}
-      initContainers:
-      - name: {{ include "cryosparc.name" . }}-init
-        image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
-        command: ["sh", "-c"]
-        args:
-        - |
-          # Create the required subpaths
-          mkdir -p /cryosparc_home/lanes;
-          mkdir -p /cryosparc_home/database;
-          mkdir -p /cryosparc_home/run;
-        volumeMounts:
-        - name: cryosparc-home
-          mountPath: /cryosparc_home
-        - name: sssd-pipes
-          mountPath: /var/lib/sss/pipes
-        - name: sssd-conf
-          mountPath: /etc/sssd
-        resources:
-          limits:
-            cpu: 1
-            memory: 256Mi
-          requests:
-            cpu: 1
-            memory: 256Mi
       containers:
       - name: {{ include "cryosparc.name" . }}
         image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         envFrom:
         - configMapRef:
-            name: {{ include "cryosparc.name" . }}-config
+            name: {{ include "cryosparc.name" . }}-envs
         command: ["sh", "-c"]
         args:
         - |
+          mkdir -p /cryosparc_data/lanes;
+          mkdir -p /cryosparc_data/database;
+          mkdir -p /cryosparc_data/run;
           printenv MY_NODE_NAME;
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
           cryosparcm start;
           cryosparcm status;
-          # Keep the pod running
+          echo "Creating an admin user";
+          cryosparcm cli "create_user('initial', '$ADMIN_EMAIL', '$ADMIN_PASSWORD', 'SciApps', 'Admin', True)";
+          unset ADMIN_EMAIL ADMIN_PASSWORD
+          echo "Updating cluster lanes";
+          ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
+            cd $x;
+            cryosparcm cluster connect;
+          done;
+          echo "Keep CryoSPARC running";
           while true; do 
             sleep 3600;
           done;
@@ -79,24 +66,6 @@ spec:
           preStop:
             exec:
               command: ['cryosparcm', 'stop']   # Fix rollout restart issue
-          postStart:
-            exec:
-              command:
-              - "sh"
-              - "-c"
-              - |
-                cryosparcm listusers |grep "$ADMIN_USERNAME";
-                if [ $? -ne 0 ]; then
-                  echo "Adding Sciapps admin role";
-                  cryosparcm createuser --email "$ADMIN_EMAIL" --username "$ADMIN_USERNAME" --firstname "SciApps" --lastname "Admin" --password "$ADMIN_PASSWORD";
-                  cryosparcm updateuser --email "$ADMIN_EMAIL" --admin "true" --password "$ADMIN_PASSWORD";
-                fi
-                unset ADMIN_EMAIL ADMIN_USERNAME ADMIN_PASSWORD
-                echo "Updating cluster lanes";
-                ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
-                  cd $x;
-                  cryosparcm cluster connect;
-                done;
         workingDir: /opt/cryosparc_master
         env:
         - name: SLURM_CONF
@@ -110,8 +79,6 @@ spec:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: license
-        - name: ADMIN_USERNAME
-          value: "oscsoft"
         - name: ADMIN_EMAIL
           valueFrom:
             secretKeyRef:
@@ -123,18 +90,12 @@ spec:
               name: {{ include "cryosparc.name" . }}
               key: password
         volumeMounts:
-        - name: cryosparc-home
-          mountPath: /opt/cryosparc_master/database
-          subPath: database
-        - name: cryosparc-home
-          mountPath: /opt/cryosparc_master/lanes
-          subPath: lanes
-        - name: cryosparc-home
-          mountPath: /opt/cryosparc_master/run
-          subPath: run
+        - name: {{ include "cryosparc.name" . }}-data
+          mountPath: /cryosparc_data
         - name: project
           mountPath: {{ tpl .Values.mounts.project . }}
-          readOnly: false
+        - name: home
+          mountPath: {{ tpl .Values.mounts.home . }}
         - name: munge-socket
           mountPath: /var/run/munge/munge.socket.2
         - name: slurm-conf
@@ -143,6 +104,12 @@ spec:
           mountPath: /var/lib/sss/pipes
         - name: sssd-conf
           mountPath: /etc/sssd
+        - name: ascend-cluster-conf
+          mountPath: /cryosparc_data/lanes/ascend
+        - name: pitzer-cluster-conf
+          mountPath: /cryosparc_data/lanes/pitzer
+        - name: cardinal-cluster-conf
+          mountPath: /cryosparc_data/lanes/cardinal
         resources: {{ toYaml (index .Values.global.env (include "osc.common.environment" .) "podResources") | nindent 10 }}
         ports:
           - containerPort: {{ .Values.global.basePort }}
@@ -159,7 +126,7 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
       volumes:
-      - name: cryosparc-home
+      - name: home
         hostPath:
           path: {{ tpl .Values.mounts.home . }}
           type: Directory
@@ -183,3 +150,42 @@ spec:
         hostPath:
           path: /etc/sssd
           type: Directory
+      - name: ascend-cluster-conf
+        configMap:
+          name: {{ include "cryosparc.name" . }}-lanes
+          items:
+          - key: "ascend_cluster_info"
+            path: "cluster_info.json"
+          - key: "ascend_cluster_script"
+            path: "cluster_script.sh"
+      - name: pitzer-cluster-conf
+        configMap:
+          name: {{ include "cryosparc.name" . }}-lanes
+          items:
+          - key: "pitzer_cluster_info"
+            path: "cluster_info.json"
+          - key: "pitzer_cluster_script"
+            path: "cluster_script.sh"
+      - name: cardinal-cluster-conf
+        configMap:
+          name: {{ include "cryosparc.name" . }}-lanes
+          items:
+          - key: "cardinal_cluster_info"
+            path: "cluster_info.json"
+          - key: "cardinal_cluster_script"
+            path: "cluster_script.sh"
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ include "cryosparc.name" . }}-data
+      annotations:
+        osc.edu/fileset: '{{ .Values.global.project }}'
+    spec:
+      storageClassName: {{ .Values.storage.projectStorageClass }}
+      accessModes:
+      - {{ .Values.storage.accessModes }}
+      resources:
+        requests:
+          storage: 500Gi
