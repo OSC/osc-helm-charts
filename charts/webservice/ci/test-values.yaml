@@ -4,33 +4,26 @@ global:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
   storageClass: standard
-maintenance:
-  groups:
+  maintenanceGroups:
     - foo
     - bar
-nodeSelector:
-  kubernetes.io/os: linux
-auth:
-  clientSecret: b8a873d4-e662-496c-ad43-26596eaff68c
-  cookieSecret: PwRlaBzY3aBtKvshJzlMpxyfAp6AZg7orRoKz3NtuJw=
-  oidcIssuerURL: http://keycloak.keycloak.svc.cluster.local/realms/master
+  debugGroups:
+    - foobar
+  alert:
+    receiver: test
+  ingress:
+    host: webservice.example.com
 command: ['/http-echo']
 args:
-  - "-listen=:{{ .Values.service.port }}"
+  - "-listen=:{{ .Values.global.service.port }}"
   - "-text=Hello World"
 defaultArgs:
   type: none
-alert:
-  receiver: test
-debugGroups:
-  - foobar
 image:
   repository: hashicorp/http-echo
   tag: latest
 envSecrets:
   TEST: secret
-ingress:
-  host: webservice.example.com
 podSecurityContext:
   runAsUser: 1000
   runAsGroup: 1000
@@ -49,6 +42,12 @@ mounts:
   emptyDir:
     test: /tmp/test
     foo: /tmp/bar
+osc-common:
+  oauth2-proxy:
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
 database:
   mariadb:
     enable: true
