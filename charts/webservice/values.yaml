@@ -209,16 +209,21 @@ probes:
   # -- Type of probes to use, eg `httpGet` or `tcpSocket`
   # @default -- `httpGet`
   type: ~
+  # -- Default probe path for probes
   path: /
   typeDefaults:
     # -- Type of probes to use when `appType` is `rshiny`.
     rshiny: tcpSocket
 startupProbe:
-  # -- Config for httpGet startupProbe
   httpGet:
+    # -- Config for httpGet startupProbe path
+    # @default -- container `probePath` or `probes.path`
     path: '{{ .probePath | default .Values.probes.path }}'
+    # -- Config for httpGet startupProbe port
+    # @default -- container `portName` or container `name`
     port: '{{ .portName | default .name }}'
   # -- Config for tcpSocket startupProbe
+  # @default -- container `portName` or container `name`
   tcpSocket:
     port: '{{ .portName | default .name }}'
   # -- startupProbe failureThreshold
@@ -228,11 +233,15 @@ startupProbe:
   # -- startupProbe timeoutSeconds
   timeoutSeconds: 5
 livenessProbe:
-  # -- Config for httpGet livenessProbe
   httpGet:
+    # -- Config for httpGet livenessProbe path
+    # @default -- container `probePath` or `probes.path`
     path: '{{ .probePath | default .Values.probes.path }}'
+    # -- Config for httpGet livenessProbe port
+    # @default -- container `portName` or container `name`
     port: '{{ .portName | default .name }}'
   # -- Config for tcpSocket livenessProbe
+  # @default -- container `portName` or container `name`
   tcpSocket:
     port: '{{ .portName | default .name }}'
   # -- livenessProbe failureThreshold
@@ -242,11 +251,15 @@ livenessProbe:
   # -- livenessProbe timeoutSeconds
   timeoutSeconds: 5
 readinessProbe:
-  # -- Config for httpGet readinessProbe
   httpGet:
+    # -- Config for httpGet readinessProbe path
+    # @default -- container `probePath` or `probes.path`
     path: '{{ .probePath | default .Values.probes.path }}'
+    # -- Config for httpGet readinessProbe port
+    # @default -- container `portName` or container `name`
     port: '{{ .portName | default .name }}'
   # -- Config for tcpSocket readinessProbe
+  # @default -- container `portName` or container `name`
   tcpSocket:
     port: '{{ .portName | default .name }}'
   # -- readinessProbe failureThreshold
@@ -271,6 +284,7 @@ init:
       # -- init container pod memory request
       memory: 256Mi
 
+# @ignored
 ingress:
   # @ignored
   className: "nginx"

@@ -119,20 +119,23 @@ See [charts-private](../../charts-private) for examples.
 | service.annotations | Additional service annotations | `{}` |
 | service.typeAnnotations.rshiny | Default Service annotations when `appType` is `rshiny` | Specific to rshiny |
 | probes.type | Type of probes to use, eg `httpGet` or `tcpSocket` | `httpGet` |
-| probes.path |  | `"/"` |
+| probes.path | Default probe path for probes | `"/"` |
 | probes.typeDefaults.rshiny | Type of probes to use when `appType` is `rshiny`. | `"tcpSocket"` |
-| startupProbe.httpGet | Config for httpGet startupProbe | `{"path":"{{ .probePath | default .Values.probes.path }}","port":"{{ .portName | default .name }}"}` |
-| startupProbe.tcpSocket | Config for tcpSocket startupProbe | `{"port":"{{ .portName | default .name }}"}` |
+| startupProbe.httpGet.path | Config for httpGet startupProbe path | container `probePath` or `probes.path` |
+| startupProbe.httpGet.port | Config for httpGet startupProbe port | container `portName` or container `name` |
+| startupProbe.tcpSocket | Config for tcpSocket startupProbe | container `portName` or container `name` |
 | startupProbe.failureThreshold | startupProbe failureThreshold | `12` |
 | startupProbe.periodSeconds | startupProbe periodSeconds | `10` |
 | startupProbe.timeoutSeconds | startupProbe timeoutSeconds | `5` |
-| livenessProbe.httpGet | Config for httpGet livenessProbe | `{"path":"{{ .probePath | default .Values.probes.path }}","port":"{{ .portName | default .name }}"}` |
-| livenessProbe.tcpSocket | Config for tcpSocket livenessProbe | `{"port":"{{ .portName | default .name }}"}` |
+| livenessProbe.httpGet.path | Config for httpGet livenessProbe path | container `probePath` or `probes.path` |
+| livenessProbe.httpGet.port | Config for httpGet livenessProbe port | container `portName` or container `name` |
+| livenessProbe.tcpSocket | Config for tcpSocket livenessProbe | container `portName` or container `name` |
 | livenessProbe.failureThreshold | livenessProbe failureThreshold | `6` |
 | livenessProbe.periodSeconds | livenessProbe periodSeconds | `10` |
 | livenessProbe.timeoutSeconds | livenessProbe timeoutSeconds | `5` |
-| readinessProbe.httpGet | Config for httpGet readinessProbe | `{"path":"{{ .probePath | default .Values.probes.path }}","port":"{{ .portName | default .name }}"}` |
-| readinessProbe.tcpSocket | Config for tcpSocket readinessProbe | `{"port":"{{ .portName | default .name }}"}` |
+| readinessProbe.httpGet.path | Config for httpGet readinessProbe path | container `probePath` or `probes.path` |
+| readinessProbe.httpGet.port | Config for httpGet readinessProbe port | container `portName` or container `name` |
+| readinessProbe.tcpSocket | Config for tcpSocket readinessProbe | container `portName` or container `name` |
 | readinessProbe.failureThreshold | readinessProbe failureThreshold | `6` |
 | readinessProbe.periodSeconds | readinessProbe periodSeconds | `10` |
 | readinessProbe.timeoutSeconds | readinessProbe timeoutSeconds | `5` |
@@ -141,7 +144,6 @@ See [charts-private](../../charts-private) for examples.
 | init.podResources.limits.memory | init container pod memory limits | `"1Gi"` |
 | init.podResources.requests.cpu | init container pod CPU request | `"200m"` |
 | init.podResources.requests.memory | init container pod memory request | `"256Mi"` |
-| ingress |  | `{}` |
 | data.enable | Enable use of persistent data volume | `false` |
 | data.storageSize | Persistent data volume size | `"10Gi"` |
 | data.path | Persistent data volume mount path | `"/data"` |
