@@ -2,11 +2,12 @@ global:
   imagePullSecret:
     # @ignored
     name: osc-registry
-    # -- OSC container registry
+    # @ignored
     registry: docker-registry.osc.edu
-    # -- OSC container registry robot account
+    # @ignored
     username: robot$webservices-read
     # -- Password for the robot account.
+    # @section -- Image Config
     # @default -- **required**
     password:
   # -- The nodeSelector role
@@ -15,53 +16,78 @@ global:
   storageClass: webservices-nfs-client
   auth:
     # -- Enable auth management
+    # @section -- Authentication
     enable: true
     # -- The upstream service for the OAuth2 proxy. **required** when auth is enabled
+    # @section -- Authentication
     upstream: 'http://{{ include "webservice.name" $ }}.{{ $.Release.Namespace }}.svc.cluster.local:{{ .Values.global.service.port }}'
     # -- Routes to skip auth
+    # @section -- Authentication
     skipAuthRoutes: []
     # -- Restrict access to these groups
+    # @section -- Authentication
     allowGroups: []
     # -- Common groups to allow
+    # @section -- Authentication
     commonAllowGroups:
       - sysstf
   ingress:
     # -- Ingress host
+    # @section -- Ingress
+    # @default -- **required**
     host: ""
     # -- Ingress host alias
+    # @section -- Ingress
+    # @default -- **required**
     hostAlias: ""
   # -- Groups that debug pods
+  # @section -- Extra RBAC
   debugGroups: []
   # -- Groups that can perform maintenance operations
+  # @section -- Extra RBAC
   maintenanceGroups: []
   alert:
     # -- The alert receiver name. Also pulled from global.env.$environment.alert.receiver
+    # @section - Monitoring
     receiver: ""
   service:
     # -- Service port
+    # @section -- App Config
     port: 3000
 
 # -- The application type
+# @section -- App Config
 appType: rails
 # -- Command to start webservice
+# @section -- App Config
 # @default -- Pulled from `defaultCommand`
 command: []
 # -- Args to start webservice
+# @section -- App Config
 # @default -- Pulled from `defaultArgs`
 args: []
 # -- webservice working directory
+# @section -- App Config
 workingDir:
 # -- List environment variables, eg: `{"name": "<name>", "value": "<value>"}`
+# @section -- App Config
 env: []
 defaultCommand:
   # -- Default command when `appType` is `rails`
+  # @section -- App Config
+  # @default -- Command for Rails
   rails: ['bundle', 'exec', 'passenger', 'start']
   # -- Default command when `appType` is `rshiny`
+  # @section -- App Config
+  # @default -- Command for RShiny
   rshiny: ['/bin/passenger', 'start']
   # -- Default command when `appType` is `none`
+  # @section -- App Config
   none: []
 defaultArgs:
   # -- Default args when `appType` is `rails`
+  # @section -- App Config
+  # @default -- Rails args
   rails:
     # Set by PASSENGER_PORT env var
     # - "--port={{ .Values.service.port }}"
@@ -74,6 +100,8 @@ defaultArgs:
     - "--log-file=/dev/stdout"
     - "--pid-file=/tmp/passenger-{{ .name }}.pid"
   # -- Default args when `appType` is `rshiny`
+  # @section -- App Config
+  # @default -- RShiny args
   rshiny:
     # Set by PASSENGER_PORT env var
     # - "--port={{ .Values.service.port }}"
@@ -88,8 +116,10 @@ defaultArgs:
     - "--app-start-command"
     - '{{ .startCommand | default "R --no-save --slave -f /app/entrypoint.R --args $$PORT" }}'
   # -- Default args when `appType` is `none`
+  # @section -- App Config
   none: []
 # -- Containers used to run the web service
+# @section -- App Config
 # @default -- A single container
 containers:
   - name: '{{ include "webservice.name" . }}'
@@ -102,26 +132,35 @@ containers:
 
 image:
   # -- Image repository.
+  # @section -- Image Config
   # @default -- **required**
   repository:
   # -- Image tag. Also pulled from `global.env.<env>.image.tag`.
+  # @section -- Image Config
   # @default -- **required**
   tag:
   # -- imagePullPolicy.  **Forced to `Always` when image tag contains `:latest`**.
+  # @section -- Image Config
   pullPolicy: IfNotPresent
 
 mounts:
   # -- emptyDir mounts
+  # @section -- Mounts
   emptyDir: {}
   # -- webservice home mount that is mounted at same location inside pod
+  # @section -- Mounts
   home: ''
   # -- Read-only directory volumes, `name: path`.
+  # @section -- Mounts
   roDir: {}
   # -- Read-write directory volumes, `name: path`.
+  # @section -- Mounts
   rwDir: {}
   # -- Socket volumes, `name: path`.
+  # @section -- Mounts
   socket: {}
   # -- Read-only file volumes, `name: path`.
+  # @section -- Mounts
   roFile: {}
 
 # -- Additional nodeSelector that is added to existing role selection.
@@ -262,24 +301,30 @@ data:
 
 database:
   # -- Enable database subchart
+  # @section -- Database
   enable: false
   # @ignored
   imagePullSecret:
     enable: false
   mariadb:
     # -- Enable MariaDB database
+    # @section -- Database
     enable: false
     auth:
       # -- The root user admin password
+      # @section -- Database
       # @default -- **required**
       rootPassword:
       # -- The database name
+      # @section -- Database
       # @default -- **required**
       database:
       # -- The database username
+      # @section -- Database
       # @default -- **required**
       username:
       # -- The database password
+      # @section -- Database
       # @default -- **required**
       password:
     # @ignored
@@ -290,18 +335,23 @@ database:
             app.kubernetes.io/name: '{{ include "webservice.name" . }}'
   postgresql:
     # -- Enable PostgreSQL database
+    # @section -- Database
     enable: false
     auth:
       # -- The postgres user admin password
+      # @section -- Database
       # @default -- **required**
       postgresPassword:
       # -- The database name
+      # @section -- Database
       # @default -- **required**
       database:
       # -- The database username
+      # @section -- Database
       # @default -- **required**
       username:
       # -- The database password
+      # @section -- Database
       # @default -- **required**
       password:
     # @ignored

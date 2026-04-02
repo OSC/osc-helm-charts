@@ -23,45 +23,91 @@ See [charts-private](../../charts-private) for examples.
 
 ## Values
 
+### Image Config
+
 | Key | Description | Default |
 |-----|-------------|---------|
-| global.imagePullSecret.registry | OSC container registry | `"docker-registry.osc.edu"` |
-| global.imagePullSecret.username | OSC container registry robot account | `"robot$webservices-read"` |
 | global.imagePullSecret.password | Password for the robot account. | **required** |
-| global.nodeSelectorRole | The nodeSelector role | `"webservices"` |
-| global.storageClass | The persistent storage class | `"webservices-nfs-client"` |
+| image.repository | Image repository. | **required** |
+| image.tag | Image tag. Also pulled from `global.env.<env>.image.tag`. | **required** |
+| image.pullPolicy | imagePullPolicy.  **Forced to `Always` when image tag contains `:latest`**. | `"IfNotPresent"` |
+
+### Authentication
+
+| Key | Description | Default |
+|-----|-------------|---------|
 | global.auth.enable | Enable auth management | `true` |
 | global.auth.upstream | The upstream service for the OAuth2 proxy. **required** when auth is enabled | `"http://{{ include \"webservice.name\" $ }}.{{ $.Release.Namespace }}.svc.cluster.local:{{ .Values.global.service.port }}"` |
 | global.auth.skipAuthRoutes | Routes to skip auth | `[]` |
 | global.auth.allowGroups | Restrict access to these groups | `[]` |
 | global.auth.commonAllowGroups | Common groups to allow | `["sysstf"]` |
-| global.ingress.host | Ingress host | `""` |
-| global.ingress.hostAlias | Ingress host alias | `""` |
+
+### Ingress
+
+| Key | Description | Default |
+|-----|-------------|---------|
+| global.ingress.host | Ingress host | **required** |
+| global.ingress.hostAlias | Ingress host alias | **required** |
+
+### Extra RBAC
+
+| Key | Description | Default |
+|-----|-------------|---------|
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
-| global.alert.receiver | The alert receiver name. Also pulled from global.env.$environment.alert.receiver | `""` |
+
+### App Config
+
+| Key | Description | Default |
+|-----|-------------|---------|
 | global.service.port | Service port | `3000` |
 | appType | The application type | `"rails"` |
 | command | Command to start webservice | Pulled from `defaultCommand` |
 | args | Args to start webservice | Pulled from `defaultArgs` |
 | workingDir | webservice working directory | `nil` |
 | env | List environment variables, eg: `{"name": "<name>", "value": "<value>"}` | `[]` |
-| defaultCommand.rails | Default command when `appType` is `rails` | `["bundle","exec","passenger","start"]` |
-| defaultCommand.rshiny | Default command when `appType` is `rshiny` | `["/bin/passenger","start"]` |
+| defaultCommand.rails | Default command when `appType` is `rails` | Command for Rails |
+| defaultCommand.rshiny | Default command when `appType` is `rshiny` | Command for RShiny |
 | defaultCommand.none | Default command when `appType` is `none` | `[]` |
-| defaultArgs.rails | Default args when `appType` is `rails` | `["--min-instances=1","--sticky-sessions","--start-timeout=180","--environment=production","--disable-security-update-check","--disable-anonymous-telemetry","--log-file=/dev/stdout","--pid-file=/tmp/passenger-{{ .name }}.pid"]` |
-| defaultArgs.rshiny | Default args when `appType` is `rshiny` | `["--min-instances=1","--sticky-sessions","--start-timeout=180","--environment=production","--disable-security-update-check","--disable-anonymous-telemetry","--log-file=/dev/stdout","--pid-file=/tmp/passenger-{{ .name }}.pid","--app-start-command","{{ .startCommand | default \"R --no-save --slave -f /app/entrypoint.R --args $$PORT\" }}"]` |
+| defaultArgs.rails | Default args when `appType` is `rails` | Rails args |
+| defaultArgs.rshiny | Default args when `appType` is `rshiny` | RShiny args |
 | defaultArgs.none | Default args when `appType` is `none` | `[]` |
 | containers | Containers used to run the web service | A single container |
-| image.repository | Image repository. | **required** |
-| image.tag | Image tag. Also pulled from `global.env.<env>.image.tag`. | **required** |
-| image.pullPolicy | imagePullPolicy.  **Forced to `Always` when image tag contains `:latest`**. | `"IfNotPresent"` |
+
+### Mounts
+
+| Key | Description | Default |
+|-----|-------------|---------|
 | mounts.emptyDir | emptyDir mounts | `{}` |
 | mounts.home | webservice home mount that is mounted at same location inside pod | `""` |
 | mounts.roDir | Read-only directory volumes, `name: path`. | `{}` |
 | mounts.rwDir | Read-write directory volumes, `name: path`. | `{}` |
 | mounts.socket | Socket volumes, `name: path`. | `{}` |
 | mounts.roFile | Read-only file volumes, `name: path`. | `{}` |
+
+### Database
+
+| Key | Description | Default |
+|-----|-------------|---------|
+| database.enable | Enable database subchart | `false` |
+| database.mariadb.enable | Enable MariaDB database | `false` |
+| database.mariadb.auth.rootPassword | The root user admin password | **required** |
+| database.mariadb.auth.database | The database name | **required** |
+| database.mariadb.auth.username | The database username | **required** |
+| database.mariadb.auth.password | The database password | **required** |
+| database.postgresql.enable | Enable PostgreSQL database | `false` |
+| database.postgresql.auth.postgresPassword | The postgres user admin password | **required** |
+| database.postgresql.auth.database | The database name | **required** |
+| database.postgresql.auth.username | The database username | **required** |
+| database.postgresql.auth.password | The database password | **required** |
+
+### Other Values
+
+| Key | Description | Default |
+|-----|-------------|---------|
+| global.nodeSelectorRole | The nodeSelector role | `"webservices"` |
+| global.storageClass | The persistent storage class | `"webservices-nfs-client"` |
+| global.alert.receiver | The alert receiver name. Also pulled from global.env.$environment.alert.receiver @section - Monitoring | `""` |
 | nodeSelector | Additional nodeSelector that is added to existing role selection. | `{}` |
 | podResources.limits.cpu | The pod CPU limits | `4` |
 | podResources.limits.memory | The pod memory limits | `"4Gi"` |
@@ -99,17 +145,6 @@ See [charts-private](../../charts-private) for examples.
 | data.enable | Enable use of persistent data volume | `false` |
 | data.storageSize | Persistent data volume size | `"10Gi"` |
 | data.path | Persistent data volume mount path | `"/data"` |
-| database.enable | Enable database subchart | `false` |
-| database.mariadb.enable | Enable MariaDB database | `false` |
-| database.mariadb.auth.rootPassword | The root user admin password | **required** |
-| database.mariadb.auth.database | The database name | **required** |
-| database.mariadb.auth.username | The database username | **required** |
-| database.mariadb.auth.password | The database password | **required** |
-| database.postgresql.enable | Enable PostgreSQL database | `false` |
-| database.postgresql.auth.postgresPassword | The postgres user admin password | **required** |
-| database.postgresql.auth.database | The database name | **required** |
-| database.postgresql.auth.username | The database username | **required** |
-| database.postgresql.auth.password | The database password | **required** |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
