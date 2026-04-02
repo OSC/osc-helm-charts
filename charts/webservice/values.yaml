@@ -41,10 +41,13 @@ global:
     # -- Service port
     port: 3000
 
+# -- The application type
 appType: rails
 # -- Command to start webservice
+# @default -- Pulled from `defaultCommand`
 command: []
 # -- Args to start webservice
+# @default -- Pulled from `defaultArgs`
 args: []
 # -- webservice working directory
 workingDir:
@@ -86,6 +89,8 @@ defaultArgs:
     - '{{ .startCommand | default "R --no-save --slave -f /app/entrypoint.R --args $$PORT" }}'
   # -- Default args when `appType` is `none`
   none: []
+# -- Containers used to run the web service
+# @default -- A single container
 containers:
   - name: '{{ include "webservice.name" . }}'
     port: ~
@@ -106,16 +111,17 @@ image:
   pullPolicy: IfNotPresent
 
 mounts:
+  # -- emptyDir mounts
   emptyDir: {}
   # -- webservice home mount that is mounted at same location inside pod
   home: ''
-  # -- Read-only directory volumes, `name=path`.
+  # -- Read-only directory volumes, `name: path`.
   roDir: {}
-  # -- Read-write directory volumes, `name=path`.
+  # -- Read-write directory volumes, `name: path`.
   rwDir: {}
-  # -- Socket volumes, `name=path`.
+  # -- Socket volumes, `name: path`.
   socket: {}
-  # -- Read-only file volumes, `name=path`.
+  # -- Read-only file volumes, `name: path`.
   roFile: {}
 
 # -- Additional nodeSelector that is added to existing role selection.
@@ -125,13 +131,16 @@ nodeSelector: {}
 podSecurityContext:
   runAsNonRoot: true
 
-# -- The pod resource limits
 podResources:
   limits:
+    # -- The pod CPU limits
     cpu: 4
+    # -- The pod memory limits
     memory: 4Gi
   requests:
+    # -- The pod CPU request
     cpu: 1
+    # -- The pod memory request
     memory: 256Mi
 
 # -- Number of replicas. Also pulled from `global.env.<env>.replicas`
@@ -148,16 +157,18 @@ secrets: {}
 envSecrets: {}
 
 service:
+  # -- Additional service annotations
   annotations: {}
   typeAnnotations:
     # -- Default Service annotations when `appType` is `rshiny`
+    # @default -- Specific to rshiny
     rshiny:
       prometheus.io/probe_module: http
       prometheus.io/probe_scheme: http
 
 probes:
   # -- Type of probes to use, eg `httpGet` or `tcpSocket`
-  # @default -- httpGet
+  # @default -- `httpGet`
   type: ~
   path: /
   typeDefaults:
@@ -209,20 +220,25 @@ readinessProbe:
 # -- webservice init containers
 initContainers: {}
 init:
-  # -- init container pod resource limits
   podResources:
     limits:
+      # -- init container pod CPU limits
       cpu: 1
+      # -- init container pod memory limits
       memory: 1Gi
     requests:
+      # -- init container pod CPU request
       cpu: 200m
+      # -- init container pod memory request
       memory: 256Mi
 
 ingress:
+  # @ignored
   className: "nginx"
+  # @ignored
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
-  # -- ingress annotations used when `appType` is `rshiny`
+  # @ignored
   rShinyAnnotations:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"

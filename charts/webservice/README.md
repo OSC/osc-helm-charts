@@ -19,6 +19,8 @@ OSC webservice bootstrap Helm Chart
 
 ## Usage
 
+See [charts-private](../../charts-private) for examples.
+
 ## Values
 
 | Key | Description | Default |
@@ -39,9 +41,9 @@ OSC webservice bootstrap Helm Chart
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
 | global.alert.receiver | The alert receiver name. Also pulled from global.env.$environment.alert.receiver | `""` |
 | global.service.port | Service port | `3000` |
-| appType |  | `"rails"` |
-| command | Command to start webservice | `[]` |
-| args | Args to start webservice | `[]` |
+| appType | The application type | `"rails"` |
+| command | Command to start webservice | Pulled from `defaultCommand` |
+| args | Args to start webservice | Pulled from `defaultArgs` |
 | workingDir | webservice working directory | `nil` |
 | env | List environment variables, eg: `{"name": "<name>", "value": "<value>"}` | `[]` |
 | defaultCommand.rails | Default command when `appType` is `rails` | `["bundle","exec","passenger","start"]` |
@@ -50,30 +52,27 @@ OSC webservice bootstrap Helm Chart
 | defaultArgs.rails | Default args when `appType` is `rails` | `["--min-instances=1","--sticky-sessions","--start-timeout=180","--environment=production","--disable-security-update-check","--disable-anonymous-telemetry","--log-file=/dev/stdout","--pid-file=/tmp/passenger-{{ .name }}.pid"]` |
 | defaultArgs.rshiny | Default args when `appType` is `rshiny` | `["--min-instances=1","--sticky-sessions","--start-timeout=180","--environment=production","--disable-security-update-check","--disable-anonymous-telemetry","--log-file=/dev/stdout","--pid-file=/tmp/passenger-{{ .name }}.pid","--app-start-command","{{ .startCommand | default \"R --no-save --slave -f /app/entrypoint.R --args $$PORT\" }}"]` |
 | defaultArgs.none | Default args when `appType` is `none` | `[]` |
-| containers[0].name |  | `"{{ include \"webservice.name\" . }}"` |
-| containers[0].port |  | `nil` |
-| containers[0].portName |  | `"http"` |
-| containers[0].startCommand |  | `nil` |
-| containers[0].probePath |  | `nil` |
-| containers[0].probeType |  | `nil` |
-| containers[0].ingressPath |  | `"/"` |
+| containers | Containers used to run the web service | A single container |
 | image.repository | Image repository. | **required** |
 | image.tag | Image tag. Also pulled from `global.env.<env>.image.tag`. | **required** |
 | image.pullPolicy | imagePullPolicy.  **Forced to `Always` when image tag contains `:latest`**. | `"IfNotPresent"` |
-| mounts.emptyDir |  | `{}` |
+| mounts.emptyDir | emptyDir mounts | `{}` |
 | mounts.home | webservice home mount that is mounted at same location inside pod | `""` |
-| mounts.roDir | Read-only directory volumes, `name=path`. | `{}` |
-| mounts.rwDir | Read-write directory volumes, `name=path`. | `{}` |
-| mounts.socket | Socket volumes, `name=path`. | `{}` |
-| mounts.roFile | Read-only file volumes, `name=path`. | `{}` |
+| mounts.roDir | Read-only directory volumes, `name: path`. | `{}` |
+| mounts.rwDir | Read-write directory volumes, `name: path`. | `{}` |
+| mounts.socket | Socket volumes, `name: path`. | `{}` |
+| mounts.roFile | Read-only file volumes, `name: path`. | `{}` |
 | nodeSelector | Additional nodeSelector that is added to existing role selection. | `{}` |
-| podResources | The pod resource limits | `{"limits":{"cpu":4,"memory":"4Gi"},"requests":{"cpu":1,"memory":"256Mi"}}` |
+| podResources.limits.cpu | The pod CPU limits | `4` |
+| podResources.limits.memory | The pod memory limits | `"4Gi"` |
+| podResources.requests.cpu | The pod CPU request | `1` |
+| podResources.requests.memory | The pod memory request | `"256Mi"` |
 | replicas | Number of replicas. Also pulled from `global.env.<env>.replicas` | 1 |
 | secrets | Secrets for this webservice, eg `{"name": "value"}` | `{}` |
 | envSecrets | Environment secrets for this webservice, eg `{"NAME": "value"}` | `{}` |
-| service.annotations |  | `{}` |
-| service.typeAnnotations.rshiny | Default Service annotations when `appType` is `rshiny` | `{"prometheus.io/probe_module":"http","prometheus.io/probe_scheme":"http"}` |
-| probes.type | Type of probes to use, eg `httpGet` or `tcpSocket` | httpGet |
+| service.annotations | Additional service annotations | `{}` |
+| service.typeAnnotations.rshiny | Default Service annotations when `appType` is `rshiny` | Specific to rshiny |
+| probes.type | Type of probes to use, eg `httpGet` or `tcpSocket` | `httpGet` |
 | probes.path |  | `"/"` |
 | probes.typeDefaults.rshiny | Type of probes to use when `appType` is `rshiny`. | `"tcpSocket"` |
 | startupProbe.httpGet | Config for httpGet startupProbe | `{"path":"{{ .probePath | default .Values.probes.path }}","port":"{{ .portName | default .name }}"}` |
@@ -92,10 +91,11 @@ OSC webservice bootstrap Helm Chart
 | readinessProbe.periodSeconds | readinessProbe periodSeconds | `10` |
 | readinessProbe.timeoutSeconds | readinessProbe timeoutSeconds | `5` |
 | initContainers | webservice init containers | `{}` |
-| init.podResources | init container pod resource limits | `{"limits":{"cpu":1,"memory":"1Gi"},"requests":{"cpu":"200m","memory":"256Mi"}}` |
-| ingress.className |  | `"nginx"` |
-| ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" |  | `"8k"` |
-| ingress.rShinyAnnotations | ingress annotations used when `appType` is `rshiny` | `{"nginx.ingress.kubernetes.io/proxy-read-timeout":"86400","nginx.ingress.kubernetes.io/proxy-send-timeout":"3600","nginx.ingress.kubernetes.io/server-snippets":"location / {\n  proxy_http_version 1.1;\n  proxy_set_header Upgrade $http_upgrade;\n  proxy_set_header Connection $connection_upgrade;\n  proxy_buffering off;\n }\n"}` |
+| init.podResources.limits.cpu | init container pod CPU limits | `1` |
+| init.podResources.limits.memory | init container pod memory limits | `"1Gi"` |
+| init.podResources.requests.cpu | init container pod CPU request | `"200m"` |
+| init.podResources.requests.memory | init container pod memory request | `"256Mi"` |
+| ingress |  | `{}` |
 | data.enable | Enable use of persistent data volume | `false` |
 | data.storageSize | Persistent data volume size | `"10Gi"` |
 | data.path | Persistent data volume mount path | `"/data"` |
@@ -110,3 +110,6 @@ OSC webservice bootstrap Helm Chart
 | database.postgresql.auth.database | The database name | **required** |
 | database.postgresql.auth.username | The database username | **required** |
 | database.postgresql.auth.password | The database password | **required** |
+
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
