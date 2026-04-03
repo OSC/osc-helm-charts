@@ -27,6 +27,7 @@ See [charts-private](../../charts-private) for examples.
 
 | Key | Description | Default |
 |-----|-------------|---------|
+| global.imagePullSecret.username | OSC container registry robot account | `"robot$webservices-read"` |
 | global.imagePullSecret.password | Password for the robot account. | **required** |
 | image.repository | Image repository. | **required** |
 | image.tag | Image tag. Also pulled from `global.env.<env>.image.tag`. | **required** |

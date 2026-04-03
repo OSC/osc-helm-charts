@@ -4,7 +4,8 @@ global:
     name: osc-registry
     # @ignored
     registry: docker-registry.osc.edu
-    # @ignored
+    # -- OSC container registry robot account
+    # @section -- Image Config
     username: robot$webservices-read
     # -- Password for the robot account.
     # @section -- Image Config
