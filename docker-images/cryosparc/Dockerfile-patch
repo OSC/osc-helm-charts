@@ -1,0 +1,11 @@
+LABEL maintainer 'Zhi-Qiang You <zyou@osc.edu>'
+ARG IMAGE_TAG
+FROM docker-registry.osc.edu/webservices/cryosparc:${IMAGE_TAG}
+
+COPY cryosparc_master_patch.tar.gz /tmp/patch.tar.gz
+
+RUN ls -1 /tmp/patch.tar.gz && \
+    tar xvf /tmp/patch.tar.gz -C /opt && \
+    rm -rf /tmp/*
+
+WORKDIR /opt/cryosparc_master

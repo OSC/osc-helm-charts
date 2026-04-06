@@ -2,8 +2,8 @@ apiVersion: v2
 name: cryosparc
 description: OSC CryoSPARC bootstrap Helm Chart
 type: application
-version: 0.5.1
-appVersion: "4.7.1-r3"
+version: 0.6.0
+appVersion: "4.7.1p251124-r3"
 maintainers:
   - name: zyou
 dependencies:
