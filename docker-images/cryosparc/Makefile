@@ -20,12 +20,12 @@ ifeq ($(PATCH),)
 	--build-arg LICENSE_ID="$(LICENSE_ID)" \
 	-t $(TAG) $(ROOT_DIR)
 else
-	rm -rf $(PWD)/tmp && mkdir -p $(PWD)/tmp; \
+	rm -rf $(ROOT_DIR)/tmp && mkdir -p $(ROOT_DIR)/tmp; \
 	docker run -it --rm \
 	-e CRYOSPARC_LICENSE_ID="$(LICENSE_ID)" \
 	-e CRYOSPARC_DB_PATH="/tmp/database" \
 	-e CRYOSPARC_BASE_PORT="31000" \
-	-v $(PWD)/tmp:/tmp \
+	-v $(ROOT_DIR)/tmp:/tmp \
 	$(_TAG) bash -c " \
 	mkdir -p \$$CRYOSPARC_DB_PATH; \
 	rm -f run; \
@@ -38,8 +38,8 @@ else
 	\
 	docker build \
 	--build-arg IMAGE_TAG="$(VERSION)-r$(REVISION)" \
-	-f Dockerfile-patch \
-	-t $(TAG) $(PWD)/tmp
+	-f $(ROOT_DIR)/Dockerfile-patch \
+	-t $(TAG) $(ROOT_DIR)/tmp
 endif
 
 push:
