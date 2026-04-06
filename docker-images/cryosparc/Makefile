@@ -20,22 +20,22 @@ ifeq ($(PATCH),)
 	--build-arg LICENSE_ID="$(LICENSE_ID)" \
 	-t $(TAG) $(ROOT_DIR)
 else
-	rm -rf $(ROOT_DIR)/tmp && mkdir -p $(ROOT_DIR)/tmp; \
-	docker run -it --rm \
+	rm -rf $(ROOT_DIR)/tmp && mkdir -p $(ROOT_DIR)/tmp
+
+	docker run --rm \
 	-e CRYOSPARC_LICENSE_ID="$(LICENSE_ID)" \
 	-e CRYOSPARC_DB_PATH="/tmp/database" \
 	-e CRYOSPARC_BASE_PORT="31000" \
 	-v $(ROOT_DIR)/tmp:/tmp \
 	$(_TAG) bash -c " \
-	mkdir -p \$$CRYOSPARC_DB_PATH; \
-	rm -f run; \
-	cryosparcm start; \
-	cryosparcm status; \
-	cryosparcm patch --check; \
-	cryosparcm patch --download; \
-	cp -f cryosparc_master_patch.tar.gz /tmp/ \
-	"; \
-	\
+  		mkdir -p \$$CRYOSPARC_DB_PATH; \
+		rm -f run; \
+		cryosparcm start; \
+		cryosparcm status; \
+		cryosparcm patch --check; \
+		cryosparcm patch --download; \
+		cp -f cryosparc_master_patch.tar.gz /tmp/"
+
 	docker build \
 	--build-arg IMAGE_TAG="$(VERSION)-r$(REVISION)" \
 	-f $(ROOT_DIR)/Dockerfile-patch \
