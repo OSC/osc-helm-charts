@@ -54,7 +54,7 @@ decrypt-private-values: $(PRIVATE_CHARTS_VALUES)
 .PHONY: helm-docs
 helm-docs: ## Generate helm docs
 	@echo Generate helm docs... >&2
-	@docker run --rm -v ${PWD}/charts:/helm-docs -w /helm-docs jnorwood/helm-docs:v1.11.0 -s file
+	@docker run --rm -v ${PWD}/charts:/helm-docs -w /helm-docs jnorwood/helm-docs:v1.14.2 -s file
 
 .PHONY: verify-docs
 verify-docs: helm-docs ## Check Helm charts docs are up to date
