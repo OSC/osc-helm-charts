@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -15,7 +15,7 @@ OSC Open Web UI deployment
 | Repository | Name | Version |
 |------------|------|---------|
 | https://helm.openwebui.com/ | open-webui | 12.13.0 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.13.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.0 |
 
 ## Usage
 
@@ -30,10 +30,6 @@ global:
     host: testuser.k8.osc.edu
     hostAlias: testuser.osc.edu
   auth:
-    idpHost: IDP
-    clientID: client-id
-    clientSecret: client-secret
-    cookieSecret: secret
     allowGroups:
       - group
   alert:
@@ -81,15 +77,16 @@ global:
     annotations:
       # Limit to OH-TECH VPN
       nginx.ingress.kubernetes.io/whitelist-source-range: '<OH-TECH VPN>'
+  auth:
+    allowGroups:
+      - oscstaff
   # Generate from the command 'uuidgen'
   webui_secret_key: <SECRET>
-auth:
-  enable: false
 open-webui:
   persistence:
     storageClass: paas-nfs-client
   sso:
-    enabled: false
+    enableRoleManagement: true
   ollama:
     ollama:
       models:

@@ -26,10 +26,6 @@ global:
     host: testuser.k8.osc.edu
     hostAlias: testuser.osc.edu
   auth:
-    idpHost: IDP
-    clientID: client-id
-    clientSecret: client-secret
-    cookieSecret: secret
     allowGroups:
       - group
   alert:
@@ -77,15 +73,16 @@ global:
     annotations:
       # Limit to OH-TECH VPN
       nginx.ingress.kubernetes.io/whitelist-source-range: '<OH-TECH VPN>'
+  auth:
+    allowGroups:
+      - oscstaff
   # Generate from the command 'uuidgen'
   webui_secret_key: <SECRET>
-auth:
-  enable: false
 open-webui:
   persistence:
     storageClass: paas-nfs-client
   sso:
-    enabled: false
+    enableRoleManagement: true
   ollama:
     ollama:
       models:
