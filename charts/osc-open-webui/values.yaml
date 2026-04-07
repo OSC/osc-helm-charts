@@ -84,6 +84,8 @@ ollama:
 
 open-webui:
   # @ignored
+  fullnameOverride: open-webui
+  # @ignored
   nameOverride: open-webui
   # @ignored
   openaiApiKey: false

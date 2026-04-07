@@ -36,6 +36,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ include "open-webui.fullname" . }}
+            name: {{ index .Values "open-webui" "fullnameOverride" }}
             port:
               name: http
