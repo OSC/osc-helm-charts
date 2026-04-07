@@ -134,6 +134,9 @@ oauth2-proxy:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ tpl (include "osc.common.serviceAccountValue" .) . }}'
     receiver: '{{ .Values.global.alert.receiver }}'
   # @ignored
+  deploymentLabels:
+    keycloak.osc.edu/keycloakclient: '{{ include "osc.common.name" . }}'
+  # @ignored
   envFrom:
     - configMapRef:
         name: '{{ include "osc.common.auth.configmap.name" . }}'
