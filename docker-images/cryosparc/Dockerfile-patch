@@ -1,6 +1,6 @@
 ARG IMAGE_TAG
 FROM docker-registry.osc.edu/webservices/cryosparc:${IMAGE_TAG}
-LABEL maintainer 'Zhi-Qiang You <zyou@osc.edu>'
+LABEL maintainer='Zhi-Qiang You <zyou@osc.edu>'
 
 COPY cryosparc_master_patch.tar.gz /tmp/patch.tar.gz
 
