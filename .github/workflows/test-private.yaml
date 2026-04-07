@@ -99,7 +99,7 @@ jobs:
         run: |
           helm repo add keycloak-cr-operator https://osc.github.io/keycloak-cr-operator/
           helm install keycloak-cr-operator keycloak-cr-operator/keycloak-cr-operator -n keycloak-cr-operator --create-namespace \
-            -f .github/config/keycloak-cr-operator-values.yaml --version v0.0.3 --wait --timeout 300s
+            -f .github/config/keycloak-cr-operator-values.yaml --version v0.0.4 --wait --timeout 300s
       - name: Install Kyverno
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/

@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.5.5](https://img.shields.io/badge/Version-0.5.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -14,8 +14,8 @@ OSC Open Web UI deployment
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://helm.openwebui.com/ | open-webui | 12.3.0 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.2 |
+| https://helm.openwebui.com/ | open-webui | 12.13.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.13.0 |
 
 ## Usage
 
@@ -43,10 +43,8 @@ global:
   webui_secret_key: SECRET
 
 open-webui:
-  podLabels:
-    osc.edu/service-account: testuser
-  nodeSelector:
-    node-role.kubernetes.io/webservices: ''
+  sso:
+    enableRoleManagement: true
   ollama:
     nodeSelector:
       nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
@@ -135,96 +133,23 @@ open-webui:
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
 | global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
 | global.webservicesDeploy.create | Create webservices deployment rolebinding | `true` |
-| global.ingress.host |  | `""` |
-| global.ingress.hostAlias |  | `""` |
-| global.ingress.annotations | Additional Ingress annotations for all Ingress resources | `nil` |
-| global.ingress.api.annotations | Additional Ingress annotations for the API ingress | `nil` |
-| global.ingress.auth.annotations | Additional Ingress annotations for the Auth ingress | `nil` |
-| global.ingress.open-webui.annotations | Additional Ingress annotations for the Open WebUI Ingress | `nil` |
-| global.auth.idpHost |  | `nil` |
-| global.auth.clientID |  | `nil` |
-| global.auth.clientSecret |  | `nil` |
-| global.auth.cookieSecret |  | `nil` |
-| global.auth.allowGroups |  | `[]` |
-| global.alert.receiver |  | `nil` |
+| global.ingress.host | Ingress host | **required** |
+| global.ingress.hostAlias | Ingress host alias | **required** |
+| global.ingress.annotations | Additional Ingress annotations for the Ingress resource | `nil` |
+| global.auth.allowGroups | Restrict access to these groups | `[]` |
+| global.alert.receiver | The alert receiver | `nil` |
 | global.webui_secret_key |  | `nil` |
-| ingressName |  | `"ingress-nginx"` |
-| prometheusName |  | `"prometheus"` |
-| auth.enable |  | `true` |
-| auth.cookieName |  | `"_{{ include \"osc.common.serviceAccountValue\" . }}{{ include \"osc.common.environment\" . }}"` |
-| auth.oidcIssuerURL |  | `"https://$(IDP_HOST)/realms/osc"` |
-| auth.image.repository |  | `"quay.io/oauth2-proxy/oauth2-proxy"` |
-| auth.image.tag |  | `"v7.1.3"` |
-| auth.image.pullPolicy |  | `"IfNotPresent"` |
-| auth.podSecurityContext.runAsNonRoot |  | `true` |
-| auth.service.port |  | `4180` |
-| auth.service.annotations."prometheus.io/probe_module" |  | `"http-healthz"` |
-| auth.service.annotations."prometheus.io/probe_path" |  | `"/ping"` |
-| auth.metricsService.type |  | `"ClusterIP"` |
-| auth.metricsService.port |  | `8080` |
-| auth.metricsService.annotations."prometheus.io/scrape" |  | `"true"` |
-| auth.metricsService.annotations."prometheus.io/path" |  | `"/metrics"` |
-| auth.podResources.limits.cpu |  | `"200m"` |
-| auth.podResources.limits.memory |  | `"128Mi"` |
-| auth.podResources.requests.cpu |  | `"100m"` |
-| auth.podResources.requests.memory |  | `"64Mi"` |
-| auth.replicas |  | `1` |
-| auth.podDistributionBudget.minAvailable |  | `1` |
-| open-webui.nameOverride |  | `"open-webui"` |
-| open-webui.fullnameOverride | Set to force old names after upgrades | `"open-webui"` |
-| open-webui.serviceAccount.name | Set to force old names after upgrades | `"open-webui"` |
-| open-webui.openaiApiKey |  | `false` |
-| open-webui.pipelines.enabled |  | `false` |
-| open-webui.websocket.enabled |  | `false` |
-| open-webui.podLabels |  | `{}` |
-| open-webui.image.repository |  | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
-| open-webui.image.tag |  | `"0.8.8"` |
-| open-webui.imagePullSecrets[0].name |  | `"osc-registry"` |
-| open-webui.resources.limits.memory |  | `"4Gi"` |
-| open-webui.resources.limits.cpu |  | `2` |
-| open-webui.resources.requests.memory |  | `"2Gi"` |
-| open-webui.resources.requests.cpu |  | `1` |
-| open-webui.copyAppData.resources.limits.memory |  | `"1Gi"` |
-| open-webui.copyAppData.resources.limits.cpu |  | `1` |
-| open-webui.copyAppData.resources.requests.memory |  | `"500Mi"` |
-| open-webui.copyAppData.resources.requests.cpu |  | `"500m"` |
-| open-webui.ingress.enabled |  | `false` |
-| open-webui.persistence.size |  | `"10Gi"` |
-| open-webui.persistence.storageClass |  | `"webservices-nfs-client"` |
-| open-webui.nodeSelector |  | `{}` |
-| open-webui.extraEnvVars |  | `[]` |
-| open-webui.commonEnvVars[0].name |  | `"WEBUI_AUTH_TRUSTED_GROUPS_HEADER"` |
-| open-webui.commonEnvVars[0].value |  | `"X-Auth-Request-Groups"` |
-| open-webui.commonEnvVars[1].name |  | `"ENABLE_OAUTH_GROUP_CREATION"` |
-| open-webui.commonEnvVars[1].value |  | `"True"` |
-| open-webui.commonEnvVars[2].name |  | `"DEFAULT_USER_ROLE"` |
-| open-webui.commonEnvVars[2].value |  | `"user"` |
-| open-webui.commonEnvVars[3].name |  | `"ENABLE_SIGNUP"` |
-| open-webui.commonEnvVars[3].value |  | `"True"` |
-| open-webui.commonEnvVars[4].name |  | `"ENABLE_OAUTH_SIGNUP"` |
-| open-webui.commonEnvVars[4].value |  | `"False"` |
-| open-webui.commonEnvVars[5].name |  | `"ENABLE_LOGIN_FORM"` |
-| open-webui.commonEnvVars[5].value |  | `"True"` |
-| open-webui.commonEnvVars[6].name |  | `"WEBUI_AUTH"` |
-| open-webui.commonEnvVars[6].value |  | `"True"` |
-| open-webui.commonEnvVars[7].name |  | `"ENABLE_VERSION_UPDATE_CHECK"` |
-| open-webui.commonEnvVars[7].value |  | `"False"` |
-| open-webui.commonEnvVars[8].name |  | `"ENABLE_API_KEYS"` |
-| open-webui.commonEnvVars[8].value |  | `"True"` |
-| open-webui.extraEnvFrom[0].secretRef.name |  | `"osc-open-webui-secret"` |
-| open-webui.service.port |  | `80` |
-| open-webui.service.annotations."prometheus.io/probe_module" |  | `"http"` |
-| open-webui.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
-| open-webui.podSecurityContext.runAsNonRoot |  | `true` |
-| open-webui.containerSecurityContext.allowPrivilegeEscalation |  | `false` |
-| open-webui.containerSecurityContext.capabilities.drop[0] |  | `"ALL"` |
-| open-webui.containerSecurityContext.seccompProfile.type |  | `"RuntimeDefault"` |
-| open-webui.containerSecurityContext.privileged |  | `false` |
-| open-webui.sso.enabled |  | `true` |
-| open-webui.sso.trustedHeader.enabled |  | `true` |
-| open-webui.sso.trustedHeader.nameHeader |  | `"X-Auth-Request-Preferred-Username"` |
-| open-webui.sso.trustedHeader.emailHeader |  | `"X-Auth-Request-Email"` |
-| open-webui.ollama.fullnameOverride |  | `"open-webui-ollama"` |
+| ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |
+| open-webui.image.repository | OSC registry location for Open WebUI image | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
+| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"0.8.11"` |
+| open-webui.resources.limits.memory | Open WebUI pod memory limit | `"4Gi"` |
+| open-webui.resources.limits.cpu | Open WebUI pod CPU limit | `2` |
+| open-webui.resources.requests.memory | Open WebUI pod memory request | `"2Gi"` |
+| open-webui.resources.requests.cpu | Open WebUI pod CPU request | `1` |
+| open-webui.persistence.storageClass | The Open WebUI persistent storage class | `"webservices-nfs-client"` |
+| open-webui.extraEnvVars | Additional Open WebUI environment variables | `[]` |
+| open-webui.sso.enableRoleManagement | Enables role access controls in Open WebUI | `false` |
+| open-webui.ollama.nameOverride |  | `"ollama"` |
 | open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |
 | open-webui.ollama.image.tag |  | `"0.16.1"` |
 | open-webui.ollama.imagePullSecrets[0].name |  | `"osc-registry"` |
