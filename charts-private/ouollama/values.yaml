@@ -3,10 +3,6 @@ global:
   imagePullSecret:
     password: EXTERNAL-SECRET
   auth:
-    idpHost: EXTERNAL-DATA
-    clientID: EXTERNAL-DATA
-    clientSecret: EXTERNAL-SECRET
-    cookieSecret: EXTERNAL-SECRET
     allowGroups:
       - PHS0375
       - oscall
@@ -20,16 +16,6 @@ global:
     receiver: sciapps
 osc-open-webui:
   open-webui:
-    extraLabels:
-      receiver: sciapps
-    podLabels:
-      osc.edu/service-account: ouollama
-      receiver: sciapps
-    nodeSelector:
-      node-role.kubernetes.io/webservices: ''
-    service:
-      labels:
-        receiver: sciapps
     ollama:
       nodeSelector:
         # EXTERNAL-DATA
