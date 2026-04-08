@@ -21,7 +21,7 @@ ifeq ($(PATCH),)
 	-t $(TAG) $(ROOT_DIR)
 else
 	rm -rf $(ROOT_DIR)/tmp && mkdir -p $(ROOT_DIR)/tmp
-	cp cryosparc-patch.sh $(ROOT_DIR)/tmp/
+	cp $(ROOT_DIR)/cryosparc-patch.sh $(ROOT_DIR)/tmp/
 
 	docker run --rm \
 	-e CRYOSPARC_LICENSE_ID="$(LICENSE_ID)" \
