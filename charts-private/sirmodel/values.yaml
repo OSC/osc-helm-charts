@@ -24,14 +24,14 @@ global:
         requests:
           cpu: 100m
           memory: 128Mi
-webservice:
-  appType: rshiny
   auth:
     enable: false
+  debugGroups:
+    - wiagstf
+  alert:
+    receiver: shiny-sir
+webservice:
+  appType: rshiny
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/sirmodel
-  alert:
-    receiver: shiny-sir
-  debugGroups:
-    - wiagstf

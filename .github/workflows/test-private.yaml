@@ -125,4 +125,8 @@ jobs:
             kubectl describe job -A
             kubectl logs job.batch/$(kubectl get jobs -n nominatim -o jsonpath="{.items[0].metadata.name}") -n nominatim
           fi
-          kubectl logs -n kyverno -l app.kubernetes.io/component=admission-controller
+      - name: Get logs
+        if: failure()
+        run: |
+          set +e
+          kubectl logs -n kyverno -l app.kubernetes.io/component=admission-controller --tail=500

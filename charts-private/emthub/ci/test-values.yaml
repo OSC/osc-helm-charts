@@ -3,9 +3,9 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
+  ingress:
+    host: test.local
 webservice:
   mounts:
     roDir:
       project: null
-  ingress:
-    host: test.local
