@@ -36,6 +36,7 @@ Common labels
 {{- define "webservice.labels" -}}
 helm.sh/chart: {{ include "webservice.chart" . }}
 {{ include "webservice.selectorLabels" . }}
+{{ include "osc.common.role" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -48,7 +49,6 @@ Selector labels
 {{- define "webservice.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "webservice.name" . }}
-{{ include "osc.common.role" . }}
 {{- end }}
 
 {{- define "webservice.database.databaseName" -}}
