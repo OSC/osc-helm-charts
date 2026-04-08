@@ -14,7 +14,7 @@ OSC CryoSPARC bootstrap Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.13.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.0 |
 
 ## Usage
 
