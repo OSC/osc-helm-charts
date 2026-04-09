@@ -24,6 +24,9 @@ jobs:
           python-version: 3.9
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.8.0
+      - name: Helm login
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}' --password-stdin
       - name: Run chart-testing (lint)
         run: ct lint --config .github/config/cf.yaml --chart-dirs charts-private
 
@@ -71,6 +74,9 @@ jobs:
         run: |
           kubectl label node kind-control-plane node-role.kubernetes.io/test=''
           kubectl label node kind-control-plane node-role.kubernetes.io/webservices=''
+      - name: Helm login
+        run: |
+          echo -n '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_OSC_READ_USERNAME }}' --password-stdin
       - name: Build and Load nominatim images
         if: matrix.chart == 'nominatim'
         run: |
