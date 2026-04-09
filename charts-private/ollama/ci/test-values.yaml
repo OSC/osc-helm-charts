@@ -1,0 +1,25 @@
+global:
+  environment: dev
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  debugGroups:
+    - foobar
+  maintenanceGroups:
+    - foo
+    - bar
+  project: PAS0710
+
+ollama:
+  image:
+    tag: '0.18.3'
+
+  persistentVolume:
+    accessModes:
+    - ReadWriteOnce
+    storageClass: standard
+
+  podSecurityContext:
+    runAsUser: 65534
+    runAsGroup: 65534
+    fsGroup: 65534
