@@ -82,9 +82,6 @@ ollama:
     labels:
       '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
       receiver: '{{ .Values.global.alert.receiver }}'
-    
-    # -- Labels to add to the deployment
-    labels: {}
 
   # -- Docker registry secret names as an array
   imagePullSecrets:
@@ -160,7 +157,7 @@ ollama:
     - ReadWriteMany
     annotations:
       osc.edu/fileset: '{{ .Values.global.project }}'
-    size : 500Gi
+    size: 500Gi
     storageClass: local-ess
 
   serviceAccount:
