@@ -11,9 +11,6 @@ global:
   project: PAS0710
 
 ollama:
-  image:
-    tag: '0.18.3'
-
   persistentVolume:
     accessModes:
     - ReadWriteOnce

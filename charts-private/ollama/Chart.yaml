@@ -12,7 +12,7 @@ dependencies:
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../../charts/osc-common
   - name: ollama
-    version: 1.54.0-osc-r1
-    repository: oci://docker-registry.osc.edu/kubernetes/charts
+    version: 1.54.0-osc-r2
+    #repository: oci://docker-registry.osc.edu/kubernetes/charts
     #version: 1.54.0
     #repository: file://./ollama-helm

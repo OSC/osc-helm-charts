@@ -1,7 +1,7 @@
 global:
   # -- The service account used by OSC deployments.
   # Also pulled from global.env.<env>.serviceAccount
-  oscServiceAccount: '{{ include "ollama.name" . }}'
+  oscServiceAccount: '{{ include "ollama.fullname" . }}'
   # -- The deployment's OSC environment
   environment: production
   # -- The nodeSelector role
@@ -45,9 +45,11 @@ global:
     # -- Create webservices deployment rolebinding
     create: false
   # -- Groups that debug pods
-  debugGroups: []
+  debugGroups:
+    - sappstf
   # -- Groups that can perform maintenance operations
-  maintenanceGroups: []
+  maintenanceGroups:
+    - sappstf
   # -- Groups that are allowed to perform port forwarding
   portforwardGroups: []
   auth:
@@ -70,37 +72,62 @@ global:
   project: ''
 
 ollama:
-  networkPolicy:
-    # -- Array of additional pod labels to allow
-    allowedPodLabels: []
+  # -- Map of labels to add to the pods
+  podLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ tpl (include "osc.common.serviceAccountValue" .) . }}'
+    receiver: '{{ .Values.global.alert.receiver }}'
 
+  deployment:
+    # -- Labels to add to the deployment
+    labels:
+      '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+      receiver: '{{ .Values.global.alert.receiver }}'
+    
+    # -- Labels to add to the deployment
+    labels: {}
+
+  # -- Docker registry secret names as an array
   imagePullSecrets:
-  - name: osc-registry
+  - name: '{{ .Values.global.imagePullSecret.name }}'
 
   image:
+    # -- Docker image registry
     repository: docker-registry.osc.edu/kubernetes/ollama/ollama
-    tag: ''
+    # -- Docker image tag, overrides the image tag whose default is the chart appVersion.
+    tag: '0.18.3'
 
   ollama:
     mountPath: /ollama
     gpu:
+      # -- Enable GPU integration
       enabled: true
       type: nvidia
+      # -- Specify the number of GPU
       number: 1
     models:
+      # -- List of models to pull at container startup
+      # The more you add, the longer the container will take to start if models are not present
       pull: []
 
+  # -- Node labels for pod assignment.
   nodeSelector:
     nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
 
   service:
+    # -- Labels to add to the service
+    labels:
+      receiver: '{{ .Values.global.alert.receiver }}'
+    # -- Annotations to add to the service
     annotations:
       prometheus.io/probe_module: http
       prometheus.io/probe_scheme: http
 
+  # -- Pod Security Context
   podSecurityContext:
     runAsNonRoot: true
 
+  # -- Container Security Context
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -127,13 +154,15 @@ ollama:
     value: '1'
 
   persistentVolume:
+    # -- Enable persistence using PVC
     enabled: true
     accessModes:
     - ReadWriteMany
     annotations:
       osc.edu/fileset: '{{ .Values.global.project }}'
     size : 500Gi
-    storageClass: local-scratch
+    storageClass: local-ess
 
   serviceAccount:
-    create: false
+    # -- Specifies whether a service account should be created
+    create: true
