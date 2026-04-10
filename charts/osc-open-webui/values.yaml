@@ -98,6 +98,7 @@ open-webui:
   # @ignored
   extraLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    keycloak.osc.edu/keycloakclient: '{{ .Release.Name }}'
     receiver: '{{ .Values.global.alert.receiver }}'
   # @ignored
   podLabels:
