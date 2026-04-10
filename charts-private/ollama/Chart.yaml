@@ -14,5 +14,5 @@ dependencies:
   - name: ollama
     version: 1.54.0-osc-r2
     repository: oci://docker-registry.osc.edu/kubernetes/charts
-    #version: 1.54.0
-    #repository: file://./ollama-helm
+    # version: 1.54.0
+    # repository: file://./ollama-helm
