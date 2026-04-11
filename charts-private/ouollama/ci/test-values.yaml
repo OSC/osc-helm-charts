@@ -37,7 +37,12 @@ osc-open-webui:
         requests:
           memory: 200Mi
           cpu: 500m
-      initContainers: []
-      volumes: []
-      volumeMounts: []
-      extraEnv: []
+      volumes:
+      - name: data
+        hostPath:
+          path: /tmp/PHS0375
+          type: DirectoryOrCreate
+      - name: home
+        hostPath:
+          path: /tmp/ouollama
+          type: DirectoryOrCreate
