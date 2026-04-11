@@ -1,0 +1,49 @@
+global:
+  oscServiceAccount: nobody
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: webservices
+  ingress:
+    host: webservice.k8.example.com
+    hostAlias: webservice.example.com
+  webui_secret_key: supersecret
+ollama:
+  networkPolicy:
+    allowedPodLabels:
+      - app.kubernetes.io/name: ollama
+
+open-webui:
+  persistence:
+    storageClass: standard
+    size: 50Mi
+  resources:
+    limits:
+      memory: 500Mi
+      cpu: 1
+    requests:
+      memory: 200Mi
+      cpu: 500m
+  podSecurityContext:
+    runAsUser: 1000
+  ollama:
+    ollama:
+      gpu:
+        enabled: false
+    deployment:
+      labels:
+        osc.edu/service-account: nobody
+    podLabels:
+      osc.edu/service-account: nobody
+    resources:
+      limits:
+        memory: 500Mi
+        cpu: 1
+      requests:
+        memory: 200Mi
+        cpu: 500m
+    podSecurityContext:
+      runAsUser: 1000
+    initContainers: []
+    volumes: []
+    volumeMounts: []
+    extraEnv: []
