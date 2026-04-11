@@ -25,6 +25,9 @@ webservices:
     - busybox
   validNodeSelector:
     - test
+    - webservices
+  validStorageClass:
+    - standard
 paas:
   allowHostPaths:
     - /etc/slurm

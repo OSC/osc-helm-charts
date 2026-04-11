@@ -68,3 +68,10 @@ metadata:
   name: chatisa
   labels:
     osc.edu/role: webservice
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ouollama
+  labels:
+    osc.edu/role: webservice
