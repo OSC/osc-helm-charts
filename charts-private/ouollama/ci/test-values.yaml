@@ -40,9 +40,9 @@ osc-open-webui:
       volumes:
       - name: data
         hostPath:
-          path: /tmp/PHS0375
-          type: DirectoryOrCreate
+          path: /tmp
+          type: Directory
       - name: home
         hostPath:
-          path: /tmp/ouollama
-          type: DirectoryOrCreate
+          path: /tmp
+          type: Directory
