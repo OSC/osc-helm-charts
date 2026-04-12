@@ -48,3 +48,6 @@ osc-open-webui:
         hostPath:
           path: /tmp
           type: Directory
+      tests:
+        # The tests aren't configurable and violate Kyverno policies
+        enabled: false
