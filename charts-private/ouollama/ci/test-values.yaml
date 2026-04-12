@@ -17,6 +17,8 @@ osc-open-webui:
       size: 50Mi
     copyAppData:
       command:
+        - sh
+        - '-c'
         - exit
         - '0'
     resources:
