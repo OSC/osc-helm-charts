@@ -18,6 +18,7 @@ webservices:
     - /var/run/munge/munge.socket.2
     - /users/?*
     - /fs/?*
+    - /tmp
     - /tmp/?*
   authorizedRegistries:
     - docker-registry.osc.edu
