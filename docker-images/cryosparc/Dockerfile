@@ -1,5 +1,5 @@
 FROM docker-registry.osc.edu/osc/slurm-25.05-rhel9:latest
-LABEL maintainer 'Zhi-Qiang You <zyou@osc.edu>'
+LABEL maintainer='Zhi-Qiang You <zyou@osc.edu>'
 ARG LICENSE_ID
 ARG VERSION
 

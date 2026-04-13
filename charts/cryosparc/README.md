@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1-r3](https://img.shields.io/badge/AppVersion-4.7.1--r3-informational?style=flat-square)
+![Version: 0.6.0](https://img.shields.io/badge/Version-0.6.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.7.1p251124-r3](https://img.shields.io/badge/AppVersion-4.7.1p251124--r3-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -14,7 +14,7 @@ OSC CryoSPARC bootstrap Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.13.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.0 |
 
 ## Usage
 
