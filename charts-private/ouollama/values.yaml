@@ -16,6 +16,8 @@ global:
     receiver: sciapps
 osc-open-webui:
   open-webui:
+    sso:
+      enableRoleManagement: true
     ollama:
       nodeSelector:
         # EXTERNAL-DATA
