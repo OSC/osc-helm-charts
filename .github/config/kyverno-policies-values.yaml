@@ -19,12 +19,16 @@ webservices:
     - /users/?*
     - /fs/?*
     - /tmp
+    - /tmp/?*
   authorizedRegistries:
     - docker-registry.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
     - busybox
   validNodeSelector:
     - test
+    - webservices
+  validStorageClass:
+    - standard
 paas:
   allowHostPaths:
     - /etc/slurm
