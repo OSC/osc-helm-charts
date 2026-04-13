@@ -218,7 +218,10 @@ open-webui:
       enabled: false
   ollama:
     # Added so can be referenced
+    # @ignored
     nameOverride: ollama
+    # @ignored
+    fullnameOverride: ollama
     image:
       repository: docker-registry.osc.edu/kubernetes/ollama/ollama
       tag: '0.16.1'
