@@ -18,6 +18,8 @@ osc-open-webui:
   open-webui:
     sso:
       enableRoleManagement: true
+      roleManagement:
+        adminRoles: sysstf,sappstf,ouollamaadmin
     ollama:
       nodeSelector:
         # EXTERNAL-DATA
