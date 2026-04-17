@@ -180,7 +180,7 @@ spec:
             path: "cluster_script.sh"
       - name: admin-secret
         secret:
-          secretName: {{ include "cryosparc.name" . }}-admin
+          secretName: {{ include "cryosparc.name" . }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: Retain
     whenScaled: Retain
