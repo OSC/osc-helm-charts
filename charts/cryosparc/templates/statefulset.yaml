@@ -51,13 +51,14 @@ spec:
           cryosparcm start;
           cryosparcm status;
           echo "Creating an admin user";
-          cryosparcm cli "create_user('initial', '$ADMIN_EMAIL', '$ADMIN_PASSWORD', 'SciApps', 'Admin', True)";
-          unset ADMIN_EMAIL ADMIN_PASSWORD
+          cryosparcm cli \
+          "create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'SciApps', 'Admin', True)";
           echo "Updating cluster lanes";
           ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
             cd $x;
             cryosparcm cluster connect;
           done;
+          cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })";
           echo "Keep CryoSPARC running";
           while true; do 
             sleep 3600;
@@ -79,16 +80,6 @@ spec:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: license
-        - name: ADMIN_EMAIL
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "cryosparc.name" . }}
-              key: email
-        - name: ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "cryosparc.name" . }}
-              key: password
         volumeMounts:
         - name: {{ include "cryosparc.name" . }}-data
           mountPath: /cryosparc_data
@@ -110,6 +101,9 @@ spec:
           mountPath: /cryosparc_data/lanes/pitzer
         - name: cardinal-cluster-conf
           mountPath: /cryosparc_data/lanes/cardinal
+        - name: admin-secret
+          mountPath: /run/secrets/.admin
+          readOnly: true
         resources: {{ toYaml (index .Values.global.env (include "osc.common.environment" .) "podResources") | nindent 10 }}
         ports:
           - containerPort: {{ .Values.global.basePort }}
@@ -174,6 +168,9 @@ spec:
             path: "cluster_info.json"
           - key: "cardinal_cluster_script"
             path: "cluster_script.sh"
+      - name: admin-secret
+        secret:
+          secretName: {{ include "cryosparc.name" . }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: Retain
     whenScaled: Retain

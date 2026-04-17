@@ -21,26 +21,28 @@
 ## {{ job_type }}           - cryosparc job type
 ##
 ## OSC customized variables
-## {{ time }}               - time limit of the job (default: 60 minutes)
+## {{ time }}               - time limit of the job
 ## {{ mem_gb }}             - amount of memory needed in GB. (default: 4GB x {{ num_cpu }})
 
 #### What follows is a simple SLURM script:
 #SBATCH --cluster=cardinal
-#SBATCH --account={{ account|default('REPLACE_ME_DEFAULT_ACCOUNT') }}
+#SBATCH --account={{ account }}
 #SBATCH --job-name=cryosparc_{{ project_uid }}_{{ job_uid }}
 #SBATCH --chdir={{ project_dir_abs }}
-#SBATCH --time={{ (time|default(60)) }}
+#SBATCH --time={{ time }}
 #SBATCH --output={{ job_dir_abs }}/output.txt
 #SBATCH --error={{ job_dir_abs }}/error.txt
 #SBATCH --export=ALL,LD_PRELOAD=
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task={{ num_cpu }}
-#SBATCH --ntasks-per-node={{ (ntasks_per_node|default(1)) }}
 {%- if mem_gb %}
 #SBATCH --mem={{ mem_gb|int }}gb
 {%- endif %}
 {%- if num_gpu > 0 %}
 #SBATCH --gpus-per-node={{ num_gpu }}
+{%- endif %}
+{%- if extra_slurm_cmds %}
+#SBATCH {{ extra_slurm_cmds }}
 {%- endif %}
 
 export CRYOSPARC_SSD_PATH="$TMPDIR"
