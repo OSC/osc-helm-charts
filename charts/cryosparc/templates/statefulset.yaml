@@ -80,16 +80,6 @@ spec:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: license
-        - name: ADMIN_EMAIL
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "cryosparc.name" . }}
-              key: email
-        - name: ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "cryosparc.name" . }}
-              key: password
         volumeMounts:
         - name: {{ include "cryosparc.name" . }}-data
           mountPath: /cryosparc_data
