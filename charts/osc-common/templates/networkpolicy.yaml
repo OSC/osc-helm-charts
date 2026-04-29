@@ -30,29 +30,13 @@ spec:
     {{- end }}
     {{- if .Values.global.networkPolicy.ingressNamespace }}
     - namespaceSelector:
-        {{- $ingressNamespace := lookup "v1" "Namespace" "" .Values.global.networkPolicy.ingressNamespace }}
-        {{- if and $ingressNamespace $ingressNamespace.metadata.labels }}
         matchLabels:
-          {{- range $key, $value := $ingressNamespace.metadata.labels }}
-          {{ $key }}: {{ $value }}
-          {{- end }}
-        {{- else }}
-        matchLabels:
-          app.kubernetes.io/name: {{ .Values.global.networkPolicy.ingressNamespace }}
-        {{- end }}
+          kubernetes.io/metadata.name: {{ .Values.global.networkPolicy.ingressNamespace }}
     {{- end }}
     {{- if .Values.global.networkPolicy.prometheusNamespace }}
     - namespaceSelector:
-        {{- $prometheusNamespace := lookup "v1" "Namespace" "" .Values.global.networkPolicy.prometheusNamespace }}
-        {{- if and $prometheusNamespace $prometheusNamespace.metadata.labels }}
         matchLabels:
-          {{- range $key, $value := $prometheusNamespace.metadata.labels }}
-          {{ $key }}: {{ $value }}
-          {{- end }}
-        {{- else }}
-        matchLabels:
-          app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
-        {{- end }}
+          kubernetes.io/metadata.name: {{ .Values.global.networkPolicy.prometheusNamespace }}
     {{- end }}
     {{- range .Values.global.networkPolicy.ports }}
     ports:
