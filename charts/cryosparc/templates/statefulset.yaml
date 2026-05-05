@@ -112,6 +112,10 @@ spec:
             name: mongod
           - containerPort: {{ add .Values.global.basePort 2 }}
             name: cmd-server
+          - containerPort: {{ add .Values.global.basePort 3 }}
+            name: cmd-vis
+          - containerPort: {{ add .Values.global.basePort 4 }}
+            name: redis
           - containerPort: {{ add .Values.global.basePort 5 }}
             name: rtp-server
       nodeSelector: 
