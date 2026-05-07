@@ -85,6 +85,8 @@ data:
         regex: kubevirt;kubevirt-prometheus-metrics;metrics
       - action: labelmap
         regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
       - regex: "(app_kubernetes_io_version|prometheus_kubevirt_io)"
         action: labeldrop
       - regex: "np_kubevirt_io_allow_access_cluster_services"
