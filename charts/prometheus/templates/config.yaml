@@ -85,6 +85,12 @@ data:
         regex: kubevirt;kubevirt-prometheus-metrics
       - action: labelmap
         regex: __meta_kubernetes_pod_label_(.+)
+      - regex: "(app_kubernetes_io_version|prometheus_kubevirt_io)"
+        action: labeldrop
+      - regex: "np_kubevirt_io_allow_access_cluster_services"
+        action: labeldrop
+      - regex: ".+_(hash|generation)"
+        action: labeldrop
     - job_name: kubernetes-services
       scheme: http
       metrics_path: "/probe"
