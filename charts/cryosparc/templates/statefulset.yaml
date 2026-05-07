@@ -51,14 +51,24 @@ spec:
           cryosparcm start;
           cryosparcm status;
           echo "Creating an admin user";
+          {{- $version := semver (include "cryosparc.imageTag" .) -}}
+          {{- if eq ($version.Major | int) 5 }}
+          cryosparcm user create \
+          --email "$(cat /run/secrets/.admin/email)"  --password "$(cat /run/secrets/.admin/password)" \
+          --username admin --firstname SciApps --lastname Admin --role admin || true;
+          {{- else }}
           cryosparcm cli \
-          "create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'SciApps', 'Admin', True)";
+          "create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'admin', 'SciApps', 'Admin', True)";
+          {{- end }}
           echo "Updating cluster lanes";
           ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
             cd $x;
             cryosparcm cluster connect;
           done;
+          {{- $version := semver (include "cryosparc.imageTag" .) -}}
+          {{- if ne ($version.Major | int) 5 }}
           cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })";
+          {{- end }}
           echo "Keep CryoSPARC running";
           while true; do 
             sleep 3600;
