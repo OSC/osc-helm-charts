@@ -72,6 +72,29 @@ data:
         regex: default;kubernetes;https
       - action: labelmap
         regex: __meta_kubernetes_service_label_(.+)
+    - job_name: kubernetes-kubevirt
+      scheme: https
+      metrics_path: /metrics
+      tls_config:
+        insecure_skip_verify: true
+      kubernetes_sd_configs:
+      - role: endpoints
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_endpoints_name,__meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: kubevirt;kubevirt-prometheus-metrics;metrics
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
+      - source_labels: [__meta_kubernetes_endpoint_node_name]
+        target_label: node
+      - regex: "(app_kubernetes_io_version|prometheus_kubevirt_io)"
+        action: labeldrop
+      - regex: "np_kubevirt_io_allow_access_cluster_services"
+        action: labeldrop
+      - regex: ".+_(hash|generation)"
+        action: labeldrop
     - job_name: kubernetes-services
       scheme: http
       metrics_path: "/probe"
