@@ -80,9 +80,9 @@ data:
       kubernetes_sd_configs:
       - role: endpoints
       relabel_configs:
-      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_endpoints_name]
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_endpoints_name,__meta_kubernetes_endpoint_port_name]
         action: keep
-        regex: kubevirt;kubevirt-prometheus-metrics
+        regex: kubevirt;kubevirt-prometheus-metrics;metrics
       - action: labelmap
         regex: __meta_kubernetes_pod_label_(.+)
       - regex: "(app_kubernetes_io_version|prometheus_kubevirt_io)"
