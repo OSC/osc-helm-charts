@@ -46,4 +46,6 @@
 {%- endif %}
 
 export CRYOSPARC_SSD_PATH="$TMPDIR"
+export CRYOSPARC_LICENSE_ID=REPLACE_ME_LICENSE_ID
+
 {{ run_cmd }}
