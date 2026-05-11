@@ -33,6 +33,27 @@ spec:
         hostnames:
         {{- $nodes | toYaml | nindent 8 }}
       {{- end }}
+      initContainers:
+      - name: init-{{ include "cryosparc.name" . }}
+        image: docker-registry.osc.edu/kubernetes/busybox:latest
+        command: ["sh", "-c"]
+        args:
+        - |
+          mkdir -p /cryosparc_data/lanes;
+          mkdir -p /cryosparc_data/database;
+          mkdir -p /cryosparc_data/run;
+          ls -1 /tmp/lanes |while read x; do
+            cp -r -f /tmp/lanes/$x /cryosparc_data/lanes/;
+          done
+        volumeMounts:
+        - name: {{ include "cryosparc.name" . }}-data
+          mountPath: /cryosparc_data
+        - name: ascend-cluster-conf
+          mountPath: /tmp/lanes/ascend
+        - name: pitzer-cluster-conf
+          mountPath: /tmp/lanes/pitzer
+        - name: cardinal-cluster-conf
+          mountPath: /tmp/lanes/cardinal
       containers:
       - name: {{ include "cryosparc.name" . }}
         image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
@@ -43,9 +64,6 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
-          mkdir -p /cryosparc_data/lanes;
-          mkdir -p /cryosparc_data/database;
-          mkdir -p /cryosparc_data/run;
           printenv MY_NODE_NAME;
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
           cryosparcm start;
@@ -61,9 +79,8 @@ spec:
           "create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'admin', 'SciApps', 'Admin', True)";
           {{- end }}
           echo "Updating cluster lanes";
-          ls -1 /run/secrets/lanes/ |while read x; do
-            cp -r -f /run/secrets/lanes/$x /cryosparc_data/lanes/;
-            cd /cryosparc_data/lanes/$x;
+          ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
+            cd $x;
             cryosparcm cluster connect;
           done;
           {{- $version := semver (include "cryosparc.imageTag" .) -}}
@@ -108,12 +125,6 @@ spec:
           mountPath: /var/lib/sss/pipes
         - name: sssd-conf
           mountPath: /etc/sssd
-        - name: ascend-cluster-conf
-          mountPath: /run/secrets/lanes/ascend
-        - name: pitzer-cluster-conf
-          mountPath: /run/secrets/lanes/pitzer
-        - name: cardinal-cluster-conf
-          mountPath: /run/secrets/lanes/cardinal
         - name: admin-secret
           mountPath: /run/secrets/.admin
           readOnly: true
