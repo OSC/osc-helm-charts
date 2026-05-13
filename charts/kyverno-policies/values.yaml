@@ -130,6 +130,22 @@ kyverno-policies:
                 values:
                 - webservice
                 - paas
+    check-runasgroup:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: kubevirt
+    restrict-seccomp-strict:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: kubevirt
   # @ignored
   policyPreconditions:
     disallow-capabilities:
@@ -167,9 +183,6 @@ kyverno-policies:
         - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
           operator: NotEquals
           value: "dcgm-exporter"
-        - key: "{{ request.object.metadata.labels.\"cdi.kubevirt.io\" || '' }}"
-          operator: NotEquals
-          value: "cdi-upload-server"
     restrict-seccomp-strict:
       all:
         - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
