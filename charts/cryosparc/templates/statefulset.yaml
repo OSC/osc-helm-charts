@@ -64,8 +64,9 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
-          printenv MY_NODE_NAME;
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
+          mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc;
+          cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license;
           cryosparcm start;
           cryosparcm status;
           echo "Creating an admin user";
