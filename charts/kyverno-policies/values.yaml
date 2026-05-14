@@ -130,6 +130,22 @@ kyverno-policies:
                 values:
                 - webservice
                 - paas
+    check-runasgroup:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: kubevirt
+    restrict-seccomp-strict:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: kubevirt
   # @ignored
   policyPreconditions:
     disallow-capabilities:

@@ -26,4 +26,4 @@ spec:
       pattern:
         metadata:
           labels:
-            {{ include "osc.common.roleKey" . }}: "ondemand | infrastructure | webservice | paas"
+            {{ include "osc.common.roleKey" . }}: "ondemand | infrastructure | webservice | paas | kubevirt"

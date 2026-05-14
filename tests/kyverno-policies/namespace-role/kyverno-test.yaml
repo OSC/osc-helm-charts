@@ -23,6 +23,7 @@ results:
       - test-infrastructure
       - test-webservice
       - test-paas
+      - test-kubevirt
     kind: Namespace
     result: pass
   - policy: namespace-role
