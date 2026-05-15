@@ -65,6 +65,7 @@ spec:
         args:
         - |
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
+          set -e
           mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc;
           cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license;
           cryosparcm start;
@@ -88,6 +89,7 @@ spec:
           {{- if ne ($version.Major | int) 5 }}
           cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })";
           {{- end }}
+          set +e
           echo "Keep CryoSPARC running";
           while true; do 
             sleep 3600;
