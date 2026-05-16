@@ -66,8 +66,10 @@ spec:
         - |
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
           set -e
-          mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc;
-          cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license;
+          if [[ "$(whoami)" != "nobody" ]]; then
+            mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc;
+            cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license;
+          fi
           cryosparcm start;
           cryosparcm status;
           echo "Creating an admin user";
