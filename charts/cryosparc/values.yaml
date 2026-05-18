@@ -85,7 +85,7 @@ global:
           cpu: 1
           memory: 4Gi
         requests:
-          cpu: 1
+          cpu: 500m
           memory: 256Mi
       image:
         tag: ''

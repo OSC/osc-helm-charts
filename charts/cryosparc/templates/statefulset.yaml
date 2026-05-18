@@ -33,6 +33,27 @@ spec:
         hostnames:
         {{- $nodes | toYaml | nindent 8 }}
       {{- end }}
+      initContainers:
+      - name: init-{{ include "cryosparc.name" . }}
+        image: docker-registry.osc.edu/kubernetes/busybox:latest
+        command: ["sh", "-c"]
+        args:
+        - |
+          mkdir -p /cryosparc_data/lanes;
+          mkdir -p /cryosparc_data/database;
+          mkdir -p /cryosparc_data/run;
+          ls -1 /tmp/lanes |while read x; do
+            cp -r -f /tmp/lanes/$x /cryosparc_data/lanes/;
+          done
+        volumeMounts:
+        - name: {{ include "cryosparc.name" . }}-data
+          mountPath: /cryosparc_data
+        - name: ascend-cluster-conf
+          mountPath: /tmp/lanes/ascend
+        - name: pitzer-cluster-conf
+          mountPath: /tmp/lanes/pitzer
+        - name: cardinal-cluster-conf
+          mountPath: /tmp/lanes/cardinal
       containers:
       - name: {{ include "cryosparc.name" . }}
         image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}
@@ -43,22 +64,32 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
-          mkdir -p /cryosparc_data/lanes;
-          mkdir -p /cryosparc_data/database;
-          mkdir -p /cryosparc_data/run;
-          printenv MY_NODE_NAME;
           export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
+          set -e
+          mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc;
+          cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license;
           cryosparcm start;
           cryosparcm status;
           echo "Creating an admin user";
+          {{- $version := semver (include "cryosparc.imageTag" .) -}}
+          {{- if eq ($version.Major | int) 5 }}
+          cryosparcm user create \
+          --email "$(cat /run/secrets/.admin/email)"  --password "$(cat /run/secrets/.admin/password)" \
+          --username admin --firstname SciApps --lastname Admin --role admin || true;
+          {{- else }}
           cryosparcm cli \
-          "create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'SciApps', 'Admin', True)";
+          "create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'admin', 'SciApps', 'Admin', True)";
+          {{- end }}
           echo "Updating cluster lanes";
           ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
             cd $x;
             cryosparcm cluster connect;
           done;
+          {{- $version := semver (include "cryosparc.imageTag" .) -}}
+          {{- if ne ($version.Major | int) 5 }}
           cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })";
+          {{- end }}
+          set +e
           echo "Keep CryoSPARC running";
           while true; do 
             sleep 3600;
@@ -69,6 +100,8 @@ spec:
               command: ['cryosparcm', 'stop']   # Fix rollout restart issue
         workingDir: /opt/cryosparc_master
         env:
+        - name: TZ
+          value: "America/New_York"
         - name: SLURM_CONF
           value: {{ .Values.slurmConf }}
         - name: MY_NODE_NAME
@@ -95,12 +128,6 @@ spec:
           mountPath: /var/lib/sss/pipes
         - name: sssd-conf
           mountPath: /etc/sssd
-        - name: ascend-cluster-conf
-          mountPath: /cryosparc_data/lanes/ascend
-        - name: pitzer-cluster-conf
-          mountPath: /cryosparc_data/lanes/pitzer
-        - name: cardinal-cluster-conf
-          mountPath: /cryosparc_data/lanes/cardinal
         - name: admin-secret
           mountPath: /run/secrets/.admin
           readOnly: true
@@ -112,6 +139,10 @@ spec:
             name: mongod
           - containerPort: {{ add .Values.global.basePort 2 }}
             name: cmd-server
+          - containerPort: {{ add .Values.global.basePort 3 }}
+            name: cmd-vis
+          - containerPort: {{ add .Values.global.basePort 4 }}
+            name: redis
           - containerPort: {{ add .Values.global.basePort 5 }}
             name: rtp-server
       nodeSelector: 

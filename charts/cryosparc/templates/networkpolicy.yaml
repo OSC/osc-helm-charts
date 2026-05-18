@@ -21,8 +21,16 @@ spec:
           app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
     ports:
       - protocol: TCP
+        port: {{ .Values.global.basePort }}
+      - protocol: TCP
         port: {{ add .Values.global.basePort 1 }}
       - protocol: TCP
         port: {{ add .Values.global.basePort 2 }}
       - protocol: TCP
+        port: {{ add .Values.global.basePort 3 }}
+      - protocol: TCP
+        port: {{ add .Values.global.basePort 4 }}
+      - protocol: TCP
         port: {{ add .Values.global.basePort 5 }}
+      - protocol: TCP
+        port: {{ add .Values.global.basePort 6 }}
