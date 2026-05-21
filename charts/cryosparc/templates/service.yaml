@@ -67,4 +67,19 @@ spec:
     port: {{ add .Values.global.basePort 6 }}
     targetPort: {{ add .Values.global.basePort 6 }}
     nodePort: {{ add .Values.global.basePort 6 }}
+  - name: reserved-1
+    protocol: TCP
+    port: {{ add .Values.global.basePort 7 }}
+    targetPort: {{ add .Values.global.basePort 7 }}
+    nodePort: {{ add .Values.global.basePort 7 }}
+  - name: reserved-2
+    protocol: TCP
+    port: {{ add .Values.global.basePort 8 }}
+    targetPort: {{ add .Values.global.basePort 8 }}
+    nodePort: {{ add .Values.global.basePort 8 }}
+  - name: reserved-3
+    protocol: TCP
+    port: {{ add .Values.global.basePort 9 }}
+    targetPort: {{ add .Values.global.basePort 9 }}
+    nodePort: {{ add .Values.global.basePort 9 }}
   type: NodePort

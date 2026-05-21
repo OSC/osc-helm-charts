@@ -34,3 +34,9 @@ spec:
         port: {{ add .Values.global.basePort 5 }}
       - protocol: TCP
         port: {{ add .Values.global.basePort 6 }}
+      - protocol: TCP
+        port: {{ add .Values.global.basePort 7 }}
+      - protocol: TCP
+        port: {{ add .Values.global.basePort 8 }}
+      - protocol: TCP
+        port: {{ add .Values.global.basePort 9 }}
