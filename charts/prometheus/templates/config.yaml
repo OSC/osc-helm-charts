@@ -72,30 +72,28 @@ data:
         regex: default;kubernetes;https
       - action: labelmap
         regex: __meta_kubernetes_service_label_(.+)
-    - job_name: kubernetes-kube-proxy
-      scheme: http
+    - job_name: kubernetes-kubevirt
+      scheme: https
       metrics_path: /metrics
+      tls_config:
+        insecure_skip_verify: true
       kubernetes_sd_configs:
-      - role: node
+      - role: endpoints
       relabel_configs:
-      - source_labels: [__address__]
-        action: replace
-        target_label: __address__
-        regex: '([^:]+)(?::\d+)?'
-        replacement: '$1:10249'
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_endpoints_name,__meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: (kubevirt|cdi);(kubevirt|cdi)-prometheus-metrics;metrics
       - action: labelmap
-        regex: __meta_kubernetes_node_label_(.+)
-      - source_labels: [__meta_kubernetes_node_name]
-        regex: '(.+)'
-        replacement: '$1'
-        target_label: host
-      - source_labels: [host]
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
+      - source_labels: [__meta_kubernetes_endpoint_node_name]
         target_label: node
-      - regex: "feature_node_.+"
+      - regex: "(app_kubernetes_io_version|prometheus_kubevirt_io|prometheus_cdi_kubevirt_io)"
         action: labeldrop
-      - regex: "nvidia_com_.+"
+      - regex: "np_kubevirt_io_allow_access_cluster_services"
         action: labeldrop
-      - regex: "cluster"
+      - regex: ".+_(hash|generation|createVersion)"
         action: labeldrop
     - job_name: kubernetes-services
       scheme: http

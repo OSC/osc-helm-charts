@@ -12,7 +12,6 @@ global:
         tag: '{{ .Values.global.imageTag }}'
       auth:
         accessGroup: accessphylogatr
-        replicas: 2
     test:
       serviceAccount: phylogatr
       replicas: 2
@@ -22,7 +21,6 @@ global:
         tag: '{{ .Values.global.imageTag }}'
       auth:
         accessGroup: accessphylogatr
-        replicas: 2
     dev:
       serviceAccount: phylogatrdev
       replicas: 1
@@ -32,7 +30,6 @@ global:
         tag: latest
       auth:
         accessGroup: accessphylogatrdev
-        replicas: 1
       podResources:
         limits:
           cpu: 1
@@ -40,6 +37,14 @@ global:
         requests:
           cpu: 100m
           memory: 128Mi
+  auth:
+    enable: true
+    allowGroups:
+      - '{{ index .Values.global.env (include "osc.common.environment" .) "auth" "accessGroup" }}'
+  debugGroups:
+    - wiagstf
+  alert:
+    receiver: gateways
 webservice:
   appType: rails
   startupProbe:
@@ -61,13 +66,6 @@ webservice:
   data:
     enable: true
     size: 10Gi
-  auth:
-    enable: true
-    idpHost: EXTERNAL-DATA
-    clientSecret: EXTERNAL-SECRET
-    cookieSecret: EXTERNAL-SECRET
-  alert:
-    receiver: gateways
   env:
   - name: BATCH_MODE
     value: '1'
@@ -87,8 +85,6 @@ webservice:
       slurm-conf: /etc/slurm
     socket:
       munge-socket: /var/run/munge/munge.socket.2
-  debugGroups:
-    - wiagstf
   initContainers:
     - name: db-copy
       command:

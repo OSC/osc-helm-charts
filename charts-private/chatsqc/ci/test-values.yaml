@@ -3,6 +3,5 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
-webservice:
   ingress:
     host: test.local

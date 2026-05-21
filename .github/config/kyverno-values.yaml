@@ -11,6 +11,15 @@ admissionController:
       loggingFormat: text
       exceptionNamespace: kyverno
       webhookTimeout: 30
+  rbac:
+    clusterRole:
+      extraResources:
+        - apiGroups: ['keycloak.osc.edu']
+          resources: ['keycloakclients']
+          verbs:
+            - get
+            - list
+            - watch
 config:
   resourceFiltersIncludeNamespaces:
   - local-path-storage

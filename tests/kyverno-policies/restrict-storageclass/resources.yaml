@@ -1,0 +1,212 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paas-staff-pvc-skip
+  namespace: paas-staff
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: webservices-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: webservice-pvc-pass
+  namespace: webservice
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: webservices-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: webservice-pvc-pass-local-path
+  namespace: webservice
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-path
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: webservice-pvc-fail
+  namespace: webservice
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: infra-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paas-staff-pvc-pass
+  namespace: paas-staff
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: paas-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paas-pvc-pass
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paas-pvc-fail
+  namespace: paas
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: paas-nfs-client
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paas-staff-pvc-pass-local-path
+  namespace: paas-staff
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-path
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-staff-statefulset-skip
+  namespace: paas-staff
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-skip
+      spec:
+        storageClassName: webservices-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-staff-statefulset-pass
+  namespace: paas-staff
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: paas-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-pass
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-statefulset-fail
+  namespace: paas
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: paas-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paas-staff-statefulset-pass-local-path
+  namespace: paas-staff
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: paas-statefulset-pass
+      spec:
+        storageClassName: local-path
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-pass
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pass
+      spec:
+        storageClassName: webservices-nfs-client
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-pass-local
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pass
+      spec:
+        storageClassName: local-storage
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-pass-local-path
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pass
+      spec:
+        storageClassName: local-path
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-fail
+  namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-fail
+      spec:
+        storageClassName: infra-nfs-client

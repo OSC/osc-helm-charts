@@ -25,6 +25,13 @@ results:
   - policy: add-gpu-nodeselector
     rule: gpu-nodeselector
     resources:
+      - test-gpu-skip-affinity
+    patchedResource: gpu-nodeselector-not-mutated-if-affinity.yaml
+    kind: Pod
+    result: skip
+  - policy: add-gpu-nodeselector
+    rule: gpu-nodeselector
+    resources:
       - test-gpu-nodeselector
     patchedResource: gpu-nodeselector-mutated.yaml
     kind: Pod

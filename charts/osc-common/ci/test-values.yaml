@@ -1,0 +1,22 @@
+---
+global:
+  nodeSelectorRole: test
+  networkPolicy:
+    podSelector:
+      app.kubernetes.io/name: test
+    ingressAllowedPods:
+      - require: foo
+      - app.kubernetes.io/name: '{{ include "osc.common.name" . }}'
+    ports:
+      - '{{ .Values.service.port }}'
+  debugGroups:
+    - testdebug
+    - testdebug2
+  maintenanceGroups:
+    - testmaint
+    - testmaint2
+  portforwardGroups:
+    - portforward
+    - portforward2
+service:
+  port: 8080

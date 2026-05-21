@@ -1,0 +1,37 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: keycloakclient
+  annotations:
+    policies.kyverno.io/category: KeycloakClient
+    policies.kyverno.io/description: >-
+      Validate usage of KeycloakClient resources
+spec:
+  background: true
+  validationFailureAction: Enforce
+  rules:
+  - name: pass-redirecturi
+    match:
+      any:
+      - resources:
+          kinds:
+            - keycloak.osc.edu/v1alpha1/KeycloakClient
+          namespaceSelector:
+              matchLabels:
+                osc.edu/role: paas
+    context:
+    - name: allowed
+      apiCall:
+        urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+        jmesPath: "metadata.annotations.\"osc.edu/allowed-dns\" || ''"
+    validate:
+      message: "The requested redirectUris do not match allowed DNS for this namespace"
+      foreach:
+      - list: request.object.spec.redirectUris || []
+        deny:
+          conditions:
+            all:
+            - key: "{{`{{ element }}`}}"
+              operator: AnyNotIn
+              value: "{{`{{ allowed | split(@, ',')[].join('', ['https://', @, '*']) }}`}}"

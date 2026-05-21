@@ -1,0 +1,37 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+- name: keycloakclient
+  resources:
+    - name: paas-pass-list
+      values:
+        allowed: 'web.osc.edu,bar.osc.edu'
+    - name: paas-fail-list
+      values:
+        allowed: 'web.osc.edu,bar.osc.edu'
+    - name: paas-pass-wildcard
+      values:
+        allowed: 'test*.osc.edu'
+    - name: paas-fail-wildcard
+      values:
+        allowed: 'test*.osc.edu'
+    - name: paas-pass-single
+      values:
+        allowed: 'foo.osc.edu'
+    - name: paas-fail-single
+      values:
+        allowed: 'foo.osc.edu'
+    - name: paas-pass-no-redirects
+      values:
+        allowed: 'test.osc.edu'
+    - name: paas-fail-dne
+      values:
+        allowed: ''
+    - name: skip
+namespaceSelector:
+  - name: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas

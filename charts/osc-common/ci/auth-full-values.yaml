@@ -1,0 +1,21 @@
+global:
+  oscServiceAccount: test
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  auth:
+    enable: true
+    upstream: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80
+    skipAuthRoutes:
+      - '/api($|/.*)'
+      - '^/ollama($|/.*)'
+      - '^/docs($|/.*)'
+    allowGroups:
+      - group1
+      - group2
+      - '{{ .Values.global.project }}'
+  ingress:
+    host: test.example.com
+  project: test1
+keycloakClient:
+  config:
+    publicClient: true

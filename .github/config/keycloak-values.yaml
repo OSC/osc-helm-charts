@@ -1,0 +1,9 @@
+image:
+  repository: bitnamilegacy/keycloak
+postgresql:
+  image:
+    repository: bitnamilegacy/postgresql
+resourcesPreset: large
+auth:
+  adminUser: admin
+  adminPassword: secret

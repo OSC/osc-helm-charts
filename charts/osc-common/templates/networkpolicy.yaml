@@ -1,0 +1,46 @@
+{{- if .Values.global.networkPolicy.create }}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "osc.common.name" . }}
+  labels:
+    {{- include "osc.common.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+    {{- if .Values.global.networkPolicy.podSelector }}
+      {{- tpl (toYaml .Values.global.networkPolicy.podSelector) . | nindent 6 }}
+    {{- else }}
+      {{- include "osc.common.selectorLabels" . | nindent 6 }}
+    {{- end }}
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          {{- include "osc.common.selectorLabels" . | nindent 10 }}
+    {{- if .Values.global.auth.enable }}
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/component: authentication-proxy
+    {{- end }}
+    {{- range $labels := .Values.global.networkPolicy.ingressAllowedPods  }}
+    - podSelector:
+        matchLabels:
+          {{-  tpl (toYaml $labels) $ | nindent 10 }}
+    {{- end }}
+    {{- if .Values.global.networkPolicy.ingressNamespace }}
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.global.networkPolicy.ingressNamespace }}
+    {{- end }}
+    {{- if .Values.global.networkPolicy.prometheusNamespace }}
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.global.networkPolicy.prometheusNamespace }}
+    {{- end }}
+    {{- range .Values.global.networkPolicy.ports }}
+    ports:
+      - protocol: TCP
+        port: {{ tpl (toString .) $ }}
+    {{- end }}
+{{- end }}

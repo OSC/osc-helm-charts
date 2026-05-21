@@ -10,14 +10,56 @@ resources:
 variables: variables.yaml
 results:
   - policy: add-role
-    rule: paas-add-role
+    rule: paas-add-role-pod
     resources:
       - test-paas
     patchedResource: test-paas-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-role
-    rule: paas-add-role
+    rule: paas-add-role-all
+    resources:
+      - paas-deployment
+    patchedResource: test-paas-mutated.yaml
+    kind: Deployment
+    result: pass
+  - policy: add-role
+    rule: paas-add-role-all
+    resources:
+      - paas-statefulset
+    patchedResource: test-paas-mutated.yaml
+    kind: StatefulSet
+    result: pass
+  - policy: add-role
+    rule: paas-add-role-all
+    resources:
+      - paas-replicaset
+    patchedResource: test-paas-mutated.yaml
+    kind: ReplicaSet
+    result: pass
+  - policy: add-role
+    rule: paas-add-role-all
+    resources:
+      - paas-job
+    patchedResource: test-paas-mutated.yaml
+    kind: Job
+    result: pass
+  - policy: add-role
+    rule: paas-add-role-all
+    resources:
+      - paas-service
+    patchedResource: test-paas-mutated.yaml
+    kind: Service
+    result: pass
+  - policy: add-role
+    rule: paas-add-role-all
+    resources:
+      - paas-ingress
+    patchedResource: test-paas-mutated.yaml
+    kind: Ingress
+    result: pass
+  - policy: add-role
+    rule: paas-add-role-pod
     resources:
       - test-skip
       - test-skip-webservice

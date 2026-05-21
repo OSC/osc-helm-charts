@@ -3,26 +3,23 @@ global:
   imagePullSecret:
     password: EXTERNAL-SECRET
   auth:
-    idpHost: EXTERNAL-DATA
-    clientID: EXTERNAL-DATA
-    clientSecret: EXTERNAL-SECRET
-    cookieSecret: EXTERNAL-SECRET
     allowGroups:
       - PHS0375
       - oscall
-  maintenance:
-    groups:
-      - oscstaff
+  maintenanceGroups:
+    - oscstaff
   ingress:
     host: EXTERNAL-DATA
     hostAlias: EXTERNAL-DATA
   webui_secret_key: EXTERNAL-SECRET
+  alert:
+    receiver: sciapps
 osc-open-webui:
   open-webui:
-    podLabels:
-      osc.edu/service-account: ouollama
-    nodeSelector:
-      node-role.kubernetes.io/webservices: ''
+    sso:
+      enableRoleManagement: true
+      roleManagement:
+        adminRoles: sysstf,sappstf,ouollamaadmin
     ollama:
       nodeSelector:
         # EXTERNAL-DATA
@@ -31,14 +28,19 @@ osc-open-webui:
       deployment:
         labels:
           osc.edu/service-account: ouollama
+          receiver: sciapps
       podLabels:
         osc.edu/service-account: ouollama
+        receiver: sciapps
       volumes:
       - name: data
         hostPath:
-          path: /fs/ess/PHS0375/ollama-models
+          path: /fs/ess/PHS0375
           type: Directory
       - name: home
         hostPath:
-          path: /users/PHS0375/ouollama/ollama-home
+          path: /users/PHS0375/ouollama
           type: Directory
+      service:
+        labels:
+          receiver: sciapps

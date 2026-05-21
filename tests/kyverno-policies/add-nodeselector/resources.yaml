@@ -22,8 +22,8 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-paas-skip
-  namespace: webservices
+  name: test-webservice-nodeselector
+  namespace: webservice
 spec:
   containers:
     - name: nginx

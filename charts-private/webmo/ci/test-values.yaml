@@ -12,14 +12,12 @@ global:
         requests:
           cpu: 100m
           memory: 128Mi
-webservice:
   ingress:
     host: test.local
+webservice:
   mounts:
-    rwDir:
-      webmo: null
-    roDir:
-      slurm-conf: null
+    rwDir: null
+    roDir: null
     socket: null
   readinessProbe:
     httpGet:

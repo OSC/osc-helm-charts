@@ -14,21 +14,29 @@ rules:
   verbs:
     - get
     - list
+    - watch
 - apiGroups: [""]
   resources:
     - pods
+    - pods/attach
     - pods/exec
+    - pods/portforward
+    - pods/proxy
     - services
+    - services/proxy
+    - endpoints
     - configmaps
     - serviceaccounts
     - secrets
   verbs:
     - get
     - list
+    - watch
     - create
     - patch
     - update
     - delete
+    - deletecollection
 - apiGroups: ["apps"]
   resources:
     - deployments

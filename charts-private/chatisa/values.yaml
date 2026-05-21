@@ -22,13 +22,18 @@ global:
         requests:
           cpu: 100m
           memory: 128Mi
-      maintenance:
-        groups:
-          - sappstf
-webservice:
-  appType: none
   auth:
     enable: false
+  maintenanceGroups:
+    - sappstf
+  debugGroups:
+    - sappstf
+  service:
+    port: 8080
+  alert:
+    receiver: sciapps
+webservice:
+  appType: none
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/chatisa
@@ -49,9 +54,3 @@ webservice:
   readinessProbe:
     httpGet:
       path: /healthz
-  service:
-    port: 8080
-  alert:
-    receiver: sciapps
-  debugGroups:
-    - sappstf

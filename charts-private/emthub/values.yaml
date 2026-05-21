@@ -22,20 +22,19 @@ global:
         requests:
           cpu: 500m
           memory: 265Mi
-      maintenance:
-        groups:
-          - wiagstf
-webservice:
-  appType: rshiny
   auth:
     enable: false
+  maintenanceGroups:
+    - wiagstf
+  debugGroups:
+    - wiagstf
+  alert:
+    receiver: emthub
+webservice:
+  appType: rshiny
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/emthub
   mounts:
     roDir:
       project: /fs/ess/PAS2531
-  alert:
-    receiver: emthub
-  debugGroups:
-    - wiagstf

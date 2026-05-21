@@ -18,6 +18,7 @@ data:
   user-emthub: "42168"
   user-harvesttest: "44687"
   user-webmooberlin: "49133"
+  user-ouollama: "49669"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -34,6 +35,7 @@ data:
   user-emthub: "8052"
   user-harvesttest: "8377"
   user-webmooberlin: "9173"
+  user-ouollama: "8085"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -50,3 +52,4 @@ data:
   user-emthub: '["8052"]'
   user-harvesttest: '["8377","8388","65533"]'
   user-webmooberlin: '["9173"]'
+  user-ouollama: '["8085"]'

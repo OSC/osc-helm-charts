@@ -1,4 +1,4 @@
-{{ if .Values.auth.enable }}
+{{ if .Values.global.auth.enable }}
 {{ $name := printf "%s-remove-auth-ingress" (include "webservice.name" .) }}
 ---
 apiVersion: v1
@@ -45,9 +45,6 @@ metadata:
     "helm.sh/hook-weight": "-15"
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 rules:
-- apiGroups: [""]
-  resources: ["secrets"]
-  verbs: ["delete"]
 - apiGroups: ["networking.k8s.io"]
   resources: ["ingresses"]
   verbs: ["delete"]
@@ -107,38 +104,7 @@ spec:
         args:
           - "delete"
           - "ingress"
-          - {{ include "webservice.auth.name" . | quote }}
-          {{- range $container := .Values.containers }}
-          - {{ printf "%s-%s" (include "webservice.name" $) (tpl $container.name $) | quote }}
-          {{- end }}
-          - "--namespace={{ .Release.Namespace }}"
-          - "--ignore-not-found=true"
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          seccompProfile:
-            type: RuntimeDefault
-          privileged: false
-        resources:
-          limits:
-            cpu: 1
-            memory: 512Mi
-          requests:
-            cpu: 500m
-            memory: 265Mi
-      - name: remove-auth-secret
-        image: "{{ .Values.hook.image.repository }}:{{ .Values.hook.image.tag }}"
-        command:
-          - "kubectl"
-        args:
-          - "delete"
-          - "secret"
-          - {{ include "webservice.auth.name" . }}-cert
-          {{- range $container := .Values.containers }}
-          - {{ printf "%s-%s-cert" (include "webservice.name" $) (tpl $container.name $) | quote }}
-          {{- end }}
+          - {{ include "webservice.name" . | quote }}
           - "--namespace={{ .Release.Namespace }}"
           - "--ignore-not-found=true"
         securityContext:

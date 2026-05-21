@@ -1,4 +1,15 @@
+global:
+  # @ignored
+  imagePullSecret:
+    create: false
+  # @ignored
+  networkPolicy:
+    create: false
+  # @ignored
+  webservicesDeploy:
+    create: false
 users:
+  # -- Allowed host paths for user namespaces
   allowHostPaths:
     - /var/lib/sss/pipes
     - /etc/sssd
@@ -10,10 +21,12 @@ users:
     - /fs/?*
     - /apps/?*
     - /nfsroot/?*
+  # -- Authorized registries for user namespaces
   authorizedRegistries:
     - docker-registry.osc.edu
     - docker-registry-test.osc.edu
 webservices:
+  # -- Allowed host paths for webservices
   allowHostPaths:
     - /var/lib/sss/pipes
     - /etc/sssd
@@ -22,14 +35,22 @@ webservices:
     - /var/run/munge/munge.socket.2
     - /users/?*
     - /fs/?*
+  # -- Authorized registries for webservices
   authorizedRegistries:
     - docker-registry.osc.edu
     - docker-registry-test.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
+  # -- Allowed node selectors for webservices
   validNodeSelector:
     - infrastructure
     - webservices
+  # -- Allowed storage classes for webservices
+  validStorageClass:
+    - local-ess
+    - local-path
+    - webservices-nfs-client
 paas:
+  # -- Allowed host paths for PAAS namespaces
   allowHostPaths:
     - /var/lib/sss/pipes
     - /etc/sssd
@@ -38,25 +59,38 @@ paas:
     - /var/run/munge/munge.socket.2
     - /users/?*
     - /fs/?*
+  # -- Authorized registries for PAAS namespaces
   authorizedRegistries:
     - docker-registry.osc.edu
     - docker-registry-test.osc.edu
     - quay.io/oauth2-proxy/oauth2-proxy
+  # -- Allowed node selectors for PAAS namespaces
   validNodeSelector:
     - paas
+  # -- The cert-manager cluster issuer for PAAS namespaces
   certManagerClusterIssuer: letsencrypt
+  # -- The Ingress class name for PAAS namespaces
   ingressClassName: nginx
-validationFailureAction: {}
+  validStorageClass:
+    # -- Allow storage classes for PAAS namespaces
+    paas:
+      - local-ess
+    # -- Allowed storage classes for staff PAAS namespaces
+    paasStaff:
+      - local-ess
+      - local-path
+      - paas-nfs-client
 kyverno-policies:
-  # Supported- baseline/restricted/privileged/custom
-  # For more info- https://kyverno.io/policies/pod-security
+  # -- Pod Security Standard profile (`baseline`, `restricted`, `privileged`, `custom`).
+  # For more info https://kyverno.io/policies/pod-security.
   podSecurityStandard: restricted
+  # -- Additional policies to include from `other`.
   includeOtherPolicies:
     - require-non-root-groups
-  # Supported- low/medium/high
+  # -- Pod Security Standard (`low`, `medium`, `high`).
   podSecuritySeverity: medium
-  # Supported values- `Audit`, `Enforce`
-  # For more info- https://kyverno.io/docs/writing-policies/validate/
+  # -- Validation failure action (`Audit`, `Enforce`).
+  # For more info https://kyverno.io/docs/policy-types/cluster-policy/validate.
   validationFailureAction: Enforce
 #  validationFailureActionOverrides:
 #    all:
@@ -64,6 +98,7 @@ kyverno-policies:
 #        namespaces:
 #          - external-dns
 #          - prometheus
+  # @ignored
   policyExclude:
     disallow-host-path:
       any:
@@ -95,6 +130,23 @@ kyverno-policies:
                 values:
                 - webservice
                 - paas
+    check-runasgroup:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: kubevirt
+    restrict-seccomp-strict:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: kubevirt
+  # @ignored
   policyPreconditions:
     disallow-capabilities:
       all:

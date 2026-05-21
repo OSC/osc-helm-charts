@@ -1,0 +1,140 @@
+global:
+  # -- The service account used by OSC deployments.
+  # @default -- The chart's release name
+  oscServiceAccount: '{{ include "cryosparc.name" . }}'
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The OSC node role to use with nodeSelector
+  nodeSelectorRole: webservices
+  imagePullSecret:
+    # -- Create the image pull secret
+    create: true
+    # -- imagePullSecret name
+    name: osc-registry
+    # -- imagePullSecret registry
+    registry: docker-registry.osc.edu
+    # -- imagePullSecret username
+    username: robot$webservices-read
+    # -- imagePullSecret password.
+    # This value will be set by OSC's Puppet.
+    # This value must be set to IMAGE-PULL-PASSWORD for CI tests.
+    password:
+  # @ignored
+  networkPolicy:
+    create: true
+    ingressNamespace: ingress-nginx
+    prometheusNamespace: prometheus
+    ports:
+      - '{{ .Values.global.basePort }}'
+  # @ignored
+  webservicesDeploy:
+    create: false
+  # -- Groups that debug pods
+  debugGroups: []
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups: []
+  auth:
+    # @ignored
+    enable: true
+    # @ignored
+    upstream: http://{{ include "cryosparc.name" . }}.{{ .Release.Namespace }}.svc.cluster.local:80
+    # -- Base groups allowed to login
+    commonAllowGroups:
+      - sappstf
+      - sysstf
+      - '{{ .Values.global.project }}'
+    # -- Additional groups allowed to login
+    allowGroups: []
+  ingress:
+    # -- Ingress host.
+    # @default -- **required**
+    host: ""
+    # -- Ingress host alias.
+    # @default -- **required**
+    hostAlias: ""
+  alert:
+    # Also pulled from global.env.$environment.alert.receiver
+    receiver: sciapps
+  # @ignored
+  env:
+    production:
+      # CryoSPARC Master Node Requirements
+      # https://guide.cryosparc.com/setup-configuration-and-management/hardware-and-system-requirements#cryosparc-master-node-requirements
+      podResources:
+        limits:
+          cpu: 8
+          memory: 32Gi
+        requests:
+          cpu: 4
+          memory: 16Gi
+      image:
+        tag: ''
+    test:
+      podResources:
+        limits:
+          cpu: 1
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+      image:
+        tag: ''
+    dev:
+      podResources:
+        limits:
+          cpu: 1
+          memory: 4Gi
+        requests:
+          cpu: 1
+          memory: 256Mi
+      image:
+        tag: ''
+  # -- The base service port. Must be unique for each CryoSPARC instance
+  # @default -- **required**
+  basePort: ~
+  # -- The service project
+  # @default -- **required**
+  project: ''
+
+# -- The CryoSPARC license ID
+license: ''
+homeDir: '{{ .Values.global.project }}'
+# -- Slurm configuration of the cluster used for service
+slurmConf: /etc/slurm/slurm-ascend.conf
+worker_bin_path:
+  # -- The CryoSPARC worker binary path for Ascend cluster
+  ascend: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
+  # -- The CryoSPARC worker binary path for Cardinal cluster
+  cardinal: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
+  # -- The CryoSPARC worker binary path for Pitzer cluster
+  pitzer: /apps/cryosparc-worker/{{ regexReplaceAll "-r.*$" (include "cryosparc.imageTag" .) "" }}/bin/cryosparcw
+# @ignored
+storage:
+  projectStorageClass: local-ess
+  accessModes: ReadWriteMany
+
+image:
+  # -- The CryoSPARC image URL
+  repository: docker-registry.osc.edu/webservices/cryosparc
+  # -- The CryoSPARC image tag
+  tag: ''
+  pullPolicy: IfNotPresent
+
+mounts:
+  home: /users/{{ tpl .Values.homeDir . }}/{{ tpl (include "osc.common.serviceAccountValue" .) . }}
+  project: /fs/ess/{{ required "Project must be provided" .Values.global.project }}
+
+admin:
+  email: ''
+  password: ''
+
+nodeSelector: {}
+
+# @ignored
+podSecurityContext:
+  runAsNonRoot: true
+
+# The following should not be changed
+# @ignored
+service:
+  port: 80

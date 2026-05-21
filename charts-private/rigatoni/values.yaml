@@ -17,18 +17,18 @@ global:
       replicas: 1
       image:
         tag: latest
-webservice:
-  appType: rshiny
   auth:
     enable: false
+  debugGroups:
+    - wiagstf
+    - PAS0854
+  alert:
+    receiver: gateways
+webservice:
+  appType: rshiny
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/rigatoni
   mounts:
     roDir:
       project: /fs/ess/PAS0854
-  alert:
-    receiver: gateways
-  debugGroups:
-    - wiagstf
-    - PAS0854

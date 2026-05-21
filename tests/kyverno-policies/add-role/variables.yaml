@@ -5,7 +5,7 @@ metadata:
 policies:
   - name: add-role
     rules:
-      - name: paas-add-role
+      - name: paas-add-role-pod
         values:
           role: test
 namespaceSelector:

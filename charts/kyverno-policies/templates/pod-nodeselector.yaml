@@ -30,15 +30,8 @@ spec:
             kinds:
             - Pod
             namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - webservice
-    exclude:
-      any:
-        - resources:
-            name: "cm-acme-http-solver-*"
+              matchLabels:
+                osc.edu/role: webservice
     validate:
       message: "Node selector must be set"
       anyPattern:
@@ -57,15 +50,8 @@ spec:
             kinds:
             - Pod
             namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - paas
-    exclude:
-      any:
-        - resources:
-            name: "cm-acme-http-solver-*"
+              matchLabels:
+                osc.edu/role: paas
     validate:
       message: "Node selector must be set"
       anyPattern:

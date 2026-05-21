@@ -1,6 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 KYVERNO_GIT = https://github.com/kyverno/kyverno.git
-KYVERNO_VERSION := "v1.13.2"
+KYVERNO_VERSION := "v1.14.5"
 KYVERNO_DIR := $(ROOT_DIR)/kyverno-cli
 #KYVENOR_CLI := $(KYVERNO_DIR)/cmd/cli/kubectl-kyverno/kubectl-kyverno
 KYVENOR_CLI := $(KYVERNO_DIR)/kyverno
@@ -54,7 +54,7 @@ decrypt-private-values: $(PRIVATE_CHARTS_VALUES)
 .PHONY: helm-docs
 helm-docs: ## Generate helm docs
 	@echo Generate helm docs... >&2
-	@docker run --rm -v ${PWD}/charts:/helm-docs -w /helm-docs jnorwood/helm-docs:v1.11.0 -s file
+	@docker run --rm -v ${PWD}/charts:/helm-docs -w /helm-docs jnorwood/helm-docs:v1.14.2 -s file
 
 .PHONY: verify-docs
 verify-docs: helm-docs ## Check Helm charts docs are up to date

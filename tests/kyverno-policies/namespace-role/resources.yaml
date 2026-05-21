@@ -47,4 +47,11 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: test-kubevirt
+  labels:
+    osc.edu/role: kubevirt
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: test-fail

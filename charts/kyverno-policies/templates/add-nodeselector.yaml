@@ -19,6 +19,20 @@ spec:
           spec:
             nodeSelector:
               node-role.kubernetes.io/ondemand: ''
+    - name: webservice-nodeselector
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+      mutate:
+        patchStrategicMerge:
+          spec:
+            nodeSelector:
+              node-role.kubernetes.io/webservices: ''
     - name: paas-nodeselector
       match:
         any:
@@ -26,11 +40,8 @@ spec:
             kinds:
             - Pod
             namespaceSelector:
-              matchExpressions:
-              - key: osc.edu/role
-                operator: In
-                values:
-                - paas
+              matchLabels:
+                osc.edu/role: paas
       mutate:
         patchStrategicMerge:
           spec:

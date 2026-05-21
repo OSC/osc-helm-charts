@@ -5,6 +5,7 @@ metadata:
   labels:
     {{ include "osc.common.serviceAccount" . }}
     {{- include "webservice.labels" . | nindent 4 }}
+    app.kubernetes.io/purpose: test
   annotations:
     "helm.sh/hook": test
 spec:
@@ -14,7 +15,7 @@ spec:
       image: busybox:latest
       imagePullPolicy: Always
       command: ['wget']
-      args: ['-O-','-S','{{ include "webservice.name" . }}:{{ .Values.service.port }}{{ tpl .Values.startupProbe.httpGet.path . }}']
+      args: ['-O-','-S','{{ include "webservice.name" . }}:{{ .Values.global.service.port }}{{ tpl .Values.startupProbe.httpGet.path . }}']
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
@@ -23,15 +24,13 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         privileged: false
-  {{- $podResources := .Values.podResources }}
-  {{- if .Values.global.env }}
-    {{- if (index .Values.global.env (include "osc.common.environment" .)) }}
-      {{- if (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
-        {{- $podResources = (index .Values.global.env (include "osc.common.environment" .) "podResources") }}
-      {{- end }}
-    {{- end }}
-  {{- end }}
-      resources: {{ toYaml $podResources | nindent 8 }}
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 64Mi
   restartPolicy: Never
   nodeSelector:
     {{ include "osc.common.nodeSelectorRole" . }}
