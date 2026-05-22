@@ -20,6 +20,8 @@ spec:
       {{- if (include "cryosparc.alert.receiver" .) }}
         receiver: {{ include "cryosparc.alert.receiver" . }}
       {{- end }}
+      annotations:
+        checksum/config: {{ include "cryosparc.run.content" . | sha256sum }}
     spec:
       serviceAccountName: {{ include "cryosparc.name" . }}
       securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}

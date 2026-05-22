@@ -33,37 +33,5 @@ metadata:
   labels:
     {{- include "cryosparc.labels" . | nindent 4 }}
 data:
-  run.sh: |-
-    export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
-    set -e
-    echo "Create cryosparc directory"
-    mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc;
-    echo "Write license"
-    cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license;
-    echo "Start cryosparc"
-    cryosparcm start;
-    cryosparcm status;
-    echo "Creating an admin user";
-    {{- $version := semver (include "cryosparc.imageTag" .) -}}
-    {{- if eq ($version.Major | int) 5 }}
-    cryosparcm user create \
-    --email "$(cat /run/secrets/.admin/email)"  --password "$(cat /run/secrets/.admin/password)" \
-    --username admin --firstname SciApps --lastname Admin --role admin || true;
-    {{- else }}
-    cryosparcm cli \
-    "create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'admin', 'SciApps', 'Admin', True)";
-    {{- end }}
-    echo "Updating cluster lanes";
-    ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
-      cd $x;
-      cryosparcm cluster connect;
-    done;
-    {{- $version := semver (include "cryosparc.imageTag" .) -}}
-    {{- if ne ($version.Major | int) 5 }}
-    cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })";
-    {{- end }}
-    set +e
-    echo "Keep CryoSPARC running";
-    while true; do
-      sleep 3600;
-    done;
+  run.sh: |
+    {{- include "cryosparc.run.content" . | nindent 4 }}
