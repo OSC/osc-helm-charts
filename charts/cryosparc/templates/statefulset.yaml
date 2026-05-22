@@ -54,6 +54,7 @@ spec:
           mountPath: /tmp/lanes/pitzer
         - name: cardinal-cluster-conf
           mountPath: /tmp/lanes/cardinal
+        resources: {{ toYaml .Values.initContainerResources | nindent 10 }}
       containers:
       - name: {{ include "cryosparc.name" . }}
         image: {{ tpl .Values.image.repository . }}:{{ include "cryosparc.imageTag" . }}

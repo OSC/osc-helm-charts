@@ -134,6 +134,15 @@ nodeSelector: {}
 podSecurityContext:
   runAsNonRoot: true
 
+# @ignored
+initContainerResources:
+  limits:
+    cpu: 500m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
 # The following should not be changed
 # @ignored
 service:
