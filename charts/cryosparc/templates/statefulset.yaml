@@ -70,7 +70,7 @@ spec:
           mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc;
           cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license;
           cryosparcm start;
-          cryosparcm status;
+          cryosparcm status || true;
           echo "Creating an admin user";
           {{- $version := semver (include "cryosparc.imageTag" .) -}}
           {{- if eq ($version.Major | int) 5 }}
