@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.14.1](https://img.shields.io/badge/Version-0.14.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.15.0](https://img.shields.io/badge/Version-0.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -14,7 +14,7 @@ OSC common Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://docker-registry.osc.edu/kubernetes | oauth2-proxy | 10.5.0-osc-r2 |
+| https://oauth2-proxy.github.io/manifests | oauth2-proxy | 10.6.0 |
 
 ## Usage
 
@@ -102,7 +102,7 @@ global:
 | global.alert.receiver | The alert receiver name | `""` |
 | oauth2-proxy.image.registry | The OSC registry | The OSC registry hostname |
 | oauth2-proxy.image.repository | Path to oauth2-proxy on the OSC registry | `"kubernetes/oauth2-proxy"` |
-| oauth2-proxy.image.tag | oauth2-proxy image tag.  **must be replicated to the OSC registry** | `"v7.15.0"` |
+| oauth2-proxy.image.tag | oauth2-proxy image tag.  **must be replicated to the OSC registry** | `"v7.15.2"` |
 | oauth2-proxy.resources.limits.cpu | CPU limit for OAuth2 Proxy pods | `"200m"` |
 | oauth2-proxy.resources.limits.memory | Memory limit for OAuth2 Proxy pods | `"128Mi"` |
 | oauth2-proxy.resources.requests.cpu | CPU request for OAuth2 Proxy pods | `"100m"` |

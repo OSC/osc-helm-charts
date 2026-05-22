@@ -112,7 +112,7 @@ oauth2-proxy:
     # -- Path to oauth2-proxy on the OSC registry
     repository: kubernetes/oauth2-proxy
     # -- oauth2-proxy image tag.  **must be replicated to the OSC registry**
-    tag: v7.15.0
+    tag: v7.15.2
   # @ignored
   config:
     existingSecret: '{{ include "osc.common.auth.secret.name" . }}'
