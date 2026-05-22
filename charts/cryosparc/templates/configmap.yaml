@@ -29,7 +29,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "cryosparc.name" . }}-run
+  name: {{ include "cryosparc.name" . }}-scripts
   labels:
     {{- include "cryosparc.labels" . | nindent 4 }}
 data:
