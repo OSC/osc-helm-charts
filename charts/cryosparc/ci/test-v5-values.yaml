@@ -19,7 +19,7 @@ storage:
 
 image:
   tag: '5.0.6-r1'
-license: xxx-xxx-xxx
+license: CRYOSPARC_LICENSE_ID
 admin:
   email: qwer1234@osc.edu
   password: qwer1234

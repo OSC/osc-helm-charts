@@ -120,6 +120,10 @@ jobs:
         run: |
           sed -i 's|OSC-IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_READ_TOKEN}}|g' charts/*/ci/*.yaml
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts/*/ci/*.yaml
+      - name: Set cryosparc license
+        if: matrix.chart == 'cryosparc'
+        run: |
+          sed -i 's|CRYOSPARC_LICENSE_ID|${{ secrets.CRYOSPARC_LICENSE_ID }}|g' charts/cryosparc/ci/*.yaml
       - name: Install Keycloak
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
