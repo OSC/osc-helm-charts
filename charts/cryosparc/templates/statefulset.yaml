@@ -21,6 +21,7 @@ spec:
         receiver: {{ include "cryosparc.alert.receiver" . }}
       {{- end }}
       annotations:
+        checksum/env: {{ include "cryosparc.env" . | sha256sum }}
         checksum/config: {{ include "cryosparc.run.content" . | sha256sum }}
     spec:
       serviceAccountName: {{ include "cryosparc.name" . }}

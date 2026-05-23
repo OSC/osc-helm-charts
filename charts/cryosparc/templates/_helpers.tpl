@@ -115,6 +115,33 @@ app.kubernetes.io/name: {{ include "cryosparc.name" . }}
 {{- end -}}
 
 {{/*
+env for cryosparc
+Defined here so that version changes in labels of the configmap won't automatically trigger pod restart
+*/}}
+{{- define "cryosparc.env" -}}
+# Instance Configuration
+CRYOSPARC_DB_PATH: "/opt/cryosparc_master/database"
+CRYOSPARC_BASE_PORT: {{ .Values.global.basePort | quote }}
+CRYOSPARC_DB_CONNECTION_TIMEOUT_MS: "20000"
+# Security
+CRYOSPARC_INSECURE: "false"
+CRYOSPARC_DB_ENABLE_AUTH: "true"
+# Cluster Integration
+CRYOSPARC_CLUSTER_JOB_MONITOR_INTERVAL: "10"
+CRYOSPARC_CLUSTER_JOB_MONITOR_MAX_RETRIES: "1000000"
+# Project Configuration
+CRYOSPARC_PROJECT_DIR_PREFIX: "CS-"
+# Development
+CRYOSPARC_DEVELOP: "false"
+# Other
+CRYOSPARC_CLICK_WRAP: "true"
+# Required if the owner of the script is different from the caller
+CRYOSPARC_FORCE_USER: "true"
+# Skip the hostname check
+CRYOSPARC_FORCE_HOSTNAME: "true"
+{{- end -}}
+
+{{/*
 Run script for cryosparc
 Defined here so that version changes in labels of the configmap won't automatically trigger pod restart
 */}}
