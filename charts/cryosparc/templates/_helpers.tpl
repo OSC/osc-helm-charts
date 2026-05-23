@@ -154,7 +154,10 @@ echo "Write license"
 cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license
 echo "Start cryosparc"
 cryosparcm start
+# Do not fail if status has non-zero exit code
+set +e
 cryosparcm status
+set -e
 echo "Creating an admin user"
 {{- $version := semver (include "cryosparc.imageTag" .) -}}
 {{- if eq ($version.Major | int) 5 }}
@@ -172,6 +175,7 @@ ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
 done
 {{- $version := semver (include "cryosparc.imageTag" .) -}}
 {{- if ne ($version.Major | int) 5 }}
+echo "Set account variable"
 cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })"
 {{- end }}
 set +e
