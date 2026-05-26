@@ -94,8 +94,8 @@ qdrant:
   snapshotPersistence:
     enabled: true
     storageClassName: paas-nfs-client
-  #snapshotRestoration:
-  #  enabled: true
+#  snapshotRestoration:
+#    enabled: true
 
 rabbitmq:
   enable: true
@@ -169,11 +169,11 @@ huggingfaceCache:
   sizeLimit: "5Gi"  # emptyDir size limit (ephemeral)
 
 secrets:
-    # Internal secrets - created by the chart
-    create: true
-    api:
-      openaiKey: "your_strong_key"
-      qdrantKey: "your_strong_key"
+  # Internal secrets - created by the chart
+  create: true
+  api:
+    openaiKey: "your_strong_key"
+    qdrantKey: "your_strong_key"
 
 crawlee:
   enabled: true
@@ -188,7 +188,6 @@ crawlee:
     type: ClusterIP
     port: 3000
   env:
-    #MINIO_ENDPOINT: "http://osc-chat-minio:9000"
     NO_CRAWL: FALSE
     S3_BUCKET_NAME: osc-chat
     AWS_REGION: us-east-1
@@ -276,25 +275,25 @@ vllm-stack:
       pvcStorage: "50Gi"
       pvcAccessMode:
         - ReadWriteMany
-        #- ReadWriteOnce
+#        - ReadWriteOnce
       storageClass: local-ess
-      #storageClass: local-path
-      #pvcLabels:
-      #  osc.edu/service-account: skhuvis 
+#      storageClass: local-path
+#      pvcLabels:
+#        osc.edu/service-account: skhuvis 
       pvcAnnotations:
         osc.edu/fileset: PDE0050
 
       vllmConfig:
-        #enableChunkedPrefill: false
-        #enablePrefixCaching: false
+#        enableChunkedPrefill: false
+#        enablePrefixCaching: false
         maxModelLen: 40960
         dtype: "half"
-        #extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.50"]
-        #extraArgs: ["--enforce-eager", "--quantization", "awq", "--gpu-memory-utilization", "0.85"]
+#        extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.50"]
+#        extraArgs: ["--enforce-eager", "--quantization", "awq", "--gpu-memory-utilization", "0.85"]
         extraArgs:
           - "--disable-access-log-for-endpoints"
           - "/health,/metrics,/ping"
-          #- "--enforce-eager"
+#          - "--enforce-eager"
           - "--gpu-memory-utilization"
           - "0.90"
           - "--served-model-name"
@@ -303,9 +302,9 @@ vllm-stack:
           - "eager"
           - "--max-num-seqs"
           - "128"
-          #- '--distributed-executor-backend=ray'
-        #extraArgs: ["--enforce-eager", "--quantization", "bitsandbytes", "--gpu-memory-utilization", "0.85"]
-        #tensorParallelSize: 2
+#          - '--distributed-executor-backend=ray'
+#        extraArgs: ["--enforce-eager", "--quantization", "bitsandbytes", "--gpu-memory-utilization", "0.85"]
+#        tensorParallelSize: 2
       enableTool: true
       toolCallParser: hermes
 
@@ -314,20 +313,20 @@ vllm-stack:
         - key: nvidia.com/gpu.product
           operator: In
           values:
-          #- NVIDIA-A100-PCIE-40GB-MIG-3g.20gb
+#          - NVIDIA-A100-PCIE-40GB-MIG-3g.20gb
           - NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
-          #- NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
-        #- key: kubernetes.io/hostname
-        #  operator: In
-        #  values:
-        #  - kubeworker27
+#          - NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+#        - key: kubernetes.io/hostname
+#          operator: In
+#          values:
+#          - kubeworker27
 
-      #keda:
-      #  enabled: false
-      #lmcacheConfig:
-      #  enabled: false
+#      keda:
+#        enabled: false
+#      lmcacheConfig:
+#        enabled: false
 
-      #hf_token: ""
+#      hf_token: ""
     - name: "qwen3-embedding"
       repository: "docker-registry.osc.edu/kubernetes/vllm/vllm-openai"
       tag: "v0.17.0-cu130"
@@ -343,7 +342,6 @@ vllm-stack:
       limitMemory: "36Gi"
       limitGPU: 1
 
-      # TODO: Eval if need also on pods
       podAnnotations:
         prometheus.io/scrape: 'true'
         prometheus.io/path: /metrics
@@ -351,25 +349,25 @@ vllm-stack:
       pvcStorage: "50Gi"
       pvcAccessMode:
         - ReadWriteMany
-        #- ReadWriteOnce
+#        - ReadWriteOnce
       storageClass: local-ess
-      #storageClass: local-path
-      #pvcLabels:
-      #  osc.edu/service-account: skhuvis 
+#      storageClass: local-path
+#      pvcLabels:
+#        osc.edu/service-account: skhuvis
       pvcAnnotations:
         osc.edu/fileset: PDE0050
 
       vllmConfig:
-        #enableChunkedPrefill: false
-        #enablePrefixCaching: false
+#        enableChunkedPrefill: false
+#        enablePrefixCaching: false
         maxModelLen: 40960
         dtype: "half"
-        #extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.50"]
-        #extraArgs: ["--enforce-eager", "--quantization", "awq", "--gpu-memory-utilization", "0.85"]
+#        extraArgs: ["--disable-log-requests", "--gpu-memory-utilization", "0.50"]
+#        extraArgs: ["--enforce-eager", "--quantization", "awq", "--gpu-memory-utilization", "0.85"]
         extraArgs:
           - "--disable-access-log-for-endpoints"
           - "/health,/metrics,/ping"
-          #- "--enforce-eager"
+#          - "--enforce-eager"
           - "--gpu-memory-utilization"
           - "0.90"
           - "--served-model-name"
@@ -378,9 +376,9 @@ vllm-stack:
           - "eager"
           - "--max-num-seqs"
           - "128"
-          #- '--distributed-executor-backend=ray'
-        #extraArgs: ["--enforce-eager", "--quantization", "bitsandbytes", "--gpu-memory-utilization", "0.85"]
-        #tensorParallelSize: 2
+#          - '--distributed-executor-backend=ray'
+#        extraArgs: ["--enforce-eager", "--quantization", "bitsandbytes", "--gpu-memory-utilization", "0.85"]
+#        tensorParallelSize: 2
       enableTool: true
       toolCallParser: qwen3_coder
 
@@ -389,21 +387,21 @@ vllm-stack:
         - key: nvidia.com/gpu.product
           operator: In
           values:
-          #- NVIDIA-A100-PCIE-40GB-MIG-3g.20gb
+#          - NVIDIA-A100-PCIE-40GB-MIG-3g.20gb
           - NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
-          #- NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
-        #- key: kubernetes.io/hostname
-        #  operator: In
-        #  values:
-        #  - kubeworker27
+#          - NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+#        - key: kubernetes.io/hostname
+#          operator: In
+#          values:
+#          - kubeworker27
 
-      #keda:
-      #  enabled: false
-      #lmcacheConfig:
-      #  enabled: false
+#      keda:
+#        enabled: false
+#      lmcacheConfig:
+#        enabled: false
 
-      #hf_token: ""
-    #vllmApiKey: <OMIT>
+#      hf_token: ""
+#    vllmApiKey: <OMIT>
     containerSecurityContext:
       runAsNonRoot: true
     env:
@@ -423,12 +421,12 @@ vllm-stack:
         value: '1'
       - name: OMP_NUM_THREADS
         value: '2'
-      #- name: NVIDIA_VISIBLE_DEVICES
-      #  value: all
-      #- name: CUDA_VISIBLE_DEVICES
-      #  value: '0,1'
-      #- name: NCCL_DEBUG
-      #  value: WARN
+#      - name: NVIDIA_VISIBLE_DEVICES
+#        value: all
+#      - name: CUDA_VISIBLE_DEVICES
+#        value: '0,1'
+#      - name: NCCL_DEBUG
+#        value: WARN
 
   routerSpec:
     repository: docker-registry.osc.edu/kubernetes/lmcache/lmstack-router
@@ -449,8 +447,8 @@ vllm-stack:
     ingress:
       enabled: true
       className: nginx
-      #annotations:
-      #  nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7'
+#      annotations:
+#        nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7'
       hosts:
         - host: skhuvis-vllm.k8.osc.edu
           paths:
