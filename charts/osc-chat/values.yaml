@@ -279,7 +279,7 @@ vllm-stack:
       storageClass: local-ess
 #      storageClass: local-path
 #      pvcLabels:
-#        osc.edu/service-account: skhuvis 
+#        osc.edu/service-account: skhuvis
       pvcAnnotations:
         osc.edu/fileset: PDE0050
 
