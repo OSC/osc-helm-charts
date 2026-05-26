@@ -245,6 +245,7 @@ networkPolicies:
   enabled: false
 
 vllm-stack:
+  enabled: true
   servingEngineSpec:
     labels:
       environment: production
