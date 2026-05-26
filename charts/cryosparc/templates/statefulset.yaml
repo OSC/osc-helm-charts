@@ -115,18 +115,23 @@ spec:
             name: cmd-server
           - containerPort: {{ add .Values.global.basePort 3 }}
             name: cmd-vis
+          {{- if (include "cryosparc.isV5" .) }}
           - containerPort: {{ add .Values.global.basePort 4 }}
             name: redis
+          {{- end }}
           - containerPort: {{ add .Values.global.basePort 5 }}
             name: rtp-server
           - containerPort: {{ add .Values.global.basePort 6 }}
             name: webapp-api
-          - containerPort: {{ add .Values.global.basePort 7 }}
-            name: reserved-1
-          - containerPort: {{ add .Values.global.basePort 8 }}
-            name: reserved-2
-          - containerPort: {{ add .Values.global.basePort 9 }}
-            name: reserved-3
+          {{- if (include "cryosparc.isV5" .) }}
+          # Commet out until used to avoid Prometheus alerts untl using Prometheus operator
+          # - containerPort: {{ add .Values.global.basePort 7 }}
+          #   name: reserved-1
+          # - containerPort: {{ add .Values.global.basePort 8 }}
+          #   name: reserved-2
+          # - containerPort: {{ add .Values.global.basePort 9 }}
+          #   name: reserved-3
+          {{- end }}
         livenessProbe:
           tcpSocket:
             port: {{ add .Values.global.basePort 2 }}
