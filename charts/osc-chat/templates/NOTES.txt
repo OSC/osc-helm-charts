@@ -49,7 +49,7 @@
 {{- if .Values.keycloak.enabled }}
    ✓ Keycloak Auth: Enabled
 {{- end }}
-{{- if .Values.vllm_stack.enabled }}
+{{- if (index .Values "vllm-stack").enabled }}
    ✓ VLLM : Enabled
 {{- end }}
 {{- if .Values.ollama.enabled }}

@@ -244,7 +244,7 @@ frontend:
 networkPolicies:
   enabled: false
 
-vllm_stack:
+vllm-stack:
   enabled: true
   servingEngineSpec:
     labels:
