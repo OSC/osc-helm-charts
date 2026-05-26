@@ -52,11 +52,13 @@ spec:
     port: {{ add .Values.global.basePort 3 }}
     targetPort: {{ add .Values.global.basePort 3 }}
     nodePort: {{ add .Values.global.basePort 3 }}
+  {{- if (include "cryosparc.isV5" .) }}
   - name: redis
     protocol: TCP
     port: {{ add .Values.global.basePort 4 }}
     targetPort: {{ add .Values.global.basePort 4 }}
     nodePort: {{ add .Values.global.basePort 4 }}
+  {{- end }}
   - name: rtp-server
     protocol: TCP
     port: {{ add .Values.global.basePort 5 }}
@@ -67,19 +69,22 @@ spec:
     port: {{ add .Values.global.basePort 6 }}
     targetPort: {{ add .Values.global.basePort 6 }}
     nodePort: {{ add .Values.global.basePort 6 }}
-  - name: reserved-1
-    protocol: TCP
-    port: {{ add .Values.global.basePort 7 }}
-    targetPort: {{ add .Values.global.basePort 7 }}
-    nodePort: {{ add .Values.global.basePort 7 }}
-  - name: reserved-2
-    protocol: TCP
-    port: {{ add .Values.global.basePort 8 }}
-    targetPort: {{ add .Values.global.basePort 8 }}
-    nodePort: {{ add .Values.global.basePort 8 }}
-  - name: reserved-3
-    protocol: TCP
-    port: {{ add .Values.global.basePort 9 }}
-    targetPort: {{ add .Values.global.basePort 9 }}
-    nodePort: {{ add .Values.global.basePort 9 }}
+  {{- if (include "cryosparc.isV5" .) }}
+  # Commet out until used to avoid Prometheus alerts untl using Prometheus operator
+  # - name: reserved-1
+  #   protocol: TCP
+  #   port: {{ add .Values.global.basePort 7 }}
+  #   targetPort: {{ add .Values.global.basePort 7 }}
+  #   nodePort: {{ add .Values.global.basePort 7 }}
+  # - name: reserved-2
+  #   protocol: TCP
+  #   port: {{ add .Values.global.basePort 8 }}
+  #   targetPort: {{ add .Values.global.basePort 8 }}
+  #   nodePort: {{ add .Values.global.basePort 8 }}
+  # - name: reserved-3
+  #   protocol: TCP
+  #   port: {{ add .Values.global.basePort 9 }}
+  #   targetPort: {{ add .Values.global.basePort 9 }}
+  #   nodePort: {{ add .Values.global.basePort 9 }}
+  {{- end }}
   type: NodePort

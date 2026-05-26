@@ -114,6 +114,13 @@ app.kubernetes.io/name: {{ include "cryosparc.name" . }}
 {{- $nodeNames | toJson -}}
 {{- end -}}
 
+{{- define "cryosparc.isV5" -}}
+{{- $version := semver (include "cryosparc.imageTag" .) -}}
+{{- if eq ($version.Major | int) 5 }}
+true
+{{- end }}
+{{- end -}}
+
 {{/*
 env for cryosparc
 Defined here so that version changes in labels of the configmap won't automatically trigger pod restart
@@ -159,8 +166,7 @@ set +e
 cryosparcm status
 set -e
 echo "Creating an admin user"
-{{- $version := semver (include "cryosparc.imageTag" .) -}}
-{{- if eq ($version.Major | int) 5 }}
+{{- if (include "cryosparc.isV5" .) }}
 cryosparcm user create \
 --email "$(cat /run/secrets/.admin/email)"  --password "$(cat /run/secrets/.admin/password)" \
 --username admin --firstname SciApps --lastname Admin --role admin || true
@@ -173,8 +179,7 @@ ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
   cd $x
   cryosparcm cluster connect
 done
-{{- $version := semver (include "cryosparc.imageTag" .) -}}
-{{- if ne ($version.Major | int) 5 }}
+{{- if not (include "cryosparc.isV5" .) }}
 echo "Set account variable"
 cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })"
 {{- end }}
