@@ -20,6 +20,9 @@ spec:
       {{- if (include "cryosparc.alert.receiver" .) }}
         receiver: {{ include "cryosparc.alert.receiver" . }}
       {{- end }}
+      annotations:
+        checksum/env: {{ include "cryosparc.env" . | sha256sum }}
+        checksum/config: {{ include "cryosparc.run.content" . | sha256sum }}
     spec:
       serviceAccountName: {{ include "cryosparc.name" . }}
       securityContext: {{ toYaml .Values.podSecurityContext | nindent 8 }}
@@ -62,39 +65,7 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ include "cryosparc.name" . }}-envs
-        command: ["sh", "-c"]
-        args:
-        - |
-          export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}";
-          set -e
-          mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc;
-          cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license;
-          cryosparcm start;
-          cryosparcm status;
-          echo "Creating an admin user";
-          {{- $version := semver (include "cryosparc.imageTag" .) -}}
-          {{- if eq ($version.Major | int) 5 }}
-          cryosparcm user create \
-          --email "$(cat /run/secrets/.admin/email)"  --password "$(cat /run/secrets/.admin/password)" \
-          --username admin --firstname SciApps --lastname Admin --role admin || true;
-          {{- else }}
-          cryosparcm cli \
-          "create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'admin', 'SciApps', 'Admin', True)";
-          {{- end }}
-          echo "Updating cluster lanes";
-          ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
-            cd $x;
-            cryosparcm cluster connect;
-          done;
-          {{- $version := semver (include "cryosparc.imageTag" .) -}}
-          {{- if ne ($version.Major | int) 5 }}
-          cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })";
-          {{- end }}
-          set +e
-          echo "Keep CryoSPARC running";
-          while true; do 
-            sleep 3600;
-          done;
+        command: ["sh", "/scripts/run.sh"]
         lifecycle:
           preStop:
             exec:
@@ -115,6 +86,8 @@ spec:
               name: {{ include "cryosparc.name" . }}
               key: license
         volumeMounts:
+        - name: scripts
+          mountPath: /scripts
         - name: {{ include "cryosparc.name" . }}-data
           mountPath: /cryosparc_data
         - name: project
@@ -154,12 +127,31 @@ spec:
             name: reserved-2
           - containerPort: {{ add .Values.global.basePort 9 }}
             name: reserved-3
+        livenessProbe:
+          tcpSocket:
+            port: {{ add .Values.global.basePort 2 }}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          tcpSocket:
+            port: {{ add .Values.global.basePort 2 }}
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
       nodeSelector: 
         {{ include "osc.common.nodeSelectorRole" . }}
         {{- with .Values.nodeSelector }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
       volumes:
+      - name: scripts
+        configMap:
+          name: {{ include "cryosparc.name" . }}-scripts
+          defaultMode: 0755
       - name: home
         hostPath:
           path: {{ tpl .Values.mounts.home . }}

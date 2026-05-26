@@ -19,7 +19,7 @@ storage:
 
 image:
   tag: '5.0.6-r1'
-license: xxx-xxx-xxx
+license: CRYOSPARC_LICENSE_ID
 admin:
   email: qwer1234@osc.edu
   password: qwer1234
@@ -27,6 +27,6 @@ mounts:
   # Override the default as 'ct install' test uses randomized release name and we need to precreate the directory
   home: /users/PAS0710/cryosciapps
 podSecurityContext:
-  runAsUser: 1000
-  runAsGroup: 1000
-  fsGroup: 1000
+  runAsUser: 65534
+  runAsGroup: 65534
+  fsGroup: 65534

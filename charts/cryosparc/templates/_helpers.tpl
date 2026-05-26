@@ -113,3 +113,74 @@ app.kubernetes.io/name: {{ include "cryosparc.name" . }}
   {{- end -}}
 {{- $nodeNames | toJson -}}
 {{- end -}}
+
+{{/*
+env for cryosparc
+Defined here so that version changes in labels of the configmap won't automatically trigger pod restart
+*/}}
+{{- define "cryosparc.env" -}}
+# Instance Configuration
+CRYOSPARC_DB_PATH: "/opt/cryosparc_master/database"
+CRYOSPARC_BASE_PORT: {{ .Values.global.basePort | quote }}
+CRYOSPARC_DB_CONNECTION_TIMEOUT_MS: "20000"
+# Security
+CRYOSPARC_INSECURE: "false"
+CRYOSPARC_DB_ENABLE_AUTH: "true"
+# Cluster Integration
+CRYOSPARC_CLUSTER_JOB_MONITOR_INTERVAL: "10"
+CRYOSPARC_CLUSTER_JOB_MONITOR_MAX_RETRIES: "1000000"
+# Project Configuration
+CRYOSPARC_PROJECT_DIR_PREFIX: "CS-"
+# Development
+CRYOSPARC_DEVELOP: "false"
+# Other
+CRYOSPARC_CLICK_WRAP: "true"
+# Required if the owner of the script is different from the caller
+CRYOSPARC_FORCE_USER: "true"
+# Skip the hostname check
+CRYOSPARC_FORCE_HOSTNAME: "true"
+{{- end -}}
+
+{{/*
+Run script for cryosparc
+Defined here so that version changes in labels of the configmap won't automatically trigger pod restart
+*/}}
+{{- define "cryosparc.run.content" -}}
+export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}"
+set -e
+echo "Create cryosparc directory"
+mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc
+echo "Write license"
+cat /run/secrets/.admin/license > {{ tpl .Values.mounts.home . }}/.cryosparc/license
+echo "Start cryosparc"
+cryosparcm start
+# Do not fail if status has non-zero exit code
+set +e
+cryosparcm status
+set -e
+echo "Creating an admin user"
+{{- $version := semver (include "cryosparc.imageTag" .) -}}
+{{- if eq ($version.Major | int) 5 }}
+cryosparcm user create \
+--email "$(cat /run/secrets/.admin/email)"  --password "$(cat /run/secrets/.admin/password)" \
+--username admin --firstname SciApps --lastname Admin --role admin || true
+{{- else }}
+cryosparcm cli \
+"create_user('initial', '$(cat /run/secrets/.admin/email)', '$(cat /run/secrets/.admin/password)', 'admin', 'SciApps', 'Admin', True)"
+{{- end }}
+echo "Updating cluster lanes"
+ls -d -1 /opt/cryosparc_master/lanes/* |while read x; do
+  cd $x
+  cryosparcm cluster connect
+done
+{{- $version := semver (include "cryosparc.imageTag" .) -}}
+{{- if ne ($version.Major | int) 5 }}
+echo "Set account variable"
+cryosparcm cli "set_cluster_configuration_custom_vars({'account': '{{ tpl .Values.global.project .}}' })"
+{{- end }}
+set +e
+echo "Keep CryoSPARC running"
+while true; do
+  sleep 3600
+done
+{{- end -}}
