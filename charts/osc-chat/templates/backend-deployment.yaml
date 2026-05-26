@@ -49,8 +49,8 @@ spec:
             # Prevent crashes in test when Ollama is disabled
             - name: OLLAMA_SERVER_URL
               value: {{ default "http://localhost:11434" .Values.backend.env.OLLAMA_SERVER_URL | quote }}
-            - name: NCSA_HOSTED_API_KEY
-              value: {{ default "" .Values.backend.env.NCSA_HOSTED_API_KEY | quote }}
+            - name: OSC_HOSTED_API_KEY
+              value: {{ default "" .Values.backend.env.OSC_HOSTED_API_KEY | quote }}
             - name: EMBEDDING_API_BASE
               value: {{ .Values.backend.env.EMBEDDING_API_BASE | quote }}
             - name: EMBEDDING_MODEL
