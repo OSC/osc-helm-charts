@@ -53,7 +53,7 @@ kube-prometheus-stack:
   kubeApiServer:
     serviceMonitor:
       relabelings:
-      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+      - sourceLabels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
         action: keep
         regex: default;kubernetes;https
       - action: labelmap
@@ -67,12 +67,12 @@ kube-prometheus-stack:
         targetLabel: metrics_path
       - action: labelmap
         regex: __meta_kubernetes_node_label_(.+)
-      - source_labels: [__meta_kubernetes_node_name]
+      - sourceLabels: [__meta_kubernetes_node_name]
         regex: '(.+)'
         replacement: '$1'
-        target_label: host
-      - source_labels: [host]
-        target_label: node
+        targetLabel: host
+      - sourceLabels: [host]
+        targetLabel: node
       - regex: "feature_node_.+"
         action: labeldrop
       - regex: "nvidia_com_.+"
@@ -85,12 +85,12 @@ kube-prometheus-stack:
         targetLabel: metrics_path
       - action: labelmap
         regex: __meta_kubernetes_node_label_(.+)
-      - source_labels: [__meta_kubernetes_node_name]
+      - sourceLabels: [__meta_kubernetes_node_name]
         regex: '(.+)'
         replacement: '$1'
-        target_label: host
-      - source_labels: [host]
-        target_label: node
+        targetLabel: host
+      - sourceLabels: [host]
+        targetLabel: node
       - regex: "feature_node_.+"
         action: labeldrop
       - regex: "nvidia_com_.+"
