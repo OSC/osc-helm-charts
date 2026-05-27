@@ -18,7 +18,7 @@ global:
     keycloakClient:
       forceCreate: true
   ingress:
-    host: skhuvis.k8.osc.edu
+    host: ""
 
 enviroment: "prod"
 
