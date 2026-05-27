@@ -197,6 +197,9 @@ kube-prometheus-stack:
         runAsGroup: 94
         runAsUser: 94
         fsGroup: 94
+      externalLabels:
+        cluster: kubernetes
+        environment: '{{ include "osc.common.environment" . }}'
       additionalScrapeConfigs:
         # TODO: Remove kubevirt-scrape once using ServiceMonitor in Helm chart
         - job_name: kubevirt
