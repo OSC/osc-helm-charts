@@ -20,8 +20,6 @@ global:
   ingress:
     host: ""
 
-enviroment: "prod"
-
 autoscaling:
   enabled: false
 
