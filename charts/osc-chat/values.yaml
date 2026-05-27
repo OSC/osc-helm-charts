@@ -2,6 +2,9 @@ global:
   imageRegistry: docker-registry.osc.edu
   imagePullSecret:
     name: osc-registry
+    # -- OSC registry password
+    # @default -- **required**
+    password: 
   oscServiceAccount: skhuvis
   database:
     allowIngress: true
