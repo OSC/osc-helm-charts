@@ -4,6 +4,17 @@ global:
   ingress:
     host: test.example.com
 
+kube-prometheus-stack:
+  prometheus:
+    prometheusSpec:
+      resources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 256Mi
+
 sslExporter:
   rbac:
     create: true

@@ -116,6 +116,7 @@ jobs:
         run: |
           kubectl label node kind-control-plane node-role.kubernetes.io/test=''
           kubectl label node kind-control-plane node-role.kubernetes.io/webservices=''
+          kubectl label node kind-control-plane node-role.kubernetes.io/infrastructure=''
       - name: Set image pull secret
         run: |
           sed -i 's|OSC-IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_READ_TOKEN}}|g' charts/*/ci/*.yaml
