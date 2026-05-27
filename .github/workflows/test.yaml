@@ -125,6 +125,10 @@ jobs:
         if: matrix.chart == 'cryosparc'
         run: |
           sed -i 's|CRYOSPARC_LICENSE_ID|${{ secrets.CRYOSPARC_LICENSE_ID }}|g' charts/cryosparc/ci/*.yaml
+      - name: Prometheus Operator crds
+        run: |
+          helm install prometheus-operator-crds oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds -n prometheus-operator-crds --create-namespace --version 29.0.0 \
+            --wait --timeout 300s
       - name: Install Keycloak
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
