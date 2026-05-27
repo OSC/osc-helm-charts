@@ -10,7 +10,7 @@ global:
     allowIngress: true
   security:
     allowInsecureImages: true
-  storageClass: paas-nfs-client
+  storageClass: webservices-nfs-client
   webservicesDeploy:
     create: false
   auth:
