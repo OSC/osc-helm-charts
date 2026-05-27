@@ -116,6 +116,10 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
         resources:
           limits:
             cpu: 1
