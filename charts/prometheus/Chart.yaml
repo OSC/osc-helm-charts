@@ -9,7 +9,7 @@ maintainers:
   - name: treydock
 dependencies:
   - name: kube-prometheus-stack
-    version: 85.3.3
+    version: 85.4.0
     repository: oci://ghcr.io/prometheus-community/charts
   - name: kube-state-metrics
     version: 5.6.2
