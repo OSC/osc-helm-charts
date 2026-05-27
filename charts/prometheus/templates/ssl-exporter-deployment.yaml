@@ -59,7 +59,5 @@ spec:
             items:
             - key: ssl-exporter.yaml
               path: {{ .Values.sslExporter.configName }}.yaml
-      {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''

@@ -2,11 +2,15 @@ apiVersion: v2
 name: prometheus
 description: OSC Prometheus deployment
 type: application
-version: 0.21.1
-appVersion: "v2.44.0"
+version: 0.22.0
+# appVersion: "v2.44.0"
+appVersion: "v3.11.3"
 maintainers:
   - name: treydock
 dependencies:
+  - name: kube-prometheus-stack
+    version: 85.3.3
+    repository: oci://ghcr.io/prometheus-community/charts
   - name: kube-state-metrics
     version: 5.6.2
     repository: https://prometheus-community.github.io/helm-charts/
@@ -14,6 +18,6 @@ dependencies:
     version: 4.6.0
     repository: https://nvidia.github.io/dcgm-exporter/helm-charts
   - name: osc-common
-    version: 0.5.0
+    version: 0.14.1
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../common

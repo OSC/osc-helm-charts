@@ -15,7 +15,7 @@ spec:
           {{- include "prometheus.selectorLabels" . | nindent 10 }}
     - podSelector:
         matchLabels:
-          {{- include "prometheus-proxy.selectorLabels" . | nindent 10 }}
+          app.kubernetes.io/component: authentication-proxy
     - podSelector:
         matchLabels:
           {{- include "blackbox-exporter.selectorLabels" . | nindent 10 }}
