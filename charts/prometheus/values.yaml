@@ -600,3 +600,8 @@ dcgm-exporter:
       memory: '512Mi'
   nodeSelector:
     feature.node.kubernetes.io/pci-10de.present: "true"
+
+hook:
+  image:
+    repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
+    tag: '2.39.0'
