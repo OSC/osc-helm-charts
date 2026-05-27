@@ -14,6 +14,14 @@ kube-prometheus-stack:
         requests:
           cpu: 500m
           memory: 256Mi
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: standard
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 1Gi
 
 sslExporter:
   rbac:
