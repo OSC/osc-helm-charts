@@ -20,9 +20,6 @@ global:
   ingress:
     host: ""
 
-autoscaling:
-  enabled: false
-
 serviceAccount:
   create: false
   annotations: {}
