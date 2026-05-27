@@ -199,7 +199,7 @@ kube-prometheus-stack:
         fsGroup: 94
       additionalScrapeConfigs:
         # TODO: Remove kubevirt-scrape once using ServiceMonitor in Helm chart
-        - job_name: kubernetes-kubevirt
+        - job_name: kubevirt
           scheme: https
           metrics_path: /metrics
           tls_config:
@@ -222,7 +222,7 @@ kube-prometheus-stack:
             action: labeldrop
           - regex: ".+_(hash|generation|createVersion)"
             action: labeldrop
-        - job_name: kubernetes-services
+        - job_name: services
           scheme: http
           metrics_path: "/probe"
           kubernetes_sd_configs:
@@ -268,7 +268,7 @@ kube-prometheus-stack:
             action: labeldrop
           - regex: "helm_sh_chart"
             action: labeldrop
-        - job_name: kubernetes-service-endpoints
+        - job_name: service-endpoints
           kubernetes_sd_configs:
           - role: service
           relabel_configs:
@@ -307,7 +307,7 @@ kube-prometheus-stack:
             action: labeldrop
           - regex: "helm_sh_chart"
             action: labeldrop
-        - job_name: kubernetes-pod-endpoints
+        - job_name: pod-endpoints
           metrics_path: /metrics
           kubernetes_sd_configs:
           - role: pod
@@ -344,7 +344,7 @@ kube-prometheus-stack:
             regex: '(.+);(.+)'
             replacement: '$1:$2'
             target_label: instance
-        - job_name: kubernetes-ingress-probe
+        - job_name: ingress-probe
           scrape_timeout: 60s
           scrape_interval: 3m
           scheme: http
@@ -388,7 +388,7 @@ kube-prometheus-stack:
             action: labeldrop
           - regex: "helm_sh_chart"
             action: labeldrop
-        - job_name: kubernetes-ingress-ssl
+        - job_name: ingress-ssl
           scrape_timeout: 60s
           scrape_interval: 3m
           scheme: http
