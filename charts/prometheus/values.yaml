@@ -21,8 +21,6 @@ global:
     host: ""
     # -- Ingress host alias
     hostAlias: ""
-  imagePullSecrets:
-    - name: osc-registry
 
 nameOverride: ""
 fullnameOverride: ""
@@ -34,8 +32,8 @@ kube-prometheus-stack:
       enabled: true
       image:
         busybox:
-          registry: docker-registry.osc.edu
-          repository: kubernetes/busybox
+          registry: quay.io
+          repository: prometheus/busybox
       resources:
         limits:
           cpu: 1
