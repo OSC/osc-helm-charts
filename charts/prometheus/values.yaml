@@ -158,9 +158,6 @@ kube-prometheus-stack:
       scrapeInterval: 1m
       scrapeTimeout: 10s
       evaluationInterval: 1m
-      additionalArgs:
-        - name: web.enable-lifecycle
-          value: ""
       retention: 30d
       storageSpec:
         volumeClaimTemplate:
