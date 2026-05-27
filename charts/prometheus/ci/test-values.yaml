@@ -3,6 +3,7 @@ global:
     password: OSC-IMAGE-PULL-PASSWORD
   ingress:
     host: test.example.com
+  storageClass: standard
 
 kube-prometheus-stack:
   prometheus:
@@ -17,7 +18,6 @@ kube-prometheus-stack:
       storageSpec:
         volumeClaimTemplate:
           spec:
-            storageClassName: standard
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:

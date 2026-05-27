@@ -21,6 +21,7 @@ global:
     host: ""
     # -- Ingress host alias
     hostAlias: ""
+  storageClass: nfs-infra
 
 nameOverride: ""
 fullnameOverride: ""
@@ -152,7 +153,7 @@ kube-prometheus-stack:
       storageSpec:
         volumeClaimTemplate:
           spec:
-            storageClassName: infra-nfs-client
+            storageClassName: '{{ .Values.global.storageClass }}'
             accessModes: ["ReadWriteMany"]
             resources:
               requests:
