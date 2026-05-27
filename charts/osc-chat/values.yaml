@@ -91,7 +91,7 @@ qdrant:
     storageClassName: local-path
   snapshotPersistence:
     enabled: true
-    storageClassName: paas-nfs-client
+    storageClassName: webservices-nfs-client
 #  snapshotRestoration:
 #    enabled: true
 
