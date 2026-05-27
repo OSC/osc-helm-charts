@@ -21,8 +21,6 @@ global:
     host: ""
 
 serviceAccount:
-  create: false
-  annotations: {}
   name:
 
 database:
