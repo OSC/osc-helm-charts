@@ -151,7 +151,9 @@ kube-prometheus-stack:
       image:
         # TODO: Use old version if upgrade is problematic
         # tag: v2.44.0
-        tag: v3.11.3-distroless
+        # Allow debugging by not using distroless
+        # tag: v3.11.3-distroless
+        tag: v3.11.3
       persistentVolumeClaimRetentionPolicy:
         whenDeleted: Retain
         whenScaled: Retain
