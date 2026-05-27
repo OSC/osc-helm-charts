@@ -28,21 +28,9 @@ fullnameOverride: ""
 kube-prometheus-stack:
   fullnameOverride: prometheus
   crds:
+    enabled: false
     upgradeJob:
-      enabled: true
-      image:
-        busybox:
-          registry: quay.io
-          repository: prometheus/busybox
-      resources:
-        limits:
-          cpu: 1
-          memory: 256Mi
-        requests:
-          cpu: 100m
-          memory: 64Mi
-      nodeSelector:
-        node-role.kubernetes.io/infrastructure: ''
+      enabled: false
   defaultRules:
     # TODO: Evaluate which we may want
     create: false
