@@ -62,7 +62,15 @@ kube-prometheus-stack:
         targetLabel: host
       - sourceLabels: [host]
         targetLabel: node
-      - regex: "feature_node_.+"
+      - regex: "cpu_(feature|model)_.+"
+        action: labeldrop
+      - regex: "host_model_.+"
+        action: labeldrop
+      - regex: "(feature|hyperv|scheduling)_node_.+"
+        action: labeldrop
+      - regex: "machine_type_.+"
+        action: labeldrop
+      - regex: "kubevirt_io_.+"
         action: labeldrop
       - regex: "nvidia_com_.+"
         action: labeldrop
@@ -80,7 +88,15 @@ kube-prometheus-stack:
         targetLabel: host
       - sourceLabels: [host]
         targetLabel: node
-      - regex: "feature_node_.+"
+      - regex: "cpu_(feature|model)_.+"
+        action: labeldrop
+      - regex: "host_model_.+"
+        action: labeldrop
+      - regex: "(feature|hyperv|scheduling)_node_.+"
+        action: labeldrop
+      - regex: "machine_type_.+"
+        action: labeldrop
+      - regex: "kubevirt_io_.+"
         action: labeldrop
       - regex: "nvidia_com_.+"
         action: labeldrop
