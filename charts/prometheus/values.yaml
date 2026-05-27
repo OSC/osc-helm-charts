@@ -461,7 +461,7 @@ kube-prometheus-stack:
 watch:
   image:
     repository: docker-registry.osc.edu/kubernetes/weaveworks/watch
-    tag: master-5fc29a9
+    tag: master-0c44bf6
     pullPolicy: IfNotPresent
   securityContext:
     allowPrivilegeEscalation: false
