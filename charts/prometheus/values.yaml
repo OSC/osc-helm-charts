@@ -96,6 +96,10 @@ kube-prometheus-stack:
         requests:
           cpu: 100m
           memory: 128Mi
+    kubeletService:
+      enabled: false
+    kubeletEndpointsEnabled: false
+    kubeletEndpointSliceEnabled: false
   prometheus:
     service:
       port: 9090
