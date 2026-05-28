@@ -433,7 +433,7 @@ vllm-stack:
 
   routerSpec:
     repository: docker-registry.osc.edu/kubernetes/lmcache/lmstack-router
-    tag: v0.1.10
+    tag: v0.1.11
     imagePullPolicy: IfNotPresent
     imagePullSecrets:
     - name: osc-registry
