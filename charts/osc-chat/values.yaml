@@ -257,7 +257,7 @@ vllm-stack:
     # Qwen Model
     - name: "qwen3"
       repository: "docker-registry.osc.edu/kubernetes/vllm/vllm-openai"
-      tag: "v0.17.0-cu130"
+      tag: "v0.21.0"
       imagePullSecret: osc-registry
       modelURL: "Qwen/Qwen3-8B"
       replicaCount: 1
