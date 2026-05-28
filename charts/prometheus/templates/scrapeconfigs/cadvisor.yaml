@@ -8,7 +8,7 @@ metadata:
 spec:
   jobName: cadvisor
   kubernetesSDConfigs:
-    - role: node
+    - role: Node
   scheme: https
   metricsPath: /metrics/cadvisor
   tlsConfig:

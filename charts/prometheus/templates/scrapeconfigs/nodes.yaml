@@ -8,7 +8,7 @@ metadata:
 spec:
   jobName: nodes
   kubernetesSDConfigs:
-    - role: node
+    - role: Node
   scheme: https
   metricsPath: /metrics
   tlsConfig:
