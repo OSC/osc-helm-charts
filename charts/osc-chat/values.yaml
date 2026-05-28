@@ -120,8 +120,8 @@ backend:
   ingress:
     enabled: false
   image:
-    repository: sciapps/ai_ta_backend
-    tag: latest
+    repository: osc/hpcgpt_frontend
+    tag: 0.1.0
     pullPolicy: Always
   imagePullSecret:
     enable: false
@@ -144,8 +144,8 @@ backend:
 worker:
   enabled: true
   image:
-    repository: sciapps/ai_ta_backend
-    tag: latest
+    repository: osc/hpcgpt_backend
+    tag: 0.1.0
     pullPolicy: Always
     registry: ""
   replicaCount: 1
@@ -180,8 +180,8 @@ secrets:
 crawlee:
   enabled: true
   image:
-    repository: sciapps/crawlee
-    tag: latest
+    repository: osc/crawlee
+    tag: 0.1.0
     pullPolicy: Always
   imagePullSecret:
     enable: false
