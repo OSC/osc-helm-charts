@@ -270,11 +270,10 @@ vllm-stack:
       limitMemory: "48Gi"
       limitGPU: 1
 
-      # TODO: Eval if need also on pods
       podAnnotations:
         prometheus.io/scrape: 'true'
         prometheus.io/path: /metrics
-        prometheus.io/port: '80'
+        prometheus.io/port: '8000'
       pvcStorage: "50Gi"
       pvcAccessMode:
         - ReadWriteMany
