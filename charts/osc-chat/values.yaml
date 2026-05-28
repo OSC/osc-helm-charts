@@ -120,8 +120,8 @@ backend:
   ingress:
     enabled: false
   image:
-    repository: osc/hpcgpt_frontend
-    tag: 0.1.0
+    repository: osc/hpcgpt_backend
+    tag: v0.1.0
     pullPolicy: Always
   imagePullSecret:
     enable: false
@@ -145,7 +145,7 @@ worker:
   enabled: true
   image:
     repository: osc/hpcgpt_backend
-    tag: 0.1.0
+    tag: v0.1.0
     pullPolicy: Always
     registry: ""
   replicaCount: 1
@@ -181,7 +181,7 @@ crawlee:
   enabled: true
   image:
     repository: osc/crawlee
-    tag: 0.1.0
+    tag: v0.1.0
     pullPolicy: Always
   imagePullSecret:
     enable: false
@@ -213,8 +213,8 @@ keycloak:
 frontend:
   enabled: true
   image:
-    repository: sciapps/hpcgpt_frontend
-    tag: latest
+    repository: osc/hpcgpt_frontend
+    tag: v0.1.0
     pullPolicy: Always
   replicaCount: 1
   service:
