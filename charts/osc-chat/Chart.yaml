@@ -44,5 +44,9 @@ dependencies:
     version: 0.14.1
     repository: https://osc.github.io/osc-helm-charts
   - name: vllm-stack
-    version: 0.1.10
-    repository: "https://vllm-project.github.io/production-stack"
+    # version: 0.1.11
+    # repository: "https://vllm-project.github.io/production-stack"
+    # Use fork until merged and released:
+    # https://github.com/vllm-project/production-stack/pull/954
+    version: '0.1.11-osc-r1'
+    repository: oci://docker-registry.osc.edu/kubernetes/vllm
