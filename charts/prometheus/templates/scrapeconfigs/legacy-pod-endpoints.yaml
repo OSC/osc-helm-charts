@@ -1,0 +1,49 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: legacy-pod-endpoints
+  namespace: {{ .Release.Namespace }}
+  labels:
+    discovery: annotations
+    {{- include "prometheus.labels" . | nindent 4 }}
+spec:
+  jobName: pod-endpoints
+  kubernetesSDConfigs:
+    - role: Pod
+  metricsPath: /metrics
+  relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+      action: keep
+      regex: 'true'
+    - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_port, __meta_kubernetes_pod_container_port_number]
+      action: keep
+      regex: '(.+);(.+)'
+    - sourceLabels: [__meta_kubernetes_pod_container_port_protocol]
+      action: keep
+      regex: 'TCP'
+    # A way to find legacy scrapes
+    - targetLabel: 'discovery'
+      replacement: 'annotations'
+    - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+      action: replace
+      targetLabel: __metrics_path__
+      regex: '(.+)'
+    - sourceLabels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+      action: replace
+      targetLabel: __address__
+      regex: '([^:]+)(?::\d+)?;(\d+)'
+      replacement: '$1:$2'
+    - sourceLabels: [__meta_kubernetes_pod_node_name]
+      regex: '(.+)'
+      replacement: '$1'
+      targetLabel: host
+    - sourceLabels: [host]
+      targetLabel: node
+    - sourceLabels: [__meta_kubernetes_namespace]
+      targetLabel: namespace
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      targetLabel: kubernetes_name
+    - sourceLabels: [kubernetes_name, __meta_kubernetes_pod_annotation_prometheus_io_port]
+      regex: '(.+);(.+)'
+      replacement: '$1:$2'
+      targetLabel: instance
