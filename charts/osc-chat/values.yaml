@@ -437,6 +437,11 @@ vllm-stack:
     imagePullPolicy: IfNotPresent
     imagePullSecrets:
     - name: osc-registry
+    env:
+    - name: USER
+      value: osc-chat
+    - name: LOGNAME
+      value: osc-chat
     servicePort: 80
     serviceAnnotations:
       prometheus.io/scrape: 'true'
