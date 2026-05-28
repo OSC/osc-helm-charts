@@ -71,7 +71,5 @@ spec:
             items:
             - key: blackbox-exporter.yaml
               path: {{ .Values.blackboxExporter.configName }}.yaml
-      {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''

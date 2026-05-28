@@ -1,0 +1,33 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: legacy-kube-state-metrics
+  namespace: {{ .Release.Namespace }}
+  labels:
+    discovery: annotations
+    {{- include "prometheus.labels" . | nindent 4 }}
+spec:
+  jobName: kube-state-metrics
+  metricsPath: /metrics
+  staticConfigs:
+    - targets:
+      - 'kube-state-metrics.{{ .Release.Namespace }}.svc.cluster.local:8080'
+      labels:
+        discovery: annotations
+  metricRelabelings:
+    - sourceLabels: [node]
+      regex: '(.+)'
+      replacement: '$1'
+      targetLabel: host
+    - sourceLabels: [label_receiver]
+      regex: '(.+)'
+      replacement: '$1'
+      targetLabel: receiver
+    - regex: "label_receiver"
+      action: labeldrop
+    - sourceLabels: [label_osc_edu_role]
+      regex: '(.+)'
+      replacement: '$1'
+      targetLabel: osc_edu_role
+    - regex: "label_osc_edu_role"
+      action: labeldrop

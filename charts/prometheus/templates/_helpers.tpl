@@ -46,37 +46,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "prometheus.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "prometheus.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/name: prometheus
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "prometheus.serviceAccountName" -}}
-{{- default (include "prometheus.fullname" .) .Values.serviceAccount.name }}
-{{- end }}
-
-{{/*
-Selector proxy labels
-*/}}
-{{- define "prometheus-proxy.selectorLabels" -}}
-app.kubernetes.io/name: {{ .Values.proxy.name }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Common proxy labels
-*/}}
-{{- define "prometheus-proxy.labels" -}}
-helm.sh/chart: {{ include "prometheus.chart" . }}
-{{ include "prometheus-proxy.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Values.proxy.image.tag | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
 
 {{/*
 Selector blackbox-exporter labels

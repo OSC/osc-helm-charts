@@ -1,0 +1,58 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: legacy-services
+  namespace: {{ .Release.Namespace }}
+  labels:
+    discovery: annotations
+    {{- include "prometheus.labels" . | nindent 4 }}
+spec:
+  jobName: services
+  kubernetesSDConfigs:
+    - role: Service
+  scheme: http
+  metricsPath: /probe
+  params:
+    module:
+    - tcp_connect
+  relabelings:
+    - sourceLabels: [__meta_kubernetes_namespace, __meta_kubernetes_service_label_job]
+      action: drop
+      regex: "^user-.+;.+"
+    - sourceLabels: [__meta_kubernetes_service_annotation_prometheus_io_probe_skip]
+      action: drop
+      regex: 'true'
+    - sourceLabels: [__meta_kubernetes_service_port_protocol]
+      action: keep
+      regex: TCP
+    # A way to find legacy scrapes
+    - targetLabel: 'discovery'
+      replacement: 'annotations'
+    - sourceLabels: [__address__]
+      targetLabel: __param_target
+    - targetLabel: __address__
+      replacement: 'blackbox-exporter.{{ .Release.Namespace }}.svc.cluster.local:9115'
+    - sourceLabels: [__meta_kubernetes_service_annotation_prometheus_io_probe_module]
+      regex: "(.+)"
+      replacement: "$1"
+      targetLabel: __param_module
+    - sourceLabels: [__meta_kubernetes_service_annotation_prometheus_io_probe_scheme, __param_target]
+      regex: "(.+);(.+)"
+      replacement: '${1}://${2}'
+      targetLabel: __param_target
+    - sourceLabels: [__param_target, __meta_kubernetes_service_annotation_prometheus_io_probe_path]
+      regex: "(.+);(.+)"
+      replacement: '${1}${2}'
+      targetLabel: __param_target
+    - sourceLabels: [__param_target]
+      targetLabel: instance
+    - action: labelmap
+      regex: __meta_kubernetes_service_label_(.+)
+    - sourceLabels: [__meta_kubernetes_namespace]
+      targetLabel: namespace
+    - sourceLabels: [__meta_kubernetes_service_name]
+      targetLabel: kubernetes_name
+    - regex: "app_kubernetes_io_(managed_by|version)"
+      action: labeldrop
+    - regex: "helm_sh_chart"
+      action: labeldrop

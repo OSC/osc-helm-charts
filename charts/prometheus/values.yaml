@@ -2,78 +2,173 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 global:
+  oscServiceAccount: prometheus
+  nodeSelectorRole: infrastructure
   imagePullSecret:
     name: osc-registry
     registry: docker-registry.osc.edu
     username: robot$osc-read
     password:
-
-image:
-  repository: quay.io/prometheus/prometheus
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  networkPolicy:
+    create: false
+  webservicesDeploy:
+    create: false
+  auth:
+    enable: true
+    upstream: http://prometheus-prometheus.{{ .Release.Namespace }}.svc.cluster.local:9090
+  ingress:
+    # -- Ingress host value
+    host: ""
+    # -- Ingress host alias
+    hostAlias: ""
+  storageClass: nfs-infra
 
 nameOverride: ""
 fullnameOverride: ""
 
-serviceAccount:
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-podAnnotations: {}
-
-podSecurityContext:
-  fsGroup: 94
-
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  seccompProfile:
-    type: RuntimeDefault
-  privileged: false
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 94
-  runAsGroup: 94
-
-service:
-  type: ClusterIP
-  port: 9090
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/path: /metrics
-    prometheus.io/probe_module: http-healthz
-    prometheus.io/probe_path: /-/healthy
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-dnsDomain: cluster.local
-
-config:
-  name: prometheus.yaml
-
-storageClassName:
+kube-prometheus-stack:
+  fullnameOverride: prometheus
+  crds:
+    enabled: false
+    upgradeJob:
+      enabled: false
+  defaultRules:
+    # TODO: Evaluate which we may want
+    create: false
+  alertmanager:
+    enabled: false
+  grafana:
+    enabled: false
+  kubeApiServer:
+    serviceMonitor:
+      relabelings:
+      - sourceLabels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+      - action: labelmap
+        regex: __meta_kubernetes_service_label_(.+)
+  kubelet:
+    enabled: false
+  coreDns:
+    service:
+      enabled: false
+    serviceMonitor:
+      selector:
+        matchLabels:
+          k8s-app: kube-dns
+      port: metrics
+  # TODO: Evaluate how to get etcd monitoring into the operator
+  kubeEtcd:
+    enabled: false
+  kubeProxy:
+    enabled: false
+  # TODO: Adopt the stack's kube-state-metrics
+  kubeStateMetrics:
+    enabled: false
+  nodeExporter:
+    enabled: false
+  prometheusOperator:
+    fullnameOverride: prometheus-operator
+    admissionWebhooks:
+      deployment:
+        enabled: true
+        nodeSelector:
+          node-role.kubernetes.io/infrastructure: ''
+      patch:
+        nodeSelector:
+          node-role.kubernetes.io/infrastructure: ''
+      certManager:
+        enabled: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+    nodeSelector:
+      node-role.kubernetes.io/infrastructure: ''
+    prometheusConfigReloader:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+    kubeletService:
+      enabled: false
+    kubeletEndpointsEnabled: false
+    kubeletEndpointSliceEnabled: false
+  prometheus:
+    service:
+      port: 9090
+    prometheusSpec:
+      image:
+        # TODO: Use old version if upgrade is problematic
+        # tag: v2.44.0
+        # Allow debugging by not using distroless
+        # tag: v3.11.3-distroless
+        tag: v3.11.3
+      persistentVolumeClaimRetentionPolicy:
+        whenDeleted: Retain
+        whenScaled: Retain
+      scrapeInterval: 1m
+      scrapeTimeout: 10s
+      scrapeClasses:
+        - name: kubernetes
+          default: false
+          tlsConfig:
+            caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          authorization:
+            type: Bearer
+            credentialsFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      evaluationInterval: 1m
+      retention: 30d
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: '{{ .Values.global.storageClass }}'
+            accessModes: ["ReadWriteMany"]
+            resources:
+              requests:
+                storage: 100Gi
+      resources:
+        limits:
+          cpu: 4
+          memory: 16Gi
+        requests:
+          cpu: 2
+          memory: 8Gi
+      nodeSelector:
+        node-role.kubernetes.io/infrastructure: ''
+      ruleSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      probeSelectorNilUsesHelmValues: false
+      scrapeConfigSelectorNilUsesHelmValues: false
+      serviceMonitorNamespaceSelector:
+        matchExpressions:
+          - key: osc.edu/role
+            operator: NotIn
+            values: ["paas"]
+      podMonitorNamespaceSelector:
+        matchExpressions:
+          - key: osc.edu/role
+            operator: NotIn
+            values: ["paas"]
+      securityContext:
+        runAsGroup: 94
+        runAsUser: 94
+        fsGroup: 94
+      externalLabels:
+        cluster: kubernetes
+        environment: '{{ include "osc.common.environment" . }}'
 
 watch:
   image:
     repository: docker-registry.osc.edu/kubernetes/weaveworks/watch
-    tag: master-5fc29a9
+    tag: master-0c44bf6
     pullPolicy: IfNotPresent
   securityContext:
     allowPrivilegeEscalation: false
@@ -93,43 +188,6 @@ watch:
     requests:
       cpu: 100m
       memory: 50Mi
-
-proxy:
-  oidcIssuerURL:
-  clientID:
-  clientSecret:
-  cookieSecret:
-  cookieName:
-  allowGroups:
-  name: prometheus-proxy
-  image:
-    repository: quay.io/oauth2-proxy/oauth2-proxy
-    pullPolicy: IfNotPresent
-    tag: "v7.4.0"
-  securityContext: {}
-  resources: {}
-  service:
-    type: ClusterIP
-    port: 4180
-    annotations:
-      prometheus.io/probe_module: http-healthz
-      prometheus.io/probe_path: /ping
-  metricsService:
-    type: ClusterIP
-    port: 8080
-    annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
-  ingress:
-    className: "nginx"
-    annotations:
-      nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
-      cert-manager.io/cluster-issuer: letsencrypt
-      prometheus.io/probe_path: /ping
-      # nginx.ingress.kubernetes.io/server-alias set by hostAlias
-    host: prometheus-proxy.local
-    hostAlias:
-
 
 blackboxExporter:
   name: blackbox-exporter
@@ -223,6 +281,8 @@ kube-state-metrics:
       type: RuntimeDefault
     privileged: false
     runAsNonRoot: true
+  nodeSelector:
+    node-role.kubernetes.io/infrastructure: ''
 
 dcgm-exporter:
   nameOverride: dcgm-exporter
@@ -255,7 +315,7 @@ dcgm-exporter:
   nodeSelector:
     feature.node.kubernetes.io/pci-10de.present: "true"
 
-replicaCount: 1
-
-nodeSelector:
-  kubernetes.io/os: linux
+hook:
+  image:
+    repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
+    tag: '2.39.0'
