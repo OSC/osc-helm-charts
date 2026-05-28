@@ -156,7 +156,7 @@ worker:
     EMBEDDING_MODEL: Qwen/Qwen3-Embedding-8B
   resources:
     limits:
-      cpu: 1000m
+      cpu: 1
       memory: 1Gi
     requests:
       cpu: 500m
