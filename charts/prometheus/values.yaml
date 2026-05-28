@@ -115,6 +115,14 @@ kube-prometheus-stack:
         whenScaled: Retain
       scrapeInterval: 1m
       scrapeTimeout: 10s
+      scrapeClasses:
+        - name: kubernetes
+          default: false
+          tlsConfig:
+            caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          authorization:
+            type: Bearer
+            credentialsFile: /var/run/secrets/kubernetes.io/serviceaccount/token
       evaluationInterval: 1m
       retention: 30d
       storageSpec:

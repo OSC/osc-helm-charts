@@ -9,14 +9,10 @@ spec:
   jobName: cadvisor
   kubernetesSDConfigs:
     - role: Node
+  scrapeClass: kubernetes
   scheme: https
   metricsPath: /metrics/cadvisor
-  tlsConfig:
-    caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-  authorization:
-    type: Bearer
-    credentialsFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-  relabelConfigs:
+  relabelings:
     - action: labelmap
       regex: __meta_kubernetes_node_label_(.+)
     - sourceLabels: [__meta_kubernetes_node_name]
