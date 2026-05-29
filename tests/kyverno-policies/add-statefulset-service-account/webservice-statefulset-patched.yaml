@@ -60,4 +60,22 @@ spec:
           osc.edu/service-account: "test-user"
       spec:
         storageClassName: local-home
-
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-namespace
+  namespace: webservice2
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/home: project/test
+          osc.edu/service-account-uid: "1000"
+          osc.edu/service-account-gid: "1001"
+          osc.edu/fileset: "test-fileset"
+        labels:
+          osc.edu/service-account: test-user
+      spec:
+        storageClassName: local-ess

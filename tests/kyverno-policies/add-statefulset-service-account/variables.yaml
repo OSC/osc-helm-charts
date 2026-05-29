@@ -17,6 +17,12 @@ policies:
           gidMap.data.user-test-user: '1001'
           homeMap.data.user-test-user: '/users/project/test'
     resources:
+      - name: webservice-statefulset-namespace
+        values:
+          namespaceServiceAccount: test-user
+      - name: webservice-statefulset-without-service-account
+        values:
+          namespaceServiceAccount: ''
       - name: paas-statefulset
         values:
           serviceAccount: test-user
@@ -30,6 +36,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: webservice2
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: test-user
   - name: paas
     labels:
       osc.edu/role: paas
