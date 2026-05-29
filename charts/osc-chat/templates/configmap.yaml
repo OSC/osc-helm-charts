@@ -7,9 +7,6 @@ metadata:
   labels:
     {{- include "osc-chat.labels" . | nindent 4 }}
 data:
-  # Application configuration
-  ENVIRONMENT: {{ .Values.environment | quote }}
-  
   # Service URLs
   #POSTGRES_HOST: {{ include "osc-chat.postgresql.host" . | quote }}
   POSTGRES_PORT: {{ include "osc-chat.postgresql.port" . | quote }}

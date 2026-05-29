@@ -22,7 +22,6 @@
 {{- end }}
 
 2. Application Information:
-   - Environment: {{ .Values.environment }}
    - Namespace: {{ .Release.Namespace }}
    - Release: {{ .Release.Name }}
 
@@ -87,17 +86,10 @@
 {{- end }}
 
 5. Configuration Notes:
-{{- if eq .Values.environment "dev" }}
-   🚀 Development Mode Active:
-   - Ollama is enabled for local LLM testing
-   - Resource limits are reduced for development
-   - Consider running frontend/backend locally for hot reload
-{{- else }}
    🏭 Production Mode Active:
    - External LLM APIs should be configured
    - Ensure proper ingress and TLS setup
    - Monitor resource usage and scaling
-{{- end }}
 
 {{- if not .Values.secrets.create }}
    ⚠️  External secrets mode is enabled. Ensure all required secrets are created:
