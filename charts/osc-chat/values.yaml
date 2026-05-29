@@ -150,8 +150,8 @@ worker:
     registry: ""
   replicaCount: 1
   env:
-    QDRANT_COLLECTION_NAME: "osc-chat"
-    S3_BUCKET_NAME: "osc-chat"
+    QDRANT_COLLECTION_NAME: '{{ include "osc-chat.name" . }}'
+    S3_BUCKET_NAME: '{{ include "osc-chat.name" . }}'
     EMBEDDING_API_BASE: https://skhuvis-vllm.k8.osc.edu/v1
     EMBEDDING_MODEL: Qwen/Qwen3-Embedding-8B
   resources:
