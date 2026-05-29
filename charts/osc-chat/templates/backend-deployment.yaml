@@ -7,9 +7,7 @@ metadata:
     {{- include "osc-chat.labels" . | nindent 4 }}
     app.kubernetes.io/component: backend
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.backend.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "osc-chat.backend.selectorLabels" . | nindent 6 }}
