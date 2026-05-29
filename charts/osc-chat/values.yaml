@@ -440,6 +440,10 @@ vllm-stack:
     - name: LOGNAME
       value: osc-chat
     servicePort: 80
+    labels:
+      environment: ~
+      release: osc-chat
+      osc.edu/service-account: osc-chat
     serviceAnnotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path: /metrics
