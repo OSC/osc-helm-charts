@@ -351,11 +351,9 @@ vllm-stack:
       pvcStorage: "50Gi"
       pvcAccessMode:
         - ReadWriteMany
-#        - ReadWriteOnce
       storageClass: local-ess
-#      storageClass: local-path
-#      pvcLabels:
-#        osc.edu/service-account: skhuvis
+      pvcLabels:
+        osc.edu/service-account: osc-chat
       pvcAnnotations:
         osc.edu/fileset: PDE0050
 
