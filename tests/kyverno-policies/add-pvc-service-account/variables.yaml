@@ -16,6 +16,9 @@ policies:
           gidMap.data.user-test: '1001'
           homeMap.data.user-test: '/users/project/test'
     resources:
+      - name: pvc-webservice-namespace
+        values:
+          namespaceServiceAccount: test
       - name: pvc-paas-scratch
         values:
           serviceAccount: test
@@ -26,6 +29,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: webservice2
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: test
   - name: paas
     labels:
       osc.edu/role: paas

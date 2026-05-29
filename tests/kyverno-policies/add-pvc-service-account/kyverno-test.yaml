@@ -14,6 +14,7 @@ results:
     resources:
       - pvc-webservice-scratch
       - pvc-webservice-home
+      - pvc-webservice-namespace
     patchedResources: pvc-webservice.yaml
     kind: PersistentVolumeClaim
     result: pass
