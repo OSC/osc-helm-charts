@@ -85,7 +85,10 @@ spec:
                   name: {{ include "osc-chat.fullname" . }}-secrets
                   key: MINIO_SECRET_KEY
             - name: EMBEDDING_API_BASE
-              value: {{ .Values.worker.env.EMBEDDING_API_BASE | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-app-config
+                  key: LLM_URL
             - name: EMBEDDING_MODEL
               value: {{ .Values.worker.env.EMBEDDING_MODEL | quote }}
           resources:

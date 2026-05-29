@@ -188,3 +188,14 @@ Crawlee selector labels
 {{ include "osc-chat.selectorLabels" . }}
 app.kubernetes.io/component: crawlee
 {{- end }}
+
+{{/*
+LLM server host
+*/}}
+{{- define "osc-chat.llm_server.host" -}}
+{{- if and (index .Values "vllm-stack" "enabled") ( index .Values "vllm-stack" "routerSpec" "enableRouter") -}}
+{{ .Release.Name }}-router-service/v1
+{{- else -}}
+{{ required "llm server host must be defined if not deploying vLLM" .Values.llm_server.host }}
+{{- end -}}
+{{- end }}

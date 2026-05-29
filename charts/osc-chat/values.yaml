@@ -24,6 +24,9 @@ global:
 serviceAccount:
   name:
 
+llm_server:
+  host:
+
 database:
   postgresql:
     schema:
@@ -132,7 +135,6 @@ backend:
     port: 8001
   env:
     FLASK_ENV: production
-    EMBEDDING_API_BASE: https://skhuvis-vllm.k8.osc.edu/v1
     EMBEDDING_MODEL: Qwen/Qwen3-Embedding-8B
   resources:
     limits:
@@ -152,7 +154,6 @@ worker:
   env:
     QDRANT_COLLECTION_NAME: '{{ include "osc-chat.name" . }}'
     S3_BUCKET_NAME: '{{ include "osc-chat.name" . }}'
-    EMBEDDING_API_BASE: https://skhuvis-vllm.k8.osc.edu/v1
     EMBEDDING_MODEL: Qwen/Qwen3-Embedding-8B
   resources:
     limits:
@@ -429,6 +430,7 @@ vllm-stack:
 #        value: WARN
 
   routerSpec:
+    enableRouter: true
     repository: docker-registry.osc.edu/kubernetes/lmcache/lmstack-router
     tag: v0.1.11
     imagePullPolicy: IfNotPresent

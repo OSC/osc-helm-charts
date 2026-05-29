@@ -52,7 +52,10 @@ spec:
             - name: OSC_HOSTED_API_KEY
               value: {{ default "" .Values.backend.env.OSC_HOSTED_API_KEY | quote }}
             - name: EMBEDDING_API_BASE
-              value: {{ .Values.backend.env.EMBEDDING_API_BASE | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-app-config
+                  key: LLM_URL
             - name: EMBEDDING_MODEL
               value: {{ .Values.backend.env.EMBEDDING_MODEL | quote }}
             - name: RABBITMQ_QUEUE
