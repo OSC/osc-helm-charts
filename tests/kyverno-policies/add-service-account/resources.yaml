@@ -27,6 +27,19 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-webservice-service-account-namespace
+  namespace: webservice2
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+  initContainers:
+    - name: init
+      image: busybox
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-webservice-service-account-skip
   namespace: user-test
 spec:

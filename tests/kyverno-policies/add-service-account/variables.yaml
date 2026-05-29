@@ -7,6 +7,7 @@ policies:
     rules:
       - name: webservice-service-account-run-as
         values:
+          serviceAccount: test
           uidMap.data.user-test: '1000'
           gidMap.data.user-test: '1001'
           gidsMap.data.user-test: '["1001","1002"]'
@@ -16,6 +17,14 @@ policies:
           uidMap.data.user-test: '1000'
           gidMap.data.user-test: '1001'
           gidsMap.data.user-test: '["1001","1002"]'
+    resources:
+      - name: test-no-service-account-skip
+        values:
+          serviceAccount: ''
+          namespaceServiceAccount: ''
+      - name: test-webservice-service-account-namespace
+        values:
+          namespaceServiceAccount: 'test'
 namespaceSelector:
   - name: user-test
     labels:
@@ -23,6 +32,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: webservice2
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: test
   - name: paas-invalid
     labels:
       osc.edu/role: paas
