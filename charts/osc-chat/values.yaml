@@ -250,8 +250,7 @@ vllm-stack:
   enabled: true
   servingEngineSpec:
     labels:
-      environment: production
-      release: vllm
+      release: osc-chat
     runtimeClassName: ""
     modelSpec:
     # Qwen Model
