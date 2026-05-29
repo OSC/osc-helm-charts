@@ -98,10 +98,15 @@ spec:
       {{- if .Values.huggingfaceCache.enabled }}
       volumes:
         - name: huggingface-cache
+          {{- if .Values.huggingfaceCache.storageClassName }}
+          persistentVolumeClaim:
+            claimName: {{include "osc-chat.fullname" . }}-hfcache-claim
+          {{- else }}
           emptyDir:
             {{- if .Values.huggingfaceCache.sizeLimit }}
             sizeLimit: {{ .Values.huggingfaceCache.sizeLimit | quote }}
             {{- end }}
+          {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -116,5 +121,3 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}
-
-

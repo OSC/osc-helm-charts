@@ -19,6 +19,7 @@ global:
       forceCreate: true
   ingress:
     host: ""
+    hostAlias: ""
 
 serviceAccount:
   name:
@@ -147,7 +148,6 @@ worker:
     repository: osc/hpcgpt_backend
     tag: v0.1.0
     pullPolicy: Always
-    registry: ""
   replicaCount: 1
   env:
     QDRANT_COLLECTION_NAME: '{{ include "osc-chat.name" . }}'
@@ -168,7 +168,8 @@ ollama:
 huggingfaceCache:
   enabled: true
   mountPath: "/var/cache/huggingface"
-  sizeLimit: "5Gi"  # emptyDir size limit (ephemeral)
+  sizeLimit: "5Gi"
+  storageClassName: paas-nfs-client
 
 secrets:
   # Internal secrets - created by the chart
