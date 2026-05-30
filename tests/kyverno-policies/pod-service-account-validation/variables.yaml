@@ -137,6 +137,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: webservice2
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: test
   - name: paas
     labels:
       osc.edu/role: paas

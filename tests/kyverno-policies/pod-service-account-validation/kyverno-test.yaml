@@ -13,6 +13,7 @@ results:
     rule: webservice-require-service-account
     resources:
       - user-test/test-service-account-skip
+      - webservice2/test-service-account-namespace
     kind: Pod
     result: skip
   - policy: pod-service-account-validation
