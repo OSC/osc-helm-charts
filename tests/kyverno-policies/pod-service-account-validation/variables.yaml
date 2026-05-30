@@ -22,6 +22,18 @@ policies:
           serviceAccount: test
           userGIDMap.data.user-test: '["1000", "1001"]'
     resources:
+      - name: test-service-account-pass
+        values:
+          serviceAccount: test
+          namespaceServiceAccount: ''
+      - name: test-service-account-namespace
+        values:
+          serviceAccount: ''
+          namespaceServiceAccount: test
+      - name: test-service-account-fail
+        values:
+          serviceAccount: ''
+          namespaceServiceAccount: ''
       - name: pods-require-valid-service-account-skip
         values:
           request.operation: CREATE
