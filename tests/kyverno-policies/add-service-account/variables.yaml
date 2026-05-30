@@ -5,6 +5,9 @@ metadata:
 policies:
   - name: add-service-account
     rules:
+      - name: webservice-add-service-account
+        values:
+          serviceAccount: test
       - name: webservice-service-account-run-as
         values:
           serviceAccount: test
