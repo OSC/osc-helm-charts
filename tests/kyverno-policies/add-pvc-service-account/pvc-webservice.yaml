@@ -48,6 +48,8 @@ metadata:
     osc.edu/service-account-uid: '1000'
     osc.edu/service-account-gid: '1001'
     osc.edu/home: project/test
+  labels:
+    osc.edu/service-account: test
 spec:
   accessModes:
   - ReadWriteOnce
