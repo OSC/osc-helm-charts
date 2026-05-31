@@ -111,12 +111,18 @@ policies:
       - name: webservice-statefulset-local-home
         values:
           serviceAccount: test-user
+      - name: webservice-statefulset-namespace-local-home
+        values:
+          namespaceServiceAccount: test-user
       - name: webservice-statefulset-local-home-missing-home
         values:
           serviceAccount: test-user
       - name: webservice-statefulset-local-home-invalid
         values:
           serviceAccount: test-user
+      - name: webservice-statefulset-namespace-local-home-invalid
+        values:
+          namespaceServiceAccount: test-user
       - name: paas-statefulset-local-home
         values:
           serviceAccount: test-user

@@ -488,6 +488,20 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: webservice-statefulset-namespace-local-home
+  namespace: webservice2
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/home: project/test
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
   name: webservice-statefulset-local-home-missing-home
   namespace: webservice
   labels:
@@ -506,6 +520,20 @@ metadata:
   namespace: webservice
   labels:
     osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/home: project/foo
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-namespace-local-home-invalid
+  namespace: webservice2
 spec:
   volumeClaimTemplates:
     - metadata:

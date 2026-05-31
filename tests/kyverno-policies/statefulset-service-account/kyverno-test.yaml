@@ -186,12 +186,14 @@ results:
     rule: validate-webservice-home-annotation
     resources:
       - webservice-statefulset-local-home
+      - webservice-statefulset-namespace-local-home
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
     rule: validate-webservice-home-annotation
     resources:
       - webservice-statefulset-local-home-invalid
+      - webservice-statefulset-namespace-local-home-invalid
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account
