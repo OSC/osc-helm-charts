@@ -45,6 +45,9 @@ policies:
       - name: webservice-statefulset-with-invalid-fileset
         values:
           serviceAccount: test-user
+      - name: webservice-statefulset-namespace-with-invalid-fileset
+        values:
+          namespaceServiceAccount: test-user
       - name: webservice-statefulset-with-valid-fileset
         values:
           serviceAccount: test-user

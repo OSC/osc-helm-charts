@@ -76,12 +76,14 @@ results:
     rule: validate-webservice-fileset-annotation
     resources:
       - webservice-statefulset-with-valid-fileset
+      - webservice-statefulset-namespace-local-ess
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - webservice-statefulset-with-invalid-fileset
+      - webservice-statefulset-namespace-with-invalid-fileset
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account
