@@ -117,6 +117,7 @@ results:
     resources:
       - webservice-statefulset-local-ess-with-uid-gid
       - webservice-statefulset-local-scratch-with-uid-gid
+      - webservice-statefulset-namespace-local-ess
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
@@ -126,6 +127,7 @@ results:
       - webservice-statefulset-local-scratch-with-wrong-uid-gid
       - webservice-statefulset-local-ess-without-uid-gid
       - webservice-statefulset-local-scratch-without-uid-gid
+      - webservice-statefulset-namespace-local-ess-without-uid-gid
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account

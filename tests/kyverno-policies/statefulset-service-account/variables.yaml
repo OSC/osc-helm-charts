@@ -31,7 +31,7 @@ policies:
           namespaceServiceAccount: ''
       - name: webservice-statefulset-namespace-local-ess
         values:
-          namespaceServiceAccount: test
+          namespaceServiceAccount: test-user
       - name: webservice-statefulset-without-service-account
         values:
           namespaceServiceAccount: ''
@@ -57,6 +57,9 @@ policies:
       - name: webservice-statefulset-local-ess-with-uid-gid
         values:
           serviceAccount: test-user
+      - name: webservice-statefulset-namespace-local-ess-without-uid-gid
+        values:
+          namespaceServiceAccount: test-user
       - name: webservice-statefulset-local-scratch-with-uid-gid
         values:
           serviceAccount: test-user
