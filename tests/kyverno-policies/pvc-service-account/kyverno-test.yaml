@@ -184,12 +184,14 @@ results:
     rule: validate-webservice-home-annotation
     resources:
       - pvc-webservice-pass-home
+      - pvc-webservice-namespace-pass-home
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-service-account
     rule: validate-webservice-home-annotation
     resources:
       - pvc-webservice-pass-home-invalid
+      - pvc-webservice-namespace-home-invalid
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-service-account
