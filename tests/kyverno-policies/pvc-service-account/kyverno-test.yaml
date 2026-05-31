@@ -42,6 +42,7 @@ results:
     rule: validate-service-account-uid-gid-webservice
     resources:
       - pvc-webservice-pass-uid-gid
+      - pvc-webservice-namespace-pass-uid-gid
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-service-account
@@ -49,6 +50,7 @@ results:
     resources:
       - pvc-webservice-fail-uid-gid-wrong
       - pvc-webservice-fail-uid-gid-missing
+      - pvc-webservice-namespace-fail-uid-gid-missing
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-service-account

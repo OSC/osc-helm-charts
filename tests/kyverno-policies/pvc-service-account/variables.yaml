@@ -50,15 +50,21 @@ policies:
       - name: pvc-webservice-pass-uid-gid
         values:
           serviceAccount: test
+      - name: pvc-webservice-namespace-pass-uid-gid
+        values:
+          namespaceServiceAccount: test
       - name: pvc-webservice-fail-uid-gid-wrong
         values:
           serviceAccount: test
       - name: pvc-webservice-fail-uid-gid-missing
         values:
           serviceAccount: test
+      - name: pvc-webservice-namespace-fail-uid-gid-missing
+        values:
+          namespaceServiceAccount: test
       - name: pvc-webservice-fail-service-account-missing
         values:
-          serviceAccount: test
+          namespaceServiceAccount: ''
       - name: pvc-paas-fail-service-account-missing
         values:
           serviceAccount: test
@@ -90,6 +96,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: webservice2
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: test
   - name: paas
     labels:
       osc.edu/role: paas
