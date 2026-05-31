@@ -29,9 +29,13 @@ policies:
     resources:
       - name: pvc-webservice-skip
         values:
+          namespaceServiceAccount: ''
       - name: pvc-webservice-pass
         values:
-          serviceAccount: test
+          namespaceServiceAccount: ''
+      - name: pvc-webservice-fail-no-sa
+        values:
+          namespaceServiceAccount: ''
       - name: pvc-webservice-fail
         values:
           serviceAccount: test

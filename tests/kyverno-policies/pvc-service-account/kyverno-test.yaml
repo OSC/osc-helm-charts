@@ -12,6 +12,7 @@ results:
   - policy: pvc-service-account
     rule: validate-service-account
     resources:
+      - pvc-webservice-skip-storageclass
       - pvc-webservice-skip
       - pvc-paas-skip
       - pvc-paas-pass
