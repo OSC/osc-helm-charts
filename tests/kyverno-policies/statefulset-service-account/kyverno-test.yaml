@@ -13,12 +13,14 @@ results:
     rule: validate-service-account
     resources:
       - webservice-statefulset-local-ess
+      - webservice-statefulset-namespace-local-ess
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
     rule: validate-service-account
     resources:
       - webservice-statefulset-without-service-account
+      - webservice-statefulset-namespace-without-service-account
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account

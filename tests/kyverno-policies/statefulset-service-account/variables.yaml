@@ -28,7 +28,17 @@ policies:
     resources:
       - name: webservice-statefulset-local-ess
         values:
-          serviceAccount: test-user
+          namespaceServiceAccount: ''
+      - name: webservice-statefulset-namespace-local-ess
+        values:
+          namespaceServiceAccount: test
+      - name: webservice-statefulset-without-service-account
+        values:
+          namespaceServiceAccount: ''
+      - name: webservice-statefulset-namespace-without-service-account
+        values:
+          serviceAccount: ''
+          namespaceServiceAccount: ''
       - name: paas-statefulset-local-ess
         values:
           serviceAccount: test-user
@@ -114,6 +124,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: webservice2
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: test-user
   - name: paas
     labels:
       osc.edu/role: paas
