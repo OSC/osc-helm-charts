@@ -48,6 +48,21 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: pvc-webservice-namespace-fail
+  namespace: webservice2
+  annotations:
+    osc.edu/fileset: user-test-fileset2
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: pvc-webservice-fail-no-sa
   namespace: webservice
   annotations:

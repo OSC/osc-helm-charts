@@ -39,6 +39,9 @@ policies:
       - name: pvc-webservice-fail
         values:
           serviceAccount: test
+      - name: pvc-webservice-namespace-fail
+        values:
+          namespaceServiceAccount: test
       - name: pvc-paas-skip
         values:
       - name: pvc-paas-pass

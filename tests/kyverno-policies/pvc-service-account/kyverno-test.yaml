@@ -146,12 +146,14 @@ results:
     rule: validate-webservice-fileset-annotation
     resources:
       - pvc-webservice-pass
+      - pvc-webservice-namespace-pass-uid-gid
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - pvc-webservice-fail
+      - pvc-webservice-namespace-fail
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-service-account
