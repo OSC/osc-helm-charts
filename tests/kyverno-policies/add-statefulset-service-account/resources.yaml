@@ -48,6 +48,20 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: webservice-statefulset-namespace
+  namespace: webservice2
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
   name: webservice-statefulset-without-service-account
   namespace: webservice
 spec:

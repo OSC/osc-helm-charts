@@ -28,13 +28,26 @@ policies:
     resources:
       - name: webservice-statefulset-local-ess
         values:
-          serviceAccount: test-user
+          namespaceServiceAccount: ''
+      - name: webservice-statefulset-namespace-local-ess
+        values:
+          namespaceServiceAccount: test-user
+      - name: webservice-statefulset-without-service-account
+        values:
+          namespaceServiceAccount: ''
+      - name: webservice-statefulset-namespace-without-service-account
+        values:
+          serviceAccount: ''
+          namespaceServiceAccount: ''
       - name: paas-statefulset-local-ess
         values:
           serviceAccount: test-user
       - name: webservice-statefulset-with-invalid-fileset
         values:
           serviceAccount: test-user
+      - name: webservice-statefulset-namespace-with-invalid-fileset
+        values:
+          namespaceServiceAccount: test-user
       - name: webservice-statefulset-with-valid-fileset
         values:
           serviceAccount: test-user
@@ -47,6 +60,9 @@ policies:
       - name: webservice-statefulset-local-ess-with-uid-gid
         values:
           serviceAccount: test-user
+      - name: webservice-statefulset-namespace-local-ess-without-uid-gid
+        values:
+          namespaceServiceAccount: test-user
       - name: webservice-statefulset-local-scratch-with-uid-gid
         values:
           serviceAccount: test-user
@@ -95,12 +111,18 @@ policies:
       - name: webservice-statefulset-local-home
         values:
           serviceAccount: test-user
+      - name: webservice-statefulset-namespace-local-home
+        values:
+          namespaceServiceAccount: test-user
       - name: webservice-statefulset-local-home-missing-home
         values:
           serviceAccount: test-user
       - name: webservice-statefulset-local-home-invalid
         values:
           serviceAccount: test-user
+      - name: webservice-statefulset-namespace-local-home-invalid
+        values:
+          namespaceServiceAccount: test-user
       - name: paas-statefulset-local-home
         values:
           serviceAccount: test-user
@@ -114,6 +136,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: webservice2
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: test-user
   - name: paas
     labels:
       osc.edu/role: paas

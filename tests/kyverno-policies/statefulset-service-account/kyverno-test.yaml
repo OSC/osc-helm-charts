@@ -13,12 +13,14 @@ results:
     rule: validate-service-account
     resources:
       - webservice-statefulset-local-ess
+      - webservice-statefulset-namespace-local-ess
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
     rule: validate-service-account
     resources:
       - webservice-statefulset-without-service-account
+      - webservice-statefulset-namespace-without-service-account
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account
@@ -74,12 +76,14 @@ results:
     rule: validate-webservice-fileset-annotation
     resources:
       - webservice-statefulset-with-valid-fileset
+      - webservice-statefulset-namespace-local-ess
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - webservice-statefulset-with-invalid-fileset
+      - webservice-statefulset-namespace-with-invalid-fileset
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account
@@ -115,6 +119,7 @@ results:
     resources:
       - webservice-statefulset-local-ess-with-uid-gid
       - webservice-statefulset-local-scratch-with-uid-gid
+      - webservice-statefulset-namespace-local-ess
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
@@ -124,6 +129,7 @@ results:
       - webservice-statefulset-local-scratch-with-wrong-uid-gid
       - webservice-statefulset-local-ess-without-uid-gid
       - webservice-statefulset-local-scratch-without-uid-gid
+      - webservice-statefulset-namespace-local-ess-without-uid-gid
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account
@@ -180,12 +186,14 @@ results:
     rule: validate-webservice-home-annotation
     resources:
       - webservice-statefulset-local-home
+      - webservice-statefulset-namespace-local-home
     kind: StatefulSet
     result: pass
   - policy: statefulset-service-account
     rule: validate-webservice-home-annotation
     resources:
       - webservice-statefulset-local-home-invalid
+      - webservice-statefulset-namespace-local-home-invalid
     kind: StatefulSet
     result: fail
   - policy: statefulset-service-account

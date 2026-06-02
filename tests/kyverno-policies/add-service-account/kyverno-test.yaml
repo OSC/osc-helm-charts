@@ -13,6 +13,7 @@ results:
     rule: webservice-service-account-run-as
     resources:
       - test-webservice-service-account
+      - test-webservice-service-account-namespace
     patchedResource: webservice-service-account-mutated.yaml
     kind: Pod
     result: pass
@@ -28,6 +29,7 @@ results:
       - test-webservice-service-account-mariadb
     patchedResource: webservice-service-account-mariadb-mutated.yaml
     kind: Pod
+    namespace: webservice
     result: pass
   - policy: add-service-account
     rule: webservice-service-account-run-as

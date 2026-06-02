@@ -37,3 +37,23 @@ spec:
     requests:
       storage: 8Gi
   storageClassName: local-home
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webservice-namespace
+  namespace: webservice2
+  annotations:
+    osc.edu/fileset: user-test-fileset
+    osc.edu/service-account-uid: '1000'
+    osc.edu/service-account-gid: '1001'
+    osc.edu/home: project/test
+  labels:
+    osc.edu/service-account: test
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-ess

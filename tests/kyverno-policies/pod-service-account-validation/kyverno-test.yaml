@@ -19,6 +19,7 @@ results:
     rule: webservice-require-service-account
     resources:
       - webservice/test-service-account-pass
+      - webservice2/test-service-account-namespace
     kind: Pod
     result: pass
   - policy: pod-service-account-validation
@@ -33,17 +34,13 @@ results:
       - webservice/pods-require-valid-service-account-pass
       - webservice/pods-require-valid-service-account-container-pass
       - webservice/pods-require-valid-service-account-init-pass
+      - webservice2/pods-require-valid-service-account-namespace-pass
     kind: Pod
     result: pass
   - policy: pod-service-account-validation
     rule: webservice-require-valid-service-account
     resources:
       - user-test/pods-require-valid-service-account-skip
-    kind: Pod
-    result: skip
-  - policy: pod-service-account-validation
-    rule: webservice-require-valid-service-account
-    resources:
       - webservice/pods-require-valid-service-account-skip-op
     kind: Pod
     result: skip
@@ -58,6 +55,7 @@ results:
       - webservice/pods-require-valid-service-account-gid-container-fail
       - webservice/pods-require-valid-service-account-gid-init-fail
       - webservice/fsgroup-require-valid-service-account-gid-fail
+      - webservice2/pods-require-valid-service-account-namespace-fail
     kind: Pod
     result: fail
   - policy: pod-service-account-validation
@@ -77,12 +75,14 @@ results:
     rule: webservice-service-account-authorized-for-groups
     resources:
       - webservice/test-groups-pass
+      - webservice2/test-groups-namespace-pass
     kind: Pod
     result: pass
   - policy: pod-service-account-validation
     rule: webservice-service-account-authorized-for-groups
     resources:
       - webservice/test-groups-fail
+      - webservice2/test-groups-namespace-fail
     kind: Pod
     result: fail
 

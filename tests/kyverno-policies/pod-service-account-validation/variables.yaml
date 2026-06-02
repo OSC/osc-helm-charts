@@ -22,6 +22,18 @@ policies:
           serviceAccount: test
           userGIDMap.data.user-test: '["1000", "1001"]'
     resources:
+      - name: test-service-account-pass
+        values:
+          serviceAccount: test
+          namespaceServiceAccount: ''
+      - name: test-service-account-namespace
+        values:
+          serviceAccount: ''
+          namespaceServiceAccount: test
+      - name: test-service-account-fail
+        values:
+          serviceAccount: ''
+          namespaceServiceAccount: ''
       - name: pods-require-valid-service-account-skip
         values:
           request.operation: CREATE
@@ -36,6 +48,10 @@ policies:
           request.operation: CREATE
       - name: pods-require-valid-service-account-init-pass
         values:
+          request.operation: CREATE
+      - name: pods-require-valid-service-account-namespace-pass
+        values:
+          namespaceServiceAccount: test
           request.operation: CREATE
       - name: pods-require-valid-service-account-uid-fail
         values:
@@ -64,6 +80,10 @@ policies:
       - name: fsgroup-require-valid-service-account-gid-fail
         values:
           request.operation: CREATE
+      - name: pods-require-valid-service-account-namespace-fail
+        values:
+          namespaceServiceAccount: test
+          request.operation: CREATE
       - name: test-groups-skip
         values:
           request.operation: CREATE
@@ -76,8 +96,16 @@ policies:
       - name: test-groups-pass
         values:
           request.operation: CREATE
+      - name: test-groups-namespace-pass
+        values:
+          namespaceServiceAccount: test
+          request.operation: CREATE
       - name: test-groups-fail
         values:
+          request.operation: CREATE
+      - name: test-groups-namespace-fail
+        values:
+          namespaceServiceAccount: test
           request.operation: CREATE
       - name: paas-pods-require-valid-service-account-skip-op
         values:
@@ -137,6 +165,10 @@ namespaceSelector:
   - name: webservice
     labels:
       osc.edu/role: webservice
+  - name: webservice2
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: test
   - name: paas
     labels:
       osc.edu/role: paas

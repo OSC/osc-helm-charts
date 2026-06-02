@@ -15,6 +15,7 @@ results:
       - webservice-statefulset
       - webservice-statefulset-ess
       - webservice-statefulset-home
+      - webservice-statefulset-namespace
     patchedResources: webservice-statefulset-patched.yaml
     kind: StatefulSet
     result: pass

@@ -18,8 +18,40 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: webservice-statefulset-namespace-local-ess
+  namespace: webservice2
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+          osc.edu/service-account-uid: "1000"
+          osc.edu/service-account-gid: "1001"
+        labels:
+          osc.edu/service-account: test-user
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
   name: webservice-statefulset-without-service-account
   namespace: webservice
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-scratch
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-without-service-account
+  namespace: webservice2
 spec:
   volumeClaimTemplates:
     - metadata:
@@ -130,6 +162,20 @@ metadata:
   namespace: webservice
   labels:
     osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "invalid-fileset"
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-namespace-with-invalid-fileset
+  namespace: webservice2
 spec:
   volumeClaimTemplates:
     - metadata:
@@ -286,6 +332,20 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: webservice-statefulset-namespace-local-ess-without-uid-gid
+  namespace: webservice2
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/fileset: "test-fileset"
+      spec:
+        storageClassName: local-ess
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
   name: webservice-statefulset-local-scratch-without-uid-gid
   namespace: webservice
   labels:
@@ -428,6 +488,20 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: webservice-statefulset-namespace-local-home
+  namespace: webservice2
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/home: project/test
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
   name: webservice-statefulset-local-home-missing-home
   namespace: webservice
   labels:
@@ -446,6 +520,20 @@ metadata:
   namespace: webservice
   labels:
     osc.edu/service-account: "test-user"
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: webservice-statefulset-pvc
+        annotations:
+          osc.edu/home: project/foo
+      spec:
+        storageClassName: local-home
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset-namespace-local-home-invalid
+  namespace: webservice2
 spec:
   volumeClaimTemplates:
     - metadata:

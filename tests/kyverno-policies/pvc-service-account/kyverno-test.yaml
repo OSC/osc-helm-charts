@@ -12,6 +12,7 @@ results:
   - policy: pvc-service-account
     rule: validate-service-account
     resources:
+      - pvc-webservice-skip-storageclass
       - pvc-webservice-skip
       - pvc-paas-skip
       - pvc-paas-pass
@@ -41,6 +42,7 @@ results:
     rule: validate-service-account-uid-gid-webservice
     resources:
       - pvc-webservice-pass-uid-gid
+      - pvc-webservice-namespace-pass-uid-gid
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-service-account
@@ -48,6 +50,7 @@ results:
     resources:
       - pvc-webservice-fail-uid-gid-wrong
       - pvc-webservice-fail-uid-gid-missing
+      - pvc-webservice-namespace-fail-uid-gid-missing
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-service-account
@@ -143,12 +146,14 @@ results:
     rule: validate-webservice-fileset-annotation
     resources:
       - pvc-webservice-pass
+      - pvc-webservice-namespace-pass-uid-gid
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-service-account
     rule: validate-webservice-fileset-annotation
     resources:
       - pvc-webservice-fail
+      - pvc-webservice-namespace-fail
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-service-account
@@ -179,12 +184,14 @@ results:
     rule: validate-webservice-home-annotation
     resources:
       - pvc-webservice-pass-home
+      - pvc-webservice-namespace-pass-home
     kind: PersistentVolumeClaim
     result: pass
   - policy: pvc-service-account
     rule: validate-webservice-home-annotation
     resources:
       - pvc-webservice-pass-home-invalid
+      - pvc-webservice-namespace-home-invalid
     kind: PersistentVolumeClaim
     result: fail
   - policy: pvc-service-account
