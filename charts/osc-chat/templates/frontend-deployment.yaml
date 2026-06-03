@@ -63,7 +63,7 @@ spec:
             - name: REDIS_URL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-secrets
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: REDIS_URL
             - name: POSTGRES_ENDPOINT
               valueFrom:
@@ -88,7 +88,7 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-secrets
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: POSTGRES_PASSWORD
             - name: KEYCLOAK_DB_ENDPOINT
               valueFrom:
@@ -113,17 +113,17 @@ spec:
             - name: KEYCLOAK_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-secrets
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: POSTGRES_PASSWORD
             - name: AWS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-secrets
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: MINIO_ACCESS_KEY
             - name: AWS_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-secrets
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: MINIO_SECRET_KEY
             - name: LOCAL_MINIO
               value: "true"

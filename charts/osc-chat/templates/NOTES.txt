@@ -82,7 +82,7 @@
    kubectl port-forward service/{{ include "osc-chat.fullname" . }}-keycloak 8080:8080
    # Then visit http://localhost:8080/admin
    # Username: {{ .Values.keycloak.auth.adminUser }}
-   # Password: [check secret {{ include "osc-chat.fullname" . }}-secrets]
+   # Password: [check secret {{ include "osc-chat.fullname" . }}-app-secrets]
 {{- end }}
 
 5. Configuration Notes:

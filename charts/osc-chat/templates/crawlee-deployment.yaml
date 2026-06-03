@@ -46,12 +46,12 @@ spec:
             - name: AWS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-secrets
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: MINIO_ACCESS_KEY
             - name: AWS_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-secrets
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: MINIO_SECRET_KEY
             - name: REDIS_HOST
               valueFrom:
@@ -66,7 +66,7 @@ spec:
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-secrets
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: REDIS_PASSWORD
           {{- if .Values.crawlee.probes.liveness.enabled }}
           livenessProbe:
