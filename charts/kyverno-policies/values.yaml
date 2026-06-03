@@ -168,6 +168,9 @@ kyverno-policies:
         - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
           operator: NotEquals
           value: "dcgm-exporter"
+        - key: "{{ request.object.metadata.annotations.\"app.kubernetes.io/component\" || '' }}"
+          operator: NotEquals
+          value: "nfd-worker"
     require-run-as-non-root-user:
       all:
         - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
@@ -193,6 +196,9 @@ kyverno-policies:
         - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
           operator: NotEquals
           value: "dcgm-exporter"
+        - key: "{{ request.object.metadata.annotations.\"app.kubernetes.io/component\" || '' }}"
+          operator: NotEquals
+          value: "nfd-worker"
   nameOverride:
   # -- Additional labels
   customLabels: {}
