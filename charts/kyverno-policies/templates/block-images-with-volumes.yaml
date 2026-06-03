@@ -46,6 +46,7 @@ spec:
           value:
             - prometheus
             - postgresql
+            - minio
         - key: "docker.io"
           operator: AnyNotIn
           value: "{{`{{ images.containers.*.registry }}`}}"
