@@ -78,8 +78,10 @@ qdrant:
   enable: true
   resources:
     limits:
+      cpu: 4
       memory: 8Gi
     requests:
+      cpu: 4
       memory: 8Gi
   storageClass:
   image:
@@ -167,7 +169,7 @@ huggingfaceCache:
   enabled: true
   mountPath: "/var/cache/huggingface"
   sizeLimit: "5Gi"
-  storageClassName: paas-nfs-client
+  storageClassName: webservices-nfs-client
 
 secrets:
   # Internal secrets - created by the chart
@@ -262,10 +264,10 @@ vllm-stack:
       enableLoRA: false
 
       requestCPU: 4
-      requestMemory: "48Gi"
+      requestMemory: "32Gi"
       requestGPU: 1
       limitCPU: 4
-      limitMemory: "48Gi"
+      limitMemory: "32Gi"
       limitGPU: 1
 
       podAnnotations:
@@ -277,11 +279,10 @@ vllm-stack:
         - ReadWriteMany
 #        - ReadWriteOnce
       storageClass: local-ess
-#      storageClass: local-path
-#      pvcLabels:
-#        osc.edu/service-account: skhuvis
+      pvcLabels:
+        osc.edu/service-account: oscchat
       pvcAnnotations:
-        osc.edu/fileset: PDE0050
+        osc.edu/fileset: PZS0645
 
       vllmConfig:
 #        enableChunkedPrefill: false
@@ -336,10 +337,10 @@ vllm-stack:
       enableLoRA: false
 
       requestCPU: 4
-      requestMemory: "36Gi"
+      requestMemory: "32Gi"
       requestGPU: 1
       limitCPU: 4
-      limitMemory: "36Gi"
+      limitMemory: "32Gi"
       limitGPU: 1
 
       podAnnotations:
@@ -351,9 +352,9 @@ vllm-stack:
         - ReadWriteMany
       storageClass: local-ess
       pvcLabels:
-        osc.edu/service-account: osc-chat
+        osc.edu/service-account: oscchat
       pvcAnnotations:
-        osc.edu/fileset: PDE0050
+        osc.edu/fileset: PZS0645
 
       vllmConfig:
 #        enableChunkedPrefill: false
@@ -442,15 +443,17 @@ vllm-stack:
     labels:
       environment: ~
       release: osc-chat
-      osc.edu/service-account: osc-chat
+      osc.edu/service-account: oscchat
     serviceAnnotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path: /metrics
       prometheus.io/port: '80'
     resources:
       requests:
+        cpu: 4
         memory: 1500Mi
       limits:
+        cpu: 4
         memory: 2000Mi
     ingress:
       enabled: true
