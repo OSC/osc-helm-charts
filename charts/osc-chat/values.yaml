@@ -21,9 +21,6 @@ global:
     host: ""
     hostAlias: ""
 
-serviceAccount:
-  name:
-
 llm_server:
   host:
 

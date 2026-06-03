@@ -54,7 +54,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "osc-chat.serviceAccountName" -}}
-{{- default (include "osc-chat.fullname" .) .Values.serviceAccount.name }}
+{{- include "osc-chat.fullname" . }}
 {{- end }}
 
 {{/*
