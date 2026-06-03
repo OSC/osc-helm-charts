@@ -29,6 +29,7 @@ data:
   MINIO_URL: "http://{{ include "osc-chat.fullname" . }}-minio:9000"
   MINIO_PUBLIC_URL: {{ printf "https://%s" (.Values.minio.ingress.hostname)  | quote }}
   KEYCLOAK_URL: {{ .Values.keycloak.url | quote }}
+  LLM_URL: {{ include "osc-chat.llm_server.host" . | quote }}
   
   # Application specific
   QDRANT_COLLECTION_NAME: {{ include "osc-chat.fullname" . | quote }}
