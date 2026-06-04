@@ -33,4 +33,4 @@ data:
   
   # Application specific
   QDRANT_COLLECTION_NAME: {{ include "osc-chat.fullname" . | quote }}
-  S3_BUCKET_NAME: {{ .Values.worker.env.S3_BUCKET_NAME | quote }}
+  S3_BUCKET_NAME: {{ tpl .Values.worker.env.S3_BUCKET_NAME . | quote }}

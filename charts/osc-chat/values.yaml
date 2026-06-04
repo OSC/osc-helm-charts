@@ -169,7 +169,7 @@ huggingfaceCache:
   enabled: true
   mountPath: "/var/cache/huggingface"
   sizeLimit: "5Gi"
-  storageClassName: webservices-nfs-client
+  storageClassName:  '{{ .Values.global.storageClass }}'
 
 secrets:
   # Internal secrets - created by the chart
@@ -224,15 +224,18 @@ frontend:
   ingress:
     enabled: true
     className: "nginx"
-    annotations: {}
-    hosts:
-      - host: skhuvis.k8.osc.edu
-        paths:
-          - path: /
-            pathType: Prefix
+    annotations:
+      prometheus.io/probe_path: /api/healthcheck
+      prometheus.io/probe_scheme: 'https'
+      cert-manager.io/cluster-issuer: letsencrypt
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+      nginx.ingress.kubernetes.io/server-alias: '{{ required "Ingress hostAlias must be defined in the global settings" .Values.global.ingress.hostAlias }}'
+    host: '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
     tls:
       - hosts:
-        - skhuvis.k8.osc.edu
+        - '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
+        - '{{ required "Ingress hostAlias must be defined in the global settings" .Values.global.ingress.hostAlias }}'
         secretName: osc-chat-frontend
   env:
     HOSTED_VLM_BASE_URL: https://skhuvis-vllm.k8.osc.edu/v1
@@ -277,7 +280,6 @@ vllm-stack:
       pvcStorage: "50Gi"
       pvcAccessMode:
         - ReadWriteMany
-#        - ReadWriteOnce
       storageClass: local-ess
       pvcLabels:
         osc.edu/service-account: oscchat
