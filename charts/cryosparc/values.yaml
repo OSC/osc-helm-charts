@@ -123,6 +123,7 @@ image:
 mounts:
   home: /users/{{ tpl .Values.homeDir . }}/{{ tpl (include "osc.common.serviceAccountValue" .) . }}
   project: /fs/ess/{{ required "Project must be provided" .Values.global.project }}
+  rwDir: {}
 
 admin:
   email: ''
