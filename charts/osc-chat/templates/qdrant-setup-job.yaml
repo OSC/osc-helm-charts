@@ -28,15 +28,19 @@ spec:
           limits:
             cpu: 1
             memory: 512Mi
-        command: |
-          curl -X PUT "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "vectors": {
-              "size": 4096,
-              "distance": "Cosine"
-            }
-          }'
+        command:
+          - /bin/sh
+          - -c
+          - |
+            curl -sf "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" || \
+            curl -X PUT "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "vectors": {
+                "size": 4096,
+                "distance": "Cosine"
+              }
+            }'
         env:
         - name: QDRANT_URL
           valueFrom:

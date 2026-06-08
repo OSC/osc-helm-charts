@@ -1164,6 +1164,449 @@ data:
       END IF;
     END;
     $$ LANGUAGE plpgsql;
+
+    -- API keys table
+    CREATE TABLE IF NOT EXISTS api_keys (
+        user_id TEXT NOT NULL,
+        key TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        modified_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        usage_count INTEGER DEFAULT 0 NOT NULL,
+        is_active BOOLEAN DEFAULT TRUE NOT NULL,
+        keycloak_id VARCHAR(255),
+        email VARCHAR(255)
+    );
+    
+    -- LLM-convo-monitor table
+    CREATE TABLE IF NOT EXISTS "llm-convo-monitor" (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW(),
+        convo JSONB,
+        convo_id TEXT UNIQUE,
+        course_name TEXT,
+        user_email TEXT,
+        summary TEXT,
+        convo_analysis_tags JSONB
+    );
+    
+    -- osc-course-table table
+    CREATE TABLE IF NOT EXISTS "osc-course-table" (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        total_tokens JSONB,
+        total_prompt_price JSONB,
+        total_completions_price JSONB,
+        total_embeddings_price JSONB,
+        total_queries JSONB,
+        course_name TEXT
+    );
+    
+    -- documents_failed table
+    CREATE TABLE IF NOT EXISTS documents_failed (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        s3_path TEXT,
+        readable_filename TEXT,
+        course_name TEXT,
+        url TEXT,
+        contexts JSONB,
+        base_url TEXT,
+        doc_groups TEXT,
+        error TEXT
+    );
+    
+    -- documents_in_progress table
+    CREATE TABLE IF NOT EXISTS documents_in_progress (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        s3_path TEXT,
+        readable_filename TEXT,
+        course_name TEXT,
+        url TEXT,
+        contexts JSONB,
+        base_url TEXT,
+        doc_groups TEXT,
+        error TEXT,
+        beam_task_id TEXT
+    );
+    
+    -- file_uploads table
+    CREATE TABLE IF NOT EXISTS file_uploads (
+        id UUID DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
+        conversation_id UUID NOT NULL,
+        base_url TEXT,
+        contexts JSONB,
+        course_name TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        readable_filename TEXT,
+        s3_path TEXT,
+        url TEXT
+    );
+    
+    -- n8n_workflows table
+    CREATE TABLE IF NOT EXISTS n8n_workflows (
+        latest_workflow_id SERIAL NOT NULL,
+        is_locked BOOLEAN NOT NULL
+    );
+    
+    -- usage_metrics table
+    CREATE TABLE IF NOT EXISTS usage_metrics (
+        id BIGINT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        course_name TEXT,
+        total_docs BIGINT,
+        total_convos BIGINT,
+        most_recent_convo TIMESTAMP WITH TIME ZONE,
+        owner_name TEXT,
+        admin_name TEXT
+    );
+    
+    -- llm-guided-contexts table
+    CREATE TABLE IF NOT EXISTS "llm-guided-contexts" (
+        id UUID DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        text TEXT,
+        num_tokens TEXT,
+        stop_reason TEXT,
+        doc_id UUID,
+        section_id UUID
+    );
+    
+    -- llm-guided-sections table
+    CREATE TABLE IF NOT EXISTS "llm-guided-sections" (
+        id UUID DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        num_tokens BIGINT,
+        section_title TEXT,
+        section_num TEXT,
+        doc_id UUID
+    );
+    
+    -- Conversations table
+    CREATE TABLE IF NOT EXISTS conversations (
+        id UUID DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        model VARCHAR(100) NOT NULL,
+        prompt TEXT NOT NULL,
+        temperature DOUBLE PRECISION NOT NULL,
+        user_email VARCHAR(255),
+        project_name TEXT DEFAULT '' NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        folder_id UUID
+    );
+    
+    -- Documents table
+    CREATE TABLE IF NOT EXISTS documents (
+        id BIGSERIAL PRIMARY KEY,
+        s3_path TEXT,
+        course_name TEXT,
+        url TEXT,
+        created_at TIMESTAMP DEFAULT NOW(),
+        readable_filename TEXT,
+        base_url TEXT,
+        contexts JSONB
+    );
+    
+    -- Messages table
+    CREATE TABLE IF NOT EXISTS messages (
+        id UUID PRIMARY KEY,
+        conversation_id UUID,
+        role VARCHAR(50) NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+        content_text TEXT NOT NULL,
+        contexts JSONB,
+        tools JSONB,
+        latest_system_message TEXT,
+        final_prompt_engineered_message TEXT,
+        response_time_sec INTEGER,
+        updated_at TIMESTAMP WITH TIME ZONE,
+        content_image_url TEXT[],
+        image_description TEXT,
+        feedback_is_positive BOOLEAN,
+        feedback_category TEXT,
+        feedback_details TEXT,
+        was_query_rewritten BOOLEAN,
+        query_rewrite_text TEXT,
+        processed_content TEXT,
+        "llm-monitor-tags" JSONB
+    );
+    
+    -- Projects table
+    CREATE TABLE IF NOT EXISTS projects (
+        id BIGSERIAL PRIMARY KEY,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        course_name VARCHAR,
+        doc_map_id VARCHAR,
+        convo_map_id VARCHAR,
+        n8n_api_key TEXT,
+        last_uploaded_doc_id BIGINT,
+        last_uploaded_convo_id BIGINT,
+        subscribed BIGINT,
+        description TEXT,
+        metadata_schema JSONB,
+        conversation_map_index TEXT,
+        document_map_index TEXT
+    );
+    
+    -- course_names table
+    CREATE TABLE IF NOT EXISTS course_names (
+        id SERIAL PRIMARY KEY,
+        course_name TEXT
+    );
+    
+    -- DocGroups table
+    CREATE TABLE IF NOT EXISTS doc_groups (
+        id BIGSERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        course_name TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        enabled BOOLEAN DEFAULT TRUE,
+        private BOOLEAN DEFAULT TRUE,
+        doc_count BIGINT DEFAULT 0
+    );
+    
+    -- Create unique index for doc_groups
+    CREATE UNIQUE INDEX IF NOT EXISTS doc_groups_name_course_unique ON doc_groups (name, course_name);
+    
+    -- Define the junction table for documents and doc_groups many-to-many relationship
+    CREATE TABLE IF NOT EXISTS documents_doc_groups (
+        document_id BIGINT NOT NULL,
+        doc_group_id BIGINT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+    
+    -- Create composite primary key for documents_doc_groups
+    CREATE UNIQUE INDEX IF NOT EXISTS documents_doc_groups_pkey ON documents_doc_groups (document_id, doc_group_id);
+    
+    -- doc_groups_sharing table
+    CREATE TABLE IF NOT EXISTS doc_groups_sharing (
+        id SERIAL PRIMARY KEY,
+        doc_group_id INTEGER NOT NULL,
+        shared_with_email TEXT,
+        permission_level TEXT,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+    );
+    
+    -- cedar_documents table
+    CREATE TABLE IF NOT EXISTS cedar_documents (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        document_id TEXT,
+        document_name TEXT,
+        document_source TEXT,
+        course_name TEXT,
+        status TEXT,
+        doc_groups JSONB,
+        metadata JSONB
+    );
+    
+    -- cedar_document_metadata table
+    CREATE TABLE IF NOT EXISTS cedar_document_metadata (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        document_id TEXT,
+        metadata JSONB
+    );
+    
+    -- cedar_chunks table
+    CREATE TABLE IF NOT EXISTS cedar_chunks (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        document_id TEXT,
+        chunk_index INTEGER,
+        chunk_text TEXT,
+        embedding_id TEXT,
+        metadata JSONB
+    );
+    
+    -- cedar_runs table
+    CREATE TABLE IF NOT EXISTS cedar_runs (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        run_id TEXT,
+        course_name TEXT,
+        status TEXT,
+        metadata JSONB
+    );
+    
+    -- email-newsletter table
+    CREATE TABLE IF NOT EXISTS "email-newsletter" (
+        id UUID DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        email TEXT,
+        "unsubscribed-from-newsletter" BOOLEAN
+    );
+    
+    -- folders table
+    CREATE TABLE IF NOT EXISTS folders (
+        id UUID PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        user_email VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        type TEXT,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+    
+    -- LLMProvider enum table (for storing enum values)
+    CREATE TABLE IF NOT EXISTS "LLMProvider" (
+        value TEXT
+    );
+    
+    -- llm-guided-docs table
+    CREATE TABLE IF NOT EXISTS "llm-guided-docs" (
+        id UUID DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        doc_name TEXT,
+        num_tokens BIGINT,
+        total_tokens BIGINT,
+        course_name TEXT
+    );
+    
+    -- nal_publications table
+    CREATE TABLE IF NOT EXISTS nal_publications (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        pmid VARCHAR,
+        article_title VARCHAR,
+        journal_title VARCHAR,
+        publication_date DATE,
+        filepath TEXT
+    );
+    
+    -- publications table
+    CREATE TABLE IF NOT EXISTS publications (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        pmid VARCHAR NOT NULL,
+        pmcid VARCHAR,
+        doi VARCHAR,
+        journal_title VARCHAR,
+        article_title VARCHAR,
+        issn VARCHAR,
+        published DATE,
+        last_revised DATE,
+        license VARCHAR,
+        modified_at TIMESTAMP DEFAULT NOW(),
+        full_text BOOLEAN,
+        live BOOLEAN,
+        release_date DATE,
+        pubmed_ftp_link TEXT,
+        filepath TEXT,
+        xml_filename TEXT
+    );
+    
+    -- pre_authorized_api_keys table
+    CREATE TABLE IF NOT EXISTS pre_authorized_api_keys (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        providerBodyNoModels JSONB,
+        emails JSONB,
+        providerName TEXT,
+        notes TEXT
+    );
+    
+    -- project_stats table
+    CREATE TABLE IF NOT EXISTS project_stats (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER NOT NULL,
+        project_name TEXT NOT NULL,
+        total_messages INTEGER DEFAULT 0,
+        total_conversations INTEGER DEFAULT 0,
+        unique_users INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        model_usage_counts JSONB
+    );
+    
+    -- pubmed_daily_update table
+    CREATE TABLE IF NOT EXISTS pubmed_daily_update (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+        pmid VARCHAR NOT NULL,
+        pmcid VARCHAR,
+        doi VARCHAR,
+        journal_title VARCHAR,
+        article_title VARCHAR,
+        issn VARCHAR,
+        published DATE,
+        last_revised DATE,
+        license VARCHAR,
+        modified_at TIMESTAMP DEFAULT NOW(),
+        full_text BOOLEAN,
+        live BOOLEAN,
+        release_date DATE,
+        pubmed_ftp_link TEXT,
+        filepath TEXT,
+        xml_filename TEXT
+    );
+    
+    -- user_entity table (Keycloak users)
+    CREATE TABLE IF NOT EXISTS user_entity (
+        id TEXT PRIMARY KEY,
+        email TEXT,
+        email_constraint TEXT,
+        email_verified BOOLEAN DEFAULT FALSE NOT NULL,
+        enabled BOOLEAN DEFAULT FALSE NOT NULL,
+        federation_link TEXT,
+        first_name TEXT,
+        last_name TEXT,
+        realm_id TEXT,
+        username TEXT,
+        created_timestamp BIGINT,
+        service_account_client_link TEXT,
+        not_before INTEGER DEFAULT 0 NOT NULL
+    );
+    
+    -- Create indexes for better performance
+    CREATE INDEX IF NOT EXISTS idx_llm_convo_monitor_course_name ON "llm-convo-monitor"(course_name);
+    CREATE INDEX IF NOT EXISTS idx_llm_convo_monitor_user_email ON "llm-convo-monitor"(user_email);
+    CREATE INDEX IF NOT EXISTS idx_documents_course_name ON documents(course_name);
+    CREATE INDEX IF NOT EXISTS idx_documents_s3_path ON documents(s3_path);
+    CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON messages(conversation_id);
+    CREATE INDEX IF NOT EXISTS idx_projects_course_name ON projects(course_name);
+    CREATE INDEX IF NOT EXISTS idx_conversations_project_name ON conversations(project_name);
+    CREATE INDEX IF NOT EXISTS idx_folders_user_email ON folders(user_email);
+    
+    -- Add foreign key constraints where appropriate
+    ALTER TABLE IF EXISTS messages
+    ADD CONSTRAINT fk_messages_conversation_id
+    FOREIGN KEY (conversation_id) REFERENCES conversations(id);
+    
+    ALTER TABLE IF EXISTS folders
+    ADD CONSTRAINT fk_folders_user_email
+    FOREIGN KEY (user_email) REFERENCES user_entity(email);
+    
+    -- Add triggers for automatic timestamp updates
+    CREATE OR REPLACE FUNCTION update_updated_at_column()
+    RETURNS TRIGGER AS $$
+    BEGIN
+        NEW.updated_at = NOW();
+        RETURN NEW;
+    END;
+    $$ language 'plpgsql';
+    
+    -- Add triggers to relevant tables
+    CREATE OR REPLACE TRIGGER update_conversations_updated_at
+    BEFORE UPDATE ON conversations
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+    
+    CREATE OR REPLACE TRIGGER update_projects_updated_at
+    BEFORE UPDATE ON projects
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+    
+    CREATE OR REPLACE TRIGGER update_file_uploads_updated_at
+    BEFORE UPDATE ON file_uploads
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+    
+    CREATE OR REPLACE TRIGGER update_folders_updated_at
+    BEFORE UPDATE ON folders
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
 ---
 apiVersion: batch/v1
 kind: Job
