@@ -42,7 +42,7 @@ spec:
                 name: {{ $fullName }}-frontend
                 port:
                   number: {{ $frontendPort }}
-          # Backend API under /api
+          # Backend API under /backend
           - path: /backend
             pathType: Prefix
             backend:
