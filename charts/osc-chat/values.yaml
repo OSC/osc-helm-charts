@@ -88,11 +88,11 @@ minio:
     tls: true
     path: /
     pathType: Prefix
-    secretName: "chat-minio"
+    secretName: "oscchat-minio"
     extraTls:
       - hosts:
           - oscchat-test-chat-minio.k8.osc.edu
-        secretName: chat-minio
+        secretName: oscchat-minio
 
 
 qdrant:
@@ -265,7 +265,7 @@ frontend:
       - hosts:
         - '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
         - '{{ required "Ingress hostAlias must be defined in the global settings" .Values.global.ingress.hostAlias }}'
-        secretName: osc-chat-frontend
+        secretName: oscchat-frontend
   env:
     HOSTED_VLM_BASE_URL: https://oscchat-test-vllm.k8.osc.edu/v1
   resources:
@@ -497,6 +497,6 @@ vllm-stack:
             - path: /
               pathType: Prefix
       tls:
-        - secretName: osc-chat-vllm
+        - secretName: oscchat-vllm
           hosts:
             - oscchat-test-vllm.k8.osc.edu
