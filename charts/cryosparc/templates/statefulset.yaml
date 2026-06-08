@@ -94,6 +94,11 @@ spec:
           mountPath: {{ tpl .Values.mounts.project . }}
         - name: home
           mountPath: {{ tpl .Values.mounts.home . }}
+        {{- range $name, $path := .Values.mounts.rwDir }}
+        - name: {{ $name | lower }}
+          mountPath: {{ tpl $path . }}
+          readOnly: false
+        {{- end }}
         - name: munge-socket
           mountPath: /var/run/munge/munge.socket.2
         - name: slurm-conf
@@ -150,6 +155,12 @@ spec:
         hostPath:
           path: {{ tpl .Values.mounts.project . }}
           type: Directory
+      {{- range $name, $path := .Values.mounts.rwDir }}
+      - name: {{ $name | lower }}
+        hostPath:
+          path: {{ tpl $path . }}
+          type: Directory
+      {{- end }}
       - name: munge-socket
         hostPath:
           path: /var/run/munge/munge.socket.2
