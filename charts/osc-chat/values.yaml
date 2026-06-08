@@ -10,13 +10,23 @@ global:
     allowIngress: true
   security:
     allowInsecureImages: true
-  storageClass: webservices-nfs-client
+  storageClass: local-ess
+  pvcLabels:
+    osc.edu/service-account: oscchat
+  pvcAnnotations:
+    osc.edu/fileset: PZS0645
+  fileset: PZS0645
   webservicesDeploy:
     create: false
   auth:
     enable: false
     keycloakClient:
       forceCreate: true
+      config:
+        publicClient: true
+        webOrigins:
+          - https://{{ .Values.global.ingress.host }}
+
   ingress:
     host: ""
     hostAlias: ""
@@ -27,7 +37,7 @@ llm_server:
 database:
   postgresql:
     schema:
-      enabled: false
+      enabled: true
     enable: true
     imagePullSecret:
       enable: false
@@ -36,11 +46,19 @@ database:
       database: name
       username: name
       password: secret
+    primary:
+      persistence:
+        annotations:
+          osc.edu/fileset: '{{ .Values.global.fileset }}'
 
   redis:
     enable: true
     auth:
       password: secret
+    master:
+      persistence:
+        annotations:
+          osc.edu/fileset: PZS0645
 
 minio:
   enable: true
@@ -57,20 +75,23 @@ minio:
       tag: 2.0.2-debian-12-r3
   imagePullSecret:
     enable: false
+  persistence:
+    annotations:
+      osc.edu/fileset: PZS0645
   auth:
     rootUser: "minioadmin"
     rootPassword: "minioadmin"
   ingress:
     enabled: true
     className: "nginx"
-    hostname: skhuvis-chat-minio.k8.osc.edu
+    hostname: oschat-test-chat-minio.k8.osc.edu
     tls: true
     path: /
     pathType: Prefix
     secretName: "chat-minio"
     extraTls:
       - hosts:
-          - skhuvis-chat-minio.k8.osc.edu
+          - oscchat-test-chat-minio.k8.osc.edu
         secretName: chat-minio
 
 
@@ -92,9 +113,16 @@ qdrant:
     storageClassName: local-path
   snapshotPersistence:
     enabled: true
-    storageClassName: webservices-nfs-client
+#    storageClassName: webservices-nfs-client
+    storageClassName: local-ess
+    annotations:
+      osc.edu/fileset: PZS0645
+    additionalLabels:
+      osc.edu/service-account: oscchat
 #  snapshotRestoration:
 #    enabled: true
+  imagePullSecrets:
+    - name: osc-registry
 
 rabbitmq:
   enable: true
@@ -113,8 +141,9 @@ rabbitmq:
   auth:
     username: guest
     password: guest
-  perisistence:
-    enabled: false
+  persistence:
+    annotations:
+      osc.edu/fileset: PZS0645
   rbac:
     create: false
 
@@ -230,7 +259,7 @@ frontend:
       cert-manager.io/cluster-issuer: letsencrypt
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
-      nginx.ingress.kubernetes.io/server-alias: '{{ required "Ingress hostAlias must be defined in the global settings" .Values.global.ingress.hostAlias }}'
+      nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.hostAlias }}'
     host: '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
     tls:
       - hosts:
@@ -238,7 +267,7 @@ frontend:
         - '{{ required "Ingress hostAlias must be defined in the global settings" .Values.global.ingress.hostAlias }}'
         secretName: osc-chat-frontend
   env:
-    HOSTED_VLM_BASE_URL: https://skhuvis-vllm.k8.osc.edu/v1
+    HOSTED_VLM_BASE_URL: https://oscchat-test-vllm.k8.osc.edu/v1
   resources:
     limits:
       cpu: 500m
@@ -460,14 +489,14 @@ vllm-stack:
     ingress:
       enabled: true
       className: nginx
-#      annotations:
-#        nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7'
+      annotations:
+        nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7,192.148.247.0/24,10.0.0.0/8'
       hosts:
-        - host: skhuvis-vllm.k8.osc.edu
+        - host: oscchat-test-vllm.k8.osc.edu
           paths:
             - path: /
               pathType: Prefix
       tls:
         - secretName: osc-chat-vllm
           hosts:
-            - skhuvis-vllm.k8.osc.edu
+            - oscchat-test-vllm.k8.osc.edu

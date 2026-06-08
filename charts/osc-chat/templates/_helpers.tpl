@@ -107,6 +107,24 @@ app.kubernetes.io/component: worker
 {{- end }}
 
 {{/*
+PVC labels
+*/}}
+{{- define "osc-chat.pvcLabels" -}}
+{{- with .Values.global.pvcLabels }}
+{{- tpl (toYaml .) $ }}
+{{- end }}
+{{- end }}
+
+{{/*
+PVC annotations
+*/}}
+{{- define "osc-chat.pvcAnnotations" -}}
+{{- with .Values.global.pvcAnnotations }}
+{{- tpl (toYaml .) $ }}
+{{- end }}
+{{- end }}
+
+{{/*
 PostgreSQL connection details (using dependency chart naming)
 */}}
 {{- define "osc-chat.postgresql.host" -}}
