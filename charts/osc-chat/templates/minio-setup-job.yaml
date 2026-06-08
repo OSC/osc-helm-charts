@@ -1,0 +1,49 @@
+{{- if .Values.minio.enable }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "osc-chat.fullname" . }}-minio-setup
+  labels:
+    {{- include "osc-chat.labels" . | nindent 4 }}
+    app.kubernetes.io/component: minio
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"  # Run before other services
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "osc-chat.labels" . | nindent 8 }}
+        app.kubernetes.io/component: minio
+        app.kubernetes.io/name: minio
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: minio-setup
+        image: {{ .Values.global.imageRegistry }}/{{ .Values.minio.clientImage.repository }}:{{ .Values.minio.clientImage.tag }}
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          limits:
+            cpu: 1
+            memory: 512Mi
+        command:
+        - /bin/bash
+        - -c
+        - |
+          mc alias set {{ include "osc-chat.minio.host" . }}:{{ include "osc-chat.minio.port" . }} ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY}
+          mc mb --ignore-existing minio/{{ include "osc-chat.name" .}}
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "osc-chat.fullname" . }}-app-secrets
+              key: MINIO_ACCESS_KEY
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "osc-chat.fullname" . }}-app-secrets
+              key: MINIO_SECRET_KEY
+{{- end }}

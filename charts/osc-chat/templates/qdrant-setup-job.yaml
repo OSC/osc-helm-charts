@@ -1,0 +1,51 @@
+{{- if .Values.qdrant.enable }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "osc-chat.fullname" . }}-qdrant-setup
+  labels:
+    {{- include "osc-chat.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"  # Run before other services
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "osc-chat.labels" . | nindent 8 }}
+        app.kubernetes.io/component: qdrant
+        app.kubernetes.io/name: qdrant
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: qdrant-setup
+        image: {{ .Values.global.imageRegistry }}/osc/rockylinux:9
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          limits:
+            cpu: 1
+            memory: 512Mi
+        command: |
+          curl -X PUT "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "vectors": {
+              "size": 4096,
+              "distance": "Cosine"
+            }
+          }'
+        env:
+        - name: QDRANT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "osc-chat.fullname" . }}-app-config
+              key: QDRANT_URL
+        - name: QDRANT_COLLECTION_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: {{ include "osc-chat.fullname" . }}-app-config
+              key: QDRANT_COLLECTION_NAME
+{{- end }}
