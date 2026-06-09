@@ -1,0 +1,22 @@
+name: Test Docker
+
+on:
+  pull_request:
+    paths:
+      - docker-images/**
+      - .github/workflows/test_docker.yaml
+
+  test-docker:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - vllm-runtime
+    name: Test ${{ matrix.image }} Docker image
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build ${{ matrix.image }} image
+        run: |
+          make -f docker-images/${{ matrix.image }}/Makefile build
