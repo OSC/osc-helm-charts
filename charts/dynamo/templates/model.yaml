@@ -27,8 +27,8 @@ spec:
                   cpu: {{ $frontend.cpu | default 1 | quote }}
                   memory: {{ $frontend.memory | default "2Gi" | quote }}
                 requests:
-                  cpu: {{ $frontend.cpu | default 2 | quote }}
-                  memory: {{ $frontend.memory | default "4Gi" | quote }}
+                  cpu: {{ $frontend.cpu | default 1 | quote }}
+                  memory: {{ $frontend.memory | default "2Gi" | quote }}
               volumeMounts:
                 - name: dynamo-cache
                   mountPath: /home/dynamo/.cache
