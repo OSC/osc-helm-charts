@@ -33,8 +33,8 @@ Components:
 | global.storageClass | string | `"local-ess"` | The storage class to use for PV claims |
 | image.repository | string | `"kubernetes/ai-dynamo/vllm-runtime"` | The repository path to main vllm runtime image |
 | image.tag | string | The chart's appVersion | The vllm runtime image tag |
-| image.release | string | `"1"` | The release of the custom OSC vllm runtime image |
-| hfToken | string | **required** | The HF token for Hugging Face |
+| image.release | string | `"0"` | The release of the custom OSC vllm runtime image |
+| hfToken.value | string | **required** | The HF token for Hugging Face |
 | cache | object | `{}` |  |
 
 ----------------------------------------------

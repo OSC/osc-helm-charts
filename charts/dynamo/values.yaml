@@ -35,7 +35,7 @@ image:
   # @default -- The chart's appVersion
   tag: ""
   # -- The release of the custom OSC vllm runtime image
-  release: "1"
+  release: "0"
 
 hfToken:
   # @ignored
@@ -61,8 +61,8 @@ podSecurityContext:
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
-  drop:
-  - ALL
+    drop:
+      - ALL
   seccompProfile:
     type: RuntimeDefault
   privileged: false

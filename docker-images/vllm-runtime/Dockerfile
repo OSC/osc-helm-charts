@@ -1,6 +1,6 @@
-ARG VERSION
+ARG VERSION=1.2.0
 FROM nvcr.io/nvidia/ai-dynamo/vllm-runtime:$VERSION
-LABEL maintainer 'Trey Dockendorf <tdockendorf@osc.edu>'
+LABEL maintainer='Trey Dockendorf <tdockendorf@osc.edu>'
 
 USER root
 RUN groupadd -g 4097 PZS0645 && \
