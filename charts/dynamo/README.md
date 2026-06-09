@@ -31,19 +31,19 @@ global:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
   webui_secret_key: <Open WebUI webui secret>
+  models:
+    qwen3:
+      model: Qwen/Qwen3-0.6B
+      decode:
+        args:
+          - --max-model-len
+          - "20480"
+        cpu: 2
+        memory: 6Gi
+        gpu: 1
+        gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
 hfToken:
   value: <Huggingface token>
-workers:
-  qwen3:
-    model: Qwen/Qwen3-0.6B
-    decode:
-      args:
-        - --max-model-len
-        - "20480"
-      cpu: 2
-      memory: 6Gi
-      gpu: 1
-      gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
 ```
 
 ## Requirements
@@ -70,12 +70,12 @@ workers:
 | global.ingress.hostAlias | string | `""` | Ingress host alias |
 | global.auth.allowGroups | list | `["oscall","PZS0645"]` | Restrict access to these groups |
 | global.webui_secret_key | string | **required** | The Open WebUI secret key |
+| global.models | object | `{}` | Define models |
 | image.repository | string | `"kubernetes/ai-dynamo/vllm-runtime"` | The repository path to main vllm runtime image |
 | image.tag | string | The chart's appVersion | The vllm runtime image tag |
 | image.release | string | `"0"` | The release of the custom OSC vllm runtime image |
 | hfToken.value | string | **required** | The HF token for Hugging Face |
 | cache | object | `{}` |  |
-| models | object | `{}` | Define models |
 | defaultGpuType | string | `"NVIDIA-A100-PCIE-40GB-MIG-7g.40gb"` | The default GPU type |
 | rdmaResource | string | `"rdma/shared_mlx5"` | The RDMA resource name in Kubernetes |
 | osc-open-webui.open-webui.image.tag | string | `"0.9.6"` | The version of Open WebUI |
