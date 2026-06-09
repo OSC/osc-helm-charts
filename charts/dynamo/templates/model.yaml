@@ -19,9 +19,19 @@ spec:
           containers:
             - name: main
               image: {{ include "dynamo.image" $ | quote }}
+              args:
+                - -m
+                - dynamo.frontend
+              {{- range $frontend.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
               envFrom:
                 - secretRef:
                     name: {{ $.Values.hfToken.name }}
+              {{- with $frontend.env | default list }}
+              env:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               resources:
                 limits:
                   cpu: {{ $frontend.cpu | default 1 | quote }}
