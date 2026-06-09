@@ -1572,7 +1572,9 @@ data:
     -- Add foreign key constraints where appropriate
     ALTER TABLE IF EXISTS messages
     ADD CONSTRAINT fk_messages_conversation_id
-    FOREIGN KEY (conversation_id) REFERENCES conversations(id);
+    FOREIGN KEY (conversation_id)
+    REFERENCES conversations(id)
+    ON DELETE CASCADE;
     
     ALTER TABLE IF EXISTS folders
     ADD CONSTRAINT fk_folders_user_email
