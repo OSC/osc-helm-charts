@@ -13,9 +13,8 @@ global:
     registry: docker-registry.osc.edu
     # -- imagePullSecret username
     username: robot$webservices-read
-    # -- imagePullSecret password.
-    # This value will be set by OSC's Puppet.
-    # This value must be set to IMAGE-PULL-PASSWORD for CI tests.
+    # -- imagePullSecret password. This value will be set by OSC's Puppet.
+    # @default -- **required**
     password:
   # @ignored
   networkPolicy:
@@ -25,14 +24,21 @@ global:
     create: false
 
 image:
+  # -- The repository path to main vllm runtime image
   repository: kubernetes/ai-dynamo/vllm-runtime
+  # @ignored
   pullPolicy: IfNotPresent
+  # -- The vllm runtime image tag
+  # @default -- The chart's appVersion
   tag: ""
+  # -- The release of the custom OSC vllm runtime image
   release: "1"
 
+# @ignored
 podSecurityContext:
   runAsNonRoot: true
 
+# @ignored
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -44,6 +50,7 @@ securityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
 
+# @ignored
 imagePuller:
   resources:
     limits:

@@ -1,0 +1,21 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+## dynamo Chart
+
+This chart handles the deployment of Dynamo resources.  It depends on the Dynamo platform and operator being deployed.
+
+Components:
+
+* **image-puller** - A daemonset that pulls the Dynamo images and sleeps to ensure those images are on all nodes
+
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

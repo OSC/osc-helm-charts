@@ -30,6 +30,7 @@ spec:
           {{- end }}
           image: {{ include "dynamo.image" . | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c", "sleep infinity"]
           {{- with .Values.imagePuller.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
