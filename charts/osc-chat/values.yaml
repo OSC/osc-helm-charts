@@ -83,16 +83,15 @@ minio:
     rootPassword: "minioadmin"
   ingress:
     enabled: true
-    className: "nginx"
-    hostname: oschat-test-chat-minio.k8.osc.edu
+    ingressClassName: "nginx"
+    hostname: oscchat-test-minio.k8.osc.edu
     tls: true
     path: /
     pathType: Prefix
-    secretName: "oscchat-minio"
-    extraTls:
-      - hosts:
-          - oscchat-test-chat-minio.k8.osc.edu
-        secretName: oscchat-minio
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
 
 
 qdrant:
@@ -265,9 +264,7 @@ frontend:
       - hosts:
         - '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
         - '{{ required "Ingress hostAlias must be defined in the global settings" .Values.global.ingress.hostAlias }}'
-        secretName: oscchat-frontend
-  env:
-    HOSTED_VLM_BASE_URL: https://oscchat-test-vllm.k8.osc.edu/v1
+        secretName: osc-chat-frontend
   resources:
     limits:
       cpu: 500m
@@ -485,11 +482,14 @@ vllm-stack:
         memory: 1500Mi
       limits:
         cpu: 4
-        memory: 2000Mi
+        memory: 4000Mi
     ingress:
       enabled: true
       className: nginx
       annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
         nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7,192.148.247.0/24,10.0.0.0/8'
       hosts:
         - host: oscchat-test-vllm.k8.osc.edu
@@ -497,6 +497,6 @@ vllm-stack:
             - path: /
               pathType: Prefix
       tls:
-        - secretName: oscchat-vllm
+        - secretName: osc-chat-vllm
           hosts:
             - oscchat-test-vllm.k8.osc.edu
