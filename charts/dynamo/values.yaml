@@ -128,7 +128,9 @@ osc-open-webui:
       annotations:
         osc.edu/fileset: '{{ .Values.global.fileset }}'
     # @ignored
-    extraEnvVars: []
+    extraEnvVars:
+      - name: BYPASS_MODEL_ACCESS_CONTROL
+        value: 'True'
     sso:
       # -- Enables role access controls in Open WebUI
       enableRoleManagement: true
