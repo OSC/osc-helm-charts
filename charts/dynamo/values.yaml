@@ -25,6 +25,22 @@ global:
   fileset: PZS0645
   # -- The storage class to use for PV claims
   storageClass: local-ess
+  ingress:
+    # -- Ingress host name
+    host: ""
+    # -- Ingress host alias
+    hostAlias: ""
+  auth:
+    # -- Restrict access to these groups
+    allowGroups:
+      - oscall
+      - PZS0645
+  # -- The Open WebUI secret key
+  # @default -- **required**
+  webui_secret_key:
+  # @ignored
+  frontend:
+    name: dynamo
 
 image:
   # -- The repository path to main vllm runtime image
@@ -53,6 +69,19 @@ cache:
   # @ignored
   size: 100Gi
 
+frontend:
+  resources:
+    limits:
+      # -- frontend CPU limit
+      cpu: 1
+      # -- frontend memory limit
+      memory: 2Gi
+    requests:
+      # -- frontend CPU request
+      cpu: 1
+      # -- frontend memory request
+      memory: 2Gi
+
 # @ignored
 podSecurityContext:
   runAsNonRoot: true
@@ -78,3 +107,28 @@ imagePuller:
     requests:
       cpu: 500m
       memory: 128Mi
+
+osc-open-webui:
+  open-webui:
+    # @ignored
+    openaiBaseApiUrl: "http://{{ .Values.global.frontend.name }}-frontend.{{ .Release.Namespace }}.svc.cluster.local:8000/v1"
+    # @ignored
+    openaiApiKey: false
+    image:
+      # -- The version of Open WebUI
+      tag: 0.9.6
+    # @ignored
+    persistence:
+      storageClass: '{{ .Values.global.storageClass }}'
+      labels:
+        '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+      annotations:
+        osc.edu/fileset: '{{ .Values.global.fileset }}'
+    # @ignored
+    extraEnvVars: []
+    sso:
+      # -- Enables role access controls in Open WebUI
+      enableRoleManagement: true
+    # @ignored
+    ollama:
+      enabled: false

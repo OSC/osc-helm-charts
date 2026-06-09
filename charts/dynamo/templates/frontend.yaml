@@ -1,0 +1,34 @@
+---
+apiVersion: nvidia.com/v1beta1
+kind: DynamoGraphDeployment
+metadata:
+  name: {{ .Values.global.frontend.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+spec:
+  components:
+    - name: Frontend
+      type: frontend
+      replicas: 1
+      podTemplate:
+        spec:
+          containers:
+            - name: main
+              image: {{ include "dynamo.image" . | quote }}
+              envFrom:
+                - secretRef:
+                    name: {{ .Values.hfToken.name }}
+              {{- with .Values.frontend.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: dynamo-cache
+                  mountPath: /home/dynamo/.cache
+          nodeSelector:
+            '{{ include "osc.common.nodeSelectorRoleKey" . }}': ""
+          volumes:
+            - name: dynamo-cache
+              persistentVolumeClaim:
+                claimName: {{ .Values.cache.name }}

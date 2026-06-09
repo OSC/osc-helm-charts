@@ -11,8 +11,30 @@ This chart handles the deployment of Dynamo resources.  It depends on the Dynamo
 
 Components:
 
-* **image-puller** - A daemonset that pulls the Dynamo images and sleeps to ensure those images are on all nodes
+* image-puller
+    * A daemonset that pulls the Dynamo images and sleeps to ensure those images are on all nodes
+* Items to support Dynamo
+    * PVC for cache storage
+    * Huggingface secret
+* Dynamo frontend
+* Open WebUI
 
+## Usage
+
+The following is the minimal values to deploy this chart:
+
+```yaml
+---
+global:
+  imagePullSecret:
+    password: <webservices-read password>
+  ingress:
+    host: <Ingress host>
+    hostAlias: <Ingress host alias>
+  webui_secret_key: <Open WebUI webui secret>
+hfToken:
+  value: <Huggingface token>
+```
 
 {{ template "chart.requirementsSection" . }}
 
