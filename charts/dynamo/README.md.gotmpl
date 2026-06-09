@@ -32,19 +32,19 @@ global:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
   webui_secret_key: <Open WebUI webui secret>
+  models:
+    qwen3:
+      model: Qwen/Qwen3-0.6B
+      decode:
+        args:
+          - --max-model-len
+          - "20480"
+        cpu: 2
+        memory: 6Gi
+        gpu: 1
+        gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
 hfToken:
   value: <Huggingface token>
-models:
-  qwen3:
-    model: Qwen/Qwen3-0.6B
-    decode:
-      args:
-        - --max-model-len
-        - "20480"
-      cpu: 2
-      memory: 6Gi
-      gpu: 1
-      gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
 ```
 
 {{ template "chart.requirementsSection" . }}
