@@ -10,6 +10,7 @@ metadata:
   {{- end }}
   labels:
     {{- include "dynamo.labels" . | nindent 4 }}
+    {{ tpl (include "osc.common.serviceAccount" .) . }}
 spec:
   storageClassName: {{ .Values.global.storageClass }}
   accessModes:
