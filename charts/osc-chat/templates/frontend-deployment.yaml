@@ -59,12 +59,10 @@ spec:
             #    secretKeyRef:
             #      name: {{ include "osc-chat.fullname" . }}-auth-secret
             #      key: client-secret
-            - name: NEXT_PUBLIC_BACKEND_URL
-              value: {{ default (printf "http://%s:%s" (include "osc-chat.backend.host" .) (include "osc-chat.backend.port" .)) .Values.frontend.env.NEXT_PUBLIC_BACKEND_URL | quote }}
             - name: INGEST_URL
-              value: {{ default (printf "http://%s:%s/ingest" (include "osc-chat.backend.host" .) (include "osc-chat.backend.port" .)) .Values.frontend.env.NEXT_PUBLIC_BACKEND_URL | quote }}
+              value: {{ (printf "http://%s:%s/ingest" (include "osc-chat.backend.host" .) (include "osc-chat.backend.port" .)) | quote }}
             - name: RAILWAY_URL
-              value: {{ default (printf "http://%s:%s" (include "osc-chat.backend.host" .) (include "osc-chat.backend.port" .)) .Values.frontend.env.RAILWAY_URL | quote }}
+              value: {{ (printf "http://%s:%s" (include "osc-chat.backend.host" .) (include "osc-chat.backend.port" .)) | quote }}
             - name: REDIS_URL
               valueFrom:
                 secretKeyRef:

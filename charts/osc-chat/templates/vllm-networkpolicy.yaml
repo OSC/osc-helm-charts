@@ -59,7 +59,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ include "osc-chat.fullname" . }}-allow-backend-to-vllm
+  name: {{ include "osc-chat.fullname" . }}-allow-worker-to-vllm
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
