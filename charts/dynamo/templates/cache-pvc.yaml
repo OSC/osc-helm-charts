@@ -8,6 +8,8 @@ metadata:
   annotations:
     {{- tpl (toYaml .) $ | nindent 4 }}
   {{- end }}
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
 spec:
   storageClassName: {{ .Values.global.storageClass }}
   accessModes:

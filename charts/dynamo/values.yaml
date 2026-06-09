@@ -37,9 +37,12 @@ image:
   # -- The release of the custom OSC vllm runtime image
   release: "1"
 
-# -- The HF token for Hugging Face
-# @default -- **required**
-hfToken: ""
+hfToken:
+  # @ignored
+  name: hf-token-secret
+  # -- The HF token for Hugging Face
+  # @default -- **required**
+  value:
 
 cache:
   # @ignored
