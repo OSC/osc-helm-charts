@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: image-puller
+  labels:
+    {{- include "dynamo.image-puller.labels" . | nindent 4 }}
+    {{ tpl (include "osc.common.serviceAccount" .) . }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "dynamo.image-puller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dynamo.image-puller.labels" . | nindent 8 }}
+        {{ tpl (include "osc.common.serviceAccount" .) . }}
+    spec:
+      imagePullSecrets:
+        - name: {{ include "osc.common.imagePullSecret.name" . }}
+      serviceAccountName: image-puller
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: image-puller
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: {{ include "dynamo.image" . | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.imagePuller.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      nodeSelector:
+        {{ include "osc.common.nodeSelectorRole" . }}

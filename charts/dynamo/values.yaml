@@ -1,0 +1,54 @@
+global:
+  # -- The service account used by OSC deployments.
+  # @default -- The chart's release name
+  oscServiceAccount: '{{ include "dynamo.name" . }}'
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The OSC node role to use with nodeSelector
+  nodeSelectorRole: webservices
+  imagePullSecret:
+    # -- imagePullSecret name
+    name: osc-registry
+    # -- imagePullSecret registry
+    registry: docker-registry.osc.edu
+    # -- imagePullSecret username
+    username: robot$webservices-read
+    # -- imagePullSecret password.
+    # This value will be set by OSC's Puppet.
+    # This value must be set to IMAGE-PULL-PASSWORD for CI tests.
+    password:
+  # @ignored
+  networkPolicy:
+    create: false
+  # @ignored
+  webservicesDeploy:
+    create: false
+
+image:
+  repository: kubernetes/ai-dynamo/vllm-runtime
+  pullPolicy: IfNotPresent
+  tag: ""
+  release: "1"
+
+podSecurityContext:
+  runAsNonRoot: true
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+  drop:
+  - ALL
+  seccompProfile:
+    type: RuntimeDefault
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+imagePuller:
+  resources:
+    limits:
+      cpu: 1
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 128Mi
