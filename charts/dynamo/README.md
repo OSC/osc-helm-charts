@@ -75,11 +75,7 @@ workers:
 | image.release | string | `"0"` | The release of the custom OSC vllm runtime image |
 | hfToken.value | string | **required** | The HF token for Hugging Face |
 | cache | object | `{}` |  |
-| frontend.resources.limits.cpu | int | `1` | frontend CPU limit |
-| frontend.resources.limits.memory | string | `"2Gi"` | frontend memory limit |
-| frontend.resources.requests.cpu | int | `1` | frontend CPU request |
-| frontend.resources.requests.memory | string | `"2Gi"` | frontend memory request |
-| workers | object | `{}` | Define vLLM workers |
+| models | object | `{}` | Define models |
 | defaultGpuType | string | `"NVIDIA-A100-PCIE-40GB-MIG-7g.40gb"` | The default GPU type |
 | rdmaResource | string | `"rdma/shared_mlx5"` | The RDMA resource name in Kubernetes |
 | osc-open-webui.open-webui.image.tag | string | `"0.9.6"` | The version of Open WebUI |
