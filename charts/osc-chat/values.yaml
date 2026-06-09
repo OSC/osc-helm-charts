@@ -197,7 +197,7 @@ huggingfaceCache:
   enabled: true
   mountPath: "/var/cache/huggingface"
   sizeLimit: "5Gi"
-  storageClassName:  '{{ .Values.global.storageClass }}'
+  storageClassName: '{{ .Values.global.storageClass }}'
 
 secrets:
   # Internal secrets - created by the chart
