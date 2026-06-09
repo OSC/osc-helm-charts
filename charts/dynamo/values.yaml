@@ -114,7 +114,7 @@ imagePuller:
 osc-open-webui:
   open-webui:
     # @ignored
-    openaiBaseApiUrl: '{{ include "dynamo.openai.urls" . }}'
+    openaiBaseApiUrl: false
     # @ignored
     openaiApiKey: false
     image:
@@ -129,6 +129,8 @@ osc-open-webui:
         osc.edu/fileset: '{{ .Values.global.fileset }}'
     # @ignored
     extraEnvVars:
+      - name: OPENAI_API_BASE_URLS
+        value: '{{ include "dynamo.openai.urls" . }}'
       - name: BYPASS_MODEL_ACCESS_CONTROL
         value: 'True'
     sso:
