@@ -53,6 +53,8 @@ spec:
               args:
                 - --model
                 - {{ required "model name is required" $model.model }}
+                - --served-model-name
+                - {{ $name }}
               {{- range $decode.args | default list }}
                 - {{ . | quote }}
               {{- end }}
