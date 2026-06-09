@@ -84,6 +84,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: MINIO_SECRET_KEY
+            - name: OSC_HOSTED_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
+                  key: OPENAI_API_KEY
             - name: EMBEDDING_API_BASE
               valueFrom:
                 configMapKeyRef:

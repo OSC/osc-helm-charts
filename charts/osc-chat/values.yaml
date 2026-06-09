@@ -414,21 +414,10 @@ vllm-stack:
         - key: nvidia.com/gpu.product
           operator: In
           values:
-#          - NVIDIA-A100-PCIE-40GB-MIG-3g.20gb
           - NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
-#          - NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
-#        - key: kubernetes.io/hostname
-#          operator: In
-#          values:
-#          - kubeworker27
-
-#      keda:
-#        enabled: false
-#      lmcacheConfig:
-#        enabled: false
-
-#      hf_token: ""
-#    vllmApiKey: <OMIT>
+    vllmApiKey:
+      secretName: osc-chat-app-secrets
+      secretKey: "OPENAI_API_KEY"
     containerSecurityContext:
       runAsNonRoot: true
     env:

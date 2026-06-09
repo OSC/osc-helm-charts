@@ -152,6 +152,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "osc-chat.fullname" . }}-app-config
                   key: LLM_URL
+            - name: OSC_HOSTED_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
+                  key: OPENAI_API_KEY
             - name: QDRANT_URL
               value: "http://{{ include "osc-chat.fullname" . }}-qdrant:6333"
             - name: QDRANT_COLLECTION_NAME

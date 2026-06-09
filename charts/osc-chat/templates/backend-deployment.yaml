@@ -48,7 +48,10 @@ spec:
             - name: OLLAMA_SERVER_URL
               value: {{ default "http://localhost:11434" .Values.backend.env.OLLAMA_SERVER_URL | quote }}
             - name: OSC_HOSTED_API_KEY
-              value: {{ default "" .Values.backend.env.OSC_HOSTED_API_KEY | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
+                  key: OPENAI_API_KEY
             - name: EMBEDDING_API_BASE
               valueFrom:
                 configMapKeyRef:
