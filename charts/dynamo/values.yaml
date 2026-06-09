@@ -38,9 +38,20 @@ global:
   # -- The Open WebUI secret key
   # @default -- **required**
   webui_secret_key:
-  # @ignored
-  frontend:
-    name: dynamo
+  # -- Define models
+  models: {}
+  # Example:
+  # models:
+  #   qwen3:
+  #     model: Qwen/Qwen3-0.6B
+  #     decode:
+  #       args:
+  #         - --max-model-len
+  #         - "20480"
+  #       cpu: 2
+  #       memory: 6Gi
+  #       gpu: 1
+  #       gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
 
 image:
   # -- The repository path to main vllm runtime image
@@ -68,34 +79,6 @@ cache:
     osc.edu/fileset: '{{ .Values.global.fileset }}'
   # @ignored
   size: 100Gi
-
-frontend:
-  resources:
-    limits:
-      # -- frontend CPU limit
-      cpu: 1
-      # -- frontend memory limit
-      memory: 2Gi
-    requests:
-      # -- frontend CPU request
-      cpu: 1
-      # -- frontend memory request
-      memory: 2Gi
-
-# -- Define vLLM workers
-workers: {}
-# Example:
-# workers:
-#   qwen3:
-#     model: Qwen/Qwen3-0.6B
-#     decode:
-#       args:
-#         - --max-model-len
-#         - "20480"
-#       cpu: 2
-#       memory: 6Gi
-#       gpu: 1
-#       gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
 
 # -- The default GPU type
 defaultGpuType: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
@@ -131,7 +114,7 @@ imagePuller:
 osc-open-webui:
   open-webui:
     # @ignored
-    openaiBaseApiUrl: "http://{{ .Values.global.frontend.name }}-frontend.{{ .Release.Namespace }}.svc.cluster.local:8000/v1"
+    openaiBaseApiUrl: '{{ include "dynamo.openai.urls" . }}'
     # @ignored
     openaiApiKey: false
     image:

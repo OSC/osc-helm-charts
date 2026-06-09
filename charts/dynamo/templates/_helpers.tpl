@@ -86,3 +86,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- $tag := printf "%s-osc-r%s" (.Values.image.tag | default .Chart.AppVersion) .Values.image.release }}
 {{- printf "%s/%s:%s" .Values.global.imagePullSecret.registry .Values.image.repository $tag }}
 {{- end }}
+
+{{- define "dynamo.openai.urls" -}}
+{{- $urls := list }}
+{{- range $name, $model := .Values.global.models }}
+    {{- $urls = append $urls (printf "http://%s-frontend.%s.svc.cluster.local:8000/v1" $name $.Release.Namespace) }}
+{{- end }}
+{{- $urls | join ";" }}
+{{- end }}

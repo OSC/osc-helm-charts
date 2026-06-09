@@ -1,0 +1,95 @@
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+{{- $frontend := $model.frontend | default dict }}
+{{- $decode := $model.decode | default dict }}
+---
+apiVersion: nvidia.com/v1beta1
+kind: DynamoGraphDeployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+spec:
+  components:
+    - name: Frontend
+      type: frontend
+      replicas: 1
+      podTemplate:
+        spec:
+          containers:
+            - name: main
+              image: {{ include "dynamo.image" $ | quote }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Values.hfToken.name }}
+              resources:
+                limits:
+                  cpu: {{ $frontend.cpu | default 1 | quote }}
+                  memory: {{ $frontend.memory | default "2Gi" | quote }}
+                requests:
+                  cpu: {{ $frontend.cpu | default 2 | quote }}
+                  memory: {{ $frontend.memory | default "4Gi" | quote }}
+              volumeMounts:
+                - name: dynamo-cache
+                  mountPath: /home/dynamo/.cache
+          nodeSelector:
+            '{{ include "osc.common.nodeSelectorRoleKey" $ }}': ""
+          volumes:
+            - name: dynamo-cache
+              persistentVolumeClaim:
+                claimName: {{ $.Values.cache.name }}
+    - name: VllmDecodeWorker
+      type: worker
+      replicas: 1
+      podTemplate:
+        spec:
+          containers:
+            - name: main
+              image: {{ include "dynamo.image" $ | quote }}
+              command:
+                - python3
+                - -m
+                - dynamo.vllm
+              args:
+                - --model
+                - {{ required "model name is required" $model.model }}
+              {{- range $decode.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Values.hfToken.name }}
+              resources:
+                limits:
+                  nvidia.com/gpu: {{ $decode.gpu | default 1 | quote }}
+                  {{ $.Values.rdmaResource }}: {{ $decode.gpu | default 1 | quote }}
+                  cpu: {{ $decode.cpu | default 2 | quote }}
+                  memory: {{ $decode.memory | default "4Gi" | quote }}
+                requests:
+                  nvidia.com/gpu: {{ $decode.gpu | default 1 | quote }}
+                  {{ $.Values.rdmaResource }}: {{ $decode.gpu | default 1 | quote }}
+                  cpu: {{ $decode.cpu | default 2 | quote }}
+                  memory: {{ $decode.memory | default "4Gi" | quote }}
+              workingDir: /home/dynamo
+              volumeMounts:
+                - name: dynamo-cache
+                  mountPath: /home/dynamo/.cache
+              env:
+                - name: CUPY_CACHE_DIR
+                  value: /home/dynamo/.cache/.cupy
+                - name: VLLM_NO_USAGE_STATS
+                  value: '1'
+                - name: DO_NOT_TRACK
+                  value: '1'
+                - name: OMP_NUM_THREADS
+                  value: '2'
+              {{- with $decode.env | default list }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          nodeSelector:
+            nvidia.com/gpu.product: {{ $decode.gpuType | default $.Values.defaultGpuType }}
+          volumes:
+            - name: dynamo-cache
+              persistentVolumeClaim:
+                claimName: {{ $.Values.cache.name }}
+{{- end }}
