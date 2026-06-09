@@ -33,6 +33,17 @@ global:
   webui_secret_key: <Open WebUI webui secret>
 hfToken:
   value: <Huggingface token>
+workers:
+  qwen3:
+    model: Qwen/Qwen3-0.6B
+    decode:
+      args:
+        - --max-model-len
+        - "20480"
+      cpu: 2
+      memory: 6Gi
+      gpu: 1
+      gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
 ```
 
 ## Requirements
@@ -68,6 +79,9 @@ hfToken:
 | frontend.resources.limits.memory | string | `"2Gi"` | frontend memory limit |
 | frontend.resources.requests.cpu | int | `1` | frontend CPU request |
 | frontend.resources.requests.memory | string | `"2Gi"` | frontend memory request |
+| workers | object | `{}` | Define vLLM workers |
+| defaultGpuType | string | `"NVIDIA-A100-PCIE-40GB-MIG-7g.40gb"` | The default GPU type |
+| rdmaResource | string | `"rdma/shared_mlx5"` | The RDMA resource name in Kubernetes |
 | osc-open-webui.open-webui.image.tag | string | `"0.9.6"` | The version of Open WebUI |
 | osc-open-webui.open-webui.sso.enableRoleManagement | bool | `true` | Enables role access controls in Open WebUI |
 
