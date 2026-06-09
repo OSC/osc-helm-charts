@@ -1,7 +1,6 @@
 global:
   # -- The service account used by OSC deployments.
-  # @default -- The chart's release name
-  oscServiceAccount: '{{ include "dynamo.name" . }}'
+  oscServiceAccount: dynamo
   # -- The deployment's OSC environment
   environment: production
   # -- The OSC node role to use with nodeSelector
@@ -22,6 +21,10 @@ global:
   # @ignored
   webservicesDeploy:
     create: false
+  # -- The fileset for storage
+  fileset: PZS0645
+  # -- The storage class to use for PV claims
+  storageClass: local-ess
 
 image:
   # -- The repository path to main vllm runtime image
@@ -33,6 +36,19 @@ image:
   tag: ""
   # -- The release of the custom OSC vllm runtime image
   release: "1"
+
+# -- The HF token for Hugging Face
+# @default -- **required**
+hfToken: ""
+
+cache:
+  # @ignored
+  name: dynamo-cache
+  # @ignored
+  annotations:
+    osc.edu/fileset: '{{ .Values.global.fileset }}'
+  # @ignored
+  size: 100Gi
 
 # @ignored
 podSecurityContext:
