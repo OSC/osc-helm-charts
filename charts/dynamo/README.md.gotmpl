@@ -35,14 +35,25 @@ global:
   models:
     qwen3:
       model: Qwen/Qwen3-0.6B
+      disagg: true
+      kvRouting: true
+      args:
+        - --max-model-len
+        - "20480"
       decode:
-        args:
-          - --max-model-len
-          - "20480"
+        args: []
         cpu: 2
         memory: 6Gi
         gpu: 1
         gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+        nodes: 1
+      prefill:
+        args: []
+        cpu: 2
+        memory: 6Gi
+        gpu: 1
+        gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+        nodes: 1
 hfToken:
   value: <Huggingface token>
 ```

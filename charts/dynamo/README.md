@@ -34,14 +34,25 @@ global:
   models:
     qwen3:
       model: Qwen/Qwen3-0.6B
+      disagg: true
+      kvRouting: true
+      args:
+        - --max-model-len
+        - "20480"
       decode:
-        args:
-          - --max-model-len
-          - "20480"
+        args: []
         cpu: 2
         memory: 6Gi
         gpu: 1
         gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+        nodes: 1
+      prefill:
+        args: []
+        cpu: 2
+        memory: 6Gi
+        gpu: 1
+        gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+        nodes: 1
 hfToken:
   value: <Huggingface token>
 ```
@@ -78,6 +89,8 @@ hfToken:
 | cache | object | `{}` |  |
 | defaultGpuType | string | `"NVIDIA-A100-PCIE-40GB-MIG-7g.40gb"` | The default GPU type |
 | rdmaResource | string | `"rdma/shared_mlx5"` | The RDMA resource name in Kubernetes |
+| kvTransferConfig | object | `{"kv_connector":"NixlConnector","kv_role":"kv_both"}` | The configuration of kv-transfer-config |
+| kvEventsConfig | object | `{"enable_kv_cache_events":true,"endpoint":"tcp://*:20080","publisher":"zmq","topic":"kv-events"}` | The configuration for kv-events-config |
 | osc-open-webui.open-webui.image.tag | string | `"0.9.6"` | The version of Open WebUI |
 | osc-open-webui.open-webui.sso.enableRoleManagement | bool | `true` | Enables role access controls in Open WebUI |
 
