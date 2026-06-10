@@ -98,6 +98,17 @@ workerEnv:
   - name: NIXL_TELEMETRY_ENABLE
     value: 'y'
 
+# -- The configuration of kv-transfer-config
+kvTransferConfig:
+  kv_connector: NixlConnector
+  kv_role: kv_both
+# -- The configuration for kv-events-config
+kvEventsConfig:
+  publisher: zmq
+  topic: kv-events
+  endpoint: tcp://*:20080
+  enable_kv_cache_events: true
+
 # @ignored
 disaggEnv:
   - name: UCX_TLS
