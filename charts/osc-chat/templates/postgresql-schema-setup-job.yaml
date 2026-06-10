@@ -1653,7 +1653,7 @@ spec:
           echo "PostgreSQL is ready, applying database schema..."
 
           # Apply the schema
-          PGPASSWORD={{ .Values.database.postgresql.auth.password }} psql \
+          psql \
             -h {{ include "osc-chat.postgresql.host" . }} \
             -p {{ include "osc-chat.postgresql.port" . }} \
             -U {{ include "osc-chat.postgresql.username" . }} \
@@ -1673,7 +1673,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ include "osc-chat.fullname" . }}-postgresql
-              key: postgres-password
+              key: password
         volumeMounts:
         - name: schema
           mountPath: /schema
