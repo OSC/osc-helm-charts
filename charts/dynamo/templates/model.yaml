@@ -1,6 +1,8 @@
 {{- range $name, $model := .Values.global.models | required "models must be defined" }}
 {{- $frontend := $model.frontend | default dict }}
 {{- $decode := $model.decode | default dict }}
+{{- $prefill := $model.prefill | default dict }}
+{{- $disagg := $model.disagg | default false }}
 ---
 apiVersion: nvidia.com/v1beta1
 kind: DynamoGraphDeployment
@@ -49,7 +51,11 @@ spec:
               persistentVolumeClaim:
                 claimName: {{ $.Values.cache.name }}
     - name: VllmDecodeWorker
+    {{- if $disagg }}
+      type: decode
+    {{- else }}
       type: worker
+    {{- end }}
       replicas: 1
       podTemplate:
         spec:
@@ -67,7 +73,14 @@ spec:
                 - --served-model-name
                 - {{ $model.alias }}
               {{- end }}
+              {{- if $disagg }}
+                - --disaggregation-mode
+                - decode
+              {{- end }}
               {{- range $decode.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              {{- range $model.args | default list }}
                 - {{ . | quote }}
               {{- end }}
               envFrom:
@@ -89,14 +102,9 @@ spec:
                 - name: dynamo-cache
                   mountPath: /home/dynamo/.cache
               env:
-                - name: CUPY_CACHE_DIR
-                  value: /home/dynamo/.cache/.cupy
-                - name: VLLM_NO_USAGE_STATS
-                  value: '1'
-                - name: DO_NOT_TRACK
-                  value: '1'
-                - name: OMP_NUM_THREADS
-                  value: '2'
+              {{- with $.Values.workerEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               {{- with $decode.env | default list }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
@@ -106,4 +114,64 @@ spec:
             - name: dynamo-cache
               persistentVolumeClaim:
                 claimName: {{ $.Values.cache.name }}
+  {{- if $disagg }}
+    - name: VllmPrefillWorker
+      type: prefill
+      replicas: 1
+      podTemplate:
+        spec:
+          containers:
+            - name: main
+              image: {{ include "dynamo.image" $ | quote }}
+              command:
+                - python3
+                - -m
+                - dynamo.vllm
+              args:
+                - --model
+                - {{ required "model name is required" $model.model }}
+              {{- if $model.alias }}
+                - --served-model-name
+                - {{ $model.alias }}
+              {{- end }}
+                - --disaggregation-mode
+                - prefill
+              {{- range $prefill.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              {{- range $model.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Values.hfToken.name }}
+              resources:
+                limits:
+                  nvidia.com/gpu: {{ $prefill.gpu | default 1 | quote }}
+                  {{ $.Values.rdmaResource }}: {{ $prefill.gpu | default 1 | quote }}
+                  cpu: {{ $prefill.cpu | default 2 | quote }}
+                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+                requests:
+                  nvidia.com/gpu: {{ $prefill.gpu | default 1 | quote }}
+                  {{ $.Values.rdmaResource }}: {{ $prefill.gpu | default 1 | quote }}
+                  cpu: {{ $prefill.cpu | default 2 | quote }}
+                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+              workingDir: /home/dynamo
+              volumeMounts:
+                - name: dynamo-cache
+                  mountPath: /home/dynamo/.cache
+              env:
+              {{- with $.Values.workerEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with $prefill.env | default list }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          nodeSelector:
+            nvidia.com/gpu.product: {{ $prefill.gpuType | default $.Values.defaultGpuType }}
+          volumes:
+            - name: dynamo-cache
+              persistentVolumeClaim:
+                claimName: {{ $.Values.cache.name }}
+  {{- end }}
 {{- end }}
