@@ -87,8 +87,6 @@ rdmaResource: rdma/shared_mlx5
 
 # @ignored
 workerEnv:
-  - name: CUPY_CACHE_DIR
-    value: /home/dynamo/.cache/.cupy
   - name: VLLM_NO_USAGE_STATS
     value: '1'
   - name: DO_NOT_TRACK
