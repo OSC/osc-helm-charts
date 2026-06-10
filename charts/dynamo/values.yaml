@@ -86,6 +86,17 @@ defaultGpuType: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
 rdmaResource: rdma/shared_mlx5
 
 # @ignored
+workerEnv:
+  - name: CUPY_CACHE_DIR
+    value: /home/dynamo/.cache/.cupy
+  - name: VLLM_NO_USAGE_STATS
+    value: '1'
+  - name: DO_NOT_TRACK
+    value: '1'
+  - name: OMP_NUM_THREADS
+    value: '2'
+
+# @ignored
 podSecurityContext:
   runAsNonRoot: true
 
