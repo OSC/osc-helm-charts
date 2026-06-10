@@ -43,6 +43,14 @@ spec:
                 requests:
                   cpu: {{ $frontend.cpu | default 1 | quote }}
                   memory: {{ $frontend.memory | default "2Gi" | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
               volumeMounts:
                 - name: dynamo-cache
                   mountPath: /home/dynamo/.cache
@@ -99,6 +107,20 @@ spec:
                   {{ $.Values.rdmaResource }}: {{ $decodeGPUs }}
                   cpu: {{ $decode.cpu | default 2 | quote }}
                   memory: {{ $decode.memory | default "4Gi" | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                {{- if $disagg }}
+                  add:
+                    - IPC_LOCK
+                    - SYS_RESOURCE
+                {{- else }}
+                  drop:
+                    - ALL
+                {{- end }}
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
               workingDir: /home/dynamo
               volumeMounts:
                 - name: dynamo-cache
@@ -107,6 +129,11 @@ spec:
               {{- with $.Values.workerEnv }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
+            {{- if $disagg }}
+              {{- with $.Values.disaggEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
               {{- with $decode.env | default list }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
@@ -158,6 +185,20 @@ spec:
                   {{ $.Values.rdmaResource }}: {{ $prefillGPUs }}
                   cpu: {{ $prefill.cpu | default 2 | quote }}
                   memory: {{ $prefill.memory | default "4Gi" | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                {{- if $disagg }}
+                  add:
+                    - IPC_LOCK
+                    - SYS_RESOURCE
+                {{- else }}
+                  drop:
+                    - ALL
+                {{- end }}
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
               workingDir: /home/dynamo
               volumeMounts:
                 - name: dynamo-cache
@@ -166,6 +207,11 @@ spec:
               {{- with $.Values.workerEnv }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
+            {{- if $disagg }}
+              {{- with $.Values.disaggEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
               {{- with $prefill.env | default list }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}

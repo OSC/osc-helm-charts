@@ -97,6 +97,23 @@ workerEnv:
     value: '2'
 
 # @ignored
+disaggEnv:
+  - name: UCX_TLS
+    value: "rc_x,rc,cuda_copy,cuda_ipc"
+  - name: UCX_NET_DEVICES
+    value: "mlx5_0:1,mlx5_1:1"
+  - name: UCX_IB_ADDR_TYPE
+    value: "eth"
+  - name: UCX_RNDV_SCHEME
+    value: "get_zcopy"
+  - name: UCX_RNDV_THRESH
+    value: "0"
+  - name: UCX_RC_TIMEOUT
+    value: "600s"
+  - name: UCX_KEEPALIVE_INTERVAL
+    value: "300s"
+
+# @ignored
 podSecurityContext:
   runAsNonRoot: true
 
