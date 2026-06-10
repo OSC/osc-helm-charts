@@ -153,11 +153,23 @@ kyverno-policies:
         - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
           operator: NotEquals
           value: "dcgm-exporter"
+        - key: "{{ request.object.metadata.labels.\"nvidia.com/dynamo-component-type\" || '' }}"
+          operator: AnyNotIn
+          value:
+            - decode
+            - prefill
     disallow-capabilities-strict:
       all:
         - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
           operator: NotEquals
           value: "dcgm-exporter"
+    adding-capabilities-strict:
+      all:
+        - key: "{{ request.object.metadata.labels.\"nvidia.com/dynamo-component-type\" || '' }}"
+          operator: AnyNotIn
+          value:
+            - decode
+            - prefill
     disallow-privilege-escalation:
       all:
         - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
