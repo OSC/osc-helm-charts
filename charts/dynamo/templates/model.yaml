@@ -1,7 +1,9 @@
 {{- range $name, $model := .Values.global.models | required "models must be defined" }}
 {{- $frontend := $model.frontend | default dict }}
 {{- $decode := $model.decode | default dict }}
+{{- $decodeGPUs := $decode.gpu | default 1 | quote }}
 {{- $prefill := $model.prefill | default dict }}
+{{- $prefillGPUs := $prefill.gpu | default 1 | quote }}
 {{- $disagg := $model.disagg | default false }}
 ---
 apiVersion: nvidia.com/v1beta1
@@ -88,13 +90,13 @@ spec:
                     name: {{ $.Values.hfToken.name }}
               resources:
                 limits:
-                  nvidia.com/gpu: {{ $decode.gpu | default 1 | quote }}
-                  {{ $.Values.rdmaResource }}: {{ $decode.gpu | default 1 | quote }}
+                  nvidia.com/gpu: {{ $decodeGPUs }}
+                  {{ $.Values.rdmaResource }}: {{ $decodeGPUs }}
                   cpu: {{ $decode.cpu | default 2 | quote }}
                   memory: {{ $decode.memory | default "4Gi" | quote }}
                 requests:
-                  nvidia.com/gpu: {{ $decode.gpu | default 1 | quote }}
-                  {{ $.Values.rdmaResource }}: {{ $decode.gpu | default 1 | quote }}
+                  nvidia.com/gpu: {{ $decodeGPUs }}
+                  {{ $.Values.rdmaResource }}: {{ $decodeGPUs }}
                   cpu: {{ $decode.cpu | default 2 | quote }}
                   memory: {{ $decode.memory | default "4Gi" | quote }}
               workingDir: /home/dynamo
@@ -147,13 +149,13 @@ spec:
                     name: {{ $.Values.hfToken.name }}
               resources:
                 limits:
-                  nvidia.com/gpu: {{ $prefill.gpu | default 1 | quote }}
-                  {{ $.Values.rdmaResource }}: {{ $prefill.gpu | default 1 | quote }}
+                  nvidia.com/gpu: {{ $prefillGPUs }}
+                  {{ $.Values.rdmaResource }}: {{ $prefillGPUs }}
                   cpu: {{ $prefill.cpu | default 2 | quote }}
                   memory: {{ $prefill.memory | default "4Gi" | quote }}
                 requests:
-                  nvidia.com/gpu: {{ $prefill.gpu | default 1 | quote }}
-                  {{ $.Values.rdmaResource }}: {{ $prefill.gpu | default 1 | quote }}
+                  nvidia.com/gpu: {{ $prefillGPUs }}
+                  {{ $.Values.rdmaResource }}: {{ $prefillGPUs }}
                   cpu: {{ $prefill.cpu | default 2 | quote }}
                   memory: {{ $prefill.memory | default "4Gi" | quote }}
               workingDir: /home/dynamo
