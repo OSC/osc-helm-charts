@@ -104,10 +104,8 @@ spec:
                 - --disaggregation-mode
                 - decode
               {{- end }}
-              {{- if or $disagg (gt $decodeNodes 1) }}
                 - --kv-transfer-config
                 - '{{ $kvTransferConfig | toJson }}'
-              {{- end }}
               {{- range $decode.args | default list }}
                 - {{ . | quote }}
               {{- end }}
@@ -194,10 +192,8 @@ spec:
               {{- end }}
                 - --disaggregation-mode
                 - prefill
-              {{- if or $disagg (gt $decodeNodes 1) }}
                 - --kv-transfer-config
                 - '{{ $kvTransferConfig | toJson }}'
-              {{- end }}
               {{- if $kvRouting }}
                 - --kv-events-config
                 - '{{ $.Values.kvEventsConfig | toJson }}'
