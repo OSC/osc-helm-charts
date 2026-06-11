@@ -542,7 +542,7 @@ redis:
     enabled: true
     allowExternal: false
     ingressNSMatchLabels:
-        app.kubernetes.io/name: prometheus
+      app.kubernetes.io/name: prometheus
     metrics:
       enabled: true
       allowExternal: false
