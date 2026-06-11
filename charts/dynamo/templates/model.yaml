@@ -4,9 +4,11 @@
 {{- $decode := $model.decode | default dict }}
 {{- $decodeGPUs := $decode.gpu | default 1 | quote }}
 {{- $decodeNodes := $decode.nodes | default 1 }}
+{{- $decodeScaling := $decode.scaling | default $model.scaling | default dict }}
 {{- $prefill := $model.prefill | default dict }}
 {{- $prefillGPUs := $prefill.gpu | default 1 | quote }}
 {{- $prefillNodes := $prefill.nodes | default 1 }}
+{{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
 {{- $disagg := $model.disagg | default false }}
 {{- $kvTransferConfig := dict "engine_id" (printf "vllm-engine-%s" $name) }}
 {{- $result := merge $kvTransferConfig $.Values.kvTransferConfig  }}
@@ -76,6 +78,10 @@ spec:
       type: worker
     {{- end }}
       replicas: 1
+    {{- if $decodeScaling }}
+      scalingAdapter:
+        enabled: true
+    {{- end }}
     {{- if gt $decodeNodes 1 }}
       multinode:
         nodeCount: {{ $decodeNodes }}
@@ -166,6 +172,10 @@ spec:
     - name: VllmPrefillWorker
       type: prefill
       replicas: 1
+    {{- if $decodeScaling }}
+      scalingAdapter:
+        enabled: true
+    {{- end }}
     {{- if gt $prefillNodes 1 }}
       multinode:
         nodeCount: {{ $prefillNodes }}
