@@ -39,6 +39,7 @@ spec:
                 - --router-mode
                 - kv
               {{- end }}
+                - --durable-kv-events
               {{- range $frontend.args | default list }}
                 - {{ . | quote }}
               {{- end }}
@@ -112,6 +113,7 @@ spec:
                 - --disaggregation-mode
                 - decode
               {{- end }}
+                - --durable-kv-events
                 - --kv-transfer-config
                 - '{{ $decodekvTransferConfig | toJson }}'
               {{- range $decode.args | default list }}
@@ -204,6 +206,7 @@ spec:
               {{- end }}
                 - --disaggregation-mode
                 - prefill
+                - --durable-kv-events
                 - --kv-transfer-config
                 - '{{ $prefillkvTransferConfig | toJson }}'
               {{- if $kvRouting }}

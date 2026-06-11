@@ -31,17 +31,17 @@ spec:
       query: |
       {{- if $disagg }}
         histogram_quantile(0.95,
-          sum(rate(dynamo_component_router_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
+          sum(rate(dynamo_frontend_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
           by (le)
         )
       {{- else }}
         histogram_quantile(0.95,
-          sum(rate(dynamo_component_router_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
           by (le)
         )
       {{- end }}
-      threshold: "0.5"
-      activationThreshold: "0.1"
+      threshold: "0.2"
+      activationThreshold: "0"
 {{- end }}
 {{- if and $disagg $prefillScaling }}
 ---
@@ -68,10 +68,10 @@ spec:
       metricName: dynamo_ttft_p95
       query: |
         histogram_quantile(0.95,
-          sum(rate(dynamo_component_router_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
           by (le)
         )
       threshold: "0.5"
-      activationThreshold: "0.1"
+      activationThreshold: "0"
 {{- end }}
 {{- end }}
