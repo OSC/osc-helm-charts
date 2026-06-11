@@ -165,6 +165,9 @@ kyverno-policies:
           value: "dcgm-exporter"
     adding-capabilities-strict:
       all:
+        - key: "{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}"
+          operator: NotEquals
+          value: "dcgm-exporter"
         - key: "{{ request.object.metadata.labels.\"nvidia.com/dynamo-component-type\" || '' }}"
           operator: AnyNotIn
           value:
