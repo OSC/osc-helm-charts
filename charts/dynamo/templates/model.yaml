@@ -10,8 +10,10 @@
 {{- $prefillNodes := $prefill.nodes | default 1 }}
 {{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
 {{- $disagg := $model.disagg | default false }}
-{{- $kvTransferConfig := dict "engine_id" (printf "vllm-engine-%s" $name) }}
-{{- $result := merge $kvTransferConfig $.Values.kvTransferConfig  }}
+{{- $decodekvTransferConfig := dict "engine_id" (printf "vllm-engine-decode-%s" $name) }}
+{{- $result := merge $decodekvTransferConfig $.Values.kvTransferConfig  }}
+{{- $prefillkvTransferConfig := dict "engine_id" (printf "vllm-engine-prefill-%s" $name) }}
+{{- $result := merge $prefillkvTransferConfig $.Values.kvTransferConfig  }}
 ---
 apiVersion: nvidia.com/v1beta1
 kind: DynamoGraphDeployment
@@ -111,7 +113,7 @@ spec:
                 - decode
               {{- end }}
                 - --kv-transfer-config
-                - '{{ $kvTransferConfig | toJson }}'
+                - '{{ $decodekvTransferConfig | toJson }}'
               {{- range $decode.args | default list }}
                 - {{ . | quote }}
               {{- end }}
@@ -203,7 +205,7 @@ spec:
                 - --disaggregation-mode
                 - prefill
                 - --kv-transfer-config
-                - '{{ $kvTransferConfig | toJson }}'
+                - '{{ $prefillkvTransferConfig | toJson }}'
               {{- if $kvRouting }}
                 - --kv-events-config
                 - '{{ $.Values.kvEventsConfig | toJson }}'
