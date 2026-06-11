@@ -84,6 +84,8 @@ cache:
 defaultGpuType: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
 # -- The RDMA resource name in Kubernetes
 rdmaResource: rdma/shared_mlx5
+# -- The Prometheus URL
+prometheusURL: http://prometheus-prometheus.prometheus.svc:9090
 
 # @ignored
 workerEnv:

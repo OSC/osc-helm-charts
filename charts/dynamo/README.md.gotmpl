@@ -37,10 +37,18 @@ global:
       model: Qwen/Qwen3-0.6B
       disagg: true
       kvRouting: true
+      scaling:
+        minReplicas: 0
+        maxReplicas: 2
+        cooldownPeriod: 600
       args:
         - --max-model-len
         - "20480"
       decode:
+        # scaling:
+        #   minReplicas: 0
+        #   maxReplicas: 2
+        #   cooldownPeriod: 600
         args: []
         cpu: 2
         memory: 6Gi
@@ -48,6 +56,10 @@ global:
         gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
         nodes: 1
       prefill:
+        # scaling:
+        #   minReplicas: 0
+        #   maxReplicas: 2
+        #   cooldownPeriod: 600
         args: []
         cpu: 2
         memory: 6Gi
