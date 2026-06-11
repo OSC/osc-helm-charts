@@ -50,3 +50,4 @@ dependencies:
     # https://github.com/vllm-project/production-stack/pull/954
     version: '0.1.11-osc-r1'
     repository: oci://docker-registry.osc.edu/kubernetes/vllm
+    condition: vllm-stack.enabled
