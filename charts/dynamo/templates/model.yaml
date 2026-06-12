@@ -2,11 +2,14 @@
 {{- $image := $model.image | default (include "dynamo.image" $) }}
 {{- $kvRouting := $model.kvRouting | default false }}
 {{- $frontend := $model.frontend | default dict }}
+{{- $frontendImage := $frontend.image | default $image }}
 {{- $decode := $model.decode | default dict }}
+{{- $decodeImage := $decode.image | default $image }}
 {{- $decodeGPUs := $decode.gpu | default 1 | quote }}
 {{- $decodeNodes := $decode.nodes | default 1 }}
 {{- $decodeScaling := $decode.scaling | default $model.scaling | default dict }}
 {{- $prefill := $model.prefill | default dict }}
+{{- $prefillImage := $prefill.image | default $image }}
 {{- $prefillGPUs := $prefill.gpu | default 1 | quote }}
 {{- $prefillNodes := $prefill.nodes | default 1 }}
 {{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
@@ -32,7 +35,7 @@ spec:
         spec:
           containers:
             - name: main
-              image: {{ $image | quote }}
+              image: {{ $frontendImage | quote }}
               args:
                 - -m
                 - dynamo.frontend
@@ -47,8 +50,11 @@ spec:
               envFrom:
                 - secretRef:
                     name: {{ $.Values.hfToken.name }}
-              {{- with $frontend.env | default list }}
               env:
+              {{- with $.Values.frontendEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with $frontend.env | default list }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
               resources:
@@ -94,7 +100,7 @@ spec:
         spec:
           containers:
             - name: main
-              image: {{ $image | quote }}
+              image: {{ $decodeImage | quote }}
               command:
                 - python3
                 - -m
@@ -189,7 +195,7 @@ spec:
         spec:
           containers:
             - name: main
-              image: {{ $image | quote }}
+              image: {{ $prefillImage | quote }}
               command:
                 - python3
                 - -m
