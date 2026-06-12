@@ -20,7 +20,7 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: qdrant-setup
-        image: {{ .Values.global.imageRegistry }}/osc/rockylinux:9
+        image: {{ .Values.global.imageRegistry }}/kubernetes/portainer/kubectl-shell:2.39.0
         resources:
           requests:
             cpu: 250m
