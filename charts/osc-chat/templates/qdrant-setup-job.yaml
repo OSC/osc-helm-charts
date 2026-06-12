@@ -34,8 +34,8 @@ spec:
           - /bin/sh
           - -c
           - |
-            curl -sf "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" || \
-            curl -X PUT "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" \
+            curl --header "api-key: ${QDRANT_API_KEY}" -sf "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" || \
+            curl --header "api-key: ${QDRANT_API_KEY}" -X PUT "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" \
             -H "Content-Type: application/json" \
             -d '{
               "vectors": {
@@ -54,4 +54,9 @@ spec:
             configMapKeyRef:
               name: {{ include "osc-chat.fullname" . }}-app-config
               key: QDRANT_COLLECTION_NAME
+        - name: QDRANT_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "osc-chat.fullname" . }}-qdrant-apikey
+              key: api-key
 {{- end }}

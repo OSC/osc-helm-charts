@@ -87,6 +87,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "osc-chat.fullname" . }}-app-secrets
                   key: REDIS_PASSWORD
+            - name: QDRANT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-qdrant-apikey
+                  key: api-key
             {{- if .Values.huggingfaceCache.enabled }}
             - name: TRANSFORMERS_CACHE
               value: {{ printf "%s/transformers" .Values.huggingfaceCache.mountPath | quote }}

@@ -97,6 +97,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "osc-chat.fullname" . }}-app-config
                   key: EMBEDDING_MODEL
+            - name: QDRANT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-qdrant-apikey
+                  key: api-key
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
           {{- if .Values.huggingfaceCache.enabled }}

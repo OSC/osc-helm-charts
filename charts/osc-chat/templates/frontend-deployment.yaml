@@ -162,6 +162,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "osc-chat.fullname" . }}-app-config
                   key: QDRANT_COLLECTION_NAME
+            - name: QDRANT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-qdrant-apikey
+                  key: api-key
             - name: CRAWLEE_API_URL
               value: "http://{{ include "osc-chat.fullname" . }}-crawlee:3000/crawl"
           livenessProbe:

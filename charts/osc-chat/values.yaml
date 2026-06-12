@@ -67,14 +67,20 @@ minio:
   image:
     repository: kubernetes/bitnami/minio
     tag: 2025.7.23-debian-12-r5
+    pullSecrets:
+      - osc-registry
   defaultBuckets: "osc-chat"
   clientImage:
     repository: kubernetes/bitnami/minio-client
     tag: 2025.7.21-debian-12-r3
+    pullSecrets:
+      - osc-registry
   console:
     image:
       repository: kubernetes/bitnami/minio-object-browser
       tag: 2.0.2-debian-12-r3
+      pullSecrets:
+        - osc-registry
   imagePullSecret:
     enable: false
   persistence:
@@ -124,6 +130,7 @@ qdrant:
 #    enabled: true
   imagePullSecrets:
     - name: osc-registry
+  apiKey: true
 
 rabbitmq:
   enable: true
@@ -206,7 +213,6 @@ secrets:
   create: true
   api:
     openaiKey: "your_strong_key"
-    qdrantKey: "your_strong_key"
 
 crawlee:
   enabled: true
