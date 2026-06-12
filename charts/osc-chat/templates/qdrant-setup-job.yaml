@@ -17,6 +17,8 @@ spec:
         app.kubernetes.io/component: qdrant
         app.kubernetes.io/name: qdrant
     spec:
+      imagePullSecrets:
+        - name: {{ include "osc.common.imagePullSecret.name" . }}
       restartPolicy: OnFailure
       containers:
       - name: qdrant-setup

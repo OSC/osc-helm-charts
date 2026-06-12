@@ -16,10 +16,8 @@ spec:
       labels:
         {{- include "osc-chat.frontend.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.global.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: {{ include "osc.common.imagePullSecret.name" . }}
       serviceAccountName: {{ include "osc-chat.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
