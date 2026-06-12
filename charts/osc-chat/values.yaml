@@ -16,6 +16,11 @@ global:
   pvcAnnotations:
     osc.edu/fileset: PZS0645
   fileset: PZS0645
+  llm:
+    host: ""
+  embedding:
+    host: ""
+    model: ""
   webservicesDeploy:
     create: false
   auth:
@@ -30,9 +35,6 @@ global:
   ingress:
     host: ""
     hostAlias: ""
-
-llm_server:
-  host:
 
 database:
   postgresql:
@@ -164,7 +166,6 @@ backend:
     port: 8001
   env:
     FLASK_ENV: production
-    EMBEDDING_MODEL: Qwen/Qwen3-Embedding-8B
   resources:
     limits:
       cpu: 1
@@ -183,7 +184,6 @@ worker:
   env:
     QDRANT_COLLECTION_NAME: '{{ include "osc-chat.name" . }}'
     S3_BUCKET_NAME: '{{ include "osc-chat.name" . }}'
-    EMBEDDING_MODEL: Qwen/Qwen3-Embedding-8B
   resources:
     limits:
       cpu: 1

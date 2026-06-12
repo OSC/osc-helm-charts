@@ -214,6 +214,20 @@ LLM server host
 {{- if and (index .Values "vllm-stack" "enabled") ( index .Values "vllm-stack" "routerSpec" "enableRouter") -}}
 http://{{ .Release.Name }}-router-service/v1
 {{- else -}}
-{{ required "llm server host must be defined if not deploying vLLM" .Values.llm_server.host }}
+{{ required "llm server host must be defined if not deploying vLLM" .Values.global.llm.host }}
 {{- end -}}
+{{- end }}
+
+{{/*
+Embedding model
+*/}}
+{{- define "osc-chat.embedding.host" -}}
+{{- if and (index .Values "vllm-stack" "enabled") ( index .Values "vllm-stack" "routerSpec" "enableRouter") -}}
+http://{{ .Release.Name }}-router-service/v1
+{{- else -}}
+{{- default (include "osc-chat.llm_server.host" .) .Values.global.embedding.host -}}
+{{- end -}}
+{{- end }}
+{{- define "osc-chat.embedding.model" -}}
+{{ required "embedding model must be defined" .Values.global.embedding.model }}
 {{- end }}

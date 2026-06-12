@@ -91,9 +91,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "osc-chat.fullname" . }}-app-config
-                  key: LLM_URL
+                  key: EMBEDDING_URL
             - name: EMBEDDING_MODEL
-              value: {{ .Values.worker.env.EMBEDDING_MODEL | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-app-config
+                  key: EMBEDDING_MODEL
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
           {{- if .Values.huggingfaceCache.enabled }}

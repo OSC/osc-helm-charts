@@ -54,9 +54,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "osc-chat.fullname" . }}-app-config
-                  key: LLM_URL
+                  key: EMBEDDING_URL
             - name: EMBEDDING_MODEL
-              value: {{ .Values.backend.env.EMBEDDING_MODEL | quote }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "osc-chat.fullname" . }}-app-config
+                  key: EMBEDDING_MODEL
             - name: RABBITMQ_QUEUE
               valueFrom:
                 configMapKeyRef:
