@@ -1,3 +1,8 @@
+{{- $images := list (include "dynamo.image" .) }}
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+  {{- $image := $model.image | default (include "dynamo.image" $) }}
+  {{- $images = append $images $image }}
+{{- end }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -24,17 +29,19 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: image-puller
-          {{- with .Values.securityContext }}
+      {{- range $index, $image := $images | uniq }}
+        - name: image-puller-{{ $index }}
+          {{- with $.Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: {{ include "dynamo.image" . | quote }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ $image | quote }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
           command: ["/bin/sh", "-c", "sleep infinity"]
-          {{- with .Values.imagePuller.resources }}
+          {{- with $.Values.imagePuller.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+      {{- end }}
       nodeSelector:
         {{ include "osc.common.nodeSelectorRole" . }}
