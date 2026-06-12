@@ -4,8 +4,18 @@
 {{- $prefill := $model.prefill | default dict }}
 {{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
 {{- $disagg := $model.disagg | default false }}
-{{- $namespace := printf "%s_%s" $.Release.Namespace $name | replace "-" "_" }}
+{{- $namespace := printf "%s-%s" $.Release.Namespace $name }}
 {{- if $decodeScaling }}
+{{/*
+Possible for decode:
+sum(dynamo_frontend_stage_requests{phase="decode",stage=~"preprocess|route|dispatch"})
+
+Possible for prefill:
+sum(dynamo_frontend_stage_requests{phase="prefill",stage=~"preprocess|route|dispatch"})
+
+Possible for aggregate:
+sum(dynamo_frontend_stage_requests{phase="aggregated",stage=~"preprocess|route|dispatch"})
+*/}}
 ---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
@@ -27,20 +37,22 @@ spec:
   - type: prometheus
     metadata:
       serverAddress: http://prometheus-prometheus.prometheus.svc:9090
-      metricName: dynamo_ttft_p95
-      query: |
       {{- if $disagg }}
+      metricName: dynamo_itl_p95
+      query: |
         histogram_quantile(0.95,
-          sum(rate(dynamo_frontend_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
+          sum(rate(dynamo_frontend_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
           by (le)
         )
       {{- else }}
+      metricName: dynamo_ttft_p95
+      query: |
         histogram_quantile(0.95,
-          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
           by (le)
         )
       {{- end }}
-      threshold: "0.2"
+      threshold: "2"
       activationThreshold: "0"
 {{- end }}
 {{- if and $disagg $prefillScaling }}
@@ -68,10 +80,10 @@ spec:
       metricName: dynamo_ttft_p95
       query: |
         histogram_quantile(0.95,
-          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[5m]))
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
           by (le)
         )
-      threshold: "0.5"
+      threshold: "2"
       activationThreshold: "0"
 {{- end }}
 {{- end }}
