@@ -44,6 +44,7 @@ spec:
           sum(rate(dynamo_frontend_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
           by (le)
         )
+      threshold: "0.05"
       {{- else }}
       metricName: dynamo_ttft_p95
       query: |
@@ -51,8 +52,8 @@ spec:
           sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
           by (le)
         )
+      threshold: "0.5"
       {{- end }}
-      threshold: "2"
       activationThreshold: "0"
 {{- end }}
 {{- if and $disagg $prefillScaling }}
@@ -83,7 +84,7 @@ spec:
           sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
           by (le)
         )
-      threshold: "2"
+      threshold: "0.5"
       activationThreshold: "0"
 {{- end }}
 {{- end }}
