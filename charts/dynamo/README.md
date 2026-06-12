@@ -34,6 +34,7 @@ global:
   models:
     qwen3:
       model: Qwen/Qwen3-0.6B
+      # image: ...
       disagg: true
       kvRouting: true
       scaling:
