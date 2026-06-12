@@ -126,6 +126,7 @@ disaggEnv:
   - name: UCX_KEEPALIVE_INTERVAL
     value: "300s"
 
+# @ignored
 frontendEnv:
   # Avoid accidental matching where dynamo-qwen3 matches dynamo-qwen3-coder for example
   - name: DYN_NAMESPACE_PREFIX
@@ -179,10 +180,10 @@ osc-open-webui:
         value: '{{ include "dynamo.openai.urls" . }}'
       - name: BYPASS_MODEL_ACCESS_CONTROL
         value: 'True'
-      #- name: ENABLE_OPENAI_API_PASSTHROUGH
-      #  value: 'True'
-      #- name: GLOBAL_LOG_LEVEL
-      #  value: DEBUG
+      # - name: ENABLE_OPENAI_API_PASSTHROUGH
+      #   value: 'True'
+      # - name: GLOBAL_LOG_LEVEL
+      #   value: DEBUG
     sso:
       # -- Enables role access controls in Open WebUI
       enableRoleManagement: true
