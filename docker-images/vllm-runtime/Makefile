@@ -1,5 +1,5 @@
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-VERSION = 1.2.0
+VERSION := 1.2.0
 RELEASE = 0
 TAG = docker-registry.osc.edu/kubernetes/ai-dynamo/vllm-runtime:$(VERSION)-osc-r$(RELEASE)
 
