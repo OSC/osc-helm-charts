@@ -18,6 +18,7 @@ global:
   # @ignored
   networkPolicy:
     create: false
+    prometheusNamespace: prometheus
   # @ignored
   webservicesDeploy:
     create: false
@@ -160,6 +161,8 @@ imagePuller:
 
 osc-open-webui:
   open-webui:
+    # @ignored
+    nameOverride: open-webui
     # @ignored
     openaiBaseApiUrl: false
     # @ignored
