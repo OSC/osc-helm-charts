@@ -105,6 +105,8 @@ workerEnv:
     value: '2'
   - name: NIXL_TELEMETRY_ENABLE
     value: 'y'
+  - name: DYN_LOGGING_JSONL
+    value: 'true'
 
 # -- The configuration of kv-transfer-config
 kvTransferConfig:
@@ -139,6 +141,8 @@ frontendEnv:
   # Avoid accidental matching where dynamo-qwen3 matches dynamo-qwen3-coder for example
   - name: DYN_NAMESPACE_PREFIX
     value: ""
+  - name: DYN_LOGGING_JSONL
+    value: 'true'
 
 # @ignored
 podSecurityContext:
@@ -190,6 +194,10 @@ osc-open-webui:
         value: '{{ include "dynamo.openai.urls" . }}'
       - name: BYPASS_MODEL_ACCESS_CONTROL
         value: 'True'
+      - name: ENABLE_FORWARD_USER_INFO_HEADERS
+        value: 'True'
+      - name: FORWARD_USER_INFO_HEADER_USER_EMAIL
+        value: 'x-request-id'
       # - name: ENABLE_OPENAI_API_PASSTHROUGH
       #   value: 'True'
       # - name: GLOBAL_LOG_LEVEL
