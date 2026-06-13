@@ -1,0 +1,284 @@
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+{{- $image := $model.image | default (include "dynamo.image" $) }}
+{{- $kvRouting := $model.kvRouting | default false }}
+{{- $frontend := $model.frontend | default dict }}
+{{- $frontendImage := $frontend.image | default $image }}
+{{- $decode := $model.decode | default dict }}
+{{- $decodeImage := $decode.image | default $image }}
+{{- $decodeGPUs := $decode.gpu | default 1 | quote }}
+{{- $decodeNodes := $decode.nodes | default 1 }}
+{{- $decodeScaling := $decode.scaling | default $model.scaling | default dict }}
+{{- $prefill := $model.prefill | default dict }}
+{{- $prefillImage := $prefill.image | default $image }}
+{{- $prefillGPUs := $prefill.gpu | default 1 | quote }}
+{{- $prefillNodes := $prefill.nodes | default 1 }}
+{{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
+{{- $disagg := $model.disagg | default false }}
+{{- $decodekvTransferConfig := dict "engine_id" (printf "vllm-engine-decode-%s" $name) }}
+{{- $result := merge $decodekvTransferConfig $.Values.kvTransferConfig  }}
+{{- $prefillkvTransferConfig := dict "engine_id" (printf "vllm-engine-prefill-%s" $name) }}
+{{- $result := merge $prefillkvTransferConfig $.Values.kvTransferConfig  }}
+---
+apiVersion: nvidia.com/v1beta1
+kind: DynamoGraphDeployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+spec:
+  components:
+    - name: Frontend
+      type: frontend
+      replicas: 1
+      podTemplate:
+        spec:
+          containers:
+            - name: main
+              image: {{ $frontendImage | quote }}
+              args:
+                - -m
+                - dynamo.frontend
+              {{- if $kvRouting }}
+                - --router-mode
+                - kv
+              {{- end }}
+                - --durable-kv-events
+              {{- range $frontend.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Values.hfToken.name }}
+              env:
+              {{- with $.Values.frontendEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with $frontend.env | default list }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              resources:
+                limits:
+                  cpu: {{ $frontend.cpu | default 1 | quote }}
+                  memory: {{ $frontend.memory | default "2Gi" | quote }}
+                requests:
+                  cpu: {{ $frontend.cpu | default 1 | quote }}
+                  memory: {{ $frontend.memory | default "2Gi" | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+              volumeMounts:
+                - name: dynamo-cache
+                  mountPath: /home/dynamo/.cache
+          nodeSelector:
+            '{{ include "osc.common.nodeSelectorRoleKey" $ }}': ""
+          volumes:
+            - name: dynamo-cache
+              persistentVolumeClaim:
+                claimName: {{ $.Values.cache.name }}
+    - name: VllmDecodeWorker
+    {{- if $disagg }}
+      type: decode
+    {{- else }}
+      type: worker
+    {{- end }}
+      replicas: 1
+    {{- if $decodeScaling }}
+      scalingAdapter:
+        enabled: true
+    {{- end }}
+    {{- if gt $decodeNodes 1 }}
+      multinode:
+        nodeCount: {{ $decodeNodes }}
+    {{- end }}
+      podTemplate:
+        spec:
+          containers:
+            - name: main
+              image: {{ $decodeImage | quote }}
+              command:
+                - python3
+                - -m
+                - dynamo.vllm
+              args:
+                - --model
+                - {{ required "model name is required" $model.model }}
+              {{- if $model.alias }}
+                - --served-model-name
+                - {{ $model.alias }}
+              {{- end }}
+              {{- if gt $decodeNodes 1 }}
+                - --tensor-parallel-size
+                - {{ mul $decodeNodes $decodeGPUs | quote }}
+              {{- end }}
+              {{- if $disagg }}
+                - --disaggregation-mode
+                - decode
+              {{- end }}
+                - --safetensors-load-strategy
+                - prefetch
+                - --durable-kv-events
+                - --kv-transfer-config
+                - '{{ $decodekvTransferConfig | toJson }}'
+              {{- range $decode.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              {{- range $model.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Values.hfToken.name }}
+              resources:
+                limits:
+                  nvidia.com/gpu: {{ $decodeGPUs }}
+                  {{ $.Values.rdmaResource }}: {{ $decodeGPUs }}
+                  cpu: {{ $decode.cpu | default 2 | quote }}
+                  memory: {{ $decode.memory | default "4Gi" | quote }}
+                requests:
+                  nvidia.com/gpu: {{ $decodeGPUs }}
+                  {{ $.Values.rdmaResource }}: {{ $decodeGPUs }}
+                  cpu: {{ $decode.cpu | default 2 | quote }}
+                  memory: {{ $decode.memory | default "4Gi" | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                {{- if $disagg }}
+                  add:
+                    - IPC_LOCK
+                    - SYS_RESOURCE
+                {{- else }}
+                  drop:
+                    - ALL
+                {{- end }}
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+              workingDir: /home/dynamo
+              volumeMounts:
+                - name: dynamo-cache
+                  mountPath: /home/dynamo/.cache
+              env:
+              {{- with $.Values.workerEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- if $disagg }}
+              {{- with $.Values.disaggEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
+              {{- with $decode.env | default list }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          nodeSelector:
+            nvidia.com/gpu.product: {{ $decode.gpuType | default $.Values.defaultGpuType }}
+          volumes:
+            - name: dynamo-cache
+              persistentVolumeClaim:
+                claimName: {{ $.Values.cache.name }}
+  {{- if $disagg }}
+    - name: VllmPrefillWorker
+      type: prefill
+      replicas: 1
+    {{- if $decodeScaling }}
+      scalingAdapter:
+        enabled: true
+    {{- end }}
+    {{- if gt $prefillNodes 1 }}
+      multinode:
+        nodeCount: {{ $prefillNodes }}
+    {{- end }}
+      podTemplate:
+        spec:
+          containers:
+            - name: main
+              image: {{ $prefillImage | quote }}
+              command:
+                - python3
+                - -m
+                - dynamo.vllm
+              args:
+                - --model
+                - {{ required "model name is required" $model.model }}
+              {{- if $model.alias }}
+                - --served-model-name
+                - {{ $model.alias }}
+              {{- end }}
+              {{- if gt $prefillNodes 1 }}
+                - --tensor-parallel-size
+                - {{ mul $prefillNodes $prefillGPUs | quote }}
+              {{- end }}
+                - --disaggregation-mode
+                - prefill
+                - --safetensors-load-strategy
+                - prefetch
+                - --durable-kv-events
+                - --kv-transfer-config
+                - '{{ $prefillkvTransferConfig | toJson }}'
+              {{- if $kvRouting }}
+                - --kv-events-config
+                - '{{ $.Values.kvEventsConfig | toJson }}'
+              {{- end }}
+              {{- range $prefill.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              {{- range $model.args | default list }}
+                - {{ . | quote }}
+              {{- end }}
+              envFrom:
+                - secretRef:
+                    name: {{ $.Values.hfToken.name }}
+              resources:
+                limits:
+                  nvidia.com/gpu: {{ $prefillGPUs }}
+                  {{ $.Values.rdmaResource }}: {{ $prefillGPUs }}
+                  cpu: {{ $prefill.cpu | default 2 | quote }}
+                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+                requests:
+                  nvidia.com/gpu: {{ $prefillGPUs }}
+                  {{ $.Values.rdmaResource }}: {{ $prefillGPUs }}
+                  cpu: {{ $prefill.cpu | default 2 | quote }}
+                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                {{- if $disagg }}
+                  add:
+                    - IPC_LOCK
+                    - SYS_RESOURCE
+                {{- else }}
+                  drop:
+                    - ALL
+                {{- end }}
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+              workingDir: /home/dynamo
+              volumeMounts:
+                - name: dynamo-cache
+                  mountPath: /home/dynamo/.cache
+              env:
+              {{- with $.Values.workerEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- if $disagg }}
+              {{- with $.Values.disaggEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+            {{- end }}
+              {{- with $prefill.env | default list }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          nodeSelector:
+            nvidia.com/gpu.product: {{ $prefill.gpuType | default $.Values.defaultGpuType }}
+          volumes:
+            - name: dynamo-cache
+              persistentVolumeClaim:
+                claimName: {{ $.Values.cache.name }}
+  {{- end }}
+{{- end }}

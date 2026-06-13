@@ -1,0 +1,213 @@
+global:
+  # -- The service account used by OSC deployments.
+  oscServiceAccount: dynamo
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The OSC node role to use with nodeSelector
+  nodeSelectorRole: webservices
+  imagePullSecret:
+    # -- imagePullSecret name
+    name: osc-registry
+    # -- imagePullSecret registry
+    registry: docker-registry.osc.edu
+    # -- imagePullSecret username
+    username: robot$webservices-read
+    # -- imagePullSecret password. This value will be set by OSC's Puppet.
+    # @default -- **required**
+    password:
+  # @ignored
+  networkPolicy:
+    create: false
+    prometheusNamespace: prometheus
+  # @ignored
+  webservicesDeploy:
+    create: false
+  # -- The fileset for storage
+  fileset: PZS0645
+  # -- The storage class to use for PV claims
+  storageClass: local-ess
+  ingress:
+    # -- Ingress host name
+    host: ""
+    # -- Ingress host alias
+    hostAlias: ""
+  auth:
+    # -- Restrict access to these groups
+    allowGroups:
+      - oscall
+      - PZS0645
+      - PZS0580
+  # -- The Open WebUI secret key
+  # @default -- **required**
+  webui_secret_key:
+  # -- Define models
+  models: {}
+  # Example:
+  # models:
+  #   qwen3:
+  #     model: Qwen/Qwen3-0.6B
+  #     decode:
+  #       args:
+  #         - --max-model-len
+  #         - "20480"
+  #       cpu: 2
+  #       memory: 6Gi
+  #       gpu: 1
+  #       gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+
+image:
+  # -- The repository path to main vllm runtime image
+  repository: kubernetes/ai-dynamo/vllm-runtime
+  # @ignored
+  pullPolicy: IfNotPresent
+  # -- The vllm runtime image tag
+  # @default -- The chart's appVersion
+  tag: ""
+  # -- The release of the custom OSC vllm runtime image
+  release: "0"
+
+hfToken:
+  # @ignored
+  name: hf-token-secret
+  # -- The HF token for Hugging Face
+  # @default -- **required**
+  value:
+
+cache:
+  # @ignored
+  name: dynamo-cache
+  # @ignored
+  annotations:
+    osc.edu/fileset: '{{ .Values.global.fileset }}'
+  # @ignored
+  size: 100Gi
+
+networkPolicy:
+  # -- Namespace labels to allow access to frontends
+  namespaceSelectors: []
+  # Example:
+  # namespaceSelectors:
+  # - app.kubernetes.io/name: osc-chat
+
+# -- The default GPU type
+defaultGpuType: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
+# -- The RDMA resource name in Kubernetes
+rdmaResource: rdma/shared_mlx5
+# -- The Prometheus URL
+prometheusURL: http://prometheus-prometheus.prometheus.svc:9090
+
+# @ignored
+workerEnv:
+  - name: VLLM_NO_USAGE_STATS
+    value: '1'
+  - name: DO_NOT_TRACK
+    value: '1'
+  - name: OMP_NUM_THREADS
+    value: '2'
+  - name: NIXL_TELEMETRY_ENABLE
+    value: 'y'
+  - name: DYN_LOGGING_JSONL
+    value: 'true'
+
+# -- The configuration of kv-transfer-config
+kvTransferConfig:
+  kv_connector: NixlConnector
+  kv_role: kv_both
+# -- The configuration for kv-events-config
+kvEventsConfig:
+  publisher: zmq
+  topic: kv-events
+  endpoint: tcp://*:20080
+  enable_kv_cache_events: true
+
+# @ignored
+disaggEnv:
+  - name: UCX_TLS
+    value: "rc_x,rc,cuda_copy,cuda_ipc"
+  - name: UCX_NET_DEVICES
+    value: "mlx5_0:1,mlx5_1:1"
+  - name: UCX_IB_ADDR_TYPE
+    value: "eth"
+  - name: UCX_RNDV_SCHEME
+    value: "get_zcopy"
+  - name: UCX_RNDV_THRESH
+    value: "0"
+  - name: UCX_RC_TIMEOUT
+    value: "600s"
+  - name: UCX_KEEPALIVE_INTERVAL
+    value: "300s"
+
+# @ignored
+frontendEnv:
+  # Avoid accidental matching where dynamo-qwen3 matches dynamo-qwen3-coder for example
+  - name: DYN_NAMESPACE_PREFIX
+    value: ""
+  - name: DYN_LOGGING_JSONL
+    value: 'true'
+
+# @ignored
+podSecurityContext:
+  runAsNonRoot: true
+
+# @ignored
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+
+# @ignored
+imagePuller:
+  resources:
+    limits:
+      cpu: 1
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 128Mi
+
+osc-open-webui:
+  open-webui:
+    # @ignored
+    nameOverride: open-webui
+    # @ignored
+    openaiBaseApiUrl: false
+    # @ignored
+    openaiApiKey: false
+    image:
+      # -- The version of Open WebUI
+      tag: 0.9.6
+    # @ignored
+    persistence:
+      storageClass: '{{ .Values.global.storageClass }}'
+      labels:
+        '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+      annotations:
+        osc.edu/fileset: '{{ .Values.global.fileset }}'
+    # @ignored
+    extraEnvVars:
+      - name: OPENAI_API_BASE_URLS
+        value: '{{ include "dynamo.openai.urls" . }}'
+      - name: BYPASS_MODEL_ACCESS_CONTROL
+        value: 'True'
+      - name: OAUTH_USERNAME_CLAIM
+        value: preferred_username
+      - name: ENABLE_FORWARD_USER_INFO_HEADERS
+        value: 'True'
+      - name: FORWARD_USER_INFO_HEADER_USER_NAME
+        value: 'x-request-id'
+      # - name: ENABLE_OPENAI_API_PASSTHROUGH
+      #   value: 'True'
+      # - name: GLOBAL_LOG_LEVEL
+      #   value: DEBUG
+    sso:
+      # -- Enables role access controls in Open WebUI
+      enableRoleManagement: true
+    # @ignored
+    ollama:
+      enabled: false

@@ -1,0 +1,47 @@
+{{- $images := list (include "dynamo.image" .) }}
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+  {{- $image := $model.image | default (include "dynamo.image" $) }}
+  {{- $images = append $images $image }}
+{{- end }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: image-puller
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dynamo.image-puller.labels" . | nindent 4 }}
+    {{ tpl (include "osc.common.serviceAccount" .) . }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "dynamo.image-puller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dynamo.image-puller.labels" . | nindent 8 }}
+        {{ tpl (include "osc.common.serviceAccount" .) . }}
+    spec:
+      imagePullSecrets:
+        - name: {{ include "osc.common.imagePullSecret.name" . }}
+      serviceAccountName: image-puller
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      {{- range $index, $image := $images | uniq }}
+        - name: image-puller-{{ $index }}
+          {{- with $.Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: {{ $image | quote }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c", "sleep infinity"]
+          {{- with $.Values.imagePuller.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- end }}
+      nodeSelector:
+        {{ include "osc.common.nodeSelectorRole" . }}

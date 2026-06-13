@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.cache.name }}
+  namespace: {{ .Release.Namespace }}
+  {{- with .Values.cache.annotations }}
+  annotations:
+    {{- tpl (toYaml .) $ | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+    {{ tpl (include "osc.common.serviceAccount" .) . }}
+spec:
+  storageClassName: {{ .Values.global.storageClass }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.cache.size }}
