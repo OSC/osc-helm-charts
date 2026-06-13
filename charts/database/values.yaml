@@ -142,9 +142,7 @@ mariadb:
       privileged: false
     # @ignored
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
-      prometheus.io/match_metrics: 'true'
+      prometheus.io/scrape: 'false'
     # @ignored
     resources:
       limits:
@@ -153,6 +151,10 @@ mariadb:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    interval: 60s
   # @ignored
   networkPolicy:
     enabled: true
@@ -272,9 +274,7 @@ mongodb:
       privileged: false
     # @ignored
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
-      prometheus.io/match_metrics: 'true'
+      prometheus.io/scrape: 'false'
     # @ignored
     resources:
       limits:
@@ -283,6 +283,10 @@ mongodb:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    interval: 60s
   # @ignored
   networkPolicy:
     enabled: true
@@ -400,9 +404,7 @@ postgresql:
       privileged: false
     # @ignored
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
-      prometheus.io/match_metrics: 'true'
+      prometheus.io/scrape: 'false'
     # @ignored
     resources:
       limits:
@@ -411,6 +413,10 @@ postgresql:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    interval: 60s
   # @ignored
   networkPolicy:
     enabled: true
@@ -526,9 +532,7 @@ redis:
     # @ignored
     service:
       annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/path: /metrics
-        prometheus.io/match_metrics: 'true'
+        prometheus.io/scrape: 'false'
     # @ignored
     resources:
       limits:
@@ -537,6 +541,10 @@ redis:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    interval: 60s
   # @ignored
   networkPolicy:
     enabled: true
