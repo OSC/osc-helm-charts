@@ -117,6 +117,7 @@ redis:
 | global.dataDir.path | Base path for storing MongoDB data | `nil` |
 | global.dataDir.subPath | Subpath for dataDir storage | `nil` |
 | global.security.allowInsecureImages |  | `true` |
+| global.alert.receiver | The alert receiver name | `""` |
 | imagePullSecret.enable | Manage the image pull secret from osc-common. Disable if this chart is used as a subchart. | `true` |
 | mariadb.enable | Enable MariaDB subchart by setting to `true` | `false` |
 | mariadb.image.repository | The OSC registry path to mariadb replicated image. This value should not need to be changed. | `"webservices/mariadb"` |

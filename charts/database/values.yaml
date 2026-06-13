@@ -55,6 +55,9 @@ global:
     subPath: ~
   security:
     allowInsecureImages: true
+  alert:
+    # -- The alert receiver name
+    receiver: ""
 
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
@@ -85,6 +88,9 @@ mariadb:
     # -- The database password
     # @default -- **required**
     password:
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   primary:
     # @ignored
     podLabels:
@@ -155,6 +161,9 @@ mariadb:
   serviceMonitor:
     enabled: true
     interval: 60s
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
   # @ignored
   networkPolicy:
     enabled: true
@@ -185,6 +194,9 @@ mongodb:
     # -- The version of MongoDB image.
     # This tag should be replicated into the OSC registry
     tag: 8.0.13-debian-12-r0
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   # @ignored
   podLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
@@ -287,6 +299,9 @@ mongodb:
   serviceMonitor:
     enabled: true
     interval: 60s
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
   # @ignored
   networkPolicy:
     enabled: true
@@ -316,6 +331,9 @@ postgresql:
     # -- The database password
     # @default -- **required**
     password:
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   primary:
     # @ignored
     podLabels:
@@ -417,6 +435,9 @@ postgresql:
   serviceMonitor:
     enabled: true
     interval: 60s
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
   # @ignored
   networkPolicy:
     enabled: true
@@ -443,6 +464,9 @@ redis:
     # @default -- **required**
     password:
   architecture: standalone
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   master:
     # @ignored
     podLabels:
@@ -545,6 +569,8 @@ redis:
   serviceMonitor:
     enabled: true
     interval: 60s
+    podTargetLabels:
+      - receiver
   # @ignored
   networkPolicy:
     enabled: true
