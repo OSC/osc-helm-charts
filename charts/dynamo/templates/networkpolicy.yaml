@@ -1,0 +1,49 @@
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "dynamo.name" . }}-frontend
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      nvidia.com/dynamo-component-type: frontend
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ index .Values "osc-open-webui" "open-webui" "nameOverride" }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ include "dynamo.name" . }}-worker
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchExpressions:
+      - key: nvidia.com/dynamo-component-type
+        operator: In
+        values:
+          - worker
+          - decode
+          - prefill
+  ingress:
+  - from:
+    - podSelector:
+        matchExpressions:
+          - key: nvidia.com/dynamo-component-type
+            operator: In
+            values:
+              - frontend
+              - worker
+              - decode
+              - prefill
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ .Values.global.networkPolicy.prometheusNamespace }}
