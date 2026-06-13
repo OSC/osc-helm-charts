@@ -194,9 +194,11 @@ osc-open-webui:
         value: '{{ include "dynamo.openai.urls" . }}'
       - name: BYPASS_MODEL_ACCESS_CONTROL
         value: 'True'
+      - name: OAUTH_USERNAME_CLAIM
+        value: preferred_username
       - name: ENABLE_FORWARD_USER_INFO_HEADERS
         value: 'True'
-      - name: FORWARD_USER_INFO_HEADER_USER_EMAIL
+      - name: FORWARD_USER_INFO_HEADER_USER_NAME
         value: 'x-request-id'
       # - name: ENABLE_OPENAI_API_PASSTHROUGH
       #   value: 'True'
