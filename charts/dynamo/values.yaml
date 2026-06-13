@@ -36,6 +36,7 @@ global:
     allowGroups:
       - oscall
       - PZS0645
+      - PZS0580
   # -- The Open WebUI secret key
   # @default -- **required**
   webui_secret_key:
