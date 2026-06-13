@@ -81,6 +81,13 @@ cache:
   # @ignored
   size: 100Gi
 
+networkPolicy:
+  # -- Namespace labels to allow access to frontends
+  namespaceSelectors: []
+  # Example:
+  # namespaceSelectors:
+  # - app.kubernetes.io/name: osc-chat
+
 # -- The default GPU type
 defaultGpuType: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
 # -- The RDMA resource name in Kubernetes

@@ -100,6 +100,7 @@ hfToken:
 | image.release | string | `"0"` | The release of the custom OSC vllm runtime image |
 | hfToken.value | string | **required** | The HF token for Hugging Face |
 | cache | object | `{}` |  |
+| networkPolicy.namespaceSelectors | list | `[]` | Namespace labels to allow access to frontends |
 | defaultGpuType | string | `"NVIDIA-A100-PCIE-40GB-MIG-7g.40gb"` | The default GPU type |
 | rdmaResource | string | `"rdma/shared_mlx5"` | The RDMA resource name in Kubernetes |
 | prometheusURL | string | `"http://prometheus-prometheus.prometheus.svc:9090"` | The Prometheus URL |
