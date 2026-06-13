@@ -92,7 +92,7 @@ hfToken:
 | global.storageClass | string | `"local-ess"` | The storage class to use for PV claims |
 | global.ingress.host | string | `""` | Ingress host name |
 | global.ingress.hostAlias | string | `""` | Ingress host alias |
-| global.auth.allowGroups | list | `["oscall","PZS0645"]` | Restrict access to these groups |
+| global.auth.allowGroups | list | `["oscall","PZS0645","PZS0580"]` | Restrict access to these groups |
 | global.webui_secret_key | string | **required** | The Open WebUI secret key |
 | global.models | object | `{}` | Define models |
 | image.repository | string | `"kubernetes/ai-dynamo/vllm-runtime"` | The repository path to main vllm runtime image |
