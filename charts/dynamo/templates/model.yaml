@@ -120,6 +120,8 @@ spec:
                 - --disaggregation-mode
                 - decode
               {{- end }}
+                - --safetensors-load-strategy
+                - prefetch
                 - --durable-kv-events
                 - --kv-transfer-config
                 - '{{ $decodekvTransferConfig | toJson }}'
@@ -213,6 +215,8 @@ spec:
               {{- end }}
                 - --disaggregation-mode
                 - prefill
+                - --safetensors-load-strategy
+                - prefetch
                 - --durable-kv-events
                 - --kv-transfer-config
                 - '{{ $prefillkvTransferConfig | toJson }}'
