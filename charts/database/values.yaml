@@ -55,6 +55,9 @@ global:
     subPath: ~
   security:
     allowInsecureImages: true
+  alert:
+    # -- The alert receiver name
+    receiver: ""
 
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
@@ -85,6 +88,9 @@ mariadb:
     # -- The database password
     # @default -- **required**
     password:
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   primary:
     # @ignored
     podLabels:
@@ -142,9 +148,7 @@ mariadb:
       privileged: false
     # @ignored
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
-      prometheus.io/match_metrics: 'true'
+      prometheus.io/scrape: 'false'
     # @ignored
     resources:
       limits:
@@ -153,6 +157,13 @@ mariadb:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    interval: 60s
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
   # @ignored
   networkPolicy:
     enabled: true
@@ -183,6 +194,9 @@ mongodb:
     # -- The version of MongoDB image.
     # This tag should be replicated into the OSC registry
     tag: 8.0.13-debian-12-r0
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   # @ignored
   podLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
@@ -272,9 +286,7 @@ mongodb:
       privileged: false
     # @ignored
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
-      prometheus.io/match_metrics: 'true'
+      prometheus.io/scrape: 'false'
     # @ignored
     resources:
       limits:
@@ -283,6 +295,13 @@ mongodb:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    interval: 60s
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
   # @ignored
   networkPolicy:
     enabled: true
@@ -312,6 +331,9 @@ postgresql:
     # -- The database password
     # @default -- **required**
     password:
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   primary:
     # @ignored
     podLabels:
@@ -400,9 +422,7 @@ postgresql:
       privileged: false
     # @ignored
     annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
-      prometheus.io/match_metrics: 'true'
+      prometheus.io/scrape: 'false'
     # @ignored
     resources:
       limits:
@@ -411,6 +431,13 @@ postgresql:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    interval: 60s
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
   # @ignored
   networkPolicy:
     enabled: true
@@ -437,6 +464,9 @@ redis:
     # @default -- **required**
     password:
   architecture: standalone
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   master:
     # @ignored
     podLabels:
@@ -526,9 +556,7 @@ redis:
     # @ignored
     service:
       annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/path: /metrics
-        prometheus.io/match_metrics: 'true'
+        prometheus.io/scrape: 'false'
     # @ignored
     resources:
       limits:
@@ -537,6 +565,12 @@ redis:
       requests:
         cpu: 250m
         memory: 128Mi
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    interval: 60s
+    podTargetLabels:
+      - receiver
   # @ignored
   networkPolicy:
     enabled: true
