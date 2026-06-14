@@ -35,6 +35,7 @@ global:
     qwen3:
       model: Qwen/Qwen3-0.6B
       # image: ...
+      # pullPolicy: ...
       disagg: true
       kvRouting: true
       scaling:
@@ -44,11 +45,20 @@ global:
       args:
         - --max-model-len
         - "20480"
+      # frontend:
+      #   image: ...
+      #   pullPolicy: ...
+      #   env: []
+      #   args: []
+      #   cpu: 1
+      #   memory: 2Gi
       decode:
         # scaling:
         #   minReplicas: 0
         #   maxReplicas: 2
         #   cooldownPeriod: 600
+        # image: ...
+        # pullPolicy: ...
         args: []
         cpu: 2
         memory: 6Gi
@@ -60,6 +70,8 @@ global:
         #   minReplicas: 0
         #   maxReplicas: 2
         #   cooldownPeriod: 600
+        # image: ...
+        # pullPolicy: ...
         args: []
         cpu: 2
         memory: 6Gi
