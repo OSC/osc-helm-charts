@@ -130,6 +130,9 @@ spec:
                 - --durable-kv-events
                 - --kv-transfer-config
                 - '{{ $decodekvTransferConfig | toJson }}'
+              {{- range $.Values.workerArgs }}
+                - {{ . | quote }}
+              {{- end }}
               {{- range $decode.args | default list }}
                 - {{ . | quote }}
               {{- end }}
@@ -229,6 +232,9 @@ spec:
               {{- if $kvRouting }}
                 - --kv-events-config
                 - '{{ $.Values.kvEventsConfig | toJson }}'
+              {{- end }}
+              {{- range $.Values.workerArgs }}
+                - {{ . | quote }}
               {{- end }}
               {{- range $prefill.args | default list }}
                 - {{ . | quote }}

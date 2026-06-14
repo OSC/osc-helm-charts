@@ -102,12 +102,13 @@ workerEnv:
     value: '1'
   - name: DO_NOT_TRACK
     value: '1'
-  - name: OMP_NUM_THREADS
-    value: '2'
   - name: NIXL_TELEMETRY_ENABLE
     value: 'y'
   - name: DYN_LOGGING_JSONL
     value: 'true'
+
+# -- Additional worker arguments
+workerArgs: []
 
 # -- The configuration of kv-transfer-config
 kvTransferConfig:
