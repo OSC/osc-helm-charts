@@ -145,6 +145,8 @@ frontendEnv:
     value: ""
   - name: DYN_LOGGING_JSONL
     value: 'true'
+  - name: DYN_ENABLE_ANTHROPIC_API
+    value: 'true'
 
 # @ignored
 podSecurityContext:
