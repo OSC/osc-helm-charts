@@ -72,6 +72,8 @@ minio:
     pullSecrets:
       - osc-registry
   defaultBuckets: "osc-chat"
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
   clientImage:
     repository: kubernetes/bitnami/minio-client
     tag: 2025.7.21-debian-12-r3
