@@ -31,6 +31,11 @@ global:
     host: ""
     # -- Ingress host alias
     hostAlias: ""
+    # @ignored
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-connect-timeout: "120"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
   auth:
     # -- Restrict access to these groups
     allowGroups:
