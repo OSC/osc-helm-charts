@@ -83,6 +83,14 @@ minio:
         - osc-registry
   imagePullSecret:
     enable: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      interval: 60s
+      relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
   persistence:
     annotations:
       osc.edu/fileset: PZS0645
