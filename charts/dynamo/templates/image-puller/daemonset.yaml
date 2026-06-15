@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "dynamo.image-puller.labels" . | nindent 8 }}
+        {{- include "dynamo.image-puller.selectorLabels" . | nindent 8 }}
         {{ tpl (include "osc.common.serviceAccount" .) . }}
     spec:
       imagePullSecrets:
