@@ -156,6 +156,18 @@ rabbitmq:
     requests:
       cpu: 500m
       memory: 512Mi
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
+  metrics:
+    enabled: true
+    podAnnotations:
+      prometheus.io/scrape: "false"
+    serviceMonitor:
+      default:
+        enabled: true
+        interval: 60s
+      targetLabels:
+        - receiver
   auth:
     username: guest
     password: guest
