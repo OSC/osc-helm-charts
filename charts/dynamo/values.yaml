@@ -109,6 +109,8 @@ workerEnv:
     value: '1'
   - name: NIXL_TELEMETRY_ENABLE
     value: 'y'
+  - name: OMP_NUM_THREADS
+    value: '2'
   # - name: DYN_LOGGING_JSONL
   #   value: 'true'
 

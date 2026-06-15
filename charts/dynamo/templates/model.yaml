@@ -125,8 +125,6 @@ spec:
                 - --disaggregation-mode
                 - decode
               {{- end }}
-                - --safetensors-load-strategy
-                - prefetch
               {{- if $kvRouting }}
                 - --durable-kv-events
                 - --kv-transfer-config
@@ -226,8 +224,6 @@ spec:
               {{- end }}
                 - --disaggregation-mode
                 - prefill
-                - --safetensors-load-strategy
-                - prefetch
               {{- if $kvRouting }}
                 - --durable-kv-events
                 - --kv-transfer-config
