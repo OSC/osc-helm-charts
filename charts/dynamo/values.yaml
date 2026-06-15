@@ -104,8 +104,8 @@ workerEnv:
     value: '1'
   - name: NIXL_TELEMETRY_ENABLE
     value: 'y'
-  - name: DYN_LOGGING_JSONL
-    value: 'true'
+  # - name: DYN_LOGGING_JSONL
+  #   value: 'true'
 
 # -- Additional worker arguments
 workerArgs: []
@@ -143,8 +143,8 @@ frontendEnv:
   # Avoid accidental matching where dynamo-qwen3 matches dynamo-qwen3-coder for example
   - name: DYN_NAMESPACE_PREFIX
     value: ""
-  - name: DYN_LOGGING_JSONL
-    value: 'true'
+  # - name: DYN_LOGGING_JSONL
+  #   value: 'true'
   - name: DYN_ENABLE_ANTHROPIC_API
     value: 'true'
 
