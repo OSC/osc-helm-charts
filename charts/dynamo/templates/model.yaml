@@ -127,9 +127,11 @@ spec:
               {{- end }}
                 - --safetensors-load-strategy
                 - prefetch
+              {{- if $kvRouting }}
                 - --durable-kv-events
                 - --kv-transfer-config
                 - '{{ $decodekvTransferConfig | toJson }}'
+              {{- end }}
               {{- range $.Values.workerArgs }}
                 - {{ . | quote }}
               {{- end }}
@@ -226,10 +228,10 @@ spec:
                 - prefill
                 - --safetensors-load-strategy
                 - prefetch
+              {{- if $kvRouting }}
                 - --durable-kv-events
                 - --kv-transfer-config
                 - '{{ $prefillkvTransferConfig | toJson }}'
-              {{- if $kvRouting }}
                 - --kv-events-config
                 - '{{ $.Values.kvEventsConfig | toJson }}'
               {{- end }}
