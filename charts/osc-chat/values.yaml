@@ -31,6 +31,8 @@ global:
         publicClient: true
         webOrigins:
           - https://{{ .Values.global.ingress.host }}
+  alert:
+    receiver: sciapps
 
   ingress:
     host: ""
