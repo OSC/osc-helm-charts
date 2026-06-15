@@ -166,6 +166,7 @@ securityContext:
 
 # @ignored
 imagePuller:
+  maxUnavailable: 25%
   resources:
     limits:
       cpu: 1
