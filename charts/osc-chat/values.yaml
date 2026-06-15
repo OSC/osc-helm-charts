@@ -124,6 +124,15 @@ qdrant:
       cpu: 4
       memory: 8Gi
   storageClass:
+  additionalLabels:
+    receiver: sciapps
+  metrics:
+    serviceMonitor:
+      enabled: true
+      scrapeInterval: 60s
+      relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
   image:
     repository: docker-registry.osc.edu/kubernetes/qdrant/qdrant
     tag: v1.16.3
