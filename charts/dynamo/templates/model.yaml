@@ -81,6 +81,9 @@ spec:
                   mountPath: /home/dynamo/.cache
           nodeSelector:
             '{{ include "osc.common.nodeSelectorRoleKey" $ }}': ""
+          {{- if $.Values.priorityClassName }}
+          priorityClassName: {{ $.Values.priorityClassName | quote }}
+          {{- end }}
           volumes:
             - name: dynamo-cache
               persistentVolumeClaim:
@@ -187,6 +190,9 @@ spec:
               {{- end }}
           nodeSelector:
             nvidia.com/gpu.product: {{ $decode.gpuType | default $.Values.defaultGpuType }}
+          {{- if $.Values.priorityClassName }}
+          priorityClassName: {{ $.Values.priorityClassName | quote }}
+          {{- end }}
           volumes:
             - name: dynamo-cache
               persistentVolumeClaim:
@@ -288,6 +294,9 @@ spec:
               {{- end }}
           nodeSelector:
             nvidia.com/gpu.product: {{ $prefill.gpuType | default $.Values.defaultGpuType }}
+          {{- if $.Values.priorityClassName }}
+          priorityClassName: {{ $.Values.priorityClassName | quote }}
+          {{- end }}
           volumes:
             - name: dynamo-cache
               persistentVolumeClaim:

@@ -101,6 +101,9 @@ rdmaResource: rdma/shared_mlx5
 # -- The Prometheus URL
 prometheusURL: http://prometheus-prometheus.prometheus.svc:9090
 
+# -- The priority class name for frontend and workers
+priorityClassName: ""
+
 # @ignored
 workerEnv:
   - name: VLLM_NO_USAGE_STATS
