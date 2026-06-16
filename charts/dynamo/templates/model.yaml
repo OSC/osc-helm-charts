@@ -125,10 +125,12 @@ spec:
                 - --disaggregation-mode
                 - decode
               {{- end }}
-              {{- if $kvRouting }}
-                - --durable-kv-events
+              {{- if $disagg }}
                 - --kv-transfer-config
                 - '{{ $decodekvTransferConfig | toJson }}'
+              {{- end }}
+              {{- if $kvRouting }}
+                - --durable-kv-events
               {{- end }}
               {{- range $.Values.workerArgs }}
                 - {{ . | quote }}
@@ -224,10 +226,10 @@ spec:
               {{- end }}
                 - --disaggregation-mode
                 - prefill
-              {{- if $kvRouting }}
-                - --durable-kv-events
                 - --kv-transfer-config
                 - '{{ $prefillkvTransferConfig | toJson }}'
+              {{- if $kvRouting }}
+                - --durable-kv-events
                 - --kv-events-config
                 - '{{ $.Values.kvEventsConfig | toJson }}'
               {{- end }}
