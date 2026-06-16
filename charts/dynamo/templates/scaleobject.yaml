@@ -33,6 +33,7 @@ spec:
   maxReplicaCount: {{ $decodeScaling.maxReplicas | default 2 }}
   pollingInterval: 15
   cooldownPeriod: {{ $decodeScaling.cooldownPeriod | default 600 }}
+  initialCooldownPeriod: {{ $decodeScaling.initialCooldownPeriod | default 600 }}
   triggers:
   - type: prometheus
     metadata:
@@ -74,6 +75,7 @@ spec:
   maxReplicaCount: {{ $prefillScaling.maxReplicas | default 2 }}
   pollingInterval: 15
   cooldownPeriod: {{ $prefillScaling.cooldownPeriod | default 600 }}
+  initialCooldownPeriod: {{ $prefillScaling.initialCooldownPeriod | default 600 }}
   triggers:
   - type: prometheus
     metadata:

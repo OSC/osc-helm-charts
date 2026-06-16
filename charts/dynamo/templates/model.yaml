@@ -94,10 +94,11 @@ spec:
     {{- else }}
       type: worker
     {{- end }}
-      replicas: 1
     {{- if $decodeScaling }}
       scalingAdapter:
         enabled: true
+    {{- else }}
+      replicas: 1
     {{- end }}
     {{- if gt $decodeNodes 1 }}
       multinode:
@@ -200,10 +201,11 @@ spec:
   {{- if $disagg }}
     - name: VllmPrefillWorker
       type: prefill
-      replicas: 1
-    {{- if $decodeScaling }}
+    {{- if $prefillScaling }}
       scalingAdapter:
         enabled: true
+    {{- else }}
+      replicas: 1
     {{- end }}
     {{- if gt $prefillNodes 1 }}
       multinode:
