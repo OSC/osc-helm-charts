@@ -1,0 +1,35 @@
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "dynamo.name" . }}-scaler
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+    - nvidia.com
+    resources:
+    - dynamographdeploymentscalingadapters/scale
+    verbs:
+    - get
+    - list
+    - patch
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+{{- $serviceaccount := printf "%s-k8s-service-discovery" $name }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}-scaler
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "dynamo.name" $ }}-scaler
+subjects:
+- kind: ServiceAccount
+  name: {{ $serviceaccount }}
+  namespace: {{ $.Release.Namespace }}
+{{- end }}

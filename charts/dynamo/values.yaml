@@ -175,6 +175,21 @@ securityContext:
   runAsNonRoot: true
 
 # @ignored
+frontend:
+  init:
+    image:
+      repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
+      tag: '2.39.0'
+      pullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 250m
+        memory: 64Mi
+
+# @ignored
 imagePuller:
   maxUnavailable: 25%
   resources:
@@ -215,6 +230,8 @@ osc-open-webui:
         value: 'True'
       - name: FORWARD_USER_INFO_HEADER_USER_NAME
         value: 'x-request-id'
+      - name: ENABLE_BASE_MODELS_CACHE
+        value: 'True'
       # - name: ENABLE_OPENAI_API_PASSTHROUGH
       #   value: 'True'
       # - name: GLOBAL_LOG_LEVEL

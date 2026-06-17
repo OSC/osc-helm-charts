@@ -90,7 +90,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "dynamo.openai.urls" -}}
 {{- $urls := list }}
 {{- range $name, $model := .Values.global.models }}
-    {{- $urls = append $urls (printf "http://%s-frontend.%s.svc.cluster.local:8000/v1" $name $.Release.Namespace) }}
+    {{- $urls = append $urls (printf "http://%s-frontend-frontend.%s.svc.cluster.local:8000/v1" $name $.Release.Namespace) }}
 {{- end }}
 {{- $urls | join ";" }}
 {{- end }}

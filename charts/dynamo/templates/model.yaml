@@ -21,11 +21,12 @@
 {{- $result := merge $decodekvTransferConfig $.Values.kvTransferConfig  }}
 {{- $prefillkvTransferConfig := dict "engine_id" (printf "vllm-engine-prefill-%s" $name) }}
 {{- $result := merge $prefillkvTransferConfig $.Values.kvTransferConfig  }}
+{{- $namespace := printf "%s-%s" $.Release.Namespace $name }}
 ---
 apiVersion: nvidia.com/v1beta1
 kind: DynamoGraphDeployment
 metadata:
-  name: {{ $name }}
+  name: {{ $name }}-frontend
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "dynamo.labels" $ | nindent 4 }}
@@ -36,6 +37,46 @@ spec:
       replicas: 1
       podTemplate:
         spec:
+        {{- if or $decodeScaling $prefillScaling }}
+          initContainers:
+            - name: main
+              image: {{ $.Values.frontend.init.image.repository }}:{{ $.Values.frontend.init.image.tag }}
+              imagePullPolicy: {{ $.Values.frontend.init.image.pullPolicy }}
+              command:
+              - /bin/bash
+              - -c
+              - |
+                set -x
+              {{- if $decodeScaling }}
+                if kubectl get dgdsa {{ $name }}-vllmdecodeworker -n {{ $.Release.Namespace }}; then
+                  echo "Scaling dgdsa/{{ $name }}-vllmdecodeworker"
+                  kubectl scale dgdsa {{ $name }}-vllmdecodeworker -n {{ $.Release.Namespace }} --replicas=1
+                else
+                  echo "dgdsa/{{ $name }}-vllmdecodeworker not found, skipping"
+                fi
+              {{- end }}
+              {{- if $prefillScaling }}
+                if kubectl get dgdsa {{ $name }}-vllmprefillworker -n {{ $.Release.Namespace }}; then
+                  echo "Scaling dgdsa/{{ $name }}-vllmprefillworker"
+                  kubectl scale dgdsa {{ $name }}-vllmprefillworker -n {{ $.Release.Namespace }} --replicas=1
+                else
+                  echo "dgdsa/{{ $name }}-vllmprefillworker not found, skipping"
+                fi
+              {{- end }}
+                exit 0
+              resources:
+              {{- with $.Values.frontend.init.resources }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+        {{- end }}
           containers:
             - name: main
               image: {{ $frontendImage | quote }}
@@ -48,6 +89,8 @@ spec:
                 - kv
               {{- end }}
                 - --durable-kv-events
+                - --model-name
+                - {{ $model.alias | default $model.model | quote }}
               {{- range $frontend.args | default list }}
                 - {{ . | quote }}
               {{- end }}
@@ -55,6 +98,10 @@ spec:
                 - secretRef:
                     name: {{ $.Values.hfToken.name }}
               env:
+                - name: DYN_NAMESPACE
+                  value: {{ $namespace }}
+                - name: DYNAMO_NAMESPACE
+                  value: {{ $namespace }}
               {{- with $.Values.frontendEnv }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
@@ -88,6 +135,16 @@ spec:
             - name: dynamo-cache
               persistentVolumeClaim:
                 claimName: {{ $.Values.cache.name }}
+---
+apiVersion: nvidia.com/v1beta1
+kind: DynamoGraphDeployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+spec:
+  components:
     - name: VllmDecodeWorker
     {{- if $disagg }}
       type: decode

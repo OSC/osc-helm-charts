@@ -4,7 +4,7 @@
 {{- $prefill := $model.prefill | default dict }}
 {{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
 {{- $disagg := $model.disagg | default false }}
-{{- $namespace := printf "%s-%s" $.Release.Namespace $name }}
+{{- $namespace := printf "%s-%s-frontend" $.Release.Namespace $name }}
 {{- if $decodeScaling }}
 {{/*
 Possible for decode:
@@ -37,7 +37,7 @@ spec:
   triggers:
   - type: prometheus
     metadata:
-      serverAddress: http://prometheus-prometheus.prometheus.svc:9090
+      serverAddress: {{ $.Values.prometheusURL }}
       {{- if $disagg }}
       metricName: dynamo_itl_p95
       query: |
@@ -55,7 +55,13 @@ spec:
         )
       threshold: "0.5"
       {{- end }}
-      activationThreshold: "0"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: frontend_requests
+      query: |
+        delta(dynamo_frontend_requests_total{dynamo_namespace="{{ $namespace }}"}[5m])
+      threshold: "0.001"
 {{- end }}
 {{- if and $disagg $prefillScaling }}
 ---
@@ -87,6 +93,12 @@ spec:
           by (le)
         )
       threshold: "0.5"
-      activationThreshold: "0"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: frontend_requests
+      query: |
+        delta(dynamo_frontend_requests_total{dynamo_namespace="{{ $namespace }}"}[5m])
+      threshold: "0.001"
 {{- end }}
 {{- end }}
