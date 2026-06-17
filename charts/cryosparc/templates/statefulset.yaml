@@ -69,7 +69,7 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: ['cryosparcm', 'stop']   # Fix rollout restart issue
+              command: ['sh', '-c', 'cryosparcm', 'stop']   # Fix rollout restart issue
         workingDir: /opt/cryosparc_master
         env:
         - name: TZ
