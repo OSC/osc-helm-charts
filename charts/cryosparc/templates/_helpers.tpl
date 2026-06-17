@@ -154,10 +154,6 @@ Defined here so that version changes in labels of the configmap won't automatica
 */}}
 {{- define "cryosparc.run.content" -}}
 export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}"
-cryosparcm start database
-cryosparcm database fixport
-cryosparcm stop
-sleep 5
 set -e
 echo "Create cryosparc directory"
 mkdir -p {{ tpl .Values.mounts.home . }}/.cryosparc
