@@ -37,26 +37,6 @@ spec:
             - secretRef:
                 name: {{ include "osc-chat.fullname" . }}-auth-secret
           env:
-            - name: NEXT_PUBLIC_KEYCLOAK_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-auth-config
-                  key: KEYCLOAK_URL
-            - name: NEXT_PUBLIC_KEYCLOAK_ISSUER_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-auth-config
-                  key: ISSUER_URL
-            - name: NEXT_PUBLIC_KEYCLOAK_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-auth-secret
-                  key: client-id
-            #- name: KEYCLOAK_CLIENT_SECRET
-            #  valueFrom:
-            #    secretKeyRef:
-            #      name: {{ include "osc-chat.fullname" . }}-auth-secret
-            #      key: client-secret
             - name: INGEST_URL
               value: {{ (printf "http://%s:%s/ingest" (include "osc-chat.backend.host" .) (include "osc-chat.backend.port" .)) | quote }}
             - name: RAILWAY_URL
