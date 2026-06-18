@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "osc-chat.labels" . | nindent 4 }}
     app.kubernetes.io/component: frontend
+    receiver: '{{ index .Values.global.alert.receiver }}'
 spec:
   type: {{ .Values.frontend.service.type }}
   ports:

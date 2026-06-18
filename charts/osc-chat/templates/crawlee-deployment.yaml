@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "osc-chat.labels" . | nindent 4 }}
     app.kubernetes.io/component: crawlee
+    receiver: '{{ index .Values.global.alert.receiver }}'
 spec:
   replicas: {{ .Values.crawlee.replicaCount }}
   selector:
@@ -15,6 +16,7 @@ spec:
     metadata:
       labels:
         {{- include "osc-chat.crawlee.selectorLabels" . | nindent 8 }}
+        receiver: '{{ index .Values.global.alert.receiver }}'
     spec:
       imagePullSecrets:
         - name: {{ include "osc.common.imagePullSecret.name" . }}

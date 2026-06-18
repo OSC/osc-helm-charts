@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "osc-chat.labels" . | nindent 4 }}
     app.kubernetes.io/component: worker
+    receiver: '{{ index .Values.global.alert.receiver }}'
 spec:
   replicas: {{ .Values.worker.replicaCount }}
   selector:
@@ -15,6 +16,7 @@ spec:
     metadata:
       labels:
         {{- include "osc-chat.worker.selectorLabels" . | nindent 8 }}
+        receiver: '{{ index .Values.global.alert.receiver }}'
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}

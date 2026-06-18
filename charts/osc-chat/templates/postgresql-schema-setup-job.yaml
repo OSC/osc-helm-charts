@@ -1617,6 +1617,7 @@ metadata:
   labels:
     {{- include "osc-chat.labels" . | nindent 4 }}
     app.kubernetes.io/component: database
+    receiver: '{{ index .Values.global.alert.receiver }}'
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "0"  # Run before other services
@@ -1628,6 +1629,7 @@ spec:
         {{- include "osc-chat.labels" . | nindent 8 }}
         app.kubernetes.io/component: database
         app.kubernetes.io/name: postgresql
+        receiver: '{{ index .Values.global.alert.receiver }}'
     spec:
       imagePullSecrets:
         - name: {{ include "osc.common.imagePullSecret.name" . }}
