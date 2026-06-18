@@ -21,8 +21,10 @@ global:
   embedding:
     host: ""
     model: ""
+  # @ignored
   webservicesDeploy:
     create: false
+  # @ignored
   auth:
     enable: false
     keycloakClient:
@@ -31,6 +33,7 @@ global:
         publicClient: true
         webOrigins:
           - https://{{ .Values.global.ingress.host }}
+          - '{{ printf "https://%s" (.Values.global.ingress.hostAlias | default .Values.global.ingress.host) }}'
   alert:
     receiver: sciapps
 
