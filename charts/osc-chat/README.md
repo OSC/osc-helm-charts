@@ -91,6 +91,7 @@ secrets:
 | global.llm.host | string | `""` |  |
 | global.embedding.host | string | `""` |  |
 | global.embedding.model | string | `""` |  |
+| global.embedding.vectorLen | int | `4096` |  |
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
