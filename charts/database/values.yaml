@@ -582,3 +582,7 @@ redis:
       allowExternal: false
       ingressNSMatchLabels:
         app.kubernetes.io/name: prometheus
+
+oscCommon:
+  # -- Enable the osc-common dependency
+  enable: true

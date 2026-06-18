@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.17.0](https://img.shields.io/badge/Version-0.17.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.18.0](https://img.shields.io/badge/Version-0.18.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -17,7 +17,7 @@ OSC database service Helm Chart
 | https://charts.bitnami.com/bitnami | mariadb | 21.0.8 |
 | https://charts.bitnami.com/bitnami | postgresql | 16.7.27 |
 | https://charts.bitnami.com/bitnami | redis | 23.2.12 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.9.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.2 |
 | oci://registry-1.docker.io/bitnamicharts | mongodb | 18.5.0 |
 
 ## Usage
@@ -155,3 +155,4 @@ redis:
 | redis.metrics.enabled |  | `true` |
 | redis.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/redis-exporter"` |
 | redis.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"1.76.0-debian-12-r0"` |
+| oscCommon.enable | Enable the osc-common dependency | `true` |
