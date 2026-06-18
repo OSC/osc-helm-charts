@@ -41,7 +41,7 @@ spec:
             -H "Content-Type: application/json" \
             -d '{
               "vectors": {
-                "size": ${EMBEDDING_VECTOR_LEN},
+                "size": {{ .Values.global.embedding.vectorLen }},
                 "distance": "Cosine"
               }
             }'
@@ -61,9 +61,4 @@ spec:
             secretKeyRef:
               name: {{ include "osc-chat.fullname" . }}-qdrant-apikey
               key: api-key
-        - name: EMBEDDING_VECTOR_LEN
-          valueFrom:
-            configMapKeyRef:
-              name: {{ include "osc-chat.fullname" . }}-app-config
-              key: EMBEDDING_VECTOR_LEN
-{{- end }}
+{{ end }}
