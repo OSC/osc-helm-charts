@@ -63,7 +63,7 @@ spec:
               key: api-key
         - name: EMBEDDING_VECTOR_LEN
           valueFrom:
-            secretKeyRef:
+            configMapKeyRef:
               name: {{ include "osc-chat.fullname" . }}-app-config
               key: EMBEDDING_VECTOR_LEN
 {{- end }}
