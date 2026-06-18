@@ -49,6 +49,9 @@ global:
     hostAlias: ""
 
 database:
+  # @ignored
+  oscCommon:
+    enable: false
   postgresql:
     schema:
       enabled: true
