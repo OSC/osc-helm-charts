@@ -74,5 +74,6 @@ jobs:
       - name: Build and Push ${{ matrix.image }} dev image
         if: matrix.image == 'vllm-runtime'
         run: |
+          docker rmi -f $(docker images -a -q)
           make -f docker-images/${{ matrix.image }}/Makefile build VERSION=1.3.0-dev.1-cuda13 RELEASE=1
           make -f docker-images/${{ matrix.image }}/Makefile push VERSION=1.3.0-dev.1-cuda13 RELEASE=1
