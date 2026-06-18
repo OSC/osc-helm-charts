@@ -15,19 +15,20 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.5
+version: 0.1.6
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "0.1.5"
+appVersion: "0.1.6"
 maintainers:
   - name: khsa1
 dependencies:
   - name: database
-    version: 0.17.0
+    version: 0.18.0
     repository: https://osc.github.io/osc-helm-charts
+    # repository: file://../database
   - name: minio
     version: 17.0.21
     repository: "oci://registry-1.docker.io/bitnamicharts"
@@ -40,10 +41,9 @@ dependencies:
     version: 16.0.14
     repository: "oci://registry-1.docker.io/bitnamicharts"
     condition: rabbitmq.enable
-# Included as part of database
-#  - name: osc-common
-#    version: 0.14.1
-#    repository: https://osc.github.io/osc-helm-charts
+  - name: osc-common
+    version: 0.14.2
+    repository: https://osc.github.io/osc-helm-charts
   - name: vllm-stack
     # version: 0.1.11
     # repository: "https://vllm-project.github.io/production-stack"
