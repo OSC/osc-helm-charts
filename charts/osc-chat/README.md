@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.2](https://img.shields.io/badge/AppVersion-0.1.2-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.3](https://img.shields.io/badge/AppVersion-0.1.3-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -69,7 +69,6 @@ secrets:
 | Repository | Name | Version |
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts | database | 0.17.0 |
-| https://osc.github.io/osc-helm-charts | osc-common | 0.14.1 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
 | oci://docker-registry.osc.edu/kubernetes/vllm | vllm-stack | 0.1.11-osc-r1 |
 | oci://registry-1.docker.io/bitnamicharts | minio | 17.0.21 |
