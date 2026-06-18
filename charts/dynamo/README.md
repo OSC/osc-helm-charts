@@ -57,6 +57,7 @@ global:
         #   minReplicas: 0
         #   maxReplicas: 2
         #   cooldownPeriod: 600
+        # replicas: 2
         # image: ...
         # pullPolicy: ...
         args: []
@@ -70,6 +71,7 @@ global:
         #   minReplicas: 0
         #   maxReplicas: 2
         #   cooldownPeriod: 600
+        # replicas: 2
         # image: ...
         # pullPolicy: ...
         args: []
