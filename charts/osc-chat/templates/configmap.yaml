@@ -32,6 +32,7 @@ data:
   LLM_URL: {{ include "osc-chat.llm_server.host" . | quote }}
   EMBEDDING_URL: {{ include "osc-chat.embedding.host" . | quote }}
   EMBEDDING_MODEL: {{ include "osc-chat.embedding.model" . | quote }}
+  EMBEDDING_VECTOR_LEN: {{ .Values.global.embedding.vectorLen }}
   
   # Application specific
   QDRANT_COLLECTION_NAME: {{ include "osc-chat.fullname" . | quote }}

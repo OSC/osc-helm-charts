@@ -21,6 +21,7 @@ global:
   embedding:
     host: ""
     model: ""
+    vectorLen: 4096
   # @ignored
   webservicesDeploy:
     create: false
