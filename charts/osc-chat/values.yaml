@@ -25,6 +25,12 @@ global:
   webservicesDeploy:
     create: false
   # @ignored
+  debugGroups:
+    - sappstf
+  # @ignored
+  maintenanceGroups:
+    - sappstf
+  # @ignored
   auth:
     enable: false
     keycloakClient:
