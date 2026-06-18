@@ -9,13 +9,14 @@ rules:
   - apiGroups:
     - nvidia.com
     resources:
+    - dynamographdeploymentscalingadapters
     - dynamographdeploymentscalingadapters/scale
     verbs:
     - get
     - list
     - patch
 {{- range $name, $model := .Values.global.models | required "models must be defined" }}
-{{- $serviceaccount := printf "%s-k8s-service-discovery" $name }}
+{{- $serviceaccount := printf "%s-frontend-k8s-service-discovery" $name }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

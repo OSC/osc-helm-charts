@@ -39,7 +39,7 @@ spec:
         spec:
         {{- if or $decodeScaling $prefillScaling }}
           initContainers:
-            - name: main
+            - name: scale-up-workers
               image: {{ $.Values.frontend.init.image.repository }}:{{ $.Values.frontend.init.image.tag }}
               imagePullPolicy: {{ $.Values.frontend.init.image.pullPolicy }}
               command:
