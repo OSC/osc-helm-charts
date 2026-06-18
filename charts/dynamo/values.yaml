@@ -201,6 +201,9 @@ imagePuller:
       memory: 128Mi
 
 osc-open-webui:
+  # @ignored
+  oscCommon:
+    enable: false
   open-webui:
     # @ignored
     nameOverride: open-webui
