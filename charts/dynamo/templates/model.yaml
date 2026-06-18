@@ -154,8 +154,8 @@ spec:
     {{- if $decodeScaling }}
       scalingAdapter:
         enabled: true
-    {{- else if $decode.replicas }}
-      replicas: {{ $decode.replicas }}
+    {{- else }}
+      replicas: 1
     {{- end }}
     {{- if gt $decodeNodes 1 }}
       multinode:
@@ -261,8 +261,8 @@ spec:
     {{- if $prefillScaling }}
       scalingAdapter:
         enabled: true
-    {{- else if $prefill.replicas }}
-      replicas: {{ $prefill.replicas }}
+    {{- else }}
+      replicas: 1
     {{- end }}
     {{- if gt $prefillNodes 1 }}
       multinode:
