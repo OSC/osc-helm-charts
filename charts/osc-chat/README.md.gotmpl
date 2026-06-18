@@ -1,0 +1,70 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+## OSC Chat Chart
+
+This chart handles the deployment of OSC Chat resources.
+
+Components:
+
+* OSC chat frontend
+* OSC chat backend
+* OSC chat worker
+* Postgresql
+* Redis
+* Rabbitmq
+* Minio
+* Qdrant
+* Crawlee
+* Keycloak client
+* LLM and embedding model server
+
+## Usage
+
+The following is the minimal values to deploy this chart:
+
+```yaml
+---
+global:
+  imagePullSecret:
+    password: <webservices-read password>
+  ingress:
+    host: <Ingress host>
+    hostAlias: <Ingress host alias>
+  llm:
+    host: <LLM server host>
+  embedding:
+    model: <Embedding model name>
+database:
+  postgresql:
+    auth:
+      postgresPassword: <postgres root password>
+      password: <postgres database password>
+  redis:
+    auth:
+      password: <redis password>
+
+rabbitmq:
+  auth:
+    username: <rabbitmq root username>
+    password: <rabbitmq root password>
+
+minio:
+  auth:
+    rootUser: <minio root username>
+    rootPassword: <minio root password>
+
+secrets:
+  api:
+    openaiKey: <LLM server API key>
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
