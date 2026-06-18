@@ -5,7 +5,7 @@ global:
     # -- OSC registry password
     # @default -- **required**
     password:
-  oscServiceAccount: osc-chat
+  oscServiceAccount: oscchat
   database:
     allowIngress: true
   security:
