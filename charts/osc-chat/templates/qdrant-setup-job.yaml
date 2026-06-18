@@ -62,8 +62,4 @@ spec:
               name: {{ include "osc-chat.fullname" . }}-qdrant-apikey
               key: api-key
         - name: EMBEDDING_VECTOR_LEN
-          valueFrom:
-            configMapKeyRef:
-              name: {{ include "osc-chat.fullname" . }}-app-config
-              key: EMBEDDING_VECTOR_LEN
-{{- end }}
+          value: {{ .Values.global.embedding.vectorLen }}
