@@ -104,7 +104,7 @@ minio:
   ingress:
     enabled: true
     ingressClassName: "nginx"
-    hostname: oscchat-test-minio.k8.osc.edu
+    hostname: ""
     tls: true
     path: /
     pathType: Prefix

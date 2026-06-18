@@ -1629,6 +1629,8 @@ spec:
         app.kubernetes.io/component: database
         app.kubernetes.io/name: postgresql
     spec:
+      imagePullSecrets:
+        - name: {{ include "osc.common.imagePullSecret.name" . }}
       restartPolicy: OnFailure
       containers:
       - name: schema-setup

@@ -56,6 +56,8 @@ minio:
   auth:
     rootUser: <minio root username>
     rootPassword: <minio root password>
+  ingress:
+    hostname: <minio host name>
 
 secrets:
   api:
@@ -132,7 +134,7 @@ secrets:
 | minio.auth.rootPassword | string | `"minioadmin"` |  |
 | minio.ingress.enabled | bool | `true` |  |
 | minio.ingress.ingressClassName | string | `"nginx"` |  |
-| minio.ingress.hostname | string | `"oscchat-test-minio.k8.osc.edu"` |  |
+| minio.ingress.hostname | string | `""` |  |
 | minio.ingress.tls | bool | `true` |  |
 | minio.ingress.path | string | `"/"` |  |
 | minio.ingress.pathType | string | `"Prefix"` |  |
