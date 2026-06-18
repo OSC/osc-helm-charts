@@ -12,6 +12,7 @@ metadata:
   labels:
     {{- include "osc-chat.labels" . | nindent 4 }}
     app.kubernetes.io/component: frontend
+    receiver: '{{ index .Values.global.alert.receiver }}'
   {{- with .Values.frontend.ingress.annotations }}
   annotations:
     {{- tpl (toYaml .) $ | nindent 4 }}

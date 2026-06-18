@@ -5,6 +5,7 @@ metadata:
   name: {{ include "osc-chat.fullname" . }}-qdrant-setup
   labels:
     {{- include "osc-chat.labels" . | nindent 4 }}
+    receiver: '{{ index .Values.global.alert.receiver }}'
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "0"  # Run before other services
@@ -16,6 +17,7 @@ spec:
         {{- include "osc-chat.labels" . | nindent 8 }}
         app.kubernetes.io/component: qdrant
         app.kubernetes.io/name: qdrant
+        receiver: '{{ index .Values.global.alert.receiver }}'
     spec:
       imagePullSecrets:
         - name: {{ include "osc.common.imagePullSecret.name" . }}
