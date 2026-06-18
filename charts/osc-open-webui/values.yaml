@@ -318,3 +318,7 @@ open-webui:
         value: /home/ollama
       - name: OLLAMA_FLASH_ATTENTION
         value: '1'
+
+oscCommon:
+  # -- Enable the osc-common dependency
+  enable: true

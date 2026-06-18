@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.7.4](https://img.shields.io/badge/Version-0.7.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -15,7 +15,7 @@ OSC Open Web UI deployment
 | Repository | Name | Version |
 |------------|------|---------|
 | https://helm.openwebui.com/ | open-webui | 13.1.0 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.0 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.2 |
 
 ## Usage
 
@@ -179,3 +179,4 @@ open-webui:
 | open-webui.ollama.extraEnv[1].value |  | `"/home/ollama"` |
 | open-webui.ollama.extraEnv[2].name |  | `"OLLAMA_FLASH_ATTENTION"` |
 | open-webui.ollama.extraEnv[2].value |  | `"1"` |
+| oscCommon.enable | Enable the osc-common dependency | `true` |
