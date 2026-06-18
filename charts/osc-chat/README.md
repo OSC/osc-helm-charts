@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.1](https://img.shields.io/badge/AppVersion-0.1.1-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -56,6 +56,8 @@ minio:
   auth:
     rootUser: <minio root username>
     rootPassword: <minio root password>
+  ingress:
+    hostname: <minio host name>
 
 secrets:
   api:
@@ -132,7 +134,7 @@ secrets:
 | minio.auth.rootPassword | string | `"minioadmin"` |  |
 | minio.ingress.enabled | bool | `true` |  |
 | minio.ingress.ingressClassName | string | `"nginx"` |  |
-| minio.ingress.hostname | string | `"oscchat-test-minio.k8.osc.edu"` |  |
+| minio.ingress.hostname | string | `""` |  |
 | minio.ingress.tls | bool | `true` |  |
 | minio.ingress.path | string | `"/"` |  |
 | minio.ingress.pathType | string | `"Prefix"` |  |
