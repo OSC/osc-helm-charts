@@ -312,7 +312,8 @@
   * Rules
     * Adds prometheus.io/scrape=false annotation to PAAS pods and services
     * Adds cert-manager.io/cluster-issuer annotation to PAAS ingresses
-  * Applies to: Pod, Service in PAAS namespace and Ingress in PAAS namespace
+    * Adds prometheus.io/probe_skip=true annotation to Dynamo worker services
+  * Applies to: Pod, Service in PAAS namespace and Ingress in PAAS namespace and Services for Dynamo
 
 * [add-role](templates/add-role.yaml)
   * Rules

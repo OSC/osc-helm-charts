@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.39.4](https://img.shields.io/badge/Version-0.39.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.14.5](https://img.shields.io/badge/AppVersion-v1.14.5-informational?style=flat-square)
+![Version: 0.40.0](https://img.shields.io/badge/Version-0.40.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.14.5](https://img.shields.io/badge/AppVersion-v1.14.5-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -316,7 +316,8 @@ OSC Kyverno policies deployment
   * Rules
     * Adds prometheus.io/scrape=false annotation to PAAS pods and services
     * Adds cert-manager.io/cluster-issuer annotation to PAAS ingresses
-  * Applies to: Pod, Service in PAAS namespace and Ingress in PAAS namespace
+    * Adds prometheus.io/probe_skip=true annotation to Dynamo worker services
+  * Applies to: Pod, Service in PAAS namespace and Ingress in PAAS namespace and Services for Dynamo
 
 * [add-role](templates/add-role.yaml)
   * Rules

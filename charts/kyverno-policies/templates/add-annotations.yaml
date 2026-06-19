@@ -41,3 +41,36 @@ spec:
         metadata:
           annotations:
             cert-manager.io/cluster-issuer: "{{ .Values.paas.certManagerClusterIssuer }}"
+  - name: dynamo-disable-probe
+    match:
+      any:
+        - resources:
+            kinds:
+            - Service
+            selector:
+              matchLabels:
+                nvidia.com/dynamo-discovery-enabled: "true"
+            namespaceSelector:
+              matchLabels:
+                osc.edu/access-dynamo-platform: "true"
+        - resources:
+            kinds:
+            - Service
+            selector:
+              matchLabels:
+                app.kubernetes.io/managed-by: "grove-operator"
+            namespaceSelector:
+              matchLabels:
+                osc.edu/access-dynamo-platform: "true"
+    exclude:
+      any:
+        - resources:
+            kinds:
+              - Service
+            names:
+              - "*-frontend-frontend"
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          annotations:
+            prometheus.io/probe_skip: 'true'

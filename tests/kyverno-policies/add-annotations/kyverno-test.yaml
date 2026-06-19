@@ -43,3 +43,17 @@ results:
       - webservice/skip
     kind: Ingress
     result: skip
+  - policy: add-annotations
+    rule: dynamo-disable-probe
+    resources:
+      - dynamo/test-dynamo-worker
+      - dynamo/test-dynamo-worker-grove
+    patchedResource: test-dynamo-service-mutated.yaml
+    kind: Service
+    result: pass
+  - policy: add-annotations
+    rule: dynamo-disable-probe
+    resources:
+      - dynamo/test-frontend-frontend
+    kind: Service
+    result: skip
