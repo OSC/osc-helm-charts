@@ -19,6 +19,7 @@ global:
   networkPolicy:
     create: false
     prometheusNamespace: prometheus
+    ingressNamespace: ingress-nginx
   # @ignored
   webservicesDeploy:
     create: false
@@ -37,6 +38,19 @@ global:
       nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
       nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
   auth:
+    # @ignored
+    enable: false
+    # @ignored
+    keycloakClient:
+      forceCreate: true
+      # Set secret name to ensure rendered the same for osc-common and dependenc open-webui chart
+      # @ignored
+      secret:
+        name: "{{ .Release.Name }}-auth-secret"
+      # Set configmap name to ensure rendered the same for osc-common and dependenc open-webui chart
+      # @ignored
+      configmap:
+        name: "{{ .Release.Name }}-auth-config"
     # -- Restrict access to these groups
     allowGroups:
       - oscall
