@@ -168,6 +168,50 @@ kube-prometheus-stack:
         cluster: kubernetes
         environment: '{{ include "osc.common.environment" . }}'
 
+prometheus-pushgateway:
+  fullnameOverride: pushgateway
+  extraArgs:
+    - --persistence.file=/data/pushgateway.data
+    - --persistence.interval=5m
+  resources:
+    limits:
+      cpu: 2
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  nodeSelector:
+    node-role.kubernetes.io/infrastructure: ''
+  securityContext:
+    fsGroup: 65534
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+    runAsNonRoot: true
+  serviceMonitor:
+    enabled: true
+    namespace: ~
+    interval: 15s
+    scrapeTimeout: 10s
+  persistentVolume:
+    enabled: true
+    accessModes:
+      - ReadWriteMany
+    storageClass: nfs-infra
+  networkPolicy:
+    customSelectors:
+      - podSelector: {}
+      - namespaceSelector:
+          matchLabels:
+            osc.edu/access-dynamo-platform: "true"
 watch:
   image:
     repository: docker-registry.osc.edu/kubernetes/weaveworks/watch
