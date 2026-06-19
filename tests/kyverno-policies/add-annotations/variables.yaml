@@ -14,3 +14,8 @@ namespaceSelector:
       osc.edu/role: paas
       osc.edu/service-account: test
       account: test
+  - name: dynamo
+    labels:
+      osc.edu/role: webservice
+      osc.edu/service-account: dynamo
+      osc.edu/access-dynamo-platform: "true"
