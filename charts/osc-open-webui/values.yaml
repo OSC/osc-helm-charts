@@ -165,6 +165,10 @@ open-webui:
       value: "True"
     - name: USER_PERMISSIONS_FEATURES_API_KEYS
       value: "True"
+    - name: ENABLE_AUDIT_STDOUT
+      value: "True"
+    - name: AUDIT_LOG_LEVEL
+      value: METADATA
   # @ignored
   extraEnvFrom:
     - secretRef:
