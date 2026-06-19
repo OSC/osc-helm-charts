@@ -116,6 +116,7 @@ hfToken:
 | defaultGpuType | string | `"NVIDIA-A100-PCIE-40GB-MIG-7g.40gb"` | The default GPU type |
 | rdmaResource | string | `"rdma/shared_mlx5"` | The RDMA resource name in Kubernetes |
 | prometheusURL | string | `"http://prometheus-prometheus.prometheus.svc:9090"` | The Prometheus URL |
+| pushgatewayURL | string | `"http://pushgateway.prometheus.svc:9091"` | Push Gateway URL |
 | priorityClassName | string | `""` | The priority class name for frontend and workers |
 | workerArgs | list | `[]` | Additional worker arguments |
 | kvTransferConfig | object | `{"kv_connector":"NixlConnector","kv_role":"kv_both"}` | The configuration of kv-transfer-config |

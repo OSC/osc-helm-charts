@@ -114,6 +114,8 @@ defaultGpuType: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
 rdmaResource: rdma/shared_mlx5
 # -- The Prometheus URL
 prometheusURL: http://prometheus-prometheus.prometheus.svc:9090
+# -- Push Gateway URL
+pushgatewayURL: http://pushgateway.prometheus.svc:9091
 
 # -- The priority class name for frontend and workers
 priorityClassName: ""
@@ -189,19 +191,18 @@ securityContext:
   runAsNonRoot: true
 
 # @ignored
-frontend:
-  init:
-    image:
-      repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
-      tag: '2.39.0'
-      pullPolicy: IfNotPresent
-    resources:
-      limits:
-        cpu: 500m
-        memory: 128Mi
-      requests:
-        cpu: 250m
-        memory: 64Mi
+init:
+  image:
+    repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
+    tag: '2.39.0'
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 500m
+      memory: 128Mi
+    requests:
+      cpu: 250m
+      memory: 64Mi
 
 # @ignored
 imagePuller:

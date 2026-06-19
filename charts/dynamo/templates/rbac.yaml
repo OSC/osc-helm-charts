@@ -7,13 +7,13 @@ metadata:
     {{- include "dynamo.labels" . | nindent 4 }}
 rules:
   - apiGroups:
-    - nvidia.com
+    - keda.sh
     resources:
-    - dynamographdeploymentscalingadapters
-    - dynamographdeploymentscalingadapters/scale
+    - scaledobjects
     verbs:
     - get
     - list
+    - watch
     - patch
 {{- range $name, $model := .Values.global.models | required "models must be defined" }}
 {{- $serviceaccount := printf "%s-frontend-k8s-service-discovery" $name }}

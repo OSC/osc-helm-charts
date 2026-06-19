@@ -62,6 +62,13 @@ spec:
       query: |
         sum(delta(dynamo_frontend_requests_total{dynamo_namespace="{{ $namespace }}"}[5m])) > bool 0
       threshold: "1"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: dynamo_pending_request
+      query: |
+        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}"}) > bool 0
+      threshold: "1"
 {{- end }}
 {{- if and $disagg $prefillScaling }}
 ---
@@ -99,6 +106,13 @@ spec:
       metricName: frontend_requests
       query: |
         sum(delta(dynamo_frontend_requests_total{dynamo_namespace="{{ $namespace }}"}[5m])) > bool 0
+      threshold: "1"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: dynamo_pending_request
+      query: |
+        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}"}) > bool 0
       threshold: "1"
 {{- end }}
 {{- end }}

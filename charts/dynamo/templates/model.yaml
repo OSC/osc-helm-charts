@@ -40,32 +40,35 @@ spec:
         {{- if or $decodeScaling $prefillScaling }}
           initContainers:
             - name: scale-up-workers
-              image: {{ $.Values.frontend.init.image.repository }}:{{ $.Values.frontend.init.image.tag }}
-              imagePullPolicy: {{ $.Values.frontend.init.image.pullPolicy }}
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
               command:
               - /bin/bash
               - -c
               - |
                 set -x
               {{- if $decodeScaling }}
-                if kubectl get dgdsa {{ $name }}-vllmdecodeworker -n {{ $.Release.Namespace }}; then
-                  echo "Scaling dgdsa/{{ $name }}-vllmdecodeworker"
-                  kubectl scale dgdsa {{ $name }}-vllmdecodeworker -n {{ $.Release.Namespace }} --replicas=1
+                if kubectl get scaledobject {{ $name }}-vllmdecodeworker-scaler -n {{ $.Release.Namespace }}; then
+                  echo "Scaling scaledobject/{{ $name }}-vllmdecodeworker-scaler"
+                  kubectl annotate scaledobject {{ $name }}-vllmdecodeworker-scaler autoscaling.keda.sh/paused=true autoscaling.keda.sh/paused-replicas=1 -n {{ $.Release.Namespace }} --overwrite
                 else
-                  echo "dgdsa/{{ $name }}-vllmdecodeworker not found, skipping"
+                  echo "scaledobject/{{ $name }}-vllmdecodeworker-scaler not found, skipping"
                 fi
               {{- end }}
               {{- if $prefillScaling }}
-                if kubectl get dgdsa {{ $name }}-vllmprefillworker -n {{ $.Release.Namespace }}; then
-                  echo "Scaling dgdsa/{{ $name }}-vllmprefillworker"
-                  kubectl scale dgdsa {{ $name }}-vllmprefillworker -n {{ $.Release.Namespace }} --replicas=1
+                if kubectl get scaledobject {{ $name }}-vllmprefillworker-scaler -n {{ $.Release.Namespace }}; then
+                  echo "Scaling scaledobject/{{ $name }}-vllmprefillworker-scaler"
+                  kubectl annotate scaledobject {{ $name }}-vllmprefillworker-scaler autoscaling.keda.sh/paused=true autoscaling.keda.sh/paused-replicas=1 -n {{ $.Release.Namespace }} --overwrite
                 else
-                  echo "dgdsa/{{ $name }}-vllmprefillworker not found, skipping"
+                  echo "scaledobject/{{ $name }}-vllmprefillworker-scaler not found, skipping"
                 fi
               {{- end }}
+                sleep 5
+                kubectl annotate scaledobject {{ $name }}-vllmdecodeworker-scaler autoscaling.keda.sh/paused-replicas- autoscaling.keda.sh/paused- -n {{ $.Release.Namespace }}
+                kubectl annotate scaledobject {{ $name }}-vllmprefillworker-scaler autoscaling.keda.sh/paused-replicas- autoscaling.keda.sh/paused- -n {{ $.Release.Namespace }}
                 exit 0
               resources:
-              {{- with $.Values.frontend.init.resources }}
+              {{- with $.Values.init.resources }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
               securityContext:
@@ -163,6 +166,31 @@ spec:
     {{- end }}
       podTemplate:
         spec:
+        {{- if or $decodeScaling }}
+          initContainers:
+            - name: delete-metrics
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
+              command:
+              - /bin/bash
+              - -c
+              - |
+                set -x
+                curl -X DELETE {{ $.Values.pushgatewayURL }}/metrics/job/dynamo-{{ $model.alias | default $model.model | replace "/" "-" }}
+                exit 0
+              resources:
+              {{- with $.Values.init.resources }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+        {{- end }}
           containers:
             - name: main
               image: {{ $decodeImage | quote }}
@@ -270,6 +298,31 @@ spec:
     {{- end }}
       podTemplate:
         spec:
+        {{- if or $prefillScaling }}
+          initContainers:
+            - name: delete-metrics
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
+              command:
+              - /bin/bash
+              - -c
+              - |
+                set -x
+                curl -X DELETE {{ $.Values.pushgatewayURL }}/metrics/job/dynamo-{{ $model.alias | default $model.model | replace "/" "-" }}
+                exit 0
+              resources:
+              {{- with $.Values.init.resources }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+        {{- end }}
           containers:
             - name: main
               image: {{ $prefillImage | quote }}
