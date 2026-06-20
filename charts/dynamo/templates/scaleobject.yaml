@@ -67,7 +67,7 @@ spec:
       serverAddress: {{ $.Values.prometheusURL }}
       metricName: dynamo_pending_request
       query: |
-        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}"}) > bool 0
+        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}",namespace="{{ $.Release.Namespace }}"}) > bool 0
       threshold: "1"
 {{- end }}
 {{- if and $disagg $prefillScaling }}
@@ -112,7 +112,7 @@ spec:
       serverAddress: {{ $.Values.prometheusURL }}
       metricName: dynamo_pending_request
       query: |
-        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}"}) > bool 0
+        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}",namespace="{{ $.Release.Namespace }}"}) > bool 0
       threshold: "1"
 {{- end }}
 {{- end }}
