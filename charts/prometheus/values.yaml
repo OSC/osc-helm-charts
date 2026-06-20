@@ -220,6 +220,7 @@ prometheus-pushgateway:
         - '2m'
         - '-ttl'
         - '5m'
+        - '-verbose'
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
