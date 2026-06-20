@@ -5,6 +5,11 @@ cache hash) into environment variables so compile cache is stable across
 pod restarts.
 """
 import os
+import sys
+
+if len(sys.argv) > 1:
+    if '1.3.0' in sys.argv[1]:
+        sys.exit(0)
 
 SITE = "/opt/dynamo/venv/lib/python3.12/site-packages/dynamo/vllm"
 
@@ -78,8 +83,12 @@ patch(
             "from .multimodal_handlers import EncodeWorkerHandler",
         ),
         (
-            '            vllm_config.additional_config["fpm_worker_id"] = fpm_worker_id',
-            "            os.environ[ENV_FPM_WORKER_ID] = fpm_worker_id",
+            'vllm_config.additional_config["fpm_worker_id"] = fpm_worker_id',
+            "os.environ[ENV_FPM_WORKER_ID] = fpm_worker_id",
+        ),
+        (
+            'vllm_config.additional_config["fpm_worker_id"] = fpm_worker_id',
+            "os.environ[ENV_FPM_WORKER_ID] = fpm_worker_id",
         ),
         (
             '    base_path = Path(bench_cfg["output_path"])',

@@ -3,10 +3,12 @@ FROM nvcr.io/nvidia/ai-dynamo/vllm-runtime:$VERSION
 LABEL maintainer='Trey Dockendorf <tdockendorf@osc.edu>'
 
 USER root
+RUN apt-get update && apt-get install -y less vim && rm -rf /var/lib/apt/lists/*
 #RUN uv pip install --no-cache fastsafetensors
 # Patch from https://github.com/ai-dynamo/dynamo/issues/10695#issuecomment-4699899546
-#COPY patch-10165.py .
-#RUN python3 patch-10165.py
+COPY patch-10165.py .
+ARG VERSION=1.2.0
+RUN python3 patch-10165.py $VERSION
 # Patch from https://github.com/ai-dynamo/dynamo/pull/10248/changes
 COPY patch-10248.py .
 ARG VERSION=1.2.0
