@@ -168,6 +168,83 @@ kube-prometheus-stack:
         cluster: kubernetes
         environment: '{{ include "osc.common.environment" . }}'
 
+prometheus-pushgateway:
+  fullnameOverride: pushgateway
+  extraArgs:
+    - --persistence.file=/data/pushgateway.data
+    - --persistence.interval=5m
+  resources:
+    limits:
+      cpu: 2
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  nodeSelector:
+    node-role.kubernetes.io/infrastructure: ''
+  securityContext:
+    fsGroup: 65534
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+    runAsNonRoot: true
+  serviceMonitor:
+    enabled: true
+    namespace: ~
+    interval: 15s
+    scrapeTimeout: 10s
+  persistentVolume:
+    enabled: false
+  networkPolicy:
+    customSelectors:
+      - podSelector: {}
+      - namespaceSelector:
+          matchLabels:
+            osc.edu/access-dynamo-platform: "true"
+  imagePullSecrets:
+    - name: osc-registry
+  extraContainers:
+    - name: cleaner
+      # TODO: Use local build until merged and released:
+      # https://github.com/abatilo/pushgateway-cleaner/pull/2
+      # Build:
+      #   docker build --platform linux/amd64 -t docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r1 .
+      #   docker push docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r1
+      # image: ghcr.io/abatilo/pushgateway-cleaner:v0.1.3
+      image: docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r1
+      imagePullPolicy: IfNotPresent
+      args:
+        - '-pushgateway-url'
+        - 'http://localhost:9091'
+        - '-sync-period'
+        - '2m'
+        - '-ttl'
+        - '5m'
+        - '-verbose'
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+        runAsNonRoot: true
+      resources:
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
 watch:
   image:
     repository: docker-registry.osc.edu/kubernetes/weaveworks/watch

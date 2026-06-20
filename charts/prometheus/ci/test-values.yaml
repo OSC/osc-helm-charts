@@ -23,6 +23,15 @@ kube-prometheus-stack:
               requests:
                 storage: 1Gi
 
+prometheus-pushgateway:
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
 sslExporter:
   rbac:
     create: true
