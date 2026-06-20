@@ -209,9 +209,17 @@ prometheus-pushgateway:
       - namespaceSelector:
           matchLabels:
             osc.edu/access-dynamo-platform: "true"
+  imagePullSecrets:
+    - name: osc-registry
   extraContainers:
     - name: cleaner
-      image: ghcr.io/abatilo/pushgateway-cleaner:v0.1.3
+      # TODO: Use local build until merged and released:
+      # https://github.com/abatilo/pushgateway-cleaner/pull/2
+      # Build:
+      #   docker build --platform linux/amd64 -t docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r1 .
+      #   docker push docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r1
+      # image: ghcr.io/abatilo/pushgateway-cleaner:v0.1.3
+      image: docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r1
       imagePullPolicy: IfNotPresent
       args:
         - '-pushgateway-url'
