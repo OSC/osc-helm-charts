@@ -99,7 +99,8 @@ spec:
           sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
           by (le)
         )
-      threshold: "0.5"
+      # Should be 0.5 but seems small prompts resulting in larger TTFT
+      threshold: "1"
   - type: prometheus
     metadata:
       serverAddress: {{ $.Values.prometheusURL }}
