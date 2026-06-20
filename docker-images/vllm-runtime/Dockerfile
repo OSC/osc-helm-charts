@@ -13,6 +13,10 @@ RUN python3 patch-10165.py $VERSION
 COPY patch-10248.py .
 ARG VERSION=1.2.0
 RUN python3 patch-10248.py $VERSION
+# Patch from https://github.com/vllm-project/vllm/commit/f9f770ca0b02f8b83ae92997a68efa797611ce36
+COPY vllm-nixl-env-patch.patch vllm-nixl-env-patch.sh .
+ARG VERSION=1.2.0
+RUN bash vllm-nixl-env-patch.sh $VERSION
 RUN groupadd -g 4097 PZS0645 && \
     usermod -u 52162 -g 4097 dynamo && \
     chown -R dynamo:PZS0645 /home/dynamo
