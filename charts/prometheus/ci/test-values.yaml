@@ -31,11 +31,6 @@ prometheus-pushgateway:
     requests:
       cpu: 100m
       memory: 128Mi
-  persistentVolume:
-    enabled: true
-    accessModes:
-      - ReadWriteOnce
-    storageClass: standard
 
 sslExporter:
   rbac:
