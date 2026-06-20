@@ -83,7 +83,7 @@ image:
   # @default -- The chart's appVersion
   tag: ""
   # -- The release of the custom OSC vllm runtime image
-  release: "0"
+  release: "1"
 
 hfToken:
   # @ignored

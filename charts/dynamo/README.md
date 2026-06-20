@@ -109,7 +109,7 @@ hfToken:
 | global.models | object | `{}` | Define models |
 | image.repository | string | `"kubernetes/ai-dynamo/vllm-runtime"` | The repository path to main vllm runtime image |
 | image.tag | string | The chart's appVersion | The vllm runtime image tag |
-| image.release | string | `"0"` | The release of the custom OSC vllm runtime image |
+| image.release | string | `"1"` | The release of the custom OSC vllm runtime image |
 | hfToken.value | string | **required** | The HF token for Hugging Face |
 | cache | object | `{}` |  |
 | networkPolicy.namespaceSelectors | list | `[]` | Namespace labels to allow access to frontends |
