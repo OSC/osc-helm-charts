@@ -148,6 +148,8 @@ metadata:
   labels:
     {{- include "dynamo.labels" $ | nindent 4 }}
 spec:
+  annotations:
+    prometheus.io/probe_skip: "true"
   components:
     - name: VllmDecodeWorker
     {{- if $disagg }}
