@@ -148,3 +148,17 @@ initContainerResources:
 # @ignored
 service:
   port: 80
+
+osc-common:
+  oauth2-proxy:
+    resources:
+      limits:
+        # -- CPU limit for OAuth2 Proxy pods
+        cpu: 1
+        # -- Memory limit for OAuth2 Proxy pods
+        memory: 512Mi
+      requests:
+        # -- CPU request for OAuth2 Proxy pods
+        cpu: 500m
+        # -- Memory request for OAuth2 Proxy pods
+        memory: 256Mi
