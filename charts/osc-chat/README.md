@@ -229,7 +229,7 @@ secrets:
 | keycloak.enabled | bool | `false` |  |
 | frontend.enabled | bool | `true` |  |
 | frontend.image.repository | string | `"kubernetes/hpcgpt/frontend"` |  |
-| frontend.image.tag | string | `"v0.1.4"` |  |
+| frontend.image.tag | string | `"v0.1.5"` |  |
 | frontend.image.pullPolicy | string | `"Always"` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
