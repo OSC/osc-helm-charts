@@ -27,7 +27,7 @@ spec:
         - name: frontend
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ include "osc-chat.image" (dict "imageRoot" .Values.frontend.image "global" .Values.global) }}
+          image: {{ include "osc-chat.image" (dict "imageRoot" .Values.frontend.image "global" .Values.global "env" (include "osc.common.environment" .)) }}
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - name: http
