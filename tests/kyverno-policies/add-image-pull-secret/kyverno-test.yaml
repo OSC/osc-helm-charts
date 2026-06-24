@@ -13,14 +13,14 @@ results:
     rule: paas-osc-registry
     resources:
       - test-paas
-    patchedResource: paas-mutated.yaml
+    patchedResources: paas-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-image-pull-secret
     rule: paas-osc-registry
     resources:
       - test-paas-add
-    patchedResource: paas-add-mutated.yaml
+    patchedResources: paas-add-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-image-pull-secret

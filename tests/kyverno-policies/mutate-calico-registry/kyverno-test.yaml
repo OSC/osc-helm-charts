@@ -13,7 +13,7 @@ results:
     rule: calico-container-registry
     resources:
       - test-calico-container-registry
-    patchedResource: calico-container-registry-mutated.yaml
+    patchedResources: calico-container-registry-mutated.yaml
     kind: Pod
     result: pass
   - policy: mutate-calico-registry
@@ -26,7 +26,7 @@ results:
     rule: calico-initcontainer-registry
     resources:
       - test-calico-initcontainer-registry
-    patchedResource: calico-initcontainer-registry-mutated.yaml
+    patchedResources: calico-initcontainer-registry-mutated.yaml
     kind: Pod
     result: pass
   - policy: mutate-calico-registry
@@ -39,7 +39,7 @@ results:
     rule: calico-imagepullsecret
     resources:
       - test-calico-imagepullsecret
-    patchedResource: calico-imagepullsecret-mutated.yaml
+    patchedResources: calico-imagepullsecret-mutated.yaml
     kind: Pod
     result: pass
   - policy: mutate-calico-registry
