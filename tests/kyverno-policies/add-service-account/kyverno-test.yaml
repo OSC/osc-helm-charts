@@ -14,7 +14,7 @@ results:
     resources:
       - test-webservice-service-account
       - test-webservice-service-account-namespace
-    patchedResource: webservice-service-account-mutated.yaml
+    patchedResources: webservice-service-account-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-service-account
@@ -26,10 +26,9 @@ results:
   - policy: add-service-account
     rule: webservice-service-account-run-as
     resources:
-      - test-webservice-service-account-mariadb
-    patchedResource: webservice-service-account-mariadb-mutated.yaml
+      - webservice/test-webservice-service-account-mariadb
+    patchedResources: webservice-service-account-mariadb-mutated.yaml
     kind: Pod
-    namespace: webservice
     result: pass
   - policy: add-service-account
     rule: webservice-service-account-run-as
@@ -41,21 +40,20 @@ results:
     rule: paas-service-account-run-as
     resources:
       - test-paas-service-account
-    patchedResource: paas-service-account-mutated.yaml
+    patchedResources: paas-service-account-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-service-account
     rule: paas-service-account-run-as
     resources:
-      - test-paas-service-account-mariadb
-    patchedResource: paas-service-account-mariadb-mutated.yaml
-    namespace: paas
+      - paas/test-paas-service-account-mariadb
+    patchedResources: paas-service-account-mariadb-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-service-account
     rule: paas-service-account-run-as
     resources:
       - test-paas-service-account-skip
-    patchedResource: skip.yaml
+    patchedResources: skip.yaml
     kind: Pod
     result: skip

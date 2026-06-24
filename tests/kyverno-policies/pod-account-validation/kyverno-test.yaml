@@ -40,16 +40,14 @@ results:
   - policy: pod-account-validation
     rule: pods-user-authorized-for-account
     resources:
-      - test-pass
+      - user-test/test-pass
     kind: Pod
-    namespace: user-test
     result: pass
   - policy: pod-account-validation
     rule: pods-user-authorized-for-account
     resources:
-      - test-fail
+      - user-test/test-fail
     kind: Pod
-    namespace: user-test
     result: fail
   - policy: pod-account-validation
     rule: paas-user-authorized-for-account

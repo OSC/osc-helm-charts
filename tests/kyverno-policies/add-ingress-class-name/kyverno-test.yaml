@@ -13,7 +13,7 @@ results:
     rule: add-ingress-class-name
     resources:
       - paas/paas-pass
-    patchedResource: test-paas-ingress-mutated.yaml
+    patchedResources: test-paas-ingress-mutated.yaml
     kind: Ingress
     result: pass
   - policy: add-ingress-class-name

@@ -13,14 +13,14 @@ results:
     rule: paas-disable-scrape
     resources:
       - test-paas-pod
-    patchedResource: test-paas-pod-mutated.yaml
+    patchedResources: test-paas-pod-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-annotations
     rule: paas-disable-scrape
     resources:
       - test-paas-service
-    patchedResource: test-paas-service-mutated.yaml
+    patchedResources: test-paas-service-mutated.yaml
     kind: Service
     result: pass
   - policy: add-annotations
@@ -34,7 +34,7 @@ results:
     rule: paas-cert-manager
     resources:
       - paas/paas-pass
-    patchedResource: test-paas-ingress-mutated.yaml
+    patchedResources: test-paas-ingress-mutated.yaml
     kind: Ingress
     result: pass
   - policy: add-annotations
@@ -48,7 +48,7 @@ results:
     resources:
       - dynamo/test-dynamo-worker
       - dynamo/test-dynamo-worker-grove
-    patchedResource: test-dynamo-service-mutated.yaml
+    patchedResources: test-dynamo-service-mutated.yaml
     kind: Service
     result: pass
   - policy: add-annotations

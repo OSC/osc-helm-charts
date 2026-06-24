@@ -12,21 +12,21 @@ results:
     rule: ondemand-nodeselector
     resources:
       - test-ondemand-nodeselector
-    patchedResource: ondemand-nodeselector-mutated.yaml
+    patchedResources: ondemand-nodeselector-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-nodeselector
     rule: webservice-nodeselector
     resources:
       - test-webservice-nodeselector
-    patchedResource: webservice-nodeselector-mutated.yaml
+    patchedResources: webservice-nodeselector-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-nodeselector
     rule: paas-nodeselector
     resources:
       - test-paas-nodeselector
-    patchedResource: paas-nodeselector-mutated.yaml
+    patchedResources: paas-nodeselector-mutated.yaml
     kind: Pod
     result: pass
   - policy: add-nodeselector
