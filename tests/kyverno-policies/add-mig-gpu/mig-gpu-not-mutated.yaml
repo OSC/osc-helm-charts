@@ -8,3 +8,5 @@ spec:
   containers:
     - name: nginx
       image: nginx:latest
+  nodeSelector:
+    nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB
