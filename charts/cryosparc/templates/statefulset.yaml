@@ -92,6 +92,8 @@ spec:
           mountPath: /cryosparc_data
         - name: project
           mountPath: {{ tpl .Values.mounts.project . }}
+        - name: scratch
+          mountPath: {{ tpl .Values.mounts.scratch . }}
         - name: home
           mountPath: {{ tpl .Values.mounts.home . }}
         {{- range $name, $path := .Values.mounts.rwDir }}
@@ -154,6 +156,10 @@ spec:
       - name: project
         hostPath:
           path: {{ tpl .Values.mounts.project . }}
+          type: Directory
+      - name: scratch
+        hostPath:
+          path: {{ tpl .Values.mounts.scratch . }}
           type: Directory
       {{- range $name, $path := .Values.mounts.rwDir }}
       - name: {{ $name | lower }}
