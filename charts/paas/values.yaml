@@ -31,6 +31,9 @@ default:
   # -- The default memory request for PAAS namespace pods
   memory: '2Gi'
   # -- The default GPU limit for PAAS namespaces
-  gpuLimit: '0'
+  gpuLimit:
+    mig-1g.5gb: '0'
+    mig-3g.20gb: '0'
+    mig-7g.40gb: '0'
   # -- Allow managing PVCs
   managePVC: false

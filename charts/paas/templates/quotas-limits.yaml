@@ -1,4 +1,5 @@
 {{ range $namespace := .Values.namespaces }}
+{{ $gpuLimit := $namespace.gpuLimit | default dict }}
 ---
 apiVersion: v1
 kind: ResourceQuota
@@ -13,10 +14,14 @@ spec:
   hard:
     requests.cpu: {{ $namespace.cpuLimit | default $.Values.default.cpuLimit | quote }}
     requests.memory: {{ $namespace.memoryLimit | default $.Values.default.memoryLimit | quote }}
-    requests.nvidia.com/gpu: {{ $namespace.gpuLimit | default $.Values.default.gpuLimit | quote }}
+    requests.nvidia.com/mig-1g.5gb: {{ index $gpuLimit "mig-1g.5gb" | default (index $.Values.default.gpuLimit "mig-1g.5gb") | quote }}
+    requests.nvidia.com/mig-3g.20gb: {{ index $gpuLimit "mig-3g.20gb" | default (index $.Values.default.gpuLimit "mig-3g.20gb") | quote }}
+    requests.nvidia.com/mig-7g.40gb: {{ index $gpuLimit "mig-7g.40gb" | default (index $.Values.default.gpuLimit "mig-7g.40gb") | quote }}
     limits.cpu: {{ $namespace.cpuLimit | default $.Values.default.cpuLimit | quote }}
     limits.memory: {{ $namespace.memoryLimit | default $.Values.default.memoryLimit | quote }}
-    limits.nvidia.com/gpu: {{ $namespace.gpuLimit | default $.Values.default.gpuLimit | quote }}
+    limits.nvidia.com/mig-1g.5gb: {{ index $gpuLimit "mig-1g.5gb" | default (index $.Values.default.gpuLimit "mig-1g.5gb") | quote }}
+    limits.nvidia.com/mig-3g.20gb: {{ index $gpuLimit "mig-3g.20gb" | default (index $.Values.default.gpuLimit "mig-3g.20gb") | quote }}
+    limits.nvidia.com/mig-7g.40gb: {{ index $gpuLimit "mig-7g.40gb" | default (index $.Values.default.gpuLimit "mig-7g.40gb") | quote }}
 ---
 apiVersion: v1
 kind: LimitRange

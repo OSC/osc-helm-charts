@@ -38,7 +38,10 @@ namespaces:
   cpuDefault: '1'
   memoryLimit: '16Gi'
   memoryDefault: '2Gi'
-  gpuLimit: '1'
+  gpuLimit:
+    mig-1g.5gb: '3'
+    mig-3g.20gb: '1'
+    mig-7g.40gb: '1'
   imagePullSecret:
     username: testuser
     password: password

@@ -1,6 +1,6 @@
 # paas
 
-![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC PAAS bootstrap Helm Chart
 
@@ -14,7 +14,7 @@ OSC PAAS bootstrap Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.1 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.2 |
 
 ## Usage
 
@@ -41,7 +41,10 @@ namespaces:
   cpuDefault: '1'
   memoryLimit: '16Gi'
   memoryDefault: '2Gi'
-  gpuLimit: '1'
+  gpuLimit:
+    mig-1g.5gb: '3'
+    mig-3g.20gb: '1'
+    mig-7g.40gb: '1'
   imagePullSecret:
     username: testuser
     password: password
@@ -81,5 +84,5 @@ namespaces:
 | default.cpu | The default CPU request for PAAS namespace pods | `"1"` |
 | default.memoryLimit | The default memory limit for PAAS namespaces | `"8Gi"` |
 | default.memory | The default memory request for PAAS namespace pods | `"2Gi"` |
-| default.gpuLimit | The default GPU limit for PAAS namespaces | `"0"` |
+| default.gpuLimit | The default GPU limit for PAAS namespaces | `{"mig-1g.5gb":"0","mig-3g.20gb":"0","mig-7g.40gb":"0"}` |
 | default.managePVC | Allow managing PVCs | `false` |
