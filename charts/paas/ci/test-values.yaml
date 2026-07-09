@@ -26,7 +26,13 @@ namespaces:
 - name: baz
   serviceAccount: example
   account: baz
+  gpuLimit:
+    mig-1g.5gb: '3'
 - name: testuser
   serviceAccount: testuser
   account: testgroup
   users: ['testuser']
+  gpuLimit:
+    mig-1g.5gb: '3'
+    mig-3g.20gb: '1'
+    mig-7g.40gb: '1'
