@@ -8,12 +8,14 @@
 {{- $decodeImage := $decode.image | default $image }}
 {{- $decodeImagePullPolicy := $decode.pullPolicy | default $model.pullPolicy | default $.Values.image.pullPolicy }}
 {{- $decodeGPUs := $decode.gpu | default 1 | quote }}
+{{- $decodeGPUType := $decode.gpuType | default $.Values.defaultGpuType }}
 {{- $decodeNodes := $decode.nodes | default 1 }}
 {{- $decodeScaling := $decode.scaling | default $model.scaling | default dict }}
 {{- $prefill := $model.prefill | default dict }}
 {{- $prefillImage := $prefill.image | default $image }}
 {{- $prefillImagePullPolicy := $prefill.pullPolicy | default $model.pullPolicy | default $.Values.image.pullPolicy }}
 {{- $prefillGPUs := $prefill.gpu | default 1 | quote }}
+{{- $prefillGPUType := $prefill.gpuType | default $.Values.defaultGpuType }}
 {{- $prefillNodes := $prefill.nodes | default 1 }}
 {{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
 {{- $disagg := $model.disagg | default false }}
@@ -213,12 +215,12 @@ spec:
                     name: {{ $.Values.hfToken.name }}
               resources:
                 limits:
-                  nvidia.com/gpu: {{ $decodeGPUs }}
+                  {{ $decodeGPUType }}: {{ $decodeGPUs }}
                   {{ $.Values.rdmaResource }}: {{ $decodeGPUs }}
                   cpu: {{ $decode.cpu | default 2 | quote }}
                   memory: {{ $decode.memory | default "4Gi" | quote }}
                 requests:
-                  nvidia.com/gpu: {{ $decodeGPUs }}
+                  {{ $decodeGPUType }}: {{ $decodeGPUs }}
                   {{ $.Values.rdmaResource }}: {{ $decodeGPUs }}
                   cpu: {{ $decode.cpu | default 2 | quote }}
                   memory: {{ $decode.memory | default "4Gi" | quote }}
@@ -252,8 +254,6 @@ spec:
               {{- with $decode.env | default list }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-          nodeSelector:
-            nvidia.com/gpu.product: {{ $decode.gpuType | default $.Values.defaultGpuType }}
           {{- if $.Values.priorityClassName }}
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
@@ -318,12 +318,12 @@ spec:
                     name: {{ $.Values.hfToken.name }}
               resources:
                 limits:
-                  nvidia.com/gpu: {{ $prefillGPUs }}
+                  {{ $prefillGPUType }}: {{ $prefillGPUs }}
                   {{ $.Values.rdmaResource }}: {{ $prefillGPUs }}
                   cpu: {{ $prefill.cpu | default 2 | quote }}
                   memory: {{ $prefill.memory | default "4Gi" | quote }}
                 requests:
-                  nvidia.com/gpu: {{ $prefillGPUs }}
+                  {{ $prefillGPUType }}: {{ $prefillGPUs }}
                   {{ $.Values.rdmaResource }}: {{ $prefillGPUs }}
                   cpu: {{ $prefill.cpu | default 2 | quote }}
                   memory: {{ $prefill.memory | default "4Gi" | quote }}
@@ -357,8 +357,6 @@ spec:
               {{- with $prefill.env | default list }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-          nodeSelector:
-            nvidia.com/gpu.product: {{ $prefill.gpuType | default $.Values.defaultGpuType }}
           {{- if $.Values.priorityClassName }}
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}

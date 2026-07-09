@@ -72,7 +72,7 @@ global:
   #       cpu: 2
   #       memory: 6Gi
   #       gpu: 1
-  #       gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+  #       gpuType: nvidia.com/mig-7g.40gb
 
 image:
   # -- The repository path to main vllm runtime image
@@ -109,7 +109,7 @@ networkPolicy:
   # - app.kubernetes.io/name: osc-chat
 
 # -- The default GPU type
-defaultGpuType: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
+defaultGpuType: nvidia.com/mig-7g.40gb
 # -- The RDMA resource name in Kubernetes
 rdmaResource: rdma/shared_mlx5
 # -- The Prometheus URL

@@ -63,7 +63,7 @@ global:
         cpu: 2
         memory: 6Gi
         gpu: 1
-        gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+        gpuType: nvidia.com/mig-1g.5gb
         nodes: 1
       prefill:
         # scaling:
@@ -76,7 +76,7 @@ global:
         cpu: 2
         memory: 6Gi
         gpu: 1
-        gpuType: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+        gpuType: nvidia.com/mig-1g.5gb
         nodes: 1
 hfToken:
   value: <Huggingface token>
@@ -113,7 +113,7 @@ hfToken:
 | hfToken.value | string | **required** | The HF token for Hugging Face |
 | cache | object | `{}` |  |
 | networkPolicy.namespaceSelectors | list | `[]` | Namespace labels to allow access to frontends |
-| defaultGpuType | string | `"NVIDIA-A100-PCIE-40GB-MIG-7g.40gb"` | The default GPU type |
+| defaultGpuType | string | `"nvidia.com/mig-7g.40gb"` | The default GPU type |
 | rdmaResource | string | `"rdma/shared_mlx5"` | The RDMA resource name in Kubernetes |
 | prometheusURL | string | `"http://prometheus-prometheus.prometheus.svc:9090"` | The Prometheus URL |
 | pushgatewayURL | string | `"http://pushgateway.prometheus.svc:9091"` | Push Gateway URL |
