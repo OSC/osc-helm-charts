@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.41.0](https://img.shields.io/badge/Version-0.41.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.15.3](https://img.shields.io/badge/AppVersion-v1.15.3-informational?style=flat-square)
+![Version: 0.42.0](https://img.shields.io/badge/Version-0.42.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.15.3](https://img.shields.io/badge/AppVersion-v1.15.3-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -145,10 +145,10 @@ OSC Kyverno policies deployment
     * Adds account label to pods in PAAS namespace
   * Applies to: PAAS namespace
 
-* [add-gpu-nodeselector](templates/add-gpu-nodeselector.yaml)
+* [add-mig-gpu](templates/add-mig-gpu.yaml)
   * Rules
-    * Adds GPU nodeselector to pods that request GPU resources
-    * Removes GPU nodeselector from pods that no longer request GPU resources
+    * Adds MIG resource request if using generic `nvidia.com/gpu` request
+    * Removes GPU nodeselector from pods
   * Applies to: Pod
 
 * [add-image-pull-secret](templates/add-image-pull-secret.yaml)

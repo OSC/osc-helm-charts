@@ -1,0 +1,60 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-mig-gpu
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: mig-gpu
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            operations:
+            - CREATE
+            - UPDATE
+      mutate:
+        foreach:
+        - list: "request.object.spec.[containers, initContainers][]"
+          preconditions:
+            any:
+              - key: '{{`{{ element.resources.limits."nvidia.com/gpu" || "0" }}`}}'
+                operator: GreaterThan
+                value: 0
+              - key: '{{`{{ element.resources.requests."nvidia.com/gpu" || "0" }}`}}'
+                operator: GreaterThan
+                value: 0
+          patchesJson6902: |-
+            - path: /spec/containers/{{`{{elementIndex}}`}}/resources/limits/nvidia.com~1mig-1g.5gb
+              op: add
+              value: 1
+            - path: /spec/containers/{{`{{elementIndex}}`}}/resources/requests/nvidia.com~1mig-1g.5gb
+              op: add
+              value: 1
+            - path: /spec/containers/{{`{{elementIndex}}`}}/resources/limits/nvidia.com~1gpu
+              op: remove
+            - path: /spec/containers/{{`{{elementIndex}}`}}/resources/requests/nvidia.com~1gpu
+              op: remove
+    - name: remove-gpu-nodeselector
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+            operations:
+            - CREATE
+            - UPDATE
+      preconditions:
+        all:
+        - key: "{{`{{ request.object.spec.nodeSelector.\"nvidia.com/gpu.product\" || '' }}`}}"
+          operator: AnyIn
+          value:
+            - NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+            - NVIDIA-A100-PCIE-40GB-MIG-3g.20gb
+            - NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
+      mutate:
+        patchesJson6902: |-
+          - path: /spec/nodeSelector/nvidia.com~1gpu.product
+            op: remove

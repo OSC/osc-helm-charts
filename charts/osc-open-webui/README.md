@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.7.5](https://img.shields.io/badge/Version-0.7.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.7.6](https://img.shields.io/badge/Version-0.7.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -42,9 +42,9 @@ open-webui:
   sso:
     enableRoleManagement: true
   ollama:
-    nodeSelector:
-      nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-7g.40gb
-      node-role.kubernetes.io/webservices: ''
+    ollama:
+      gpu:
+        nvidiaResource: nvidia.com/mig-7g.40gb
     deployment:
       labels:
         osc.edu/service-account: testuser
@@ -152,7 +152,6 @@ open-webui:
 | open-webui.ollama.ollama.gpu.enabled |  | `true` |
 | open-webui.ollama.ollama.gpu.type |  | `"nvidia"` |
 | open-webui.ollama.ollama.gpu.number |  | `1` |
-| open-webui.ollama.nodeSelector |  | `{}` |
 | open-webui.ollama.service.annotations."prometheus.io/probe_module" |  | `"http"` |
 | open-webui.ollama.service.annotations."prometheus.io/probe_scheme" |  | `"http"` |
 | open-webui.ollama.deployment.labels |  | `{}` |
