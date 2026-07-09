@@ -21,10 +21,6 @@ osc-open-webui:
       roleManagement:
         adminRoles: sysstf,sappstf,ouollamaadmin
     ollama:
-      nodeSelector:
-        # EXTERNAL-DATA
-        # nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
-        node-role.kubernetes.io/webservices: ''
       deployment:
         labels:
           osc.edu/service-account: ouollama
