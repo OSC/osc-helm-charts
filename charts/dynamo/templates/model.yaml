@@ -251,6 +251,9 @@ spec:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
             {{- end }}
+              {{- with $model.env | default list }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               {{- with $decode.env | default list }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
@@ -354,6 +357,9 @@ spec:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
             {{- end }}
+              {{- with $model.env | default list }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               {{- with $prefill.env | default list }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}

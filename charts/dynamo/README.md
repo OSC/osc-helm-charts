@@ -45,6 +45,7 @@ global:
       args:
         - --max-model-len
         - "20480"
+      env: []
       # frontend:
       #   image: ...
       #   pullPolicy: ...
@@ -60,6 +61,7 @@ global:
         # image: ...
         # pullPolicy: ...
         args: []
+        env: []
         cpu: 2
         memory: 6Gi
         gpu: 1
@@ -73,6 +75,7 @@ global:
         # image: ...
         # pullPolicy: ...
         args: []
+        env: []
         cpu: 2
         memory: 6Gi
         gpu: 1
