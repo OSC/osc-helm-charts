@@ -14,13 +14,11 @@ spec:
             - Pod
             namespaces:
             - kube-system
+            operations:
+            - CREATE
+            - UPDATE
       preconditions:
         all:
-        - key: "{{`{{request.operation || 'BACKGROUND'}}`}}"
-          operator: AnyIn
-          value:
-          - CREATE
-          - UPDATE
         - key: "docker.io"
           operator: AnyIn
           value: "{{`{{ images.containers.*.registry }}`}}"
@@ -43,13 +41,11 @@ spec:
             - Pod
             namespaces:
             - kube-system
+            operations:
+            - CREATE
+            - UPDATE
       preconditions:
         all:
-        - key: "{{`{{request.operation || 'BACKGROUND'}}`}}"
-          operator: AnyIn
-          value:
-          - CREATE
-          - UPDATE
         - key: "{{`{{ request.object.spec.initContainers[] || '' | length(@) }}`}}"
           operator: GreaterThanOrEquals
           value: 1
@@ -75,13 +71,11 @@ spec:
             - Pod
             namespaces:
             - kube-system
+            operations:
+            - CREATE
+            - UPDATE
       preconditions:
         all:
-        - key: "{{`{{request.operation || 'BACKGROUND'}}`}}"
-          operator: AnyIn
-          value:
-          - CREATE
-          - UPDATE
         - key: "{{`{{request.object.metadata.labels.\"k8s-app\" || ''}}`}}"
           operator: Equals
           value: "calico-*"

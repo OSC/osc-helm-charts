@@ -15,6 +15,9 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
+            operations:
+            - CREATE
+            - UPDATE
         - resources:
             kinds:
             - Pod
@@ -24,6 +27,9 @@ spec:
                 operator: In
                 values:
                 - paas
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "Pod hostPort is not allowed"
       pattern:

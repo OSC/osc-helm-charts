@@ -14,10 +14,10 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
+            operations:
+            - CREATE
+            - UPDATE
     preconditions:
-    - key: "{{`{{ request.operation }}`}}"
-      operator: In
-      value: ["CREATE","UPDATE"]
     - key: "{{`{{ request.object.spec.securityContext.supplementalGroups.length(@) }}`}}"
       operator: GreaterThan
       value: 0

@@ -19,6 +19,9 @@ spec:
         - resources:
             kinds:
             - Service
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "Service of type ExternalName cannot point to localhost."
       pattern:

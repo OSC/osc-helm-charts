@@ -18,7 +18,6 @@ results:
   - policy: pod-groups-validation
     rule: pods-user-authorized-for-groups
     resources:
-      - user-test/test-skip-op
       - user-test/test-skip-len
     kind: Pod
     result: skip

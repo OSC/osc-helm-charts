@@ -17,6 +17,9 @@ spec:
         - resources:
             kinds:
             - Pod
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: >-
         The imagePullPolicy must be set to `Always` when the tag `latest` is used.

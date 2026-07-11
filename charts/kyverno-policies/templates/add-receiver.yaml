@@ -15,6 +15,9 @@ spec:
             namespaceSelector:
               matchLabels:
                 osc.edu/role: webservice
+            operations:
+            - CREATE
+            - UPDATE
     context:
       - name: namespaceReceiver
         apiCall:
@@ -44,6 +47,9 @@ spec:
             namespaceSelector:
               matchLabels:
                 osc.edu/role: webservice
+            operations:
+            - CREATE
+            - UPDATE
     context:
       - name: namespaceReceiver
         apiCall:

@@ -18,6 +18,9 @@ spec:
                 operator: In
                 values:
                 - paas
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "External DNS annotations are now allowed"
       pattern:

@@ -9,14 +9,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: test-skip-op
-  labels:
-    osc.edu/role: paas
-    account: test
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: test-pass
   labels:
     osc.edu/role: paas

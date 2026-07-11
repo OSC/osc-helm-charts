@@ -34,7 +34,6 @@ results:
     rule: pods-user-authorized-for-account
     resources:
       - test-skip
-      - test-skip-op
     kind: Pod
     result: skip
   - policy: pod-account-validation
@@ -53,7 +52,6 @@ results:
     rule: paas-user-authorized-for-account
     resources:
       - test-paas-skip
-      - test-paas-skip-op
     kind: Pod
     result: skip
   - policy: pod-account-validation

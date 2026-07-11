@@ -20,6 +20,9 @@ spec:
                 operator: In
                 values:
                 - paas
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "role label must be set to 'paas'"
       pattern:

@@ -28,6 +28,9 @@ spec:
       - resources:
           kinds:
           - Pod
+          operations:
+          - CREATE
+          - UPDATE
     exclude:
       any:
         - resources:
@@ -38,9 +41,6 @@ spec:
                 osc.edu/role: kubevirt
     preconditions:
       all:
-        - key: "{{`{{ request.operation }}`}}"
-          operator: NotEquals
-          value: DELETE
         - key: "{{`{{ request.object.metadata.labels.\"app.kubernetes.io/name\" || '' }}`}}"
           operator: AllNotIn
           value:

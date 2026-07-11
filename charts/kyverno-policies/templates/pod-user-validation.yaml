@@ -14,10 +14,9 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
-    preconditions:
-    - key: "{{`{{ request.operation }}`}}"
-      operator: In
-      value: ["CREATE","UPDATE"]
+            operations:
+            - CREATE
+            - UPDATE
     context:
     - name: uidMap
       configMap:
@@ -53,10 +52,9 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
-    preconditions:
-    - key: "{{`{{ request.operation }}`}}"
-      operator: In
-      value: ["CREATE","UPDATE"]
+            operations:
+            - CREATE
+            - UPDATE
     context:
     - name: gidMap
       configMap:
@@ -92,10 +90,9 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
-    preconditions:
-    - key: "{{`{{ request.operation }}`}}"
-      operator: In
-      value: ["CREATE","UPDATE"]
+            operations:
+            - CREATE
+            - UPDATE
     context:
     - name: gidMap
       configMap:

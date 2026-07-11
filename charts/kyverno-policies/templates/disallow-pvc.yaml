@@ -19,6 +19,9 @@ spec:
             - PersistentVolumeClaim
           namespaces:
             - "user-?*"
+          operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "PersistentVolumeClaim is not allowed."
       deny: {}
@@ -30,6 +33,9 @@ spec:
           - Pod
           namespaces:
           - "user-?*"
+          operations:
+          - CREATE
+          - UPDATE
     validate:
       message: >-
         persistentVolumeClaims is not allowed
@@ -45,6 +51,9 @@ spec:
           - StatefulSet
           namespaces:
           - "user-?*"
+          operations:
+          - CREATE
+          - UPDATE
     validate:
       message: >-
         volumeClaimTemplates is not allowed

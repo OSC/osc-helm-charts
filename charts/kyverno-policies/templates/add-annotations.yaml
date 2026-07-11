@@ -19,6 +19,9 @@ spec:
                 operator: In
                 values:
                 - paas
+            operations:
+            - CREATE
+            - UPDATE
     mutate:
       patchStrategicMerge:
         metadata:
@@ -36,6 +39,9 @@ spec:
                 operator: In
                 values:
                 - paas
+            operations:
+            - CREATE
+            - UPDATE
     mutate:
       patchStrategicMerge:
         metadata:
@@ -53,6 +59,9 @@ spec:
             namespaceSelector:
               matchLabels:
                 osc.edu/access-dynamo-platform: "true"
+            operations:
+            - CREATE
+            - UPDATE
         - resources:
             kinds:
             - Service
@@ -62,6 +71,9 @@ spec:
             namespaceSelector:
               matchLabels:
                 osc.edu/access-dynamo-platform: "true"
+            operations:
+            - CREATE
+            - UPDATE
     exclude:
       any:
         - resources:

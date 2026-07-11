@@ -15,6 +15,9 @@ spec:
             - Ingress
           namespaces:
             - "user-?*"
+          operations:
+          - CREATE
+          - UPDATE
     validate:
       message: "Ingress is not allowed."
       deny: {}
