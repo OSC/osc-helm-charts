@@ -18,6 +18,9 @@ spec:
         - resources:
             kinds:
             - Pod
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: >-
         NFS volumes are forbidden. The fields spec.volumes[*].nfs must not be set.

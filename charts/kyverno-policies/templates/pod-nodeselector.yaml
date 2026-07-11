@@ -14,6 +14,9 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "Node selector must be set to ondemand"
       anyPattern:
@@ -32,6 +35,9 @@ spec:
             namespaceSelector:
               matchLabels:
                 osc.edu/role: webservice
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "Node selector must be set"
       anyPattern:
@@ -52,6 +58,9 @@ spec:
             namespaceSelector:
               matchLabels:
                 osc.edu/role: paas
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "Node selector must be set"
       anyPattern:

@@ -15,6 +15,9 @@ spec:
           selector:
             matchLabels:
               {{ include "osc.common.roleKey" . }}: paas
+          operations:
+          - CREATE
+          - UPDATE
     validate:
       message: "Namespaces requires account label be set."
       pattern:
@@ -30,10 +33,10 @@ spec:
           selector:
             matchLabels:
               {{ include "osc.common.roleKey" . }}: paas
+          operations:
+          - CREATE
+          - UPDATE
     preconditions:
-    - key: "{{`{{ request.operation }}`}}"
-      operator: In
-      value: ["CREATE","UPDATE"]
     - key: "{{`{{ request.object.metadata.labels.account || '' }}`}}"
       operator: NotEquals
       value: ""

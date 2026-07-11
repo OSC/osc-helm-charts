@@ -15,6 +15,9 @@ spec:
             namespaceSelector:
               matchLabels:
                 osc.edu/role: paas
+            operations:
+            - CREATE
+            - UPDATE
     mutate:
       patchStrategicMerge:
         metadata:
@@ -34,6 +37,9 @@ spec:
             namespaceSelector:
               matchLabels:
                 osc.edu/role: paas
+            operations:
+            - CREATE
+            - UPDATE
     mutate:
       patchStrategicMerge:
         metadata:

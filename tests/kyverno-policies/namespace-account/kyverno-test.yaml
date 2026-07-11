@@ -31,7 +31,6 @@ results:
     rule: valid-account
     resources:
       - user-test
-      - test-skip-op
     kind: Namespace
     result: skip
   - policy: namespace-account

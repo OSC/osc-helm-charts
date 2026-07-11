@@ -19,6 +19,9 @@ spec:
         - resources:
             kinds:
             - Pod
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "Use of the Docker Unix socket is not allowed."
       pattern:
@@ -32,6 +35,9 @@ spec:
         - resources:
             kinds:
             - Pod
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "Use of the Containerd Unix socket is not allowed."
       pattern:
@@ -45,6 +51,9 @@ spec:
         - resources:
             kinds:
             - Pod
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "Use of the CRI-O Unix socket is not allowed."
       pattern:

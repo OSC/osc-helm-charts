@@ -20,6 +20,9 @@ spec:
             - Pod
             namespaces:
             - "user-?*"
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: >-
         That HostPath volume is forbidden. The fields spec.volumes[*].hostPath must not be set to allowed paths.
@@ -40,6 +43,9 @@ spec:
                 operator: In
                 values:
                 - webservice
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: >-
         That HostPath volume is forbidden. The fields spec.volumes[*].hostPath must not be set to allowed paths.
@@ -60,6 +66,9 @@ spec:
                 operator: In
                 values:
                 - paas
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: >-
         That HostPath volume is forbidden. The fields spec.volumes[*].hostPath must not be set to allowed paths.

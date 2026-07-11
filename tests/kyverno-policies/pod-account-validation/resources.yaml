@@ -12,18 +12,6 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-skip-op
-  namespace: user-test
-  labels:
-    account: PZS0001
-spec: 
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
   name: test-pass
   namespace: user-test
   labels:
@@ -98,18 +86,6 @@ kind: Pod
 metadata:
   name: test-paas-skip
   namespace: user-test
-spec: 
-  containers:
-  - name: nginx
-    image: nginx:1.12
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: test-paas-skip-op
-  namespace: paas
-  labels:
-    account: test
 spec: 
   containers:
   - name: nginx
