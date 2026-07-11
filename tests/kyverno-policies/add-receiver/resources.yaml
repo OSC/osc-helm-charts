@@ -1,0 +1,72 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice
+  namespace: webservice
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-skip
+  namespace: user-test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-skip-paas
+  namespace: paas
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webservice-deployment
+  namespace: webservice
+spec: {}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset
+  namespace: webservice
+spec: {}
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: webservice-replicaset
+  namespace: webservice
+spec: {}
+---
+apiVersion: v1
+kind: Job
+metadata:
+  name: webservice-job
+  namespace: webservice
+spec: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webservice-service
+  namespace: webservice
+spec: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webservice-ingress
+  namespace: webservice
+spec: {}

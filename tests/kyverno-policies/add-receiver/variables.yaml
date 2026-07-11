@@ -1,0 +1,25 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Values
+metadata:
+  name: values
+policies:
+  - name: add-receiver
+    rules:
+      - name: add-receiver-pod
+        values:
+          namespaceReceiver: test
+      - name: add-receiver-all
+        values:
+          namespaceReceiver: test
+namespaceSelector:
+  - name: user-test
+    labels:
+      foo: bar
+  - name: webservice
+    labels:
+      osc.edu/role: webservice
+  - name: paas
+    labels:
+      osc.edu/role: paas
+      osc.edu/service-account: test
+      account: test

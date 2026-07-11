@@ -159,6 +159,11 @@
     * Adds paas nodeselector to pods in PAAS namespaces
   * Applies to: Pod in user-?* namespaces, webservice namespaces or PAAS namespaces
 
+* [add-receiver](templates/add-receiver.yaml)
+  * Rules
+    * Adds receiver label to webservice resources based on namespace receiver
+  * Applies to: Pod, Deployment, StatefulSet, Job, Service, Ingress in webservice namespace with `receiver` set
+
 * [add-service-account](templates/add-service-account.yaml)
   * Rules
     * Adds service account security context to webservice pods

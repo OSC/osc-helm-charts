@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-webservice
+  namespace: webservice
+  labels:
+    receiver: test
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webservice-deployment
+  namespace: webservice
+  labels:
+    receiver: test
+spec:
+  template:
+    metadata:
+      labels:
+        receiver: test
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: webservice-statefulset
+  namespace: webservice
+  labels:
+    receiver: test
+spec:
+  template:
+    metadata:
+      labels:
+        receiver: test
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: webservice-replicaset
+  namespace: webservice
+  labels:
+    receiver: test
+spec:
+  template:
+    metadata:
+      labels:
+        receiver: test
+---
+apiVersion: v1
+kind: Job
+metadata:
+  name: webservice-job
+  namespace: webservice
+  labels:
+    receiver: test
+spec:
+  template:
+    metadata:
+      labels:
+        receiver: test
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webservice-service
+  namespace: webservice
+  labels:
+    receiver: test
+spec:
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webservice-ingress
+  namespace: webservice
+  labels:
+    receiver: test
+spec:

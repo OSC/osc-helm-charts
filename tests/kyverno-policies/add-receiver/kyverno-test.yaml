@@ -1,0 +1,67 @@
+---
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: add-receiver
+policies:
+  - policy.yaml
+resources:
+  - resources.yaml
+variables: variables.yaml
+results:
+  - policy: add-receiver
+    rule: add-receiver-pod
+    resources:
+      - test-webservice
+    patchedResources: test-webservice-mutated.yaml
+    kind: Pod
+    result: pass
+  - policy: add-receiver
+    rule: add-receiver-all
+    resources:
+      - webservice-deployment
+    patchedResources: test-webservice-mutated.yaml
+    kind: Deployment
+    result: pass
+  - policy: add-receiver
+    rule: add-receiver-all
+    resources:
+      - webservice-statefulset
+    patchedResources: test-webservice-mutated.yaml
+    kind: StatefulSet
+    result: pass
+  - policy: add-receiver
+    rule: add-receiver-all
+    resources:
+      - webservice-replicaset
+    patchedResources: test-webservice-mutated.yaml
+    kind: ReplicaSet
+    result: pass
+  - policy: add-receiver
+    rule: add-receiver-all
+    resources:
+      - webservice-job
+    patchedResources: test-webservice-mutated.yaml
+    kind: Job
+    result: pass
+  - policy: add-receiver
+    rule: add-receiver-all
+    resources:
+      - webservice-service
+    patchedResources: test-webservice-mutated.yaml
+    kind: Service
+    result: pass
+  - policy: add-receiver
+    rule: add-receiver-all
+    resources:
+      - webservice-ingress
+    patchedResources: test-webservice-mutated.yaml
+    kind: Ingress
+    result: pass
+  - policy: add-receiver
+    rule: add-receiver-pod
+    resources:
+      - test-skip
+      - test-skip-paas
+    kind: Pod
+    result: skip

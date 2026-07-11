@@ -1,0 +1,61 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-receiver
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+  - name: add-receiver-pod
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+    context:
+      - name: namespaceReceiver
+        apiCall:
+          urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+          jmesPath: "metadata.labels.receiver || ''"
+    preconditions:
+      all:
+        - key: "{{`{{ namespaceReceiver || '' }}`}}"
+          operator: NotEquals
+          value: ""
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          labels:
+            receiver: "{{`{{ namespaceReceiver }}`}}"
+  - name: add-receiver-all
+    match:
+      any:
+        - resources:
+            kinds:
+            - Deployment
+            - Job
+            - StatefulSet
+            - ReplicaSet
+            - Service
+            - Ingress
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+    context:
+      - name: namespaceReceiver
+        apiCall:
+          urlPath: "/api/v1/namespaces/{{`{{ request.namespace }}`}}"
+          jmesPath: "metadata.labels.receiver || ''"
+    preconditions:
+      all:
+        - key: "{{`{{ namespaceReceiver || '' }}`}}"
+          operator: NotEquals
+          value: ""
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          labels:
+            receiver: "{{`{{ namespaceReceiver }}`}}"
