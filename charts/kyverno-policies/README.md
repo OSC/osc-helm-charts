@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.42.0](https://img.shields.io/badge/Version-0.42.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.15.3](https://img.shields.io/badge/AppVersion-v1.15.3-informational?style=flat-square)
+![Version: 0.43.0](https://img.shields.io/badge/Version-0.43.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.15.3](https://img.shields.io/badge/AppVersion-v1.15.3-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -162,6 +162,11 @@ OSC Kyverno policies deployment
     * Adds webservices nodeselector to pods in webservice namespaces
     * Adds paas nodeselector to pods in PAAS namespaces
   * Applies to: Pod in user-?* namespaces, webservice namespaces or PAAS namespaces
+
+* [add-receiver](templates/add-receiver.yaml)
+  * Rules
+    * Adds receiver label to webservice resources based on namespace receiver
+  * Applies to: Pod, Deployment, StatefulSet, Job, Service, Ingress in webservice namespace with `receiver` set
 
 * [add-service-account](templates/add-service-account.yaml)
   * Rules
