@@ -67,6 +67,7 @@ global:
         gpu: 1
         gpuType: nvidia.com/mig-1g.5gb
         nodes: 1
+        replicas: 1
       prefill:
         # scaling:
         #   minReplicas: 0
@@ -81,6 +82,7 @@ global:
         gpu: 1
         gpuType: nvidia.com/mig-1g.5gb
         nodes: 1
+        replicas: 1
 hfToken:
   value: <Huggingface token>
 ```
