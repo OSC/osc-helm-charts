@@ -20,7 +20,11 @@ sum(dynamo_frontend_stage_requests{phase="aggregated",stage=~"preprocess|route|d
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: '{{ $name }}-vllmdecodeworker-scaler'
+  {{- if $disagg }}
+  name: '{{ $name }}-decode-scaler'
+  {{- else }}
+  name: '{{ $name }}-worker-scaler'
+  {{- end }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "dynamo.labels" $ | nindent 4 }}
@@ -28,7 +32,11 @@ spec:
   scaleTargetRef:
     apiVersion: nvidia.com/v1beta1
     kind: DynamoGraphDeploymentScalingAdapter
-    name: '{{ $name }}-vllmdecodeworker'
+    {{- if $disagg }}
+    name: '{{ $name }}-decode'
+    {{- else }}
+    name: '{{ $name }}-worker'
+    {{- end }}
   minReplicaCount: {{ $decodeScaling.minReplicas | default 0 }}
   maxReplicaCount: {{ $decodeScaling.maxReplicas | default 2 }}
   pollingInterval: 15
@@ -75,7 +83,7 @@ spec:
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: '{{ $name }}-vllmprefillworker-scaler'
+  name: '{{ $name }}-prefill-scaler'
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "dynamo.labels" $ | nindent 4 }}
@@ -83,7 +91,7 @@ spec:
   scaleTargetRef:
     apiVersion: nvidia.com/v1beta1
     kind: DynamoGraphDeploymentScalingAdapter
-    name: '{{ $name }}-vllmprefillworker'
+    name: '{{ $name }}-prefill'
   minReplicaCount: {{ $prefillScaling.minReplicas | default 0 }}
   maxReplicaCount: {{ $prefillScaling.maxReplicas | default 2 }}
   pollingInterval: 15

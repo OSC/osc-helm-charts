@@ -153,10 +153,11 @@ spec:
   annotations:
     prometheus.io/probe_skip: "true"
   components:
-    - name: VllmDecodeWorker
     {{- if $disagg }}
+    - name: decode
       type: decode
     {{- else }}
+    - name: worker
       type: worker
     {{- end }}
     {{- if $decodeScaling }}
@@ -265,7 +266,7 @@ spec:
               persistentVolumeClaim:
                 claimName: {{ $.Values.cache.name }}
   {{- if $disagg }}
-    - name: VllmPrefillWorker
+    - name: prefill
       type: prefill
     {{- if $prefillScaling }}
       scalingAdapter:
