@@ -116,7 +116,6 @@ hfToken:
 | image.tag | string | The chart's appVersion | The vllm runtime image tag |
 | image.release | string | `"1"` | The release of the custom OSC vllm runtime image |
 | hfToken.value | string | **required** | The HF token for Hugging Face |
-| cache | object | `{}` |  |
 | networkPolicy.namespaceSelectors | list | `[]` | Namespace labels to allow access to frontends |
 | defaultGpuType | string | `"nvidia.com/mig-7g.40gb"` | The default GPU type |
 | rdmaResource | string | `"rdma/shared_mlx5"` | The RDMA resource name in Kubernetes |

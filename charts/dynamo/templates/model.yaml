@@ -130,17 +130,17 @@ spec:
                   type: RuntimeDefault
                 privileged: false
               volumeMounts:
-                - name: dynamo-cache
-                  mountPath: /home/dynamo/.cache
+                - name: model-cache
+                  mountPath: /home/dynamo/.cache/huggingface
           nodeSelector:
             '{{ include "osc.common.nodeSelectorRoleKey" $ }}': ""
           {{- if $.Values.priorityClassName }}
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
           volumes:
-            - name: dynamo-cache
+            - name: model-cache
               persistentVolumeClaim:
-                claimName: {{ $.Values.cache.name }}
+                claimName: {{ $.Values.modelCache.name }}
 ---
 apiVersion: nvidia.com/v1beta1
 kind: DynamoGraphDeployment
@@ -170,6 +170,9 @@ spec:
       multinode:
         nodeCount: {{ $decodeNodes }}
     {{- end }}
+      compilationCache:
+        mountPath: /home/dynamo/.cache/vllm
+        pvcName: {{ $.Values.compilationCache.name }}
       podTemplate:
         spec:
           containers:
@@ -241,8 +244,8 @@ spec:
                 privileged: false
               workingDir: /home/dynamo
               volumeMounts:
-                - name: dynamo-cache
-                  mountPath: /home/dynamo/.cache
+                - name: model-cache
+                  mountPath: /home/dynamo/.cache/huggingface
               env:
               {{- with $.Values.workerEnv }}
                 {{- toYaml . | nindent 16 }}
@@ -262,9 +265,9 @@ spec:
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
           volumes:
-            - name: dynamo-cache
+            - name: model-cache
               persistentVolumeClaim:
-                claimName: {{ $.Values.cache.name }}
+                claimName: {{ $.Values.modelCache.name }}
   {{- if $disagg }}
     - name: prefill
       type: prefill
@@ -278,6 +281,9 @@ spec:
       multinode:
         nodeCount: {{ $prefillNodes }}
     {{- end }}
+      compilationCache:
+        mountPath: /home/dynamo/.cache/vllm
+        pvcName: {{ $.Values.compilationCache.name }}
       podTemplate:
         spec:
           containers:
@@ -347,8 +353,8 @@ spec:
                 privileged: false
               workingDir: /home/dynamo
               volumeMounts:
-                - name: dynamo-cache
-                  mountPath: /home/dynamo/.cache
+                - name: model-cache
+                  mountPath: /home/dynamo/.cache/huggingface
               env:
               {{- with $.Values.workerEnv }}
                 {{- toYaml . | nindent 16 }}
@@ -368,8 +374,8 @@ spec:
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
           volumes:
-            - name: dynamo-cache
+            - name: model-cache
               persistentVolumeClaim:
-                claimName: {{ $.Values.cache.name }}
+                claimName: {{ $.Values.modelCache.name }}
   {{- end }}
 {{- end }}
