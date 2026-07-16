@@ -1,0 +1,62 @@
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+{{- $image := $model.image | default (include "dynamo.image" $) }}
+{{- $decode := $model.decode | default dict }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}-download
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+    {{ tpl (include "osc.common.serviceAccount" $) $ }}
+spec:
+  ttlSecondsAfterFinished: 120
+  template:
+    metadata:
+      labels:
+        {{- include "dynamo.selectorLabels" $ | nindent 8 }}
+        {{ tpl (include "osc.common.serviceAccount" $) $ }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: hf-download
+          image: {{ $image }}
+          imagePullPolicy: {{ $model.pullPolicy | default $.Values.image.pullPolicy }}
+          command:
+            - /bin/bash
+            - -c
+          args:
+            - |
+              set -x
+              hf download {{ $model.model }}
+              exit $?
+          envFrom:
+            - secretRef:
+                name: {{ $.Values.hfToken.name }}
+          resources:
+            limits:
+              cpu: {{ $decode.cpu | default 2 | quote }}
+              memory: {{ $decode.memory | default "4Gi" | quote }}
+            requests:
+              cpu: {{ $decode.cpu | default 2 | quote }}
+              memory: {{ $decode.memory | default "4Gi" | quote }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+            privileged: false
+          workingDir: /home/dynamo
+          volumeMounts:
+            - name: model-cache
+              mountPath: /home/dynamo/.cache/huggingface
+      nodeSelector:
+        '{{ include "osc.common.nodeSelectorRoleKey" $ }}': ""
+      volumes:
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: {{ $.Values.modelCache.name }}
+{{- end }}

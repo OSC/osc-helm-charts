@@ -39,9 +39,33 @@ spec:
       replicas: 1
       podTemplate:
         spec:
+          initContainers:
+            - name: hf-wait
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
+              command:
+              - /bin/bash
+              - -c
+              args:
+              - |
+                set -x
+                echo "Waiting for download job to finish..."
+                kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
+                exit $?
+              resources:
+              {{- with $.Values.init.resources }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
         {{/* if or $decodeScaling $prefillScaling */}}
         {{- if false }}
-          initContainers:
             - name: scale-up-workers
               image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
               imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
@@ -175,25 +199,23 @@ spec:
         pvcName: {{ $.Values.compilationCache.name }}
       podTemplate:
         spec:
-        {{- if $disagg }}
           initContainers:
-            - name: hf-download
-              image: {{ $decodeImage | quote }}
-              imagePullPolicy: {{ $decodeImagePullPolicy }}
+            - name: hf-wait
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
               command:
               - /bin/bash
               - -c
+              args:
               - |
                 set -x
-                hf download {{ $model.model }}
+                echo "Waiting for download job to finish..."
+                kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
                 exit $?
               resources:
-                limits:
-                  cpu: {{ $prefill.cpu | default 2 | quote }}
-                  memory: {{ $prefill.memory | default "4Gi" | quote }}
-                requests:
-                  cpu: {{ $prefill.cpu | default 2 | quote }}
-                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+              {{- with $.Values.init.resources }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -202,11 +224,6 @@ spec:
                 seccompProfile:
                   type: RuntimeDefault
                 privileged: false
-              workingDir: /home/dynamo
-              volumeMounts:
-                - name: model-cache
-                  mountPath: /home/dynamo/.cache/huggingface
-        {{- end }}
           containers:
             - name: main
               image: {{ $decodeImage | quote }}
@@ -320,34 +337,21 @@ spec:
         spec:
           initContainers:
             - name: hf-wait
-              image: {{ $prefillImage | quote }}
-              imagePullPolicy: {{ $prefillImagePullPolicy }}
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
               command:
               - /bin/bash
               - -c
+              args:
               - |
                 set -x
-                timeout=180
-                interval=5
-                elapsed=0
-                until hf cache ls --format json | jq -e '.[] | select(.repo_id == "{{ $model.model }}")' ; do
-                  if [ $elapsed -ge $timeout ]; then
-                    echo "Timeout reached. Exiting."
-                    exit 1
-                  fi
-                  elapsed=$((elapsed+interval))
-                  echo "Waiting for model download"
-                  sleep $interval
-                done
-                echo "Model verify passed, exit"
-                exit 0
+                echo "Waiting for download job to finish..."
+                kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
+                exit $?
               resources:
-                limits:
-                  cpu: {{ $prefill.cpu | default 2 | quote }}
-                  memory: {{ $prefill.memory | default "4Gi" | quote }}
-                requests:
-                  cpu: {{ $prefill.cpu | default 2 | quote }}
-                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+              {{- with $.Values.init.resources }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -356,10 +360,6 @@ spec:
                 seccompProfile:
                   type: RuntimeDefault
                 privileged: false
-              workingDir: /home/dynamo
-              volumeMounts:
-                - name: model-cache
-                  mountPath: /home/dynamo/.cache/huggingface
           containers:
             - name: main
               image: {{ $prefillImage | quote }}
