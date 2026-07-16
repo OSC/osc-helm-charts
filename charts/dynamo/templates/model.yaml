@@ -175,6 +175,38 @@ spec:
         pvcName: {{ $.Values.compilationCache.name }}
       podTemplate:
         spec:
+        {{- if $disagg }}
+          initContainers:
+            - name: hf-download
+              image: {{ $decodeImage | quote }}
+              imagePullPolicy: {{ $decodeImagePullPolicy }}
+              command:
+              - /bin/bash
+              - -c
+              - |
+                set -x
+                hf download {{ $model.model }}
+                exit $?
+              resources:
+                limits:
+                  cpu: {{ $prefill.cpu | default 2 | quote }}
+                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+                requests:
+                  cpu: {{ $prefill.cpu | default 2 | quote }}
+                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+              workingDir: /home/dynamo
+              volumeMounts:
+                - name: model-cache
+                  mountPath: /home/dynamo/.cache/huggingface
+        {{- end }}
           containers:
             - name: main
               image: {{ $decodeImage | quote }}
@@ -286,6 +318,48 @@ spec:
         pvcName: {{ $.Values.compilationCache.name }}
       podTemplate:
         spec:
+          initContainers:
+            - name: hf-wait
+              image: {{ $prefillImage | quote }}
+              imagePullPolicy: {{ $prefillImagePullPolicy }}
+              command:
+              - /bin/bash
+              - -c
+              - |
+                set -x
+                timeout=180
+                interval=5
+                elapsed=0
+                until hf cache ls --format json | jq -e '.[] | select(.repo_id == "{{ $model.model }}")' ; do
+                  if [ $elapsed -ge $timeout ]; then
+                    echo "Timeout reached. Exiting."
+                    exit 1
+                  fi
+                  elapsed=$((elapsed+interval))
+                  echo "Waiting for model download"
+                  sleep $interval
+                done
+                echo "Model verify passed, exit"
+                exit 0
+              resources:
+                limits:
+                  cpu: {{ $prefill.cpu | default 2 | quote }}
+                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+                requests:
+                  cpu: {{ $prefill.cpu | default 2 | quote }}
+                  memory: {{ $prefill.memory | default "4Gi" | quote }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+              workingDir: /home/dynamo
+              volumeMounts:
+                - name: model-cache
+                  mountPath: /home/dynamo/.cache/huggingface
           containers:
             - name: main
               image: {{ $prefillImage | quote }}
