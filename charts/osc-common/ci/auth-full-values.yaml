@@ -13,6 +13,8 @@ global:
       - group1
       - group2
       - '{{ .Values.global.project }}'
+    redirectUris:
+      - /oauth/oidc/callback
   ingress:
     host: test.example.com
   project: test1

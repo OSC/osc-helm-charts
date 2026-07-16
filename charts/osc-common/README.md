@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.14.2](https://img.shields.io/badge/Version-0.14.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.15.0](https://img.shields.io/badge/Version-0.15.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -90,6 +90,7 @@ global:
 | global.auth.allowGroups | Restrict access to these groups | `[]` |
 | global.auth.commonAllowGroups | Common groups to allow | `["sysstf"]` |
 | global.auth.redirectUriPath | Path used for redirect URI | `"/*"` |
+| global.auth.redirectUris | Redirect URIs | `[]` |
 | global.auth.defaultClientScopes | Default client scopes for the Keycloak client | `["web-origins","roles","profile","groups","osc-oidc-clients","basic","email"]` |
 | global.auth.extraDefaultClientScropes | Extra default client scopes for the Keycloak client | `[]` |
 | global.auth.keycloakClient.forceCreate | Force creating KeycloakClient when Oauth2 Proxy management is disabled | `false` |
