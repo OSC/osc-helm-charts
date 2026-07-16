@@ -52,11 +52,15 @@ global:
     # -- Ingress host alias
     # @default -- **required**
     hostAlias: ""
+    # -- Ingress additional hosts
+    additionalHosts: []
     # -- Additional Ingress annotations for the Ingress resource
     annotations: ~
   auth:
     # @ignored
     enable: false
+    # -- Additional redirect URIs
+    redirectUris: []
     # @ignored
     keycloakClient:
       forceCreate: true
