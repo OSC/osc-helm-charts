@@ -12,8 +12,8 @@ spec:
   {{- if .Values.global.ingress.hostAlias }}
     - https://{{ tpl .Values.global.ingress.hostAlias . }}{{ .Values.global.auth.redirectUriPath }}
   {{- end }}
-  {{- with .Values.global.ingress.additionalHosts }}
-    - https://{{ . }}{{ .Values.global.auth.redirectUriPath }}
+  {{- range (default list ((((.Values).global).ingress).additionalHosts)) }}
+    - https://{{ . }}{{ $.Values.global.auth.redirectUriPath }}
   {{- end }}
   {{- end }}
   {{- range .Values.global.auth.redirectUris }}

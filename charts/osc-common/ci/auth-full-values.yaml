@@ -17,6 +17,8 @@ global:
       - /oauth/oidc/callback
   ingress:
     host: test.example.com
+    additionalHosts:
+      - '*.test.example.com'
   project: test1
 keycloakClient:
   config:
