@@ -6,7 +6,7 @@ metadata:
     {{- include "osc.common.labels" . | nindent 4 }}
   name: {{ include "osc.common.name" . | quote }}
 spec:
-  {{- if or (default "" ((((.Values).global).ingress).host)) (default "" ((((.Values).global).ingress).hostAlias)) }}
+  {{- if or (default "" ((((.Values).global).ingress).host)) (default "" ((((.Values).global).ingress).hostAlias)) (default list ((((.Values).global).auth).redirectUris)) }}
   redirectUris:
     - https://{{ tpl .Values.global.ingress.host . }}{{ .Values.global.auth.redirectUriPath }}
   {{- if .Values.global.ingress.hostAlias }}
@@ -15,6 +15,9 @@ spec:
   {{- with .Values.global.ingress.additionalHosts }}
     - https://{{ . }}{{ .Values.global.auth.redirectUriPath }}
   {{- end }}
+  {{- end }}
+  {{- range .Values.global.auth.redirectUris }}
+    - {{ . | quote }}
   {{- end }}
   defaultClientScopes:
   {{- range .Values.global.auth.defaultClientScopes }}

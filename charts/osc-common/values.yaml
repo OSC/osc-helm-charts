@@ -69,6 +69,8 @@ global:
       - sysstf
     # -- Path used for redirect URI
     redirectUriPath: '/*'
+    # -- Redirect URIs
+    redirectUris: []
     # -- Default client scopes for the Keycloak client
     defaultClientScopes:
       - web-origins
