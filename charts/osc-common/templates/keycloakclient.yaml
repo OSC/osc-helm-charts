@@ -16,7 +16,7 @@ spec:
     - https://{{ . }}{{ $.Values.global.auth.redirectUriPath }}
   {{- end }}
   {{- end }}
-  {{- range .Values.global.auth.redirectUris }}
+  {{- range (default list ((((.Values).global).auth).redirectUris)) }}
     - {{ . | quote }}
   {{- end }}
   defaultClientScopes:
