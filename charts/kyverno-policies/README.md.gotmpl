@@ -363,3 +363,12 @@
 {{- end -}}
 
 {{ template "chart.valuesSection" . }}
+
+### Dynamo policies
+
+#### Mutate policies
+
+* [add-dynamo-resources](templates/add-dynamo-resources.yaml)
+  * Rules
+    * Add resource requests and limits to `wait-for-leader-mp` init container
+  * Applies to: Pod in namespaces using Dynamo

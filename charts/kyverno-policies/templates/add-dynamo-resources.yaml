@@ -1,0 +1,35 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-dynamo-resources
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+  - name: add-resources-to-init
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchLabels:
+                osc.edu/role: webservice
+                osc.edu/access-dynamo-platform: "true"
+            operations:
+            - CREATE
+            - UPDATE
+    mutate:
+      foreach:
+      - list: "request.object.spec.initContainers || []"
+        patchStrategicMerge:
+          spec:
+            initContainers:
+            - (name): "wait-for-leader-mp"
+              resources:
+                limits:
+                  +(cpu): 1
+                  +(memory): 512Mi
+                requests:
+                  +(cpu): 500m
+                  +(memory): 256Mi
