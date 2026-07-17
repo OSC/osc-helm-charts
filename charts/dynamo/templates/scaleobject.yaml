@@ -1,8 +1,10 @@
 {{- range $name, $model := .Values.global.models | required "models must be defined" }}
 {{- $decode := $model.decode | default dict }}
 {{- $decodeScaling := $decode.scaling | default $model.scaling | default dict }}
+{{- $decodeNodes := $decode.nodes | default 1 | int }}
 {{- $prefill := $model.prefill | default dict }}
 {{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
+{{- $prefillNodes := $prefill.nodes | default 1 | int }}
 {{- $disagg := $model.disagg | default false }}
 {{- $namespace := printf "%s-%s-frontend" $.Release.Namespace $name }}
 {{- if $decodeScaling }}
@@ -77,6 +79,69 @@ spec:
       query: |
         sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}",namespace="{{ $.Release.Namespace }}"}) > bool 0
       threshold: "1"
+{{- if gt $decodeNodes 1 }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  {{- if $disagg }}
+  name: '{{ $name }}-decode-pcsg-scaler'
+  {{- else }}
+  name: '{{ $name }}-worker-gcsg-scaler'
+  {{- end }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: grove.io/v1alpha1
+    kind: PodCliqueScalingGroup
+    {{- if $disagg }}
+    name: '{{ $name }}-0-decode'
+    {{- else }}
+    name: '{{ $name }}-0-worker'
+    {{- end }}
+  minReplicaCount: {{ $decodeScaling.minReplicas | default 0 }}
+  maxReplicaCount: {{ $decodeScaling.maxReplicas | default 2 }}
+  pollingInterval: 15
+  cooldownPeriod: {{ $decodeScaling.cooldownPeriod | default 600 }}
+  initialCooldownPeriod: {{ $decodeScaling.initialCooldownPeriod | default 600 }}
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      {{- if $disagg }}
+      metricName: dynamo_itl_p95
+      query: |
+        histogram_quantile(0.95,
+          sum(rate(dynamo_frontend_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
+          by (le)
+        )
+      threshold: "0.05"
+      {{- else }}
+      metricName: dynamo_ttft_p95
+      query: |
+        histogram_quantile(0.95,
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
+          by (le)
+        )
+      threshold: "0.5"
+      {{- end }}
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: frontend_requests
+      query: |
+        sum(delta(dynamo_frontend_requests_total{dynamo_namespace="{{ $namespace }}"}[5m])) > bool 0
+      threshold: "1"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: dynamo_pending_request
+      query: |
+        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}",namespace="{{ $.Release.Namespace }}"}) > bool 0
+      threshold: "1"
+{{- end }}
 {{- end }}
 {{- if and $disagg $prefillScaling }}
 ---
@@ -123,5 +188,51 @@ spec:
       query: |
         sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}",namespace="{{ $.Release.Namespace }}"}) > bool 0
       threshold: "1"
+{{- if gt $prefillNodes 1 }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: '{{ $name }}-prefill-pcsg-scaler'
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: grove.io/v1alpha1
+    kind: PodCliqueScalingGroup
+    name: '{{ $name }}-0-prefill'
+  minReplicaCount: {{ $prefillScaling.minReplicas | default 0 }}
+  maxReplicaCount: {{ $prefillScaling.maxReplicas | default 2 }}
+  pollingInterval: 15
+  cooldownPeriod: {{ $prefillScaling.cooldownPeriod | default 600 }}
+  initialCooldownPeriod: {{ $prefillScaling.initialCooldownPeriod | default 600 }}
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: dynamo_ttft_p95
+      query: |
+        histogram_quantile(0.95,
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
+          by (le)
+        )
+      # Should be 0.5 but seems small prompts resulting in larger TTFT
+      threshold: "1"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: frontend_requests
+      query: |
+        sum(delta(dynamo_frontend_requests_total{dynamo_namespace="{{ $namespace }}"}[5m])) > bool 0
+      threshold: "1"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: dynamo_pending_request
+      query: |
+        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}",namespace="{{ $.Release.Namespace }}"}) > bool 0
+      threshold: "1"
+{{- end }}
 {{- end }}
 {{- end }}
