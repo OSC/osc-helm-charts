@@ -7,9 +7,13 @@ global:
     allowGroups:
       - test1
       - test2
+    redirectUris:
+      - /oauth/oidc/callback
   ingress:
     host: webservice.k8.example.com
     hostAlias: webservice.example.com
+    additionalHosts:
+      - '*.service.example.com'
   webui_secret_key: supersecret
   alert:
     receiver: test-receiver

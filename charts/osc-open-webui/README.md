@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.7.6](https://img.shields.io/badge/Version-0.7.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -15,7 +15,7 @@ OSC Open Web UI deployment
 | Repository | Name | Version |
 |------------|------|---------|
 | https://helm.openwebui.com/ | open-webui | 13.1.0 |
-| https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.2 |
+| https://osc.github.io/osc-helm-charts/ | osc-common | 0.15.1 |
 
 ## Usage
 
@@ -132,7 +132,9 @@ open-webui:
 | global.webservicesDeploy.create | Create webservices deployment rolebinding | `true` |
 | global.ingress.host | Ingress host | **required** |
 | global.ingress.hostAlias | Ingress host alias | **required** |
+| global.ingress.additionalHosts | Ingress additional hosts | `[]` |
 | global.ingress.annotations | Additional Ingress annotations for the Ingress resource | `nil` |
+| global.auth.redirectUris | Additional redirect URIs | `[]` |
 | global.auth.allowGroups | Restrict access to these groups | `[]` |
 | global.alert.receiver | The alert receiver | `nil` |
 | global.webui_secret_key |  | `nil` |
