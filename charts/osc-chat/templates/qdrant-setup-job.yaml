@@ -36,7 +36,10 @@ spec:
           - /bin/sh
           - -c
           - |
-            curl --header "api-key: ${QDRANT_API_KEY}" -sf "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" || \
+            if curl --header "api-key: ${QDRANT_API_KEY}" -sf "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" > /dev/null; then
+              echo "Collection ${QDRANT_COLLECTION_NAME} already exists."
+              exit 0
+            fi
             curl --header "api-key: ${QDRANT_API_KEY}" -X PUT "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}" \
             -H "Content-Type: application/json" \
             -d '{
@@ -45,6 +48,23 @@ spec:
                 "distance": "Cosine"
               }
             }'
+            SNAPSHOTS_RESP=$(curl -X GET --header "api-key: ${QDRANT_API_KEY}" -sf "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}/snapshots")
+            LATEST_SNAPSHOT=$(echo "$SNAPSHOTS_RESP" | \
+              grep -o '"name":"[^"]*"' | \
+              cut -d'"' -f4 | \
+              sed 's/.*\([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]\)\.snapshot/\1 &/' | \
+              sort -r | \
+              head -n 1 | \
+              awk '{print $2}')
+            if [ -n "$LATEST_SNAPSHOT" ]; then
+              echo "Snapshot found: $LATEST_SNAPSHOT. Initiating recovery..."
+              curl -X PUT "${QDRANT_URL}/collections/${QDRANT_COLLECTION_NAME}/snapshots/recover" \
+                --header "api-key: ${QDRANT_API_KEY}" \
+                --header "Content-Type: application/json" \
+                -d "{
+                  \"location\": \"file:///qdrant/snapshots/${QDRANT_COLLECTION_NAME}/${LATEST_SNAPSHOT}\"
+                }"
+            fi
         env:
         - name: QDRANT_URL
           valueFrom:
