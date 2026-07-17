@@ -49,9 +49,14 @@ spec:
               args:
               - |
                 set -x
-                echo "Waiting for download job to finish..."
-                kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
-                exit $?
+                if kubectl get job {{ $name }}-download -n {{ $.Release.Namespace }} &>/dev/null; then
+                  echo "Waiting for download job to finish..."
+                  kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
+                  exit $?
+                else
+                  echo "Job not found, exit"
+                  exit 0
+                fi
               resources:
               {{- with $.Values.init.resources }}
                 {{- toYaml . | nindent 16 }}
@@ -209,9 +214,14 @@ spec:
               args:
               - |
                 set -x
-                echo "Waiting for download job to finish..."
-                kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
-                exit $?
+                if kubectl get job {{ $name }}-download -n {{ $.Release.Namespace }} &>/dev/null; then
+                  echo "Waiting for download job to finish..."
+                  kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
+                  exit $?
+                else
+                  echo "Job not found, exit"
+                  exit 0
+                fi
               resources:
               {{- with $.Values.init.resources }}
                 {{- toYaml . | nindent 16 }}
@@ -345,9 +355,14 @@ spec:
               args:
               - |
                 set -x
-                echo "Waiting for download job to finish..."
-                kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
-                exit $?
+                if kubectl get job {{ $name }}-download -n {{ $.Release.Namespace }} &>/dev/null; then
+                  echo "Waiting for download job to finish..."
+                  kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
+                  exit $?
+                else
+                  echo "Job not found, exit"
+                  exit 0
+                fi
               resources:
               {{- with $.Values.init.resources }}
                 {{- toYaml . | nindent 16 }}
