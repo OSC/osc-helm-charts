@@ -67,6 +67,10 @@ database:
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
+      initdb:
+        scripts:
+          extra-grants.sql: |
+            GRANT EXECUTE ON FUNCTION pg_ls_waldir() TO {{ .Values.auth.username }};
 
   redis:
     enable: true
