@@ -162,6 +162,17 @@ qdrant:
       osc.edu/service-account: oscchat
 #  snapshotRestoration:
 #    enabled: true
+  snapshot:
+    cronjob:
+      enabled: true
+      resources:
+        requests:
+          cpu: 250m
+          memory: 256Mi
+        limits:
+          cpu: 1
+          memory: 512Mi
+      schedule: "0 0 * * *"
   imagePullSecrets:
     - name: osc-registry
   apiKey: true
