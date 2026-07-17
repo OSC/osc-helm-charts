@@ -87,7 +87,7 @@ metadata:
   {{- if $disagg }}
   name: '{{ $name }}-decode-pcsg-scaler'
   {{- else }}
-  name: '{{ $name }}-worker-gcsg-scaler'
+  name: '{{ $name }}-worker-pcsg-scaler'
   {{- end }}
   namespace: {{ $.Release.Namespace }}
   labels:
