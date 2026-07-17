@@ -11,7 +11,7 @@ metadata:
     {{- include "dynamo.labels" $ | nindent 4 }}
     {{ tpl (include "osc.common.serviceAccount" $) $ }}
 spec:
-  ttlSecondsAfterFinished: 120
+  ttlSecondsAfterFinished: 1200
   template:
     metadata:
       labels:
