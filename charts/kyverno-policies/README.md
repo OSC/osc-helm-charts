@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.44.0](https://img.shields.io/badge/Version-0.44.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.15.3](https://img.shields.io/badge/AppVersion-v1.15.3-informational?style=flat-square)
+![Version: 0.45.0](https://img.shields.io/badge/Version-0.45.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.15.3](https://img.shields.io/badge/AppVersion-v1.15.3-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -382,3 +382,12 @@ OSC Kyverno policies deployment
 | kyverno-policies.validationFailureAction | Validation failure action (`Audit`, `Enforce`). For more info https://kyverno.io/docs/policy-types/cluster-policy/validate. | `"Enforce"` |
 | kyverno-policies.nameOverride |  | `nil` |
 | kyverno-policies.customLabels | Additional labels | `{}` |
+
+### Dynamo policies
+
+#### Mutate policies
+
+* [add-dynamo-resources](templates/add-dynamo-resources.yaml)
+  * Rules
+    * Add resource requests and limits to `wait-for-leader-mp` init container
+  * Applies to: Pod in namespaces using Dynamo
