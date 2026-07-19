@@ -199,9 +199,6 @@ spec:
       multinode:
         nodeCount: {{ $decodeNodes }}
     {{- end }}
-    {{- if and $decodeScaling (gt $decodeNodes 1) }}
-      minAvailable: {{ $decodeScaling.minReplicas | default 0 }}
-    {{- end }}
       compilationCache:
         mountPath: /home/dynamo/.cache/vllm
         pvcName: {{ $.Values.compilationCache.name }}
@@ -342,9 +339,6 @@ spec:
     {{- if gt $prefillNodes 1 }}
       multinode:
         nodeCount: {{ $prefillNodes }}
-    {{- end }}
-    {{- if and $prefillScaling (gt $prefillNodes 1) }}
-      minAvailable: {{ $prefillScaling.minReplicas | default 0 }}
     {{- end }}
       compilationCache:
         mountPath: /home/dynamo/.cache/vllm
