@@ -212,6 +212,15 @@ app.kubernetes.io/component: crawlee
 {{- end }}
 
 {{/*
+Qdrant selector labels
+*/}}
+{{- define "osc-chat.qdrant.selectorLabels" -}}
+{{ include "osc-chat.selectorLabels" . }}
+app.kubernetes.io/component: qdrant
+app.kubernetes.io/name: qdrant
+{{- end }}
+
+{{/*
 LLM server host
 */}}
 {{- define "osc-chat.llm_server.host" -}}

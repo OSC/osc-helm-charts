@@ -67,6 +67,11 @@ database:
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
+      # @ignored
+      initdb:
+        scripts:
+          extra-grants.sql: |
+            GRANT EXECUTE ON FUNCTION pg_ls_waldir() TO {{ .Values.auth.username }};
 
   redis:
     enable: true
@@ -162,6 +167,18 @@ qdrant:
       osc.edu/service-account: oscchat
 #  snapshotRestoration:
 #    enabled: true
+  # @ignored
+  snapshot:
+    cronjob:
+      enabled: true
+      resources:
+        requests:
+          cpu: 250m
+          memory: 256Mi
+        limits:
+          cpu: 1
+          memory: 512Mi
+      schedule: "0 0 * * *"
   imagePullSecrets:
     - name: osc-registry
   apiKey: true
