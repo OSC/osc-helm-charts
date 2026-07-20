@@ -123,7 +123,6 @@ spec:
                 - --router-mode
                 - kv
               {{- end }}
-                - --durable-kv-events
                 - --model-name
                 - {{ $model.alias | default $model.model | quote }}
               {{- range $frontend.args | default list }}
@@ -261,9 +260,6 @@ spec:
                 - --kv-transfer-config
                 - '{{ $decodekvTransferConfig | toJson }}'
               {{- end }}
-              {{- if $kvRouting }}
-                - --durable-kv-events
-              {{- end }}
               {{- range $.Values.workerArgs }}
                 - {{ . | quote }}
               {{- end }}
@@ -399,7 +395,6 @@ spec:
                 - --kv-transfer-config
                 - '{{ $prefillkvTransferConfig | toJson }}'
               {{- if $kvRouting }}
-                - --durable-kv-events
                 - --kv-events-config
                 - '{{ $.Values.kvEventsConfig | toJson }}'
               {{- end }}
