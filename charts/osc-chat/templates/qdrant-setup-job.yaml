@@ -14,9 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "osc-chat.labels" . | nindent 8 }}
-        app.kubernetes.io/component: qdrant
-        app.kubernetes.io/name: qdrant
+        {{- include "osc-chat.qdrant.selectorLabels" . | nindent 8 }}
         receiver: '{{ index .Values.global.alert.receiver }}'
     spec:
       imagePullSecrets:
