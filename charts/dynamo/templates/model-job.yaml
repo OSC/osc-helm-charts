@@ -19,6 +19,8 @@ spec:
         {{ tpl (include "osc.common.serviceAccount" $) $ }}
     spec:
       restartPolicy: Never
+      imagePullSecrets:
+        - name: {{ include "osc.common.imagePullSecret.name" . }}
       containers:
         - name: hf-download
           image: {{ $image }}
