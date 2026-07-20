@@ -166,6 +166,7 @@ qdrant:
       osc.edu/service-account: oscchat
 #  snapshotRestoration:
 #    enabled: true
+  # @ignored
   snapshot:
     cronjob:
       enabled: true
