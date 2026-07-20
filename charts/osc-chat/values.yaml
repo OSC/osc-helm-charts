@@ -67,6 +67,7 @@ database:
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
+      # @ignored
       initdb:
         scripts:
           extra-grants.sql: |
