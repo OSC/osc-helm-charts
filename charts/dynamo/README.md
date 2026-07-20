@@ -1,6 +1,6 @@
 # dynamo
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.0-cuda13](https://img.shields.io/badge/AppVersion-1.2.0--cuda13-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.3.0-rc1](https://img.shields.io/badge/AppVersion-1.3.0--rc1-informational?style=flat-square)
 
 A Helm chart to deploy Dynamo resources at OSC
 
@@ -114,7 +114,7 @@ hfToken:
 | global.models | object | `{}` | Define models |
 | image.repository | string | `"kubernetes/ai-dynamo/vllm-runtime"` | The repository path to main vllm runtime image |
 | image.tag | string | The chart's appVersion | The vllm runtime image tag |
-| image.release | string | `"1"` | The release of the custom OSC vllm runtime image |
+| image.release | string | `"2"` | The release of the custom OSC vllm runtime image |
 | hfToken.value | string | **required** | The HF token for Hugging Face |
 | networkPolicy.namespaceSelectors | list | `[]` | Namespace labels to allow access to frontends |
 | defaultGpuType | string | `"nvidia.com/mig-7g.40gb"` | The default GPU type |

@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}
           password: ${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}
       - name: Login to DockerHub
-        if: ${{ matrix.image == 'dcgm-exporter' || matrix.image == 'cryosparc' }}
+        if: ${{ matrix.image == 'dcgm-exporter' || matrix.image == 'cryosparc' || matrix.image == 'vllm-runtime' }}
         uses: docker/login-action@v4
         with:
           registry: docker-registry.osc.edu
@@ -60,21 +60,22 @@ jobs:
         run: |
           make -f docker-images/${{ matrix.image }}/Makefile build
           make -f docker-images/${{ matrix.image }}/Makefile push
-      - name: Free Disk Space (Ubuntu)
-        if: matrix.image == 'vllm-runtime'
-        uses: jlumbroso/free-disk-space@v1.3.1
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
-      - name: Build and Push ${{ matrix.image }} dev image
-        if: matrix.image == 'vllm-runtime'
-        run: |
-          docker images
-          docker buildx prune -a -f
-          make -f docker-images/${{ matrix.image }}/Makefile build VERSION=1.3.0-dev.1-cuda13 RELEASE=1
-          make -f docker-images/${{ matrix.image }}/Makefile push VERSION=1.3.0-dev.1-cuda13 RELEASE=1
+      #- name: Free Disk Space (Ubuntu)
+      #  if: matrix.image == 'vllm-runtime'
+      #  uses: jlumbroso/free-disk-space@v1.3.1
+      #  with:
+      #    tool-cache: false
+      #    android: true
+      #    dotnet: true
+      #    haskell: true
+      #    large-packages: true
+      #    docker-images: true
+      #    swap-storage: true
+      # TODO Use FROM until upstream releases 1.3.0 rc1 or 1.3.0 images
+      #- name: Build and Push ${{ matrix.image }} dev image
+      #  if: matrix.image == 'vllm-runtime'
+      #  run: |
+      #    docker images
+      #    docker buildx prune -a -f
+      #    make -f docker-images/${{ matrix.image }}/Makefile build FROM=docker-registry.osc.edu/kubernetes/ai-dynamo/vllm-runtime
+      #    make -f docker-images/${{ matrix.image }}/Makefile push FROM=docker-registry.osc.edu/kubernetes/ai-dynamo/vllm-runtime
