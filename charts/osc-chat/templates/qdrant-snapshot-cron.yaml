@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "osc-chat.fullname" . | default .Release.Name }}-cron
+  name: {{ include "osc-chat.fullname" . }}-qdrant-snapshot-cron
   labels:
     {{- include "osc-chat.labels" . | nindent 4 }}
     receiver: '{{ index .Values.global.alert.receiver }}'
