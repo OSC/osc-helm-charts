@@ -33,6 +33,9 @@ global:
     # -- Ingress host alias
     hostAlias: ""
     # @ignored
+    additionalHosts:
+      - "*.{{ .Values.global.ingress.hostAlias }}"
+    # @ignored
     annotations:
       nginx.ingress.kubernetes.io/proxy-connect-timeout: "120"
       nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
@@ -40,6 +43,9 @@ global:
   auth:
     # @ignored
     enable: false
+    # @ignored
+    redirectUris:
+      - '*'
     # @ignored
     keycloakClient:
       forceCreate: true
