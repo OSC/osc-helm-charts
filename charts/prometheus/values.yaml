@@ -213,9 +213,13 @@ prometheus-pushgateway:
     - name: osc-registry
   extraContainers:
     - name: cleaner
-      # Ensure image mirrored to OSC registry
+      # TODO: Use local build until merged and released:
+      # https://github.com/abatilo/pushgateway-cleaner/pull/3
+      # Build:
+      #   docker build --platform linux/amd64 -t docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r2 .
+      #   docker push docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r2
       # image: ghcr.io/abatilo/pushgateway-cleaner:v0.1.4
-      image: docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.1.4
+      image: docker-registry.osc.edu/kubernetes/pushgateway-cleaner:v0.2.0-osc-r2
       imagePullPolicy: IfNotPresent
       args:
         - '-pushgateway-url'
@@ -225,6 +229,8 @@ prometheus-pushgateway:
         - '-ttl'
         - '5m'
         - '-verbose'
+        - '-exclude-jobs'
+        - 'k8-token-accounting'
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
