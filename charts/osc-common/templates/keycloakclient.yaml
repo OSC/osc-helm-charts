@@ -13,11 +13,11 @@ spec:
     - https://{{ tpl .Values.global.ingress.hostAlias . }}{{ .Values.global.auth.redirectUriPath }}
   {{- end }}
   {{- range (default list ((((.Values).global).ingress).additionalHosts)) }}
-    - https://{{ . }}{{ $.Values.global.auth.redirectUriPath }}
+    - https://{{ tpl . $ }}{{ $.Values.global.auth.redirectUriPath }}
   {{- end }}
   {{- end }}
   {{- range (default list ((((.Values).global).auth).redirectUris)) }}
-    - {{ . | quote }}
+    - {{ tpl . $ | quote }}
   {{- end }}
   defaultClientScopes:
   {{- range .Values.global.auth.defaultClientScopes }}

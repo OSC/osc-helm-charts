@@ -18,7 +18,7 @@ global:
   ingress:
     host: test.example.com
     additionalHosts:
-      - '*.test.example.com'
+      - '*.{{ .Values.global.ingress.host }}'
   project: test1
 keycloakClient:
   config:
