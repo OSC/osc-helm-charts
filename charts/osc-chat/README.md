@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.11](https://img.shields.io/badge/Version-0.1.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.11](https://img.shields.io/badge/AppVersion-0.1.11-informational?style=flat-square)
+![Version: 0.1.12](https://img.shields.io/badge/Version-0.1.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.12](https://img.shields.io/badge/AppVersion-0.1.12-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -68,6 +68,7 @@ secrets:
 
 | Repository | Name | Version |
 |------------|------|---------|
+| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.4 |
 | https://osc.github.io/osc-helm-charts | database | 0.18.0 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.14.2 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
@@ -202,6 +203,16 @@ secrets:
 | worker.resources.limits.memory | string | `"2Gi"` |  |
 | worker.resources.requests.cpu | int | `2` |  |
 | worker.resources.requests.memory | string | `"512Mi"` |  |
+| osc-mcp.enabled | bool | `false` |  |
+| osc-mcp.extraInitContainers[0].name | string | `"wait-for-frontend"` |  |
+| osc-mcp.extraInitContainers[0].image | string | `"{{ .Values.global.imageRegistry }}/kubernetes/portainer/kubectl-shell:2.39.0"` |  |
+| osc-mcp.extraInitContainers[0].resources.requests.cpu | string | `"250m"` |  |
+| osc-mcp.extraInitContainers[0].resources.requests.memory | string | `"256Mi"` |  |
+| osc-mcp.extraInitContainers[0].resources.limits.cpu | int | `1` |  |
+| osc-mcp.extraInitContainers[0].resources.limits.memory | string | `"512Mi"` |  |
+| osc-mcp.extraInitContainers[0].command[0] | string | `"/bin/bash"` |  |
+| osc-mcp.extraInitContainers[0].command[1] | string | `"-c"` |  |
+| osc-mcp.extraInitContainers[0].command[2] | string | `"until curl -sf https://{{ .Values.global.ingress.host }}/api/healthcheck | jq -e '.healthy == true' >/dev/null; do\n  sleep 5\ndone\n"` |  |
 | ollama.enabled | bool | `false` |  |
 | huggingfaceCache.enabled | bool | `true` |  |
 | huggingfaceCache.mountPath | string | `"/var/cache/huggingface"` |  |
