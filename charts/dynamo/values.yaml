@@ -241,7 +241,7 @@ osc-open-webui:
     openaiApiKey: false
     image:
       # -- The version of Open WebUI
-      tag: 0.9.6
+      tag: 0.10.2
     # @ignored
     persistence:
       storageClass: '{{ .Values.global.storageClass }}'
@@ -253,6 +253,8 @@ osc-open-webui:
     extraEnvVars:
       - name: OPENAI_API_BASE_URLS
         value: '{{ include "dynamo.openai.urls" . }}'
+      - name: OPENAI_API_CONFIGS
+        value: '{{ include "dynamo.openai.configs" . }}'
       - name: BYPASS_MODEL_ACCESS_CONTROL
         value: 'True'
       - name: OAUTH_USERNAME_CLAIM

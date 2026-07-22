@@ -94,3 +94,15 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 {{- $urls | join ";" }}
 {{- end }}
+
+{{- define "dynamo.openai.configs" -}}
+{{- $configs := dict -}}
+{{- $index := 0 -}}
+{{- range $name, $model := .Values.global.models }}
+    {{- $model_ids := list ($model.alias | default $model.model) -}}
+    {{- $config := dict "enabled" true "prefix_id" "" "model_ids" $model_ids "connection_type" "external" -}}
+    {{- $_ := set $configs ($index | toString ) $config -}}
+    {{- $index = add $index 1 -}}
+{{- end }}
+{{- $configs | toJson -}}
+{{- end }}

@@ -125,7 +125,7 @@ hfToken:
 | workerArgs | list | `[]` | Additional worker arguments |
 | kvTransferConfig | object | `{"kv_connector":"NixlConnector","kv_role":"kv_both"}` | The configuration of kv-transfer-config |
 | kvEventsConfig | object | `{"enable_kv_cache_events":true,"endpoint":"tcp://*:20080","publisher":"zmq","topic":"kv-events"}` | The configuration for kv-events-config |
-| osc-open-webui.open-webui.image.tag | string | `"0.9.6"` | The version of Open WebUI |
+| osc-open-webui.open-webui.image.tag | string | `"0.10.2"` | The version of Open WebUI |
 | osc-open-webui.open-webui.sso.enableRoleManagement | bool | `true` | Enables role access controls in Open WebUI |
 
 ----------------------------------------------
