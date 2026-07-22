@@ -262,6 +262,26 @@ worker:
       cpu: 2
       memory: 512Mi
 
+osc-mcp:
+  enabled: false
+  extraInitContainers:
+    - name: wait-for-frontend
+      image: '{{ .Values.global.imageRegistry }}/kubernetes/portainer/kubectl-shell:2.39.0'
+      resources:
+        requests:
+          cpu: 250m
+          memory: 256Mi
+        limits:
+          cpu: 1
+          memory: 512Mi
+      command:
+        - /bin/bash
+        - -c
+        - |
+          until curl -sf https://{{ .Values.global.ingress.host }}/api/healthcheck | jq -e '.healthy == true' >/dev/null; do
+            sleep 5
+          done
+
 ollama:
   enabled: false
 

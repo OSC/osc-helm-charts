@@ -52,3 +52,7 @@ dependencies:
     version: '0.1.11-osc-r1'
     repository: oci://docker-registry.osc.edu/kubernetes/vllm
     condition: vllm-stack.enabled
+  - name: osc-mcp
+    version: 0.1.4
+    repository: https://center-for-ai-innovation.github.io/hpcgpt-cli
+    condition: osc-mcp.enabled
