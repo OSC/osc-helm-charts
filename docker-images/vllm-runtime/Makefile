@@ -1,9 +1,7 @@
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-# Use internal registry until 1.3.0 image released
-#FROM := nvcr.io/nvidia/ai-dynamo/vllm-runtime
-FROM := docker-registry.osc.edu/kubernetes/ai-dynamo/vllm-runtime
-VERSION := 1.3.0-rc1
-RELEASE := 2
+FROM := nvcr.io/nvidia/ai-dynamo/vllm-runtime
+VERSION := 1.3.0
+RELEASE := 3
 TAG = docker-registry.osc.edu/kubernetes/ai-dynamo/vllm-runtime:$(VERSION)-osc-r$(RELEASE)
 
 build:

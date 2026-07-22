@@ -37,9 +37,8 @@ jobs:
           docker-images: true
           swap-storage: true
       - name: Build ${{ matrix.image }} image
-        # TODO Use FROM until upstream releases 1.3.0 rc1 or 1.3.0 images
         run: |
-          make -f docker-images/${{ matrix.image }}/Makefile build FROM=docker-registry.osc.edu/kubernetes/ai-dynamo/vllm-runtime
+          make -f docker-images/${{ matrix.image }}/Makefile build
       #- name: Free Disk Space (Ubuntu)
       #  if: matrix.image == 'vllm-runtime'
       #  uses: jlumbroso/free-disk-space@v1.3.1
