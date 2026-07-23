@@ -68,7 +68,7 @@ secrets:
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.4 |
+| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.5 |
 | https://osc.github.io/osc-helm-charts | database | 0.18.0 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.14.2 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |

@@ -37,6 +37,8 @@ spec:
               cpu: 1
               memory: 512Mi
           command:
+            - timeout
+            - 300s
             - /bin/bash
             - -c
             - |
