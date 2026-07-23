@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.11](https://img.shields.io/badge/Version-0.1.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.11](https://img.shields.io/badge/AppVersion-0.1.11-informational?style=flat-square)
+![Version: 0.1.12](https://img.shields.io/badge/Version-0.1.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.12](https://img.shields.io/badge/AppVersion-0.1.12-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -68,6 +68,7 @@ secrets:
 
 | Repository | Name | Version |
 |------------|------|---------|
+| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.5 |
 | https://osc.github.io/osc-helm-charts | database | 0.18.0 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.14.2 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
@@ -96,6 +97,7 @@ secrets:
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
+| global.networkPolicy.ingressAllowedPods[0]."app.kubernetes.io/name" | string | `"osc-mcp"` |  |
 | database.postgresql.schema.enabled | bool | `true` |  |
 | database.postgresql.enable | bool | `true` |  |
 | database.postgresql.imagePullSecret.enable | bool | `false` |  |
@@ -202,6 +204,19 @@ secrets:
 | worker.resources.limits.memory | string | `"2Gi"` |  |
 | worker.resources.requests.cpu | int | `2` |  |
 | worker.resources.requests.memory | string | `"512Mi"` |  |
+| osc-mcp.enabled | bool | `false` |  |
+| osc-mcp.extraInitContainers[0].name | string | `"wait-for-frontend"` |  |
+| osc-mcp.extraInitContainers[0].image | string | `"{{ .Values.global.imageRegistry }}/kubernetes/portainer/kubectl-shell:2.39.0"` |  |
+| osc-mcp.extraInitContainers[0].resources.requests.cpu | string | `"250m"` |  |
+| osc-mcp.extraInitContainers[0].resources.requests.memory | string | `"256Mi"` |  |
+| osc-mcp.extraInitContainers[0].resources.limits.cpu | int | `1` |  |
+| osc-mcp.extraInitContainers[0].resources.limits.memory | string | `"512Mi"` |  |
+| osc-mcp.extraInitContainers[0].command[0] | string | `"timeout"` |  |
+| osc-mcp.extraInitContainers[0].command[1] | string | `"300s"` |  |
+| osc-mcp.extraInitContainers[0].command[2] | string | `"/bin/bash"` |  |
+| osc-mcp.extraInitContainers[0].command[3] | string | `"-c"` |  |
+| osc-mcp.extraInitContainers[0].command[4] | string | `"until curl -sf http://{{ .Release.Name }}-frontend:3000/api/healthcheck | jq -e '.healthy == true' >/dev/null\ndo\n  sleep 5\ndone\n"` |  |
+| osc-mcp.osc_chat.chatEndpoint | string | `"http://{{ .Release.Name }}-frontend:3000/api/chat-api/chat"` |  |
 | ollama.enabled | bool | `false` |  |
 | huggingfaceCache.enabled | bool | `true` |  |
 | huggingfaceCache.mountPath | string | `"/var/cache/huggingface"` |  |
@@ -229,7 +244,7 @@ secrets:
 | keycloak.enabled | bool | `false` |  |
 | frontend.enabled | bool | `true` |  |
 | frontend.image.repository | string | `"kubernetes/hpcgpt/frontend"` |  |
-| frontend.image.tag | string | `"v0.1.5"` |  |
+| frontend.image.tag | string | `"v0.1.7"` |  |
 | frontend.image.pullPolicy | string | `"Always"` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
