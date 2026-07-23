@@ -47,9 +47,9 @@ global:
   ingress:
     host: ""
     hostAlias: ""
- networkPolicy:
+  networkPolicy:
     ingressAllowedPods:
-      - app.kubernetes.io/name: osc-mcp
+      - app.kubernetes.io/name: "osc-mcp"
 
 database:
   # @ignored
