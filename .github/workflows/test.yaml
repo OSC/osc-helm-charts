@@ -76,6 +76,17 @@ jobs:
           python-version: 3.9
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.8.0
+      - name: Free Disk Space (Ubuntu)
+        if: matrix.chart == 'cryosparc'
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       - name: Create kind cluster
         uses: helm/kind-action@v1
         with:

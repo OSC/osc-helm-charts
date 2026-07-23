@@ -1,0 +1,95 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+## dynamo Chart
+
+This chart handles the deployment of Dynamo resources.  It depends on the Dynamo platform and operator being deployed.
+
+Components:
+
+* image-puller
+    * A daemonset that pulls the Dynamo images and sleeps to ensure those images are on all nodes
+* Items to support Dynamo
+    * PVC for cache storage
+    * Huggingface secret
+* Dynamo frontend
+* Open WebUI
+
+## Usage
+
+The following is the minimal values to deploy this chart:
+
+```yaml
+---
+global:
+  imagePullSecret:
+    password: <webservices-read password>
+  ingress:
+    host: <Ingress host>
+    hostAlias: <Ingress host alias>
+  webui_secret_key: <Open WebUI webui secret>
+  models:
+    qwen3:
+      model: Qwen/Qwen3-0.6B
+      # image: ...
+      # pullPolicy: ...
+      disagg: true
+      kvRouting: true
+      scaling:
+        minReplicas: 0
+        maxReplicas: 2
+        cooldownPeriod: 600
+      args:
+        - --max-model-len
+        - "20480"
+      env: []
+      # frontend:
+      #   image: ...
+      #   pullPolicy: ...
+      #   env: []
+      #   args: []
+      #   cpu: 1
+      #   memory: 2Gi
+      decode:
+        # scaling:
+        #   minReplicas: 0
+        #   maxReplicas: 2
+        #   cooldownPeriod: 600
+        # image: ...
+        # pullPolicy: ...
+        args: []
+        env: []
+        cpu: 2
+        memory: 6Gi
+        gpu: 1
+        gpuType: nvidia.com/mig-1g.5gb
+        nodes: 1
+        replicas: 1
+      prefill:
+        # scaling:
+        #   minReplicas: 0
+        #   maxReplicas: 2
+        #   cooldownPeriod: 600
+        # image: ...
+        # pullPolicy: ...
+        args: []
+        env: []
+        cpu: 2
+        memory: 6Gi
+        gpu: 1
+        gpuType: nvidia.com/mig-1g.5gb
+        nodes: 1
+        replicas: 1
+hfToken:
+  value: <Huggingface token>
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
