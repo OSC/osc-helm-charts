@@ -125,6 +125,10 @@ hfToken:
 | workerArgs | list | `[]` | Additional worker arguments |
 | kvTransferConfig | object | `{"kv_connector":"NixlConnector","kv_role":"kv_both"}` | The configuration of kv-transfer-config |
 | kvEventsConfig | object | `{"enable_kv_cache_events":true,"endpoint":"tcp://*:20080","publisher":"zmq","topic":"kv-events"}` | The configuration for kv-events-config |
+| frontend.resources.limits.cpu | int | `2` | Default frontend cpu limit |
+| frontend.resources.limits.memory | string | `"4Gi"` | Default frontend memory limit |
+| frontend.resources.requests.cpu | int | `2` | Default frontend cpu request |
+| frontend.resources.requests.memory | string | `"4Gi"` | Default frontend memory request |
 | osc-open-webui.open-webui.image.tag | string | `"0.10.2"` | The version of Open WebUI |
 | osc-open-webui.open-webui.sso.enableRoleManagement | bool | `true` | Enables role access controls in Open WebUI |
 

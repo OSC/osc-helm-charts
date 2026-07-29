@@ -144,11 +144,11 @@ spec:
               {{- end }}
               resources:
                 limits:
-                  cpu: {{ $frontend.cpu | default 1 | quote }}
-                  memory: {{ $frontend.memory | default "2Gi" | quote }}
+                  cpu: {{ $frontend.cpu | default $.Values.frontend.resources.limits.cpu | quote }}
+                  memory: {{ $frontend.memory | default $.Values.frontend.resources.limits.memory | quote }}
                 requests:
-                  cpu: {{ $frontend.cpu | default 1 | quote }}
-                  memory: {{ $frontend.memory | default "2Gi" | quote }}
+                  cpu: {{ $frontend.cpu | default $.Values.frontend.resources.requests.cpu | quote }}
+                  memory: {{ $frontend.memory | default $.Values.frontend.resources.requests.memory | quote }}
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:

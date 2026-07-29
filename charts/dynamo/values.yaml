@@ -187,6 +187,19 @@ frontendEnv:
   - name: DYN_ENABLE_ANTHROPIC_API
     value: 'true'
 
+frontend:
+  resources:
+    limits:
+      # -- Default frontend cpu limit
+      cpu: 2
+      # -- Default frontend memory limit
+      memory: 4Gi
+    requests:
+      # -- Default frontend cpu request
+      cpu: 2
+      # -- Default frontend memory request
+      memory: 4Gi
+
 # @ignored
 podSecurityContext:
   runAsNonRoot: true
