@@ -185,6 +185,7 @@ open-webui:
     annotations:
       prometheus.io/probe_module: http
       prometheus.io/probe_scheme: http
+      prometheus.io/probe_path: /health
   # @ignored
   podSecurityContext:
     runAsNonRoot: true
@@ -197,6 +198,28 @@ open-webui:
     seccompProfile:
       type: RuntimeDefault
     privileged: false
+  # @ignored
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    failureThreshold: 1
+    periodSeconds: 10
+  # @ignored
+  readinessProbe:
+    httpGet:
+      path: /health/db
+      port: http
+    failureThreshold: 1
+    periodSeconds: 10
+  # @ignored
+  startupProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    failureThreshold: 20
   sso:
     # @ignored
     enabled: true
