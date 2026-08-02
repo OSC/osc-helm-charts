@@ -31,11 +31,14 @@ open-webui:
     size: 50Mi
   resources:
     limits:
-      memory: 500Mi
-      cpu: 1
+      memory: 1Gi
+      cpu: 2
     requests:
-      memory: 200Mi
+      memory: 512Mi
       cpu: 500m
+  extraEnvVars:
+    - name: HF_HUB_OFFLINE
+      value: '1'
   podSecurityContext:
     runAsUser: 1000
   sso:
