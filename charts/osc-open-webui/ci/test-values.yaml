@@ -35,7 +35,10 @@ open-webui:
       cpu: 2
     requests:
       memory: 512Mi
-      cpu: 1
+      cpu: 500m
+  extraEnvVars:
+    - name: HF_HUB_OFFLINE
+      value: '1'
   podSecurityContext:
     runAsUser: 1000
   livenessProbe:

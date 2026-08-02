@@ -203,14 +203,16 @@ open-webui:
     httpGet:
       path: /health
       port: http
-    failureThreshold: 1
+    initialDelaySeconds: 30
+    failureThreshold: 3
     periodSeconds: 10
   # @ignored
   readinessProbe:
     httpGet:
       path: /health/db
       port: http
-    failureThreshold: 1
+    initialDelaySeconds: 30
+    failureThreshold: 3
     periodSeconds: 10
   # @ignored
   startupProbe:
