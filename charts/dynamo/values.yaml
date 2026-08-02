@@ -241,6 +241,18 @@ imagePuller:
       cpu: 500m
       memory: 128Mi
 
+# @ignored
+probe:
+  host: PZS0708.{{ .Values.global.ingress.hostAlias }}
+  blackbox:
+    name: blackbox-exporter
+    port: 9115
+    module: https
+  ssl:
+    name: ssl-exporter
+    port: 9219
+    module: https
+
 osc-open-webui:
   # @ignored
   oscCommon:
