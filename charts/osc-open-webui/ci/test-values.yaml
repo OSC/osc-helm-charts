@@ -31,13 +31,21 @@ open-webui:
     size: 50Mi
   resources:
     limits:
-      memory: 500Mi
-      cpu: 1
+      memory: 1Gi
+      cpu: 2
     requests:
-      memory: 200Mi
-      cpu: 500m
+      memory: 512Mi
+      cpu: 1
   podSecurityContext:
     runAsUser: 1000
+  livenessProbe:
+    initialDelaySeconds: 60
+  readinessProbe:
+    initialDelaySeconds: 60
+  startupProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    failureThreshold: 30
   sso:
     enableRoleManagement: true
   ollama:
