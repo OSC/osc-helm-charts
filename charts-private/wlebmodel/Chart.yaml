@@ -1,0 +1,13 @@
+apiVersion: v2
+name: sirmodel
+description: OSC wlebmodel web service
+type: application
+version: 0.1.0
+appVersion: v2.3
+maintainers:
+  - name: zyou
+dependencies:
+  - name: webservice
+    version: 0.40.2
+    repository: https://osc.github.io/osc-helm-charts/
+    # repository: file://../../charts/webservice
