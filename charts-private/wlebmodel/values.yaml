@@ -1,0 +1,39 @@
+global:
+  # -- The service account used by OSC deployments.
+  # @default -- The chart's release name
+  oscServiceAccount: wlebmodel
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The OSC node role to use with nodeSelector
+  nodeSelectorRole: webservices
+  # -- Groups that debug pods
+  debugGroups: 
+    - sciapps
+    - PAS3457
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups: []
+  auth:
+    # @ignored
+    enable: false
+  alert:
+    # Also pulled from global.env.$environment.alert.receiver
+    receiver: sciapps
+  imageTag: v2.3
+  env:
+    production:
+      replicas: 2
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    test:
+      replicas: 2
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    dev:
+      replicas: 1
+      image:
+        tag: latest
+webservice:
+  appType: rshiny
+  workingDir: /app
+  image:
+    repository: docker-registry.osc.edu/webservices/wlebmodel

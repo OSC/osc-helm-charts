@@ -1,0 +1,15 @@
+global:
+  environment: dev
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  ingress:
+    host: test.local
+webservice:
+  podResources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
