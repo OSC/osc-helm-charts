@@ -116,6 +116,7 @@ kube-prometheus-stack:
       persistentVolumeClaimRetentionPolicy:
         whenDeleted: Retain
         whenScaled: Retain
+      enableAdminAPI: true
       scrapeInterval: 1m
       scrapeTimeout: 10s
       scrapeClasses:
