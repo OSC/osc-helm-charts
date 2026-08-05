@@ -75,3 +75,10 @@ metadata:
   name: ouollama
   labels:
     osc.edu/role: webservice
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: wlebmodel
+  labels:
+    osc.edu/role: webservice

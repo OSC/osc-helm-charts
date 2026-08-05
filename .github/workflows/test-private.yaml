@@ -49,6 +49,7 @@ jobs:
           - webmo-oberlin
           - chatisa
           - ouollama
+          - wlebmodel
     name: Test Install Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
