@@ -99,7 +99,7 @@ defaultArgs:
     - "--disable-security-update-check"
     - "--disable-anonymous-telemetry"
     - "--log-file=/dev/stdout"
-    - "--pid-file=/tmp/passenger-{{ .name }}.pid"
+    - "--pid-file=/tmp/passenger-{{ tpl .name $  }}.pid"
   # -- Default args when `appType` is `rshiny`
   # @section -- App Config
   # @default -- RShiny args
@@ -113,7 +113,7 @@ defaultArgs:
     - "--disable-security-update-check"
     - "--disable-anonymous-telemetry"
     - "--log-file=/dev/stdout"
-    - "--pid-file=/tmp/passenger-{{ .name }}.pid"
+    - "--pid-file=/tmp/passenger-{{ tpl .name $ }}.pid"
     - "--app-start-command"
     - '{{ .startCommand | default "R --no-save --slave -f /app/entrypoint.R --args $$PORT" }}'
   # -- Default args when `appType` is `none`

@@ -14,8 +14,15 @@ spec:
     - name: wget
       image: busybox:latest
       imagePullPolicy: Always
-      command: ['wget']
-      args: ['-O-','-S','{{ include "webservice.name" . }}:{{ .Values.global.service.port }}{{ tpl .Values.startupProbe.httpGet.path . }}']
+      command: ['timeout']
+      args:
+        - '120'
+        - '/bin/sh'
+        - '-c'
+        - |
+          while ! wget -O- -S {{ include "webservice.name" . }}:{{ .Values.global.service.port }}{{ tpl .Values.startupProbe.httpGet.path . }} ; do
+            sleep 5
+          done
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
