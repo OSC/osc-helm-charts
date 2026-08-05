@@ -1,0 +1,33 @@
+global:
+  # @ignored
+  oscServiceAccount: wlebmodel
+  # -- Groups that debug pods
+  debugGroups:
+    - sappstf
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups: []
+  auth:
+    # @ignored
+    enable: true
+    allowGroups:
+      - PAS3457
+      - sappstf
+  alert:
+    # Also pulled from global.env.$environment.alert.receiver
+    receiver: sciapps
+  imageTag: v2.3-1
+  env:
+    production:
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    test:
+      image:
+        tag: '{{ .Values.global.imageTag }}'
+    dev:
+      image:
+        tag: latest
+webservice:
+  appType: rshiny
+  workingDir: /app
+  image:
+    repository: docker-registry.osc.edu/webservices/wlebmodel
