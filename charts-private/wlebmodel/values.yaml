@@ -1,11 +1,6 @@
 global:
-  # -- The service account used by OSC deployments.
-  # @default -- The chart's release name
+  # @ignored
   oscServiceAccount: wlebmodel
-  # -- The deployment's OSC environment
-  environment: production
-  # -- The OSC node role to use with nodeSelector
-  nodeSelectorRole: webservices
   # -- Groups that debug pods
   debugGroups:
     - sappstf
@@ -23,15 +18,12 @@ global:
   imageTag: v2.3-1
   env:
     production:
-      replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
     test:
-      replicas: 2
       image:
         tag: '{{ .Values.global.imageTag }}'
     dev:
-      replicas: 1
       image:
         tag: latest
 webservice:
