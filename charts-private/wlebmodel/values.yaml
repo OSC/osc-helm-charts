@@ -7,7 +7,7 @@ global:
   # -- The OSC node role to use with nodeSelector
   nodeSelectorRole: webservices
   # -- Groups that debug pods
-  debugGroups: 
+  debugGroups:
     - sappstf
   # -- Groups that can perform maintenance operations
   maintenanceGroups: []
