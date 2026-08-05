@@ -8,6 +8,6 @@ maintainers:
   - name: zyou
 dependencies:
   - name: webservice
-    version: 0.40.2
+    version: 0.40.3
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../../charts/webservice
