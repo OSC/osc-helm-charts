@@ -19,6 +19,7 @@ data:
   user-harvesttest: "44687"
   user-webmooberlin: "49133"
   user-ouollama: "49669"
+  user-wlebmodel: "52407"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -36,6 +37,7 @@ data:
   user-harvesttest: "8377"
   user-webmooberlin: "9173"
   user-ouollama: "8085"
+  user-wlebmodel: "9807"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -53,3 +55,4 @@ data:
   user-harvesttest: '["8377","8388","65533"]'
   user-webmooberlin: '["9173"]'
   user-ouollama: '["8085"]'
+  user-wlebmodel: '["9807","9262"]'
