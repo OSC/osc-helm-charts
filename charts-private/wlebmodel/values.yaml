@@ -8,17 +8,19 @@ global:
   nodeSelectorRole: webservices
   # -- Groups that debug pods
   debugGroups: 
-    - sciapps
-    - PAS3457
+    - sappstf
   # -- Groups that can perform maintenance operations
   maintenanceGroups: []
   auth:
     # @ignored
-    enable: false
+    enable: true
+    allowGroups:
+      - PAS3457
+      - sappstf
   alert:
     # Also pulled from global.env.$environment.alert.receiver
     receiver: sciapps
-  imageTag: v2.3
+  imageTag: v2.3-1
   env:
     production:
       replicas: 2
