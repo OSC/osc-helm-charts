@@ -36,7 +36,8 @@ spec:
   components:
     - name: Frontend
       type: frontend
-      replicas: 1
+      scalingAdapter:
+        enabled: true
       podTemplate:
         spec:
           initContainers:
