@@ -1,0 +1,129 @@
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+{{- $decode := $model.decode | default dict }}
+{{- $decodeScaling := $decode.scaling | default $model.scaling | default dict }}
+{{- $decodeNodes := $decode.nodes | default 1 | int }}
+{{- $prefill := $model.prefill | default dict }}
+{{- $prefillScaling := $prefill.scaling | default $model.scaling | default dict }}
+{{- $prefillNodes := $prefill.nodes | default 1 | int }}
+{{- $disagg := $model.disagg | default false }}
+{{- $namespace := printf "%s-%s-frontend" $.Release.Namespace $name }}
+{{- if $decodeScaling }}
+{{/*
+Possible for decode:
+sum(dynamo_frontend_stage_requests{phase="decode",stage=~"preprocess|route|dispatch"})
+
+Possible for prefill:
+sum(dynamo_frontend_stage_requests{phase="prefill",stage=~"preprocess|route|dispatch"})
+
+Possible for aggregate:
+sum(dynamo_frontend_stage_requests{phase="aggregated",stage=~"preprocess|route|dispatch"})
+*/}}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  {{- if $disagg }}
+  name: '{{ $name }}-decode-scaler'
+  {{- else }}
+  name: '{{ $name }}-worker-scaler'
+  {{- end }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: nvidia.com/v1beta1
+    kind: DynamoGraphDeploymentScalingAdapter
+    {{- if $disagg }}
+    name: '{{ $name }}-decode'
+    {{- else }}
+    name: '{{ $name }}-worker'
+    {{- end }}
+  minReplicaCount: {{ $decodeScaling.minReplicas | default 0 }}
+  maxReplicaCount: {{ $decodeScaling.maxReplicas | default 2 }}
+  pollingInterval: 15
+  cooldownPeriod: {{ $decodeScaling.cooldownPeriod | default 600 }}
+  initialCooldownPeriod: {{ $decodeScaling.initialCooldownPeriod | default 600 }}
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      {{- if $disagg }}
+      metricName: dynamo_itl_p95
+      query: |
+        histogram_quantile(0.95,
+          sum(rate(dynamo_frontend_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
+          by (le)
+        )
+      threshold: "0.05"
+      {{- else }}
+      metricName: dynamo_ttft_p95
+      query: |
+        histogram_quantile(0.95,
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
+          by (le)
+        )
+      threshold: "0.5"
+      {{- end }}
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: frontend_requests
+      query: |
+        sum(delta(dynamo_frontend_requests_total{dynamo_namespace="{{ $namespace }}"}[5m])) > bool 0
+      threshold: "1"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: dynamo_pending_request
+      query: |
+        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}",namespace="{{ $.Release.Namespace }}"}) > bool 0
+      threshold: "1"
+{{- end }}
+{{- if and $disagg $prefillScaling }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: '{{ $name }}-prefill-scaler'
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: nvidia.com/v1beta1
+    kind: DynamoGraphDeploymentScalingAdapter
+    name: '{{ $name }}-prefill'
+  minReplicaCount: {{ $prefillScaling.minReplicas | default 0 }}
+  maxReplicaCount: {{ $prefillScaling.maxReplicas | default 2 }}
+  pollingInterval: 15
+  cooldownPeriod: {{ $prefillScaling.cooldownPeriod | default 600 }}
+  initialCooldownPeriod: {{ $prefillScaling.initialCooldownPeriod | default 600 }}
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: dynamo_ttft_p95
+      query: |
+        histogram_quantile(0.95,
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
+          by (le)
+        )
+      # Should be 0.5 but seems small prompts resulting in larger TTFT
+      threshold: "1"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: frontend_requests
+      query: |
+        sum(delta(dynamo_frontend_requests_total{dynamo_namespace="{{ $namespace }}"}[5m])) > bool 0
+      threshold: "1"
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.prometheusURL }}
+      metricName: dynamo_pending_request
+      query: |
+        sum(dynamo_pending_request{model="{{ $model.alias | default $model.model | replace "/" "-" }}",namespace="{{ $.Release.Namespace }}"}) > bool 0
+      threshold: "1"
+{{- end }}
+{{- end }}
