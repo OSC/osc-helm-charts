@@ -1,0 +1,18 @@
+apiVersion: v2
+name: ollama
+description: OSC Ollama service for classroom
+type: application
+version: 0.2.0
+appVersion: '0.18.3'
+maintainers:
+  - name: zyou
+dependencies:
+  - name: osc-common
+    version: 0.14.0
+    repository: https://osc.github.io/osc-helm-charts/
+    # repository: file://../../charts/osc-common
+  - name: ollama
+    version: 1.54.0-osc-r2
+    repository: oci://docker-registry.osc.edu/kubernetes/charts
+    # version: 1.54.0
+    # repository: file://./ollama-helm
