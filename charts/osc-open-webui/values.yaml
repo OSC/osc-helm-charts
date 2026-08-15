@@ -151,6 +151,8 @@ open-webui:
   extraEnvVars: []
   # @ignored
   commonEnvVars:
+    - name: LOG_FORMAT
+      value: json
     - name: ENABLE_OAUTH_GROUP_CREATION
       value: "True"
     - name: DEFAULT_USER_ROLE
