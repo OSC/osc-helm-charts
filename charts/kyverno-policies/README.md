@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.45.0](https://img.shields.io/badge/Version-0.45.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.15.3](https://img.shields.io/badge/AppVersion-v1.15.3-informational?style=flat-square)
+![Version: 0.46.0](https://img.shields.io/badge/Version-0.46.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -14,7 +14,7 @@ OSC Kyverno policies deployment
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://kyverno.github.io/kyverno/ | kyverno-policies | 3.5.3 |
+| https://kyverno.github.io/kyverno/ | kyverno-policies | 3.6.4 |
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.14.2 |
 
 ## Policies
