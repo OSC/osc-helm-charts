@@ -15,7 +15,7 @@ global:
   alert:
     # Also pulled from global.env.$environment.alert.receiver
     receiver: sciapps
-  imageTag: v2.3-1
+  imageTag: v2.4-1
   env:
     production:
       image:

@@ -2,8 +2,8 @@ apiVersion: v2
 name: wlebmodel
 description: OSC wlebmodel web service
 type: application
-version: 0.1.2
-appVersion: v2.3-3
+version: 0.2.0
+appVersion: v2.4-1
 maintainers:
   - name: zyou
 dependencies:
