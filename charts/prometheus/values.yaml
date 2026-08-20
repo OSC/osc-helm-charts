@@ -116,6 +116,7 @@ kube-prometheus-stack:
       persistentVolumeClaimRetentionPolicy:
         whenDeleted: Retain
         whenScaled: Retain
+      enableAdminAPI: true
       scrapeInterval: 1m
       scrapeTimeout: 10s
       scrapeClasses:
@@ -202,7 +203,10 @@ prometheus-pushgateway:
     interval: 15s
     scrapeTimeout: 10s
   persistentVolume:
-    enabled: false
+    enabled: true
+    accessModes:
+      - ReadWriteMany
+    storageClass: nfs-infra
   networkPolicy:
     customSelectors:
       - podSelector: {}

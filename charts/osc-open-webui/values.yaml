@@ -151,6 +151,8 @@ open-webui:
   extraEnvVars: []
   # @ignored
   commonEnvVars:
+    - name: LOG_FORMAT
+      value: json
     - name: ENABLE_OAUTH_GROUP_CREATION
       value: "True"
     - name: DEFAULT_USER_ROLE
@@ -185,6 +187,7 @@ open-webui:
     annotations:
       prometheus.io/probe_module: http
       prometheus.io/probe_scheme: http
+      prometheus.io/probe_path: /health
   # @ignored
   podSecurityContext:
     runAsNonRoot: true
@@ -197,6 +200,30 @@ open-webui:
     seccompProfile:
       type: RuntimeDefault
     privileged: false
+  # @ignored
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 30
+    failureThreshold: 3
+    periodSeconds: 10
+  # @ignored
+  readinessProbe:
+    httpGet:
+      path: /health/db
+      port: http
+    initialDelaySeconds: 30
+    failureThreshold: 3
+    periodSeconds: 10
+  # @ignored
+  startupProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    failureThreshold: 20
   sso:
     # @ignored
     enabled: true

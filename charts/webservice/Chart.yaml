@@ -2,7 +2,7 @@ apiVersion: v2
 name: webservice
 description: OSC webservice bootstrap Helm Chart
 type: application
-version: 0.40.2
+version: 0.40.3
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
