@@ -182,7 +182,7 @@ secrets:
 | backend.enabled | bool | `true` |  |
 | backend.ingress.enabled | bool | `false` |  |
 | backend.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
-| backend.image.tag | string | `"v0.1.1"` |  |
+| backend.image.tag | string | `"v0.1.2"` |  |
 | backend.image.pullPolicy | string | `"Always"` |  |
 | backend.imagePullSecret.enable | bool | `false` |  |
 | backend.replicaCount | int | `1` |  |
@@ -195,7 +195,7 @@ secrets:
 | backend.resources.requests.memory | string | `"512Mi"` |  |
 | worker.enabled | bool | `true` |  |
 | worker.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
-| worker.image.tag | string | `"v0.1.1"` |  |
+| worker.image.tag | string | `"v0.1.2"` |  |
 | worker.image.pullPolicy | string | `"Always"` |  |
 | worker.replicaCount | int | `1` |  |
 | worker.env.QDRANT_COLLECTION_NAME | string | `"{{ include \"osc-chat.name\" . }}"` |  |
@@ -244,7 +244,7 @@ secrets:
 | keycloak.enabled | bool | `false` |  |
 | frontend.enabled | bool | `true` |  |
 | frontend.image.repository | string | `"kubernetes/hpcgpt/frontend"` |  |
-| frontend.image.tag | string | `"v0.1.7"` |  |
+| frontend.image.tag | string | `"v0.1.8"` |  |
 | frontend.image.pullPolicy | string | `"Always"` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
