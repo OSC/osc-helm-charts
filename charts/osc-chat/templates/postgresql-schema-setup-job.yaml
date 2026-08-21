@@ -1617,6 +1617,19 @@ data:
         END IF;
     END;
     $$;
+
+    -- Add "group" column to projects table if it doesn't exist
+    DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.columns
+            WHERE table_name = 'projects' AND column_name = 'group'
+        ) THEN
+            ALTER TABLE projects ADD COLUMN "group" TEXT;
+            RAISE NOTICE 'Added "group" column to projects table';
+        END IF;
+    END;
+    $$;
 ---
 apiVersion: batch/v1
 kind: Job
