@@ -27,6 +27,7 @@ mongodb:
   extraVolumes: []
   backup:
     cronjob:
+      schedule: '* * * * *'
       resources:
         limits:
           cpu: 500m
