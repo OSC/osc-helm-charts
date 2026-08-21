@@ -1114,56 +1114,6 @@ data:
         END LOOP;
     END;
     $$;
-    
-    
-    -- Create Triggers --
-    --
-    -- Name: projects after_project_insert; Type: TRIGGER; Schema: public; Owner: postgres
-    --
-    
-    DO $$
-    BEGIN
-      IF NOT EXISTS (
-        SELECT 1 FROM pg_trigger WHERE tgname = 'after_project_insert'
-      ) THEN
-        CREATE TRIGGER after_project_insert
-        AFTER INSERT ON public.projects
-        FOR EACH ROW EXECUTE FUNCTION public.initialize_project_stats();
-      END IF;
-    END;
-    $$ LANGUAGE plpgsql;
-    
-    --
-    -- Name: llm-convo-monitor project_stats_trigger; Type: TRIGGER; Schema: public; Owner: postgres
-    --
-    
-    DO $$
-    BEGIN
-      IF NOT EXISTS (
-        SELECT 1 FROM pg_trigger WHERE tgname = 'project_stats_trigger'
-      ) THEN
-        CREATE TRIGGER project_stats_trigger
-        AFTER INSERT OR DELETE OR UPDATE ON public."llm-convo-monitor"
-        FOR EACH ROW EXECUTE FUNCTION public.update_project_stats();
-      END IF;
-    END;
-    $$ LANGUAGE plpgsql;
-    
-    --
-    -- Name: documents_doc_groups trg_update_doc_count_after_insert; Type: TRIGGER; Schema: public; Owner: postgres
-    --
-    
-    DO $$
-    BEGIN
-      IF NOT EXISTS (
-        SELECT 1 FROM pg_trigger WHERE tgname = 'trg_update_doc_count_after_insert'
-      ) THEN
-        CREATE TRIGGER trg_update_doc_count_after_insert
-        AFTER INSERT OR DELETE ON public.documents_doc_groups
-        FOR EACH ROW EXECUTE FUNCTION public.update_doc_count();
-      END IF;
-    END;
-    $$ LANGUAGE plpgsql;
 
     -- API keys table
     CREATE TABLE IF NOT EXISTS api_keys (
@@ -1336,6 +1286,7 @@ data:
     CREATE TABLE IF NOT EXISTS projects (
         id BIGSERIAL PRIMARY KEY,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
         course_name VARCHAR,
         doc_map_id VARCHAR,
         convo_map_id VARCHAR,
@@ -1346,7 +1297,9 @@ data:
         description TEXT,
         metadata_schema JSONB,
         conversation_map_index TEXT,
-        document_map_index TEXT
+        document_map_index TEXT,
+        "group" TEXT,
+        course_owner_username TEXT
     );
     
     -- course_names table
@@ -1575,10 +1528,11 @@ data:
     FOREIGN KEY (conversation_id)
     REFERENCES conversations(id)
     ON DELETE CASCADE;
-    
-    ALTER TABLE IF EXISTS folders
-    ADD CONSTRAINT fk_folders_user_email
-    FOREIGN KEY (user_email) REFERENCES user_entity(email);
+
+    -- Note: Foreign key to user_entity was removed because user_entity.email is not unique
+    -- ALTER TABLE IF EXISTS folders
+    -- ADD CONSTRAINT fk_folders_user_email
+    -- FOREIGN KEY (user_email) REFERENCES user_entity(email);
     
     -- Add triggers for automatic timestamp updates
     CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -1609,6 +1563,73 @@ data:
     BEFORE UPDATE ON folders
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
+
+    -- Create Triggers that require tables to be created first --
+
+    -- Name: projects after_project_insert; Type: TRIGGER; Schema: public; Owner: postgres
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_trigger WHERE tgname = 'after_project_insert'
+      ) THEN
+        CREATE TRIGGER after_project_insert
+        AFTER INSERT ON public.projects
+        FOR EACH ROW EXECUTE FUNCTION public.initialize_project_stats();
+      END IF;
+    END;
+    $$ LANGUAGE plpgsql;
+
+    -- Name: llm-convo-monitor project_stats_trigger; Type: TRIGGER; Schema: public; Owner: postgres
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_trigger WHERE tgname = 'project_stats_trigger'
+      ) THEN
+        CREATE TRIGGER project_stats_trigger
+        AFTER INSERT OR DELETE OR UPDATE ON public."llm-convo-monitor"
+        FOR EACH ROW EXECUTE FUNCTION public.update_project_stats();
+      END IF;
+    END;
+    $$ LANGUAGE plpgsql;
+
+    -- Name: documents_doc_groups trg_update_doc_count_after_insert; Type: TRIGGER; Schema: public; Owner: postgres
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_trigger WHERE tgname = 'trg_update_doc_count_after_insert'
+      ) THEN
+        CREATE TRIGGER trg_update_doc_count_after_insert
+        AFTER INSERT OR DELETE ON public.documents_doc_groups
+        FOR EACH ROW EXECUTE FUNCTION public.update_doc_count();
+      END IF;
+    END;
+    $$ LANGUAGE plpgsql;
+
+    -- Add course_owner_username column to projects table if it doesn't exist
+    DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.columns
+            WHERE table_name = 'projects' AND column_name = 'course_owner_username'
+        ) THEN
+            ALTER TABLE projects ADD COLUMN course_owner_username TEXT;
+            RAISE NOTICE 'Added course_owner_username column to projects table';
+        END IF;
+    END;
+    $$;
+
+    -- Add "group" column to projects table if it doesn't exist
+    DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM information_schema.columns
+            WHERE table_name = 'projects' AND column_name = 'group'
+        ) THEN
+            ALTER TABLE projects ADD COLUMN "group" TEXT;
+            RAISE NOTICE 'Added "group" column to projects table';
+        END IF;
+    END;
+    $$;
 ---
 apiVersion: batch/v1
 kind: Job

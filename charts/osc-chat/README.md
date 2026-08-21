@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.14](https://img.shields.io/badge/Version-0.1.14-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.14](https://img.shields.io/badge/AppVersion-0.1.14-informational?style=flat-square)
+![Version: 0.1.15](https://img.shields.io/badge/Version-0.1.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.15](https://img.shields.io/badge/AppVersion-0.1.15-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -68,7 +68,7 @@ secrets:
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.7 |
+| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.8 |
 | https://osc.github.io/osc-helm-charts | database | 0.18.0 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.14.2 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
@@ -182,20 +182,20 @@ secrets:
 | backend.enabled | bool | `true` |  |
 | backend.ingress.enabled | bool | `false` |  |
 | backend.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
-| backend.image.tag | string | `"v0.1.1"` |  |
+| backend.image.tag | string | `"v0.1.2"` |  |
 | backend.image.pullPolicy | string | `"Always"` |  |
 | backend.imagePullSecret.enable | bool | `false` |  |
 | backend.replicaCount | int | `1` |  |
 | backend.service.type | string | `"ClusterIP"` |  |
 | backend.service.port | int | `8001` |  |
 | backend.env.FLASK_ENV | string | `"production"` |  |
-| backend.resources.limits.cpu | int | `1` |  |
-| backend.resources.limits.memory | string | `"1Gi"` |  |
-| backend.resources.requests.cpu | string | `"500m"` |  |
-| backend.resources.requests.memory | string | `"512Mi"` |  |
+| backend.resources.limits.cpu | int | `4` |  |
+| backend.resources.limits.memory | string | `"8Gi"` |  |
+| backend.resources.requests.cpu | int | `1` |  |
+| backend.resources.requests.memory | string | `"1Gi"` |  |
 | worker.enabled | bool | `true` |  |
 | worker.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
-| worker.image.tag | string | `"v0.1.1"` |  |
+| worker.image.tag | string | `"v0.1.2"` |  |
 | worker.image.pullPolicy | string | `"Always"` |  |
 | worker.replicaCount | int | `1` |  |
 | worker.env.QDRANT_COLLECTION_NAME | string | `"{{ include \"osc-chat.name\" . }}"` |  |
@@ -244,7 +244,7 @@ secrets:
 | keycloak.enabled | bool | `false` |  |
 | frontend.enabled | bool | `true` |  |
 | frontend.image.repository | string | `"kubernetes/hpcgpt/frontend"` |  |
-| frontend.image.tag | string | `"v0.1.7"` |  |
+| frontend.image.tag | string | `"v0.1.9"` |  |
 | frontend.image.pullPolicy | string | `"Always"` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
