@@ -19,6 +19,7 @@ rules:
   resources:
     - pods
     - pods/attach
+    - pods/eviction
     - pods/exec
     - pods/portforward
     - pods/proxy
