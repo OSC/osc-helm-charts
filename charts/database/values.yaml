@@ -263,6 +263,41 @@ mongodb:
       hostPath:
         path: '{{ .Values.global.dataDir.path }}'
         type: Directory
+  backup:
+    # @ignored
+    enabled: true
+    cronjob:
+      # -- MongoDB cron backup schedule
+      schedule: '@daily'
+      # @ignored
+      command:
+      - /bin/bash
+      - -c
+      - |
+        set -e
+        find "$MONGODUMP_DIR" -maxdepth 1 -type f -name "mongodump*" -mtime +7 -print0 | xargs -0 -r rm -f
+        mongodump --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} {{- if (eq $.Values.architecture "replicaset") }}--oplog{{- end }} --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz
+      # @ignored
+      labels:
+        '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+        '{{ include "osc.common.roleKey" . }}': '{{ .Values.global.nodeSelectorRole }}'
+      # @ignored
+      nodeSelector:
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+      # @ignored
+      resources:
+        limits:
+          cpu: '2'
+          memory: 512Mi
+        requests:
+          cpu: '1'
+          memory: 128Mi
+      storage:
+        # @ignored
+        accessModes:
+        - ReadWriteMany
+        # -- Backup storage annotations
+        annotations: {}
   metrics:
     # @ignored
     enabled: true
@@ -392,6 +427,41 @@ postgresql:
           mountPath: '{{ .Values.primary.persistence.mountPath }}'
         - name: dshm
           mountPath: /dev/shm
+  backup:
+    # @ignored
+    enabled: true
+    cronjob:
+      # -- PostgreSQL cron backup schedule
+      schedule: '@daily'
+      # @ignored
+      command:
+      - /bin/bash
+      - -c
+      - |
+        set -e
+        find "$PGDUMP_DIR" -maxdepth 1 -type f -name "pg_dumpall*" -mtime +7 -print0 | xargs -0 -r rm -f
+        PGPASSWORD="${PGPASSWORD:-$(< "$PGPASSWORD_FILE")}" pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file="${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"
+      # @ignored
+      labels:
+        '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+        '{{ include "osc.common.roleKey" . }}': '{{ .Values.global.nodeSelectorRole }}'
+      # @ignored
+      nodeSelector:
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+      # @ignored
+      resources:
+        limits:
+          cpu: '1'
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+      storage:
+        # @ignored
+        accessModes:
+        - ReadWriteMany
+        # -- Backup storage annotations
+        annotations: {}
   volumePermissions:
     image:
       # -- The OSC registry path to replicated image.

@@ -25,3 +25,12 @@ mongodb:
   initContainers: []
   extraVolumeMounts: []
   extraVolumes: []
+  backup:
+    cronjob:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 128Mi
