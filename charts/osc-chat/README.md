@@ -191,7 +191,7 @@ secrets:
 | backend.env.FLASK_ENV | string | `"production"` |  |
 | backend.resources.limits.cpu | int | `4` |  |
 | backend.resources.limits.memory | string | `"8Gi"` |  |
-| backend.resources.requests.cpu | string | `"1"` |  |
+| backend.resources.requests.cpu | string | `1` |  |
 | backend.resources.requests.memory | string | `"1Gi"` |  |
 | worker.enabled | bool | `true` |  |
 | worker.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
