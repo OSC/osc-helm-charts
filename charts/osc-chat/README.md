@@ -190,7 +190,7 @@ secrets:
 | backend.service.port | int | `8001` |  |
 | backend.env.FLASK_ENV | string | `"production"` |  |
 | backend.resources.limits.cpu | int | `1` |  |
-| backend.resources.limits.memory | string | `"1Gi"` |  |
+| backend.resources.limits.memory | string | `"2Gi"` |  |
 | backend.resources.requests.cpu | string | `"500m"` |  |
 | backend.resources.requests.memory | string | `"512Mi"` |  |
 | worker.enabled | bool | `true` |  |
