@@ -244,7 +244,7 @@ secrets:
 | keycloak.enabled | bool | `false` |  |
 | frontend.enabled | bool | `true` |  |
 | frontend.image.repository | string | `"kubernetes/hpcgpt/frontend"` |  |
-| frontend.image.tag | string | `"v0.1.8"` |  |
+| frontend.image.tag | string | `"v0.1.9"` |  |
 | frontend.image.pullPolicy | string | `"Always"` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
