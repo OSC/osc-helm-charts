@@ -23,7 +23,6 @@ postgresql:
         memory: 256Mi
   backup:
     cronjob:
-      schedule: '* * * * *'
       resources:
         limits:
           cpu: 500m
@@ -31,3 +30,6 @@ postgresql:
         requests:
           cpu: 200m
           memory: 128Mi
+      storage:
+        accessModes:
+        - ReadWriteOnce

@@ -27,7 +27,6 @@ mongodb:
   extraVolumes: []
   backup:
     cronjob:
-      schedule: '* * * * *'
       resources:
         limits:
           cpu: 500m
@@ -35,3 +34,6 @@ mongodb:
         requests:
           cpu: 200m
           memory: 128Mi
+      storage:
+        accessModes:
+        - ReadWriteOnce
