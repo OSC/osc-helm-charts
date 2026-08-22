@@ -191,8 +191,17 @@ qdrant:
       schedule: "0 0 * * *"
   imagePullSecrets:
     - name: osc-registry
-  # -- API key for qdrant. **Must be the same as .Values.secrets.api.qdrantKey**
-  apiKey: "super-secret"
+  # @ignored
+  apiKey: false
+  # @ignored
+  readOnlyApiKey: false
+  # @ignored
+  env:
+    - name: QDRANT__SERVICE__API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: osc-chat-app-secrets
+          key: QDRANT_API_KEY
 
 rabbitmq:
   enable: true

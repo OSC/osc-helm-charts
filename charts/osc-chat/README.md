@@ -155,7 +155,6 @@ secrets:
 | qdrant.snapshotPersistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
 | qdrant.snapshotPersistence.additionalLabels."osc.edu/service-account" | string | `"oscchat"` |  |
 | qdrant.imagePullSecrets[0].name | string | `"osc-registry"` |  |
-| qdrant.apiKey | string | `"super-secret"` | API key for qdrant. **Must be the same as .Values.secrets.api.qdrantKey** |
 | rabbitmq.enable | bool | `true` |  |
 | rabbitmq.image.repository | string | `"kubernetes/bitnami/rabbitmq"` |  |
 | rabbitmq.image.tag | string | `"4.1.3-debian-12-r1"` |  |
