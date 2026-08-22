@@ -218,9 +218,10 @@ secrets:
 | huggingfaceCache.mountPath | string | `"/var/cache/huggingface"` |  |
 | huggingfaceCache.sizeLimit | string | `"5Gi"` |  |
 | huggingfaceCache.storageClassName | string | `"{{ .Values.global.storageClass }}"` |  |
-| secrets.create | bool | `true` |  |
-| secrets.api.openaiKey | string | `"your_strong_key"` |  |
-| secrets.api.qdrantKey | string | `"super-secret"` |  |
+| secrets.create | bool | `true` | Internal secrets - created by the chart |
+| secrets.api.openaiKey | string | `"your_strong_key"` | Open AI key |
+| secrets.api.qdrantKey | string | `"super-secret"` | qdrant API key |
+| secrets.api.posthogKey | string | `"secret"` | posthog key |
 | crawlee.enabled | bool | `true` |  |
 | crawlee.image.repository | string | `"kubernetes/hpcgpt/crawlee"` |  |
 | crawlee.image.tag | string | `"v0.1.1"` |  |

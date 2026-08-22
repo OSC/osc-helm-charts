@@ -308,11 +308,15 @@ huggingfaceCache:
   storageClassName: '{{ .Values.global.storageClass }}'
 
 secrets:
-  # Internal secrets - created by the chart
+  # -- Internal secrets - created by the chart
   create: true
   api:
+    # -- Open AI key
     openaiKey: "your_strong_key"
+    # -- qdrant API key
     qdrantKey: "super-secret"
+    # -- posthog key
+    posthogKey: "secret"
 
 crawlee:
   enabled: true
