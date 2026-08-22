@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.18.0](https://img.shields.io/badge/Version-0.18.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.19.0](https://img.shields.io/badge/Version-0.19.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -118,6 +118,7 @@ redis:
 | global.dataDir.subPath | Subpath for dataDir storage | `nil` |
 | global.security.allowInsecureImages |  | `true` |
 | global.alert.receiver | The alert receiver name | `""` |
+| global.backup.keep | Number of backups to keep | `7` |
 | imagePullSecret.enable | Manage the image pull secret from osc-common. Disable if this chart is used as a subchart. | `true` |
 | mariadb.enable | Enable MariaDB subchart by setting to `true` | `false` |
 | mariadb.image.repository | The OSC registry path to mariadb replicated image. This value should not need to be changed. | `"webservices/mariadb"` |
@@ -131,6 +132,8 @@ redis:
 | mongodb.image.repository | The OSC registry path to mongodb replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mongodb"` |
 | mongodb.image.tag | The version of MongoDB image. This tag should be replicated into the OSC registry | `"8.0.13-debian-12-r0"` |
 | mongodb.resources | Set limits for the MongoDB pod | `{"limits":{"cpu":4,"memory":"4Gi"},"requests":{"cpu":1,"memory":"256Mi"}}` |
+| mongodb.backup.cronjob.schedule | MongoDB cron backup schedule | `"@daily"` |
+| mongodb.backup.cronjob.storage.annotations | Backup storage annotations | `{}` |
 | mongodb.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mongodb-exporter"` |
 | mongodb.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.47.0-debian-12-r1"` |
 | postgresql.enable | Enable PostgreSQL subchart by setting to `true` | `false` |
@@ -141,6 +144,8 @@ redis:
 | postgresql.auth.username | The database username | **required** |
 | postgresql.auth.password | The database password | **required** |
 | postgresql.primary.resources | Set limits for primary PostgreSQL pod | `{"limits":{"cpu":"4","memory":"4Gi"},"requests":{"cpu":"1","memory":"256Mi"}}` |
+| postgresql.backup.cronjob.schedule | PostgreSQL cron backup schedule | `"@daily"` |
+| postgresql.backup.cronjob.storage.annotations | Backup storage annotations | `{}` |
 | postgresql.volumePermissions.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/os-shell"` |
 | postgresql.volumePermissions.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"12-debian-12-r51"` |
 | postgresql.metrics.enabled |  | `true` |
