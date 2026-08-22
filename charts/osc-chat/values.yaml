@@ -56,16 +56,17 @@ database:
   oscCommon:
     enable: false
   postgresql:
+    # @ignored
     schema:
       enabled: true
+    # @ignored
     enable: true
-    imagePullSecret:
-      enable: false
     auth:
       postgresPassword: secret
       database: name
       username: name
       password: secret
+    # @ignored
     primary:
       persistence:
         annotations:
@@ -75,6 +76,12 @@ database:
         scripts:
           extra-grants.sql: |
             GRANT EXECUTE ON FUNCTION pg_ls_waldir() TO {{ .Values.auth.username }};
+    # @ignored
+    backup:
+      cronjob:
+        storage:
+          annotations:
+            osc.edu/fileset: '{{ .Values.global.fileset }}'
 
   redis:
     enable: true
@@ -184,7 +191,8 @@ qdrant:
       schedule: "0 0 * * *"
   imagePullSecrets:
     - name: osc-registry
-  apiKey: true
+  # -- API key for qdrant. **Must be the same as .Values.secrets.api.qdrantKey**
+  apiKey: "super-secret"
 
 rabbitmq:
   enable: true
@@ -304,6 +312,7 @@ secrets:
   create: true
   api:
     openaiKey: "your_strong_key"
+    qdrantKey: "super-secret"
 
 crawlee:
   enabled: true
