@@ -58,6 +58,9 @@ global:
   alert:
     # -- The alert receiver name
     receiver: ""
+  backup:
+    # -- Number of backups to keep
+    keep: 7
 
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
@@ -275,7 +278,7 @@ mongodb:
       - -c
       - |
         set -e
-        find "$MONGODUMP_DIR" -maxdepth 1 -type f -name "mongodump*" -mtime +7 -print0 | xargs -0 -r rm -f
+        find "$MONGODUMP_DIR" -maxdepth 1 -type f -name "mongodump*" -mtime +{{ .Values.global.backup.keep }} -print0 | xargs -0 -r rm -f
         mongodump --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} {{- if (eq $.Values.architecture "replicaset") }}--oplog{{- end }} --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz
       # @ignored
       labels:
@@ -439,7 +442,7 @@ postgresql:
       - -c
       - |
         set -e
-        find "$PGDUMP_DIR" -maxdepth 1 -type f -name "pg_dumpall*" -mtime +7 -print0 | xargs -0 -r rm -f
+        find "$PGDUMP_DIR" -maxdepth 1 -type f -name "pg_dumpall*" -mtime +{{ .Values.global.backup.keep }} -print0 | xargs -0 -r rm -f
         PGPASSWORD="${PGPASSWORD:-$(< "$PGPASSWORD_FILE")}" pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file="${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"
       # @ignored
       labels:
