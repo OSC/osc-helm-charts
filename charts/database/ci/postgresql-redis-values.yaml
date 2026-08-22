@@ -23,6 +23,7 @@ postgresql:
         memory: 256Mi
   backup:
     cronjob:
+      schedule: '* * * * *'
       resources:
         limits:
           cpu: 500m
