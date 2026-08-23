@@ -251,29 +251,6 @@ prometheus-pushgateway:
         requests:
           cpu: 250m
           memory: 128Mi
-watch:
-  image:
-    repository: docker-registry.osc.edu/kubernetes/weaveworks/watch
-    tag: master-0c44bf6
-    pullPolicy: IfNotPresent
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
-    seccompProfile:
-      type: RuntimeDefault
-    privileged: false
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 94
-    runAsGroup: 94
-  resources:
-    limits:
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 50Mi
 
 # @ignored
 prometheus-blackbox-exporter:
