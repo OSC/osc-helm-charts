@@ -275,13 +275,9 @@ watch:
       cpu: 100m
       memory: 50Mi
 
-blackboxExporter:
-  name: blackbox-exporter
-  configName: blackbox-exporter-config
-  image:
-    repository: quay.io/prometheus/blackbox-exporter
-    pullPolicy: IfNotPresent
-    tag: "v0.24.0"
+# @ignored
+prometheus-blackbox-exporter:
+  fullnameOverride: blackbox-exporter
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -297,18 +293,96 @@ blackboxExporter:
     runAsNonRoot: true
     runAsUser: 65534
     runAsGroup: 65534
+  nodeSelector:
+    node-role.kubernetes.io/infrastructure: ''
   resources:
     limits:
       memory: 128Mi
     requests:
       cpu: 100m
       memory: 50Mi
+  config:
+    modules:
+      http:
+        prober: http
+        timeout: 5s
+        http:
+          valid_status_codes:
+          - 200
+          - 301
+          - 302
+          - 303
+          - 401
+          - 403
+          preferred_ip_protocol: ip4
+          ip_protocol_fallback: false
+          follow_redirects: false
+      https:
+        prober: http
+        timeout: 5s
+        http:
+          valid_status_codes:
+          - 200
+          - 301
+          - 302
+          - 303
+          - 401
+          - 403
+          fail_if_not_ssl: true
+          preferred_ip_protocol: ip4
+          ip_protocol_fallback: false
+          follow_redirects: false
+      https-noverify:
+        prober: http
+        timeout: 5s
+        http:
+          valid_status_codes:
+          - 200
+          - 401
+          - 403
+          fail_if_not_ssl: true
+          preferred_ip_protocol: ip4
+          ip_protocol_fallback: false
+          tls_config:
+            insecure_skip_verify: true
+      http-healthz:
+        prober: http
+        timeout: 5s
+        http:
+          valid_status_codes:
+          - 200
+          preferred_ip_protocol: ip4
+          ip_protocol_fallback: false
+          follow_redirects: false
+      tcp_connect:
+        prober: tcp
+        timeout: 5s
+        tcp:
+          preferred_ip_protocol: ip4
+          ip_protocol_fallback: false
+      tcp_tls_connect:
+        prober: tcp
+        timeout: 5s
+        tcp:
+          preferred_ip_protocol: ip4
+          ip_protocol_fallback: false
+          tls: true
+          tls_config:
+            insecure_skip_verify: true
+  configReloader:
+    enabled: true
+    securityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
   service:
-    type: ClusterIP
     port: 9115
-    annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
+  serviceMonitor:
+    selfMonitor:
+      enabled: true
+  networkPolicy:
+    enabled: true
+    allowMonitoringNamespace: true
+    monitoringNamespaceName: prometheus
 
 sslExporter:
   name: ssl-exporter
@@ -354,6 +428,9 @@ kube-state-metrics:
     annotations:
       prometheus.io/probe_skip: "true"
   collectors: []
+  prometheus:
+    monitor:
+      enabled: true
   selfMonitor:
     enabled: true
     telemetryPort: 8081
@@ -368,6 +445,16 @@ kube-state-metrics:
     runAsNonRoot: true
   nodeSelector:
     node-role.kubernetes.io/infrastructure: ''
+  networkPolicy:
+    enabled: true
+    podSelector:
+      matchLabels:
+        app.kubernetes.io/name: kube-state-metrics
+    ingress:
+      - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
 
 dcgm-exporter:
   nameOverride: dcgm-exporter
