@@ -12,7 +12,7 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          {{- include "blackbox-exporter.selectorLabels" . | nindent 10 }}
+          {{- include "prometheus-blackbox-exporter.selectorLabels" . | nindent 10 }}
     - podSelector:
         matchLabels:
           {{- include "prometheus.selectorLabels" . | nindent 10 }}
