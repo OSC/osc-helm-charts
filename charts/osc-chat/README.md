@@ -69,7 +69,7 @@ secrets:
 | Repository | Name | Version |
 |------------|------|---------|
 | https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.8 |
-| https://osc.github.io/osc-helm-charts | database | 0.19.0 |
+| https://osc.github.io/osc-helm-charts | database | 0.19.2 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.14.2 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
 | oci://docker-registry.osc.edu/kubernetes/vllm | vllm-stack | 0.1.11-osc-r1 |
