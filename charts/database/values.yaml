@@ -284,6 +284,7 @@ mongodb:
       labels:
         '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
         '{{ include "osc.common.roleKey" . }}': '{{ .Values.global.nodeSelectorRole }}'
+        '{{ .Release.Name }}-mongodb-client': 'true'
       # @ignored
       nodeSelector:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
@@ -346,6 +347,8 @@ mongodb:
     allowExternal: false
     ingressNSMatchLabels:
       app.kubernetes.io/name: prometheus
+    extraIngress:
+      - podSelector: {}
 postgresql:
   # -- Enable PostgreSQL subchart by setting to `true`
   enable: false
@@ -430,6 +433,14 @@ postgresql:
           mountPath: '{{ .Values.primary.persistence.mountPath }}'
         - name: dshm
           mountPath: /dev/shm
+    # @ignored
+    networkPolicy:
+      enabled: true
+      allowExternal: false
+      ingressNSMatchLabels:
+        app.kubernetes.io/name: prometheus
+      extraIngress:
+        - podSelector: {}
   backup:
     # @ignored
     enabled: true
@@ -511,17 +522,6 @@ postgresql:
     relabelings:
       - sourceLabels: [__meta_kubernetes_service_label_receiver]
         targetLabel: receiver
-  # @ignored
-  networkPolicy:
-    enabled: true
-    ingressRules:
-      primaryAccessOnlyFrom:
-        enabled: true
-        podSelector: {}
-    metrics:
-      enabled: true
-      namespaceSelector:
-        app.kubernetes.io/name: prometheus
 redis:
   # -- Enable Redis subchart by setting to `true`
   enable: false
