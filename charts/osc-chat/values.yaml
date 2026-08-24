@@ -51,10 +51,6 @@ global:
     ingressAllowedPods:
       - app.kubernetes.io/name: "osc-mcp"
 
-# Set to ensure secret reference for qdrant can't change
-# @ignored
-fullnameOverride: osc-chat
-
 database:
   # @ignored
   oscCommon:
@@ -195,17 +191,10 @@ qdrant:
       schedule: "0 0 * * *"
   imagePullSecrets:
     - name: osc-registry
-  # @ignored
-  apiKey: false
+  # -- qdramt API key
+  apiKey: "super-secret"
   # @ignored
   readOnlyApiKey: false
-  # @ignored
-  env:
-    - name: QDRANT__SERVICE__API_KEY
-      valueFrom:
-        secretKeyRef:
-          name: osc-chat-app-secrets
-          key: QDRANT_API_KEY
 
 rabbitmq:
   enable: true
@@ -326,8 +315,6 @@ secrets:
   api:
     # -- Open AI key
     openaiKey: "your_strong_key"
-    # -- qdrant API key
-    qdrantKey: "super-secret"
     # -- posthog key
     posthogKey: "secret"
 

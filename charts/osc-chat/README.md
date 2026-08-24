@@ -42,6 +42,7 @@ database:
   postgresql:
     auth:
       postgresPassword: <postgres root password>
+      username: <username>
       password: <postgres database password>
   redis:
     auth:
@@ -59,9 +60,13 @@ minio:
   ingress:
     hostname: <minio host name>
 
+qdrant:
+  apiKey: <qdrant API key>
+
 secrets:
   api:
     openaiKey: <LLM server API key>
+    posthogKey: <posthost key>
 ```
 
 ## Requirements
@@ -155,6 +160,7 @@ secrets:
 | qdrant.snapshotPersistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
 | qdrant.snapshotPersistence.additionalLabels."osc.edu/service-account" | string | `"oscchat"` |  |
 | qdrant.imagePullSecrets[0].name | string | `"osc-registry"` |  |
+| qdrant.apiKey | string | `"super-secret"` | qdramt API key |
 | rabbitmq.enable | bool | `true` |  |
 | rabbitmq.image.repository | string | `"kubernetes/bitnami/rabbitmq"` |  |
 | rabbitmq.image.tag | string | `"4.1.3-debian-12-r1"` |  |
@@ -219,7 +225,6 @@ secrets:
 | huggingfaceCache.storageClassName | string | `"{{ .Values.global.storageClass }}"` |  |
 | secrets.create | bool | `true` | Internal secrets - created by the chart |
 | secrets.api.openaiKey | string | `"your_strong_key"` | Open AI key |
-| secrets.api.qdrantKey | string | `"super-secret"` | qdrant API key |
 | secrets.api.posthogKey | string | `"secret"` | posthog key |
 | crawlee.enabled | bool | `true` |  |
 | crawlee.image.repository | string | `"kubernetes/hpcgpt/crawlee"` |  |
