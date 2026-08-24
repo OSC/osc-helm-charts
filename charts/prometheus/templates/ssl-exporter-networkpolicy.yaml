@@ -12,7 +12,7 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          {{- include "prometheus-blackbox-exporter.selectorLabels" . | nindent 10 }}
+          app.kubernetes.io/name: prometheus-blackbox-exporter
     - podSelector:
         matchLabels:
           {{- include "prometheus.selectorLabels" . | nindent 10 }}
