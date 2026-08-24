@@ -235,7 +235,7 @@ mongodb:
   - name: create-data-dir
     image: '{{ include "mongodb.image" . }}'
     command: ['sh', '-c', 'mkdir -p /bitnami/mongodb/{{ .Values.global.dataDir.subPath }}/{{ include "osc.common.environment" . }}']
-    containerSecurityContext:
+    securityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
       capabilities:
@@ -292,10 +292,10 @@ mongodb:
       resources:
         limits:
           cpu: '2'
-          memory: 512Mi
+          memory: 4Gi
         requests:
           cpu: '1'
-          memory: 128Mi
+          memory: 2Gi
       # @ignored
       storage:
         accessModes:
@@ -348,7 +348,8 @@ mongodb:
     ingressNSMatchLabels:
       app.kubernetes.io/name: prometheus
     extraIngress:
-      - podSelector: {}
+      - from:
+          - podSelector: {}
 postgresql:
   # -- Enable PostgreSQL subchart by setting to `true`
   enable: false
@@ -440,7 +441,8 @@ postgresql:
       ingressNSMatchLabels:
         app.kubernetes.io/name: prometheus
       extraIngress:
-        - podSelector: {}
+        - from:
+            - podSelector: {}
   backup:
     # @ignored
     enabled: true
@@ -465,11 +467,11 @@ postgresql:
       # @ignored
       resources:
         limits:
-          cpu: '1'
-          memory: 512Mi
+          cpu: '2'
+          memory: 4Gi
         requests:
-          cpu: 250m
-          memory: 128Mi
+          cpu: '1'
+          memory: 2Gi
       storage:
         # @ignored
         accessModes:
