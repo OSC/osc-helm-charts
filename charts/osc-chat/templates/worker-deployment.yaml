@@ -133,8 +133,8 @@ spec:
             - name: QDRANT_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-qdrant-apikey
-                  key: api-key
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
+                  key: QDRANT_API_KEY
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
           {{- if .Values.huggingfaceCache.enabled }}

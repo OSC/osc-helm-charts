@@ -147,8 +147,8 @@ spec:
             - name: QDRANT_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "osc-chat.fullname" . }}-qdrant-apikey
-                  key: api-key
+                  name: {{ include "osc-chat.fullname" . }}-app-secrets
+                  key: QDRANT_API_KEY
             - name: CRAWLEE_API_URL
               value: "http://{{ include "osc-chat.fullname" . }}-crawlee:3000/crawl"
           livenessProbe:
