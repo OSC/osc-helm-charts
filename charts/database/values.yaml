@@ -235,7 +235,7 @@ mongodb:
   - name: create-data-dir
     image: '{{ include "mongodb.image" . }}'
     command: ['sh', '-c', 'mkdir -p /bitnami/mongodb/{{ .Values.global.dataDir.subPath }}/{{ include "osc.common.environment" . }}']
-    containerSecurityContext:
+    securityContext:
       runAsNonRoot: true
       allowPrivilegeEscalation: false
       capabilities:
@@ -284,6 +284,7 @@ mongodb:
       labels:
         '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
         '{{ include "osc.common.roleKey" . }}': '{{ .Values.global.nodeSelectorRole }}'
+        '{{ .Release.Name }}-mongodb-client': 'true'
       # @ignored
       nodeSelector:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
@@ -291,10 +292,10 @@ mongodb:
       resources:
         limits:
           cpu: '2'
-          memory: 512Mi
+          memory: 4Gi
         requests:
           cpu: '1'
-          memory: 128Mi
+          memory: 2Gi
       # @ignored
       storage:
         accessModes:
@@ -346,6 +347,9 @@ mongodb:
     allowExternal: false
     ingressNSMatchLabels:
       app.kubernetes.io/name: prometheus
+    extraIngress:
+      - from:
+          - podSelector: {}
 postgresql:
   # -- Enable PostgreSQL subchart by setting to `true`
   enable: false
@@ -430,6 +434,15 @@ postgresql:
           mountPath: '{{ .Values.primary.persistence.mountPath }}'
         - name: dshm
           mountPath: /dev/shm
+    # @ignored
+    networkPolicy:
+      enabled: true
+      allowExternal: false
+      ingressNSMatchLabels:
+        app.kubernetes.io/name: prometheus
+      extraIngress:
+        - from:
+            - podSelector: {}
   backup:
     # @ignored
     enabled: true
@@ -454,11 +467,11 @@ postgresql:
       # @ignored
       resources:
         limits:
-          cpu: '1'
-          memory: 512Mi
+          cpu: '2'
+          memory: 4Gi
         requests:
-          cpu: 250m
-          memory: 128Mi
+          cpu: '1'
+          memory: 2Gi
       storage:
         # @ignored
         accessModes:
@@ -511,17 +524,6 @@ postgresql:
     relabelings:
       - sourceLabels: [__meta_kubernetes_service_label_receiver]
         targetLabel: receiver
-  # @ignored
-  networkPolicy:
-    enabled: true
-    ingressRules:
-      primaryAccessOnlyFrom:
-        enabled: true
-        podSelector: {}
-    metrics:
-      enabled: true
-      namespaceSelector:
-        app.kubernetes.io/name: prometheus
 redis:
   # -- Enable Redis subchart by setting to `true`
   enable: false
