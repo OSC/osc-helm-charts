@@ -295,12 +295,12 @@ mongodb:
         requests:
           cpu: '1'
           memory: 128Mi
+      # @ignored
       storage:
-        # @ignored
         accessModes:
         - ReadWriteMany
-        # -- Backup storage annotations
-        annotations: {}
+      # -- Backup cronjob and cronjob storage annotations
+      annotations: {}
   metrics:
     # @ignored
     enabled: true
