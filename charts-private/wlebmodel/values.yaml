@@ -5,7 +5,8 @@ global:
   debugGroups:
     - sappstf
   # -- Groups that can perform maintenance operations
-  maintenanceGroups: []
+  maintenanceGroups:
+    - sciapps
   auth:
     # @ignored
     enable: true
