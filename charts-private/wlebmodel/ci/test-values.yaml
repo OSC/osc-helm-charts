@@ -8,8 +8,8 @@ global:
 webservice:
   podResources:
     limits:
-      cpu: 1
-      memory: 500Mi
+      cpu: 2
+      memory: 2Gi
     requests:
-      cpu: 500m
+      cpu: 1
       memory: 256Mi
