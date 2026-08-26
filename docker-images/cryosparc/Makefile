@@ -13,10 +13,14 @@ build:
 	docker build \
 	--build-arg VERSION="$(VERSION_v4)" \
 	--build-arg LICENSE_ID="$(LICENSE_ID)" \
+	--platform linux/amd64 \
+	--progress=plain \
 	-t $(TAG_v4) $(ROOT_DIR)
 	docker build \
 	--build-arg VERSION="$(VERSION_v5)" \
 	--build-arg LICENSE_ID="$(LICENSE_ID)" \
+	--platform linux/amd64 \
+	--progress=plain \
 	-t $(TAG_v5) $(ROOT_DIR)
 
 push:

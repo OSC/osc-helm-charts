@@ -7,7 +7,7 @@ RUN echo $LICENSE_ID
 RUN echo $VERSION
 
 # Tools for diagnostics
-RUN dnf install -y iproute procps-ng --disablerepo=repo.hpc* && \
+RUN dnf install -y iproute procps-ng && \
     dnf clean all && rm -rf /var/cache/dnf/*
 
 RUN cd /tmp && \
