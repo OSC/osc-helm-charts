@@ -2,7 +2,7 @@ ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 # LICENSE_ID = "This is a secret"
 
 VERSION_v4 = 4.7.1
-REVISION_v4 = 3
+REVISION_v4 = 4
 TAG_v4 = docker-registry.osc.edu/webservices/cryosparc:$(VERSION_v4)-r$(REVISION_v4)
 
 VERSION_v5 = 5.0.6
