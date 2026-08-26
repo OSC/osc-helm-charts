@@ -6,7 +6,7 @@ REVISION_v4 = 3
 TAG_v4 = docker-registry.osc.edu/webservices/cryosparc:$(VERSION_v4)-r$(REVISION_v4)
 
 VERSION_v5 = 5.0.6
-REVISION_v5 = 1
+REVISION_v5 = 2
 TAG_v5 = docker-registry.osc.edu/webservices/cryosparc:$(VERSION_v5)-r$(REVISION_v5)
 
 build:

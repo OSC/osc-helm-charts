@@ -6,6 +6,10 @@ ARG VERSION
 RUN echo $LICENSE_ID
 RUN echo $VERSION
 
+# Tools for diagnostics
+RUN dnf install -y iproute procps-ng && \
+    dnf clean all && rm -rf /var/cache/dnf/*
+
 RUN cd /tmp && \
     curl -L https://get.cryosparc.com/download/master-v${VERSION}/${LICENSE_ID} -o cryosparc_master.tar.gz && \
     tar xf cryosparc_master.tar.gz -C /opt && \
