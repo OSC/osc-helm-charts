@@ -15,7 +15,9 @@ RUN cd /tmp && \
     tar xf cryosparc_master.tar.gz -C /opt && \
     rm -rf /tmp/*
 
-RUN cd /opt/cryosparc_master && ./install.sh --license $LICENSE_ID --hostname localhost --dbpath /opt/cryosparc_database  --port 31000 --yes && \
+RUN cd /opt/cryosparc_master && \
+    sed -i 's/check_and_offer_patch_install$/# check_and_offer_patch_install/g' install/install_master.sh && \
+    ./install.sh --license $LICENSE_ID --hostname localhost --dbpath /opt/cryosparc_database  --port 31000 --yes && \
     truncate -s 0 config.sh && \
     rm -rf database run lanes && \
     ln -s /cryosparc_data/database database && \
