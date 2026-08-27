@@ -309,8 +309,6 @@ huggingfaceCache:
   storageClassName: '{{ .Values.global.storageClass }}'
 
 secrets:
-  # -- Internal secrets - created by the chart
-  create: true
   api:
     # -- Open AI key
     openaiKey: "your_strong_key"

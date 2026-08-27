@@ -223,7 +223,6 @@ secrets:
 | huggingfaceCache.mountPath | string | `"/var/cache/huggingface"` |  |
 | huggingfaceCache.sizeLimit | string | `"5Gi"` |  |
 | huggingfaceCache.storageClassName | string | `"{{ .Values.global.storageClass }}"` |  |
-| secrets.create | bool | `true` | Internal secrets - created by the chart |
 | secrets.api.openaiKey | string | `"your_strong_key"` | Open AI key |
 | secrets.api.posthogKey | string | `"secret"` | posthog key |
 | crawlee.enabled | bool | `true` |  |
