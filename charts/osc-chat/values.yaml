@@ -196,14 +196,15 @@ qdrant:
   readOnlyApiKey: false
 
 rabbitmq:
+  # @ignored
   enable: true
   image:
     repository: kubernetes/bitnami/rabbitmq
     tag: 4.1.3-debian-12-r1
+    # @ignored
     pullSecrets:
       - osc-registry
-  imagePullSecret:
-    enable: false
+  # @ignored
   resources:
     limits:
       cpu: 750m
@@ -211,8 +212,10 @@ rabbitmq:
     requests:
       cpu: 500m
       memory: 512Mi
+  # @ignored
   commonLabels:
     receiver: '{{ index .Values.global.alert.receiver }}'
+  # @ignored
   metrics:
     enabled: true
     podAnnotations:
@@ -224,11 +227,15 @@ rabbitmq:
       targetLabels:
         - receiver
   auth:
+    # -- rabbitmq username
     username: guest
+    # -- rabbitmq password
     password: guest
+  # @ignored
   persistence:
     annotations:
       osc.edu/fileset: PZS0645
+  # @ignored
   rbac:
     create: false
 

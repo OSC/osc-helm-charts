@@ -161,25 +161,10 @@ secrets:
 | qdrant.snapshotPersistence.additionalLabels."osc.edu/service-account" | string | `"oscchat"` |  |
 | qdrant.imagePullSecrets[0].name | string | `"osc-registry"` |  |
 | qdrant.apiKey | string | `"super-secret"` | qdramt API key |
-| rabbitmq.enable | bool | `true` |  |
 | rabbitmq.image.repository | string | `"kubernetes/bitnami/rabbitmq"` |  |
 | rabbitmq.image.tag | string | `"4.1.3-debian-12-r1"` |  |
-| rabbitmq.image.pullSecrets[0] | string | `"osc-registry"` |  |
-| rabbitmq.imagePullSecret.enable | bool | `false` |  |
-| rabbitmq.resources.limits.cpu | string | `"750m"` |  |
-| rabbitmq.resources.limits.memory | string | `"768Mi"` |  |
-| rabbitmq.resources.requests.cpu | string | `"500m"` |  |
-| rabbitmq.resources.requests.memory | string | `"512Mi"` |  |
-| rabbitmq.commonLabels.receiver | string | `"{{ index .Values.global.alert.receiver }}"` |  |
-| rabbitmq.metrics.enabled | bool | `true` |  |
-| rabbitmq.metrics.podAnnotations."prometheus.io/scrape" | string | `"false"` |  |
-| rabbitmq.metrics.serviceMonitor.default.enabled | bool | `true` |  |
-| rabbitmq.metrics.serviceMonitor.default.interval | string | `"60s"` |  |
-| rabbitmq.metrics.serviceMonitor.targetLabels[0] | string | `"receiver"` |  |
-| rabbitmq.auth.username | string | `"guest"` |  |
-| rabbitmq.auth.password | string | `"guest"` |  |
-| rabbitmq.persistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
-| rabbitmq.rbac.create | bool | `false` |  |
+| rabbitmq.auth.username | string | `"guest"` | rabbitmq username |
+| rabbitmq.auth.password | string | `"guest"` | rabbitmq password |
 | backend.enabled | bool | `true` |  |
 | backend.ingress.enabled | bool | `false` |  |
 | backend.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
