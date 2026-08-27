@@ -15,9 +15,14 @@ RUN cd /tmp && \
     tar xf cryosparc_master.tar.gz -C /opt && \
     rm -rf /tmp/*
 
+RUN if [ -f /opt/cryosparc_master/install/install_master.sh ]; then \
+        sed -i 's/check_and_offer_patch_install$/# check_and_offer_patch_install/g' /opt/cryosparc_master/install/install_master.sh; \
+    else \
+        echo "install/install_master.sh not found, skipping patch check removal"; \
+    fi 
+
 RUN cd /opt/cryosparc_master && \
-    test -f install/install_master.sh && sed -i 's/check_and_offer_patch_install$/# check_and_offer_patch_install/g' install/install_master.sh || true && \
-    ./install.sh --license $LICENSE_ID --hostname localhost --dbpath /opt/cryosparc_database  --port 31000 --yes && \
+    ./install.sh --license $LICENSE_ID --hostname localhost --dbpath /opt/cryosparc_database --port 31000 --yes \
     truncate -s 0 config.sh && \
     rm -rf database run lanes && \
     ln -s /cryosparc_data/database database && \
