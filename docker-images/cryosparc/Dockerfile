@@ -1,5 +1,5 @@
 FROM docker-registry.osc.edu/osc/slurm-25.05-rhel9:latest
-LABEL maintainer 'Zhi-Qiang You <zyou@osc.edu>'
+LABEL maintainer='Zhi-Qiang You <zyou@osc.edu>'
 ARG LICENSE_ID
 ARG VERSION
 
@@ -15,6 +15,7 @@ RUN cd /tmp && \
     tar xf cryosparc_master.tar.gz -C /opt && \
     rm -rf /tmp/*
 
+# Remove CryoSPARC 5 patch check
 RUN if [ -f /opt/cryosparc_master/install/install_master.sh ]; then \
         sed -i 's/check_and_offer_patch_install$/# check_and_offer_patch_install/g' /opt/cryosparc_master/install/install_master.sh; \
     else \
@@ -22,7 +23,7 @@ RUN if [ -f /opt/cryosparc_master/install/install_master.sh ]; then \
     fi 
 
 RUN cd /opt/cryosparc_master && \
-    ./install.sh --license $LICENSE_ID --hostname localhost --dbpath /opt/cryosparc_database --port 31000 --yes \
+    ./install.sh --license $LICENSE_ID --hostname localhost --dbpath /opt/cryosparc_database --port 31000 --yes && \
     truncate -s 0 config.sh && \
     rm -rf database run lanes && \
     ln -s /cryosparc_data/database database && \
