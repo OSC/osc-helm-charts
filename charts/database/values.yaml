@@ -476,8 +476,8 @@ postgresql:
         # @ignored
         accessModes:
         - ReadWriteMany
-        # -- Backup storage annotations
-        annotations: {}
+      # -- Backup storage annotations
+      annotations: {}
   volumePermissions:
     image:
       # -- The OSC registry path to replicated image.
