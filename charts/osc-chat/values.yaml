@@ -79,9 +79,8 @@ database:
     # @ignored
     backup:
       cronjob:
-        storage:
-          annotations:
-            osc.edu/fileset: '{{ .Values.global.fileset }}'
+        annotations:
+          osc.edu/fileset: '{{ .Values.global.fileset }}'
 
   redis:
     enable: true
