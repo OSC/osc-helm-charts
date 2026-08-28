@@ -16,6 +16,8 @@ spec:
     metadata:
       labels:
         {{- include "dynamo.selectorLabels" $ | nindent 8 }}
+        # Added to be treated like workers by Kyverno
+        nvidia.com/dynamo-component: worker
         {{ tpl (include "osc.common.serviceAccount" $) $ }}
     spec:
       restartPolicy: Never

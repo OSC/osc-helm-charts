@@ -199,10 +199,16 @@ spec:
       multinode:
         nodeCount: {{ $decodeNodes }}
     {{- end }}
+      sharedMemorySize: {{ $decode.sharedMemorySize | default $model.sharedMemorySize | default $.Values.sharedMemorySize }}
       compilationCache:
         mountPath: /home/dynamo/.cache/vllm
         pvcName: {{ $.Values.compilationCache.name }}
       podTemplate:
+      {{- if and (gt $decodeNodes 1) (eq $model.forceRay true) }}
+        metadata:
+          annotations:
+            nvidia.com/vllm-distributed-executor-backend: ray
+      {{- end }}
         spec:
           initContainers:
             - name: hf-wait
@@ -337,10 +343,16 @@ spec:
       multinode:
         nodeCount: {{ $prefillNodes }}
     {{- end }}
+      sharedMemorySize: {{ $prefill.sharedMemorySize | default $model.sharedMemorySize | default $.Values.sharedMemorySize }}
       compilationCache:
         mountPath: /home/dynamo/.cache/vllm
         pvcName: {{ $.Values.compilationCache.name }}
       podTemplate:
+      {{- if and (gt $prefillNodes 1) (eq $model.forceRay true) }}
+        metadata:
+          annotations:
+            nvidia.com/vllm-distributed-executor-backend: ray
+      {{- end }}
         spec:
           initContainers:
             - name: hf-wait

@@ -98,6 +98,9 @@ hfToken:
   # @default -- **required**
   value:
 
+# -- Shared memory default size
+sharedMemorySize: 8Gi
+
 # @ignored
 compilationCache:
   name: compilation-cache
@@ -137,6 +140,8 @@ workerEnv:
     value: '1'
   - name: DO_NOT_TRACK
     value: '1'
+  - name: RAY_USAGE_STATS_ENABLED
+    value: '0'
   - name: NIXL_TELEMETRY_ENABLE
     value: 'y'
   - name: OMP_NUM_THREADS
@@ -300,3 +305,9 @@ osc-open-webui:
     # @ignored
     ollama:
       enabled: false
+
+# @ignored
+hook:
+  image:
+    repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
+    tag: '2.39.0'
