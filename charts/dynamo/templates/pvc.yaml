@@ -22,6 +22,26 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: {{ .Values.tritonCache.name }}
+  namespace: {{ .Release.Namespace }}
+  {{- with .Values.tritonCache.annotations }}
+  annotations:
+    {{- tpl (toYaml .) $ | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+    {{ tpl (include "osc.common.serviceAccount" .) . }}
+spec:
+  storageClassName: {{ .Values.global.storageClass }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.tritonCache.size }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: {{ .Values.modelCache.name }}
   namespace: {{ .Release.Namespace }}
   {{- with .Values.modelCache.annotations }}

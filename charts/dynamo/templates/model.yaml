@@ -306,11 +306,13 @@ spec:
                 privileged: false
               workingDir: /home/dynamo
               volumeMounts:
+                - name: triton-cache
+                  mountPath: {{ $.Values.tritonCache.path }}
                 - name: model-cache
                   mountPath: /home/dynamo/.cache/huggingface
               env:
               {{- with $.Values.workerEnv }}
-                {{- toYaml . | nindent 16 }}
+                {{- tpl (toYaml .) $ | nindent 16 }}
               {{- end }}
             {{- if $disagg }}
               {{- with $.Values.disaggEnv }}
@@ -327,6 +329,9 @@ spec:
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
           volumes:
+            - name: triton-cache
+              persistentVolumeClaim:
+                claimName: {{ $.Values.tritonCache.name }}
             - name: model-cache
               persistentVolumeClaim:
                 claimName: {{ $.Values.modelCache.name }}
@@ -450,11 +455,13 @@ spec:
                 privileged: false
               workingDir: /home/dynamo
               volumeMounts:
+                - name: triton-cache
+                  mountPath: {{ $.Values.tritonCache.path }}
                 - name: model-cache
                   mountPath: /home/dynamo/.cache/huggingface
               env:
               {{- with $.Values.workerEnv }}
-                {{- toYaml . | nindent 16 }}
+                {{- tpl (toYaml .) $ | nindent 16 }}
               {{- end }}
             {{- if $disagg }}
               {{- with $.Values.disaggEnv }}
@@ -471,6 +478,9 @@ spec:
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
           volumes:
+            - name: triton-cache
+              persistentVolumeClaim:
+                claimName: {{ $.Values.tritonCache.name }}
             - name: model-cache
               persistentVolumeClaim:
                 claimName: {{ $.Values.modelCache.name }}

@@ -109,6 +109,14 @@ compilationCache:
   size: 100Gi
 
 # @ignored
+tritonCache:
+  name: triton-cache
+  path: /home/dynamo/.triton/cache
+  annotations:
+    osc.edu/fileset: '{{ .Values.global.fileset }}'
+  size: 100Gi
+
+# @ignored
 modelCache:
   name: model-cache
   annotations:
@@ -136,6 +144,8 @@ priorityClassName: ""
 
 # @ignored
 workerEnv:
+  - name: TRITON_CACHE_DIR
+    value: '{{ $.Values.tritonCache.path }}'
   - name: VLLM_NO_USAGE_STATS
     value: '1'
   - name: DO_NOT_TRACK
