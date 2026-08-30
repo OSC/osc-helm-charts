@@ -1,6 +1,6 @@
 # dynamo
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.3.0-rc1](https://img.shields.io/badge/AppVersion-1.3.0--rc1-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.4.2](https://img.shields.io/badge/AppVersion-1.4.2-informational?style=flat-square)
 
 A Helm chart to deploy Dynamo resources at OSC
 
@@ -116,9 +116,9 @@ hfToken:
 | global.auth.allowGroups | list | `["oscall","PZS0645","PZS0580"]` | Restrict access to these groups |
 | global.webui_secret_key | string | **required** | The Open WebUI secret key |
 | global.models | object | `{}` | Define models |
-| image.repository | string | `"kubernetes/ai-dynamo/vllm-runtime"` | The repository path to main vllm runtime image |
+| image.repository | string | `"kubernetes/ai-dynamo/vllm-runtime-enterprise"` | The repository path to main vllm runtime image |
 | image.tag | string | The chart's appVersion | The vllm runtime image tag |
-| image.release | string | `"3"` | The release of the custom OSC vllm runtime image |
+| image.release | string | `"0"` | The release of the custom OSC vllm runtime image |
 | hfToken.value | string | **required** | The HF token for Hugging Face |
 | sharedMemorySize | string | `"8Gi"` | Shared memory default size |
 | networkPolicy.namespaceSelectors | list | `[]` | Namespace labels to allow access to frontends |

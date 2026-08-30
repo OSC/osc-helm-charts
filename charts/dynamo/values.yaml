@@ -82,14 +82,14 @@ global:
 
 image:
   # -- The repository path to main vllm runtime image
-  repository: kubernetes/ai-dynamo/vllm-runtime
+  repository: kubernetes/ai-dynamo/vllm-runtime-enterprise
   # @ignored
   pullPolicy: IfNotPresent
   # -- The vllm runtime image tag
   # @default -- The chart's appVersion
   tag: ""
   # -- The release of the custom OSC vllm runtime image
-  release: "3"
+  release: "0"
 
 hfToken:
   # @ignored

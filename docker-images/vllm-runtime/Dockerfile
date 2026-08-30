@@ -1,5 +1,5 @@
-ARG FROM=nvcr.io/nvidia/ai-dynamo/vllm-runtime
-ARG VERSION=1.3.0
+ARG FROM=nvcr.io/nvidia/ai-dynamo/vllm-runtime-enterprise
+ARG VERSION=1.4.2
 FROM $FROM:$VERSION
 LABEL maintainer='Trey Dockendorf <tdockendorf@osc.edu>'
 
