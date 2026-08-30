@@ -1,12 +1,12 @@
 ARG FROM=ghcr.io/open-webui/open-webui
-ARG VERSION=0.10.2
+ARG VERSION=0.11.1
 FROM $FROM:$VERSION
 LABEL maintainer='Trey Dockendorf <tdockendorf@osc.edu>'
 
 USER root
 # RUN apt-get update && apt-get install -y less vim && rm -rf /var/lib/apt/lists/*
 
-ARG PATCH=c5b147ec6b11ae29f5d61b321a24125eefcec92b
+ARG PATCH=acaa3b4f1299c0a9febd17983acedf3ea1c7c07a
 RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/$PATCH.patch && \
     cd /app && patch -p1 < /tmp/$PATCH.patch
 RUN groupadd -g 4097 PZS0645 && \

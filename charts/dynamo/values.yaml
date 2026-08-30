@@ -279,7 +279,7 @@ osc-open-webui:
     openaiApiKey: false
     image:
       # -- The version of Open WebUI
-      tag: 0.10.2-osc-r0
+      tag: 0.11.1-osc-r0
     # @ignored
     persistence:
       storageClass: '{{ .Values.global.storageClass }}'
