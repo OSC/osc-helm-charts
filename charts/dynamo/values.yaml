@@ -199,6 +199,8 @@ frontendEnv:
   #   value: 'true'
   - name: DYN_ENABLE_ANTHROPIC_API
     value: 'true'
+  - name: DYN_ENABLE_FORCE_INCLUDE_USAGE
+    value: 'true'
 
 frontend:
   resources:
@@ -289,10 +291,11 @@ osc-open-webui:
         osc.edu/fileset: '{{ .Values.global.fileset }}'
     # @ignored
     extraEnvVars:
-      - name: OPENAI_API_BASE_URLS
-        value: '{{ include "dynamo.openai.urls" . }}'
-      - name: OPENAI_API_CONFIGS
-        value: '{{ include "dynamo.openai.configs" . }}'
+      # Avoid restarting Open WebUI with new models as requires WebUI edit
+      # - name: OPENAI_API_BASE_URLS
+      #   value: '{{ include "dynamo.openai.urls" . }}'
+      # - name: OPENAI_API_CONFIGS
+      #   value: '{{ include "dynamo.openai.configs" . }}'
       - name: BYPASS_MODEL_ACCESS_CONTROL
         value: 'True'
       - name: OAUTH_USERNAME_CLAIM

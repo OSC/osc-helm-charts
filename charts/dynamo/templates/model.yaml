@@ -262,8 +262,6 @@ spec:
               {{- if $disagg }}
                 - --disaggregation-mode
                 - decode
-              {{- end }}
-              {{- if $disagg }}
                 - --kv-transfer-config
                 - '{{ $decodekvTransferConfig | toJson }}'
               {{- end }}
