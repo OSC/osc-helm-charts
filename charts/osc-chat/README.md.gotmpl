@@ -43,6 +43,7 @@ database:
   postgresql:
     auth:
       postgresPassword: <postgres root password>
+      username: <username>
       password: <postgres database password>
   redis:
     auth:
@@ -60,9 +61,13 @@ minio:
   ingress:
     hostname: <minio host name>
 
+qdrant:
+  apiKey: <qdrant API key>
+
 secrets:
   api:
     openaiKey: <LLM server API key>
+    posthogKey: <posthost key>
 ```
 
 {{ template "chart.requirementsSection" . }}

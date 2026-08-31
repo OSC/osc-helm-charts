@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.15](https://img.shields.io/badge/Version-0.1.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.15](https://img.shields.io/badge/AppVersion-0.1.15-informational?style=flat-square)
+![Version: 0.1.16](https://img.shields.io/badge/Version-0.1.16-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.16](https://img.shields.io/badge/AppVersion-0.1.16-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -42,6 +42,7 @@ database:
   postgresql:
     auth:
       postgresPassword: <postgres root password>
+      username: <username>
       password: <postgres database password>
   redis:
     auth:
@@ -59,17 +60,21 @@ minio:
   ingress:
     hostname: <minio host name>
 
+qdrant:
+  apiKey: <qdrant API key>
+
 secrets:
   api:
     openaiKey: <LLM server API key>
+    posthogKey: <posthost key>
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.8 |
-| https://osc.github.io/osc-helm-charts | database | 0.18.0 |
+| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.9 |
+| https://osc.github.io/osc-helm-charts | database | 0.19.3 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.14.2 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
 | oci://docker-registry.osc.edu/kubernetes/vllm | vllm-stack | 0.1.11-osc-r1 |
@@ -98,14 +103,10 @@ secrets:
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
 | global.networkPolicy.ingressAllowedPods[0]."app.kubernetes.io/name" | string | `"osc-mcp"` |  |
-| database.postgresql.schema.enabled | bool | `true` |  |
-| database.postgresql.enable | bool | `true` |  |
-| database.postgresql.imagePullSecret.enable | bool | `false` |  |
 | database.postgresql.auth.postgresPassword | string | `"secret"` |  |
 | database.postgresql.auth.database | string | `"name"` |  |
 | database.postgresql.auth.username | string | `"name"` |  |
 | database.postgresql.auth.password | string | `"secret"` |  |
-| database.postgresql.primary.persistence.annotations."osc.edu/fileset" | string | `"{{ .Values.global.fileset }}"` |  |
 | database.redis.enable | bool | `true` |  |
 | database.redis.auth.password | string | `"secret"` |  |
 | database.redis.master.persistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
@@ -159,26 +160,11 @@ secrets:
 | qdrant.snapshotPersistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
 | qdrant.snapshotPersistence.additionalLabels."osc.edu/service-account" | string | `"oscchat"` |  |
 | qdrant.imagePullSecrets[0].name | string | `"osc-registry"` |  |
-| qdrant.apiKey | bool | `true` |  |
-| rabbitmq.enable | bool | `true` |  |
+| qdrant.apiKey | string | `"super-secret"` | qdramt API key |
 | rabbitmq.image.repository | string | `"kubernetes/bitnami/rabbitmq"` |  |
 | rabbitmq.image.tag | string | `"4.1.3-debian-12-r1"` |  |
-| rabbitmq.image.pullSecrets[0] | string | `"osc-registry"` |  |
-| rabbitmq.imagePullSecret.enable | bool | `false` |  |
-| rabbitmq.resources.limits.cpu | string | `"750m"` |  |
-| rabbitmq.resources.limits.memory | string | `"768Mi"` |  |
-| rabbitmq.resources.requests.cpu | string | `"500m"` |  |
-| rabbitmq.resources.requests.memory | string | `"512Mi"` |  |
-| rabbitmq.commonLabels.receiver | string | `"{{ index .Values.global.alert.receiver }}"` |  |
-| rabbitmq.metrics.enabled | bool | `true` |  |
-| rabbitmq.metrics.podAnnotations."prometheus.io/scrape" | string | `"false"` |  |
-| rabbitmq.metrics.serviceMonitor.default.enabled | bool | `true` |  |
-| rabbitmq.metrics.serviceMonitor.default.interval | string | `"60s"` |  |
-| rabbitmq.metrics.serviceMonitor.targetLabels[0] | string | `"receiver"` |  |
-| rabbitmq.auth.username | string | `"guest"` |  |
-| rabbitmq.auth.password | string | `"guest"` |  |
-| rabbitmq.persistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
-| rabbitmq.rbac.create | bool | `false` |  |
+| rabbitmq.auth.username | string | `"guest"` | rabbitmq username |
+| rabbitmq.auth.password | string | `"guest"` | rabbitmq password |
 | backend.enabled | bool | `true` |  |
 | backend.ingress.enabled | bool | `false` |  |
 | backend.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
@@ -222,8 +208,8 @@ secrets:
 | huggingfaceCache.mountPath | string | `"/var/cache/huggingface"` |  |
 | huggingfaceCache.sizeLimit | string | `"5Gi"` |  |
 | huggingfaceCache.storageClassName | string | `"{{ .Values.global.storageClass }}"` |  |
-| secrets.create | bool | `true` |  |
-| secrets.api.openaiKey | string | `"your_strong_key"` |  |
+| secrets.api.openaiKey | string | `"your_strong_key"` | Open AI key |
+| secrets.api.posthogKey | string | `"secret"` | posthog key |
 | crawlee.enabled | bool | `true` |  |
 | crawlee.image.repository | string | `"kubernetes/hpcgpt/crawlee"` |  |
 | crawlee.image.tag | string | `"v0.1.1"` |  |

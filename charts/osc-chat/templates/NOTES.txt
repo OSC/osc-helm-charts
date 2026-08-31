@@ -91,12 +91,10 @@
    - Ensure proper ingress and TLS setup
    - Monitor resource usage and scaling
 
-{{- if not .Values.secrets.create }}
    ⚠️  External secrets mode is enabled. Ensure all required secrets are created:
    - Database passwords
    - API keys (OpenAI, etc.)
    - Service credentials
-{{- end }}
 
 {{- if .Values.frontend.ingress.enabled }}
    🌐 Ingress is enabled. Ensure your ingress controller is properly configured.
