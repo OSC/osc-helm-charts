@@ -1,20 +1,25 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: cadvisor
+  name: kube-summary
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "prometheus.labels" . | nindent 4 }}
 spec:
-  jobName: cadvisor
+  jobName: kube-summary
   kubernetesSDConfigs:
     - role: Node
   scrapeClass: kubernetes
   scheme: https
-  metricsPath: /metrics/cadvisor
   scrapeInterval: 15s
   scrapeTimeout: 10s
   relabelings:
+    - sourceLabels: [__meta_kubernetes_node_name]
+      regex: (.+)
+      targetLabel: __metrics_path__
+      replacement: /node/${1}
+    - targetLabel: __address__
+      replacement: {{ .Values.kubeSummary.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.kubeSummary.service.port }}
     - action: labelmap
       regex: __meta_kubernetes_node_label_(.+)
     - sourceLabels: [__meta_kubernetes_node_name]

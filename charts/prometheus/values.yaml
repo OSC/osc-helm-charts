@@ -398,6 +398,37 @@ dcgm-exporter:
   nodeSelector:
     feature.node.kubernetes.io/pci-10de.present: "true"
 
+kubeSummary:
+  name: kube-summary-exporter
+  image:
+    repository: quay.io/utilitywarehouse/kube-summary-exporter
+    tag: v0.4.8
+    pullPolicy: IfNotPresent
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+  resources:
+    limits:
+      cpu: 2
+      memory: 512Mi
+    requests:
+      cpu: 1
+      memory: 128Mi
+  service:
+    type: ClusterIP
+    port: 9779
+    protocol: TCP
+  replicas: 1
+
 hook:
   image:
     repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell

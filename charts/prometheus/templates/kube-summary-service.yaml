@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.kubeSummary.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kube-summary-exporter.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.kubeSummary.service.type }}
+  ports:
+  - name: {{ .Values.kubeSummary.name }}
+    protocol: {{ .Values.kubeSummary.service.protocol }}
+    port: {{ .Values.kubeSummary.service.port }}
+    targetPort: {{ .Values.kubeSummary.service.port }}
+  selector:
+    {{- include "kube-summary-exporter.selectorLabels" . | nindent 4 }}

@@ -6,6 +6,14 @@ global:
   storageClass: standard
 
 kube-prometheus-stack:
+  prometheusOperator:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
   prometheus:
     prometheusSpec:
       resources:
@@ -26,11 +34,11 @@ kube-prometheus-stack:
 prometheus-pushgateway:
   resources:
     limits:
-      cpu: 1
-      memory: 1Gi
+      cpu: 500m
+      memory: 128Mi
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 64Mi
   persistentVolume:
     enabled: true
     accessModes:
@@ -48,3 +56,12 @@ kube-state-metrics:
     - namespaces
   metricLabelsAllowlist:
     - pods=[account,job]
+
+kubeSummary:
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi

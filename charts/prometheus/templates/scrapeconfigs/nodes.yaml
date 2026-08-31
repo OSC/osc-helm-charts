@@ -12,6 +12,8 @@ spec:
   scrapeClass: kubernetes
   scheme: https
   metricsPath: /metrics
+  scrapeInterval: 15s
+  scrapeTimeout: 10s
   relabelings:
     - action: labelmap
       regex: __meta_kubernetes_node_label_(.+)
@@ -21,7 +23,9 @@ spec:
       targetLabel: host
     - sourceLabels: [host]
       targetLabel: node
-    - regex: "cpu_(feature|model)_.+"
+    - regex: "cpu_.+"
+      action: labeldrop
+    - regex: "cpumanager"
       action: labeldrop
     - regex: "host_model_.+"
       action: labeldrop
@@ -32,6 +36,8 @@ spec:
     - regex: "kubevirt_io_.+"
       action: labeldrop
     - regex: "nvidia_com_.+"
+      action: labeldrop
+    - regex: "network_nvidia_com_.+"
       action: labeldrop
     - regex: "cluster"
       action: labeldrop
