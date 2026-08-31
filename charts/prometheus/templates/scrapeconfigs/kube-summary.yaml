@@ -11,6 +11,8 @@ spec:
     - role: Node
   scrapeClass: kubernetes
   scheme: https
+  scrapeInterval: 15s
+  scrapeTimeout: 10s
   relabelings:
     - sourceLabels: [__meta_kubernetes_node_name]
       regex: (.+)

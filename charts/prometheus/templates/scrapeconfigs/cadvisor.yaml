@@ -12,6 +12,8 @@ spec:
   scrapeClass: kubernetes
   scheme: https
   metricsPath: /metrics/cadvisor
+  scrapeInterval: 15s
+  scrapeTimeout: 10s
   relabelings:
     - action: labelmap
       regex: __meta_kubernetes_node_label_(.+)
