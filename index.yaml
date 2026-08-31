@@ -52,13 +52,13 @@ entries:
   cryosparc:
   - apiVersion: v2
     appVersion: 4.7.1-r3
-    created: "2026-08-31T18:13:00.767576011Z"
+    created: "2026-08-31T19:42:34.450462861Z"
     dependencies:
     - name: osc-common
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.14.2
     description: OSC CryoSPARC bootstrap Helm Chart
-    digest: 1283094fccf4604e9e2000df7877639c07ccf303589c3e742f60d14023820bd3
+    digest: 24cba29d86d7eac20f1840835d63dd54bd0b9c4d6289b0d88fd9ed40871150c3
     maintainers:
     - name: zyou
     name: cryosparc
@@ -453,7 +453,7 @@ entries:
   database:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2026-08-31T18:13:00.790273079Z"
+    created: "2026-08-31T19:42:34.481383164Z"
     dependencies:
     - condition: mariadb.enable
       name: mariadb
@@ -476,7 +476,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.14.2
     description: OSC database service Helm Chart
-    digest: c9f2b6d6af82994746ff3abd3c96ec4dce57123b1a7ab24a75ef1293a8f7a517
+    digest: f6da865671d3327daedfe08108d83c852e696b165b33003935416d95911766ab
     maintainers:
     - name: treydock
     name: database
@@ -1238,13 +1238,13 @@ entries:
   kubernetes-dashboard-proxy:
   - apiVersion: v2
     appVersion: v7.1.3
-    created: "2026-08-31T18:13:00.791493111Z"
+    created: "2026-08-31T19:42:34.483175527Z"
     dependencies:
     - name: kubernetes-dashboard
       repository: https://kubernetes-retired.github.io/dashboard/
       version: 6.0.0
     description: Kubernetes Dashboard Proxy
-    digest: d009e3900a27014c5ec15678f0d388221aa28f5b0b5921ae232d74d982179aad
+    digest: 9137eeb2d07c19a6198dc065101cc4917979f894ee020fa624f3d3aebac791ce
     maintainers:
     - name: treydock
     name: kubernetes-dashboard-proxy
@@ -1399,7 +1399,7 @@ entries:
   kyverno-policies:
   - apiVersion: v2
     appVersion: v1.16.4
-    created: "2026-08-31T18:13:00.796415357Z"
+    created: "2026-08-31T19:42:34.490669712Z"
     dependencies:
     - name: kyverno-policies
       repository: https://kyverno.github.io/kyverno/
@@ -1408,7 +1408,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.14.2
     description: OSC Kyverno policies deployment
-    digest: fdad7102f0bbb0ad0d02f34f85d974d2717a5214abefc2a94d22ab397d600590
+    digest: b507a7d3003a96f68cb766b9d616b94474c527ed0a15ea357d3c9de55434a340
     maintainers:
     - name: treydock
     name: kyverno-policies
@@ -2892,7 +2892,7 @@ entries:
   osc-chat:
   - apiVersion: v2
     appVersion: 0.1.16
-    created: "2026-08-31T18:13:00.856437453Z"
+    created: "2026-08-31T19:42:34.575492373Z"
     dependencies:
     - name: database
       repository: https://osc.github.io/osc-helm-charts
@@ -2921,7 +2921,7 @@ entries:
       repository: https://center-for-ai-innovation.github.io/hpcgpt-cli
       version: 0.1.9
     description: A Helm chart for the OSC Chat service
-    digest: 7e4496f01f4726e778944d3efe3dc01ebd5b12af8b2f42a77efe311e53ef8764
+    digest: 3d5ce09f231dd7477c0cf58838a53a0ae3fb612d9566bfbbed125d08e64b1ff5
     maintainers:
     - name: khsa1
     name: osc-chat
@@ -3499,14 +3499,14 @@ entries:
   osc-common:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2026-08-31T18:13:00.859934442Z"
+    created: "2026-08-31T19:42:34.581562816Z"
     dependencies:
     - condition: global.auth.enable
       name: oauth2-proxy
       repository: https://oauth2-proxy.github.io/manifests
       version: 10.6.0
     description: OSC common Helm Chart
-    digest: 54754f17d9ef2b2b3bccc9fc5891135d4f2be71b68b369fa329a79d03eb3ef9e
+    digest: f2e6fc82298ddd48bdd9002902d1298b8dccb87e16d094bca65ab61b5aeb20b7
     maintainers:
     - name: treydock
     name: osc-common
@@ -3897,7 +3897,7 @@ entries:
   osc-open-webui:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2026-08-31T18:13:00.869308981Z"
+    created: "2026-08-31T19:42:34.595756568Z"
     dependencies:
     - condition: oscCommon.enable
       name: osc-common
@@ -3907,7 +3907,7 @@ entries:
       repository: https://helm.openwebui.com/
       version: 13.1.0
     description: OSC Open Web UI deployment
-    digest: 4639926629b6bb3408b3590941a8561e1b236174023f3c0e7abcc19a8ec2d876
+    digest: aff925da536bb8d4b8209caa528372069c75eaf463545dcc9e1a563d92918bfa
     maintainers:
     - name: treydock
     name: osc-open-webui
@@ -4474,13 +4474,13 @@ entries:
   paas:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2026-08-31T18:13:00.873221833Z"
+    created: "2026-08-31T19:42:34.601165945Z"
     dependencies:
     - name: osc-common
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.14.2
     description: OSC PAAS bootstrap Helm Chart
-    digest: 3f901e4b9bee4a6a1d7de2ea5dd66f5aaa6e4daaeb3556824ccf1b52c4724b7b
+    digest: 7b28a2811f8d00c353543539fda12e39f5391b56a34e1bb0f0bd5afead5243e2
     maintainers:
     - name: treydock
     name: paas
@@ -4841,6 +4841,34 @@ entries:
     - https://OSC.github.io/osc-helm-charts/paas-0.1.0.tgz
     version: 0.1.0
   prometheus:
+  - apiVersion: v2
+    appVersion: v3.11.3
+    created: "2026-08-31T19:42:34.647929814Z"
+    dependencies:
+    - name: kube-prometheus-stack
+      repository: oci://ghcr.io/prometheus-community/charts
+      version: 85.4.0
+    - name: prometheus-pushgateway
+      repository: oci://ghcr.io/prometheus-community/charts
+      version: 3.6.1
+    - name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts/
+      version: 5.6.2
+    - name: dcgm-exporter
+      repository: https://nvidia.github.io/dcgm-exporter/helm-charts
+      version: 4.8.3
+    - name: osc-common
+      repository: https://osc.github.io/osc-helm-charts/
+      version: 0.14.1
+    description: OSC Prometheus deployment
+    digest: 9de49d935b84dc3aa014884ed746ac792454b9d74bdcdf7812840291dd25c1c5
+    maintainers:
+    - name: treydock
+    name: prometheus
+    type: application
+    urls:
+    - https://OSC.github.io/osc-helm-charts/prometheus-0.26.2.tgz
+    version: 0.26.2
   - apiVersion: v2
     appVersion: v3.11.3
     created: "2026-08-31T18:13:00.903864754Z"
@@ -6075,7 +6103,7 @@ entries:
   webservice:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2026-08-31T18:13:00.914690271Z"
+    created: "2026-08-31T19:42:34.661731756Z"
     dependencies:
     - condition: database.enable
       name: database
@@ -6085,7 +6113,7 @@ entries:
       repository: https://osc.github.io/osc-helm-charts/
       version: 0.14.0
     description: OSC webservice bootstrap Helm Chart
-    digest: 8394942a16574b458b8e28c3c25e5f32495a038711878f34d20b3284d727a0de
+    digest: 7e959180a3062b5981f00a5e9de208d654107be87ccd0b3deb7d6d3e6895c693
     maintainers:
     - name: treydock
     name: webservice
@@ -7566,4 +7594,4 @@ entries:
     urls:
     - https://OSC.github.io/osc-helm-charts/webservice-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-31T18:13:00.762425161Z"
+generated: "2026-08-31T19:42:34.443736933Z"
