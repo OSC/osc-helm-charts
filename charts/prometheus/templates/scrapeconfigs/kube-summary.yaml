@@ -9,8 +9,7 @@ spec:
   jobName: kube-summary
   kubernetesSDConfigs:
     - role: Node
-  scrapeClass: kubernetes
-  scheme: https
+  scheme: http
   scrapeInterval: 15s
   scrapeTimeout: 10s
   relabelings:
