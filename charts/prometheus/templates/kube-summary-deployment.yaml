@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.kubeSummary.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kube-summary-exporter.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.kubeSummary.replicas }}
+  selector:
+    matchLabels:
+      {{- include "kube-summary-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kube-summary-exporter.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+      - name: {{ include "osc.common.imagePullSecret.name" . }}
+      serviceAccountName: {{ .Values.kubeSummary.name }}
+      nodeSelector:
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+      containers:
+      - name: {{ .Values.kubeSummary.name }}
+        image: {{ .Values.kubeSummary.image.repository }}:{{ .Values.kubeSummary.image.tag }}
+        imagePullPolicy: {{ .Values.kubeSummary.image.pullPolicy }}
+        ports:
+        - name: tcp
+          containerPort: {{ .Values.kubeSummary.service.port }}
+        resources:
+          {{- toYaml .Values.kubeSummary.resources | nindent 10 }}
+        securityContext:
+          {{- toYaml .Values.kubeSummary.securityContext | nindent 10 }}
