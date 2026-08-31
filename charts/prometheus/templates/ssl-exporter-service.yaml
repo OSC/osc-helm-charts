@@ -4,10 +4,6 @@ metadata:
   name: {{ .Values.sslExporter.name }}
   labels:
     {{- include "ssl-exporter.labels" . | nindent 4 }}
-  {{- with .Values.sslExporter.service.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
 spec:
   type: {{ .Values.sslExporter.service.type }}
   ports:

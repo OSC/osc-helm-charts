@@ -340,9 +340,6 @@ sslExporter:
   service:
     type: ClusterIP
     port: 9219
-    annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /metrics
 
 ingressName: ingress-nginx
 namespaceReaper: k8-namespace-reaper
