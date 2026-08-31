@@ -9,9 +9,6 @@ spec:
   selector:
     matchLabels:
       {{- include "kube-summary-exporter.selectorLabels" . | nindent 6 }}
-  namespaceSelector:
-    matchNamespaces:
-      - {{ .Release.Namespace }}
   endpoints:
   - port: {{ .Values.kubeSummary.name }}
     interval: 60s

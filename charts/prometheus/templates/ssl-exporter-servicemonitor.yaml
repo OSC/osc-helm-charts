@@ -9,9 +9,6 @@ spec:
   selector:
     matchLabels:
       {{- include "ssl-exporter.selectorLabels" . | nindent 6 }}
-  namespaceSelector:
-    matchNamespaces:
-      - {{ .Release.Namespace }}
   endpoints:
   - port: http
     interval: 60s
