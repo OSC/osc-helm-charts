@@ -72,6 +72,22 @@ spec:
             operations:
             - CREATE
             - UPDATE
+    exclude:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            selector:
+              matchExpressions:
+                - key: nvidia.com/dynamo-component
+                  operator: In
+                  values:
+                    - decode
+                    - prefill
+                    - worker
+            operations:
+            - CREATE
+            - UPDATE
     validate:
       message: "CPU and memory limits exceed max 8 CPUs and 32GB of memory"
       pattern:

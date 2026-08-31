@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.46.0](https://img.shields.io/badge/Version-0.46.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
+![Version: 0.46.1](https://img.shields.io/badge/Version-0.46.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -107,7 +107,7 @@ OSC Kyverno policies deployment
     * Validates pod resource requests and limits for user namespaces
     * Validates pod resource limits do not exceed maximum for user namespaces
     * Validates pod resource requests and limits for webservice namespaces
-    * Validates pod resource limits do not exceed maximum for webservice namespaces
+    * Validates pod resource limits do not exceed maximum for webservice namespaces except Dynamo workers
   * Applies to: Pod in user-?* namespaces and webservice namespaces
 
 * [pod-service-account-validation](templates/pod-service-account-validation.yaml)

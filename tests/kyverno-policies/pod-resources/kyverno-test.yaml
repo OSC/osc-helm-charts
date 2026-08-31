@@ -98,3 +98,9 @@ results:
       - webservice/test-limits-webservice-fail-mem-limits
     kind: Pod
     result: fail
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - webservice/test-limits-dynamo-pass-mem-limits
+    kind: Pod
+    result: skip
