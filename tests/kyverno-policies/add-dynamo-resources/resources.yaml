@@ -17,6 +17,21 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
+  name: test-worker-ray
+  namespace: webservice
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+  initContainers:
+    - name: hf-wait
+      image: nginx:latest
+    - name: wait-for-leader
+      image: foo
+---
+apiVersion: v1
+kind: Pod
+metadata:
   name: test-paas
   namespace: paas
 spec:

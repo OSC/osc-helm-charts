@@ -25,7 +25,7 @@ spec:
         patchStrategicMerge:
           spec:
             initContainers:
-            - (name): "wait-for-leader-mp"
+            - (name): "wait-for-leader*"
               resources:
                 limits:
                   +(cpu): 1
