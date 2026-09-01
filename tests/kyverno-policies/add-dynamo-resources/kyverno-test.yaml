@@ -13,6 +13,7 @@ results:
     rule: add-resources-to-init
     resources:
       - test-worker
+      - test-worker-ray
     patchedResources: mutated.yaml
     kind: Pod
     result: pass
