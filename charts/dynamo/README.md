@@ -134,7 +134,7 @@ hfToken:
 | frontend.resources.limits.memory | string | `"4Gi"` | Default frontend memory limit |
 | frontend.resources.requests.cpu | int | `2` | Default frontend cpu request |
 | frontend.resources.requests.memory | string | `"4Gi"` | Default frontend memory request |
-| osc-open-webui.open-webui.image.tag | string | `"0.11.1-osc-r0"` | The version of Open WebUI |
+| osc-open-webui.open-webui.image.tag | string | `"0.11.3-osc-r0"` | The version of Open WebUI |
 | osc-open-webui.open-webui.sso.enableRoleManagement | bool | `true` | Enables role access controls in Open WebUI |
 
 ----------------------------------------------
