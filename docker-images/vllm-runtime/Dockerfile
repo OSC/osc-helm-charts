@@ -1,9 +1,15 @@
 ARG FROM=nvcr.io/nvidia/ai-dynamo/vllm-runtime-enterprise
 ARG VERSION=1.4.2
+FROM ghcr.io/astral-sh/uv:latest AS uv
 FROM $FROM:$VERSION
 LABEL maintainer='Trey Dockendorf <tdockendorf@osc.edu>'
 
 USER root
+
+COPY --from=uv /uv /uvx /bin/
+
+RUN uv pip install --system --no-cache-dir "ray[default]==2.58.0"
+
 RUN apt-get update && apt-get install -y less vim && rm -rf /var/lib/apt/lists/*
 #RUN uv pip install --no-cache fastsafetensors
 # Patch from https://github.com/ai-dynamo/dynamo/issues/10695#issuecomment-4699899546
