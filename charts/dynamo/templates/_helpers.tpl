@@ -87,6 +87,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- printf "%s/%s:%s" .Values.global.imagePullSecret.registry .Values.image.repository $tag }}
 {{- end }}
 
+{{- define "dynamo.runtime.version" -}}
+{{- $versionParts := splitList "-" .Chart.AppVersion }}
+{{- first $versionParts }}
+{{- end -}}
+
 {{- define "dynamo.openai.urls" -}}
 {{- $urls := list }}
 {{- range $name, $model := .Values.global.models }}

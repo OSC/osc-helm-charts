@@ -35,6 +35,7 @@ metadata:
 spec:
   components:
     - name: Frontend
+      runtimeVersionOverride: {{ include "dynamo.runtime.version" $ }}
       type: frontend
       scalingAdapter:
         enabled: true
@@ -189,6 +190,7 @@ spec:
     - name: worker
       type: worker
     {{- end }}
+      runtimeVersionOverride: {{ include "dynamo.runtime.version" $ }}
     {{- if $decodeScaling }}
       scalingAdapter:
         enabled: true
@@ -335,6 +337,7 @@ spec:
                 claimName: {{ $.Values.modelCache.name }}
   {{- if $disagg }}
     - name: prefill
+      runtimeVersionOverride: {{ include "dynamo.runtime.version" $ }}
       type: prefill
     {{- if $prefillScaling }}
       scalingAdapter:
