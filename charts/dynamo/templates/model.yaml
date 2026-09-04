@@ -1,5 +1,6 @@
 {{- range $name, $model := .Values.global.models | required "models must be defined" }}
 {{- $image := $model.image | default (include "dynamo.image" $) }}
+{{- $modelName := $model.alias | default $model.model }}
 {{- $kvRouting := $model.kvRouting | default false }}
 {{- $frontend := $model.frontend | default dict }}
 {{- $frontendImage := $frontend.image | default $image }}
@@ -47,18 +48,8 @@ spec:
               imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
               command:
               - /bin/bash
-              - -c
-              args:
-              - |
-                set -x
-                if kubectl get job {{ $name }}-download -n {{ $.Release.Namespace }} &>/dev/null; then
-                  echo "Waiting for download job to finish..."
-                  kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
-                  exit $?
-                else
-                  echo "Job not found, exit"
-                  exit 0
-                fi
+              - /scripts/hf-wait.sh
+              - {{ $name }}
               resources:
               {{- with $.Values.init.resources }}
                 {{- toYaml . | nindent 16 }}
@@ -71,7 +62,37 @@ spec:
                 seccompProfile:
                   type: RuntimeDefault
                 privileged: false
-        {{/* if or $decodeScaling $prefillScaling */}}
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+                  readOnly: true
+          {{- if and (or (gt (int $decodeScaling.minReplicas) 0) (not $decodeScaling)) (or (gt $decodeNodes 1) (gt $prefillNodes 1)) }}
+            - name: keepalive
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
+              restartPolicy: Always
+              command:
+              - /bin/bash
+              - /scripts/keepalive.sh
+              - {{ $modelName }}
+              resources:
+              {{- with $.Values.init.resources }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+                  readOnly: true
+          {{- end }}
+        {{- /* if or $decodeScaling $prefillScaling */}}
         {{- if false }}
             - name: scale-up-workers
               image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
@@ -168,6 +189,9 @@ spec:
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
           volumes:
+            - name: scripts
+              configMap:
+                name: {{ $.Values.configMap.scripts.name }}
             - name: model-cache
               persistentVolumeClaim:
                 claimName: {{ $.Values.modelCache.name }}
@@ -218,18 +242,8 @@ spec:
               imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
               command:
               - /bin/bash
-              - -c
-              args:
-              - |
-                set -x
-                if kubectl get job {{ $name }}-download -n {{ $.Release.Namespace }} &>/dev/null; then
-                  echo "Waiting for download job to finish..."
-                  kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
-                  exit $?
-                else
-                  echo "Job not found, exit"
-                  exit 0
-                fi
+              - /scripts/hf-wait.sh
+              - {{ $name }}
               resources:
               {{- with $.Values.init.resources }}
                 {{- toYaml . | nindent 16 }}
@@ -242,6 +256,10 @@ spec:
                 seccompProfile:
                   type: RuntimeDefault
                 privileged: false
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+                  readOnly: true
           containers:
             - name: main
               image: {{ $decodeImage | quote }}
@@ -329,6 +347,9 @@ spec:
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
           volumes:
+            - name: scripts
+              configMap:
+                name: {{ $.Values.configMap.scripts.name }}
             - name: triton-cache
               persistentVolumeClaim:
                 claimName: {{ $.Values.tritonCache.name }}
@@ -366,18 +387,8 @@ spec:
               imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
               command:
               - /bin/bash
-              - -c
-              args:
-              - |
-                set -x
-                if kubectl get job {{ $name }}-download -n {{ $.Release.Namespace }} &>/dev/null; then
-                  echo "Waiting for download job to finish..."
-                  kubectl wait --for=condition=complete job/{{ $name }}-download -n {{ $.Release.Namespace }} --timeout=300s
-                  exit $?
-                else
-                  echo "Job not found, exit"
-                  exit 0
-                fi
+              - /scripts/hf-wait.sh
+              - {{ $name }}
               resources:
               {{- with $.Values.init.resources }}
                 {{- toYaml . | nindent 16 }}
@@ -390,6 +401,10 @@ spec:
                 seccompProfile:
                   type: RuntimeDefault
                 privileged: false
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+                  readOnly: true
           containers:
             - name: main
               image: {{ $prefillImage | quote }}
@@ -479,6 +494,9 @@ spec:
           priorityClassName: {{ $.Values.priorityClassName | quote }}
           {{- end }}
           volumes:
+            - name: scripts
+              configMap:
+                name: {{ $.Values.configMap.scripts.name }}
             - name: triton-cache
               persistentVolumeClaim:
                 claimName: {{ $.Values.tritonCache.name }}

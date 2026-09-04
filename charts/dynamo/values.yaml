@@ -232,6 +232,11 @@ securityContext:
   runAsNonRoot: true
 
 # @ignored
+configMap:
+  scripts:
+    name: scripts
+
+# @ignored
 init:
   image:
     repository: docker-registry.osc.edu/kubernetes/portainer/kubectl-shell
