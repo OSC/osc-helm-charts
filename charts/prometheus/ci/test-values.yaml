@@ -54,8 +54,11 @@ kube-state-metrics:
     - nodes
     - pods
     - namespaces
+    - jobs
   metricLabelsAllowlist:
-    - pods=[account,job]
+    - pods=[account,job,cluster,osc.edu/cluster,receiver,osc.edu/role]
+    - jobs=[osc.edu/role]
+    - nodes=[osc.edu/cluster,osc.edu/role,nvidia.com/gpu.product,nvidia.com/gpu.count]
 
 kubeSummary:
   resources:
