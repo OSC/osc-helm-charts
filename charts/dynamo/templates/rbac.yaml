@@ -1,0 +1,85 @@
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "dynamo.name" . }}-job-wait
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+    - batch
+    resources:
+    - jobs
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - list
+    - watch
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+{{- $workerServiceAccount := printf "%s-k8s-service-discovery" $name }}
+{{- $frontendServiceAccount := printf "%s-frontend-k8s-service-discovery" $name }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}-job-wait
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "dynamo.name" $ }}-job-wait
+subjects:
+- kind: ServiceAccount
+  name: {{ $frontendServiceAccount }}
+  namespace: {{ $.Release.Namespace }}
+- kind: ServiceAccount
+  name: {{ $workerServiceAccount }}
+  namespace: {{ $.Release.Namespace }}
+{{- end }}
+{{- if false }}
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "dynamo.name" . }}-scaler
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+    - keda.sh
+    resources:
+    - scaledobjects
+    verbs:
+    - get
+    - list
+    - watch
+    - patch
+{{- range $name, $model := .Values.global.models | required "models must be defined" }}
+{{- $serviceaccount := printf "%s-frontend-k8s-service-discovery" $name }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}-scaler
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "dynamo.name" $ }}-scaler
+subjects:
+- kind: ServiceAccount
+  name: {{ $serviceaccount }}
+  namespace: {{ $.Release.Namespace }}
+{{- end }}
+{{- end }}

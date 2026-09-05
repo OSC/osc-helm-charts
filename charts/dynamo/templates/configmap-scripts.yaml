@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.scripts.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+data:
+  hf-wait.sh: |
+    set -x
+    MODEL_NAME=${1}
+    if kubectl get job ${MODEL_NAME}-download -n {{ .Release.Namespace }} &>/dev/null; then
+      echo "Waiting for download job to finish..."
+      kubectl wait --for=condition=complete job/${MODEL_NAME}-download -n {{ .Release.Namespace }} --timeout=300s
+      exit $?
+    else
+      echo "Job not found, exit"
+      exit 0
+    fi
+  keepalive.sh: |
+    MODEL_NAME=${1}
+    echo "Wait for model to be available"
+    until curl http://localhost:8000/v1/models | jq -e '.data | length > 0'; do
+      echo "Model not ready yet, waiting..."
+      sleep 10
+    done
+    echo "Model ready, begin keep alive"
+    data=$(printf '{"model":"%s","chat_template_kwargs":{"enable_thinking":false},"messages":[{"role": "user", "content": "Test"}]}' "$MODEL_NAME")
+    while true; do
+      timeout 30 curl --fail -s -o /dev/null http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d "$data"
+      ret=$?
+      if [ $ret -ne 0 ]; then
+        echo "keep alive failed, ret=$ret"
+        exit 1
+      fi
+      sleep 60
+    done
