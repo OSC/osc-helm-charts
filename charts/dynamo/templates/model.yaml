@@ -41,6 +41,13 @@ spec:
       scalingAdapter:
         enabled: true
       podTemplate:
+      {{- $keepalive := false }}
+      {{- if and (or (gt (int $decodeScaling.minReplicas) 0) (not $decodeScaling)) (or (gt $decodeNodes 1) (gt $prefillNodes 1)) }}
+        {{- $keepalive = true }}
+        metadata:
+          annotations:
+            checksum/keepalive: {{ include "dynamo.keepalive.content" . | sha256sum }}
+      {{- end }}
         spec:
           initContainers:
             - name: hf-wait
@@ -66,7 +73,7 @@ spec:
                 - name: scripts
                   mountPath: /scripts
                   readOnly: true
-          {{- if and (or (gt (int $decodeScaling.minReplicas) 0) (not $decodeScaling)) (or (gt $decodeNodes 1) (gt $prefillNodes 1)) }}
+          {{- if $keepalive }}
             - name: keepalive
               image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
               imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
