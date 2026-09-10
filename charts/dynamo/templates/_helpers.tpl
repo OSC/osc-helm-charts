@@ -122,12 +122,12 @@ done
 echo "Model ready, begin keep alive"
 data=$(printf '{"model":"%s","chat_template_kwargs":{"enable_thinking":false},"messages":[{"role": "user", "content": "Test"}]}' "$MODEL_NAME")
 while true; do
-    timeout 30 curl --fail -sS -o /dev/null http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -d "$data"
+    timeout 30 curl --fail -sS -o /dev/null http://localhost:8000/v1/chat/completions -H "Content-Type: application/json" -H "x-request-id: keepalive" -d "$data"
     ret=$?
     if [ $ret -ne 0 ]; then
-    echo "keep alive failed, ret=$ret"
-    exit 1
+        echo "keep alive failed, ret=$ret"
+        exit 1
     fi
-    sleep 60
+    sleep {{ .Values.keepalive.interval }}
 done
 {{- end -}}

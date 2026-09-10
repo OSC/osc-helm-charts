@@ -236,6 +236,10 @@ configMap:
   scripts:
     name: scripts
 
+keepalive:
+  # -- Interval in seconds of how often to do keepalive for persistent multi-node jobs
+  interval: 300
+
 # @ignored
 init:
   image:

@@ -46,7 +46,7 @@ spec:
         {{- $keepalive = true }}
         metadata:
           annotations:
-            checksum/keepalive: {{ include "dynamo.keepalive.content" . | sha256sum }}
+            checksum/keepalive: {{ include "dynamo.keepalive.content" $ | sha256sum }}
       {{- end }}
         spec:
           initContainers:
