@@ -154,6 +154,11 @@ Defined here so that version changes in labels of the configmap won't automatica
 */}}
 {{- define "cryosparc.run.content" -}}
 export CRYOSPARC_MASTER_HOSTNAME="${MY_NODE_NAME}"
+# Debug port issue
+ss -anp
+ss -t -p
+ps auxf
+# Start cryosparc
 cryosparcm start database
 cryosparcm database fixport
 cryosparcm stop
