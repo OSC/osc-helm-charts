@@ -10,13 +10,16 @@
 {{- if $decodeScaling }}
 {{/*
 Possible for decode:
-sum(dynamo_frontend_stage_requests{phase="decode",stage=~"preprocess|route|dispatch"})
+        histogram_quantile(0.95,
+          sum(rate(dynamo_frontend_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
+          by (le)
+        )
 
-Possible for prefill:
-sum(dynamo_frontend_stage_requests{phase="prefill",stage=~"preprocess|route|dispatch"})
-
-Possible for aggregate:
-sum(dynamo_frontend_stage_requests{phase="aggregated",stage=~"preprocess|route|dispatch"})
+Possible for prefill & aggregate
+        histogram_quantile(0.95,
+          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
+          by (le)
+        )
 */}}
 ---
 apiVersion: keda.sh/v1alpha1
@@ -49,21 +52,15 @@ spec:
     metadata:
       serverAddress: {{ $.Values.prometheusURL }}
       {{- if $disagg }}
-      metricName: dynamo_itl_p95
+      metricName: stage-requests
       query: |
-        histogram_quantile(0.95,
-          sum(rate(dynamo_frontend_inter_token_latency_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
-          by (le)
-        )
-      threshold: "0.05"
+        sum(dynamo_frontend_stage_requests{dynamo_namespace="{{ $namespace }}", phase="decode",stage=~"preprocess|route|dispatch"})
+      threshold: "2"
       {{- else }}
-      metricName: dynamo_ttft_p95
+      metricName: stage-requests
       query: |
-        histogram_quantile(0.95,
-          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
-          by (le)
-        )
-      threshold: "0.5"
+        sum(dynamo_frontend_stage_requests{dynamo_namespace="{{ $namespace }}", phase="aggregated",stage=~"preprocess|route|dispatch"})
+      threshold: "2"
       {{- end }}
   - type: prometheus
     metadata:
@@ -103,14 +100,10 @@ spec:
   - type: prometheus
     metadata:
       serverAddress: {{ $.Values.prometheusURL }}
-      metricName: dynamo_ttft_p95
+      metricName: stage-requests
       query: |
-        histogram_quantile(0.95,
-          sum(rate(dynamo_frontend_time_to_first_token_seconds_bucket{dynamo_namespace="{{ $namespace }}"}[1m]))
-          by (le)
-        )
-      # Should be 0.5 but seems small prompts resulting in larger TTFT
-      threshold: "1"
+        sum(dynamo_frontend_stage_requests{dynamo_namespace="{{ $namespace }}", phase="prefill",stage=~"preprocess|route|dispatch"})
+      threshold: "2"
   - type: prometheus
     metadata:
       serverAddress: {{ $.Values.prometheusURL }}
