@@ -64,7 +64,6 @@ admin:
 | global.alert.receiver |  | `"sciapps"` |
 | global.basePort | The base service port. Must be unique for each CryoSPARC instance | **required** |
 | global.project | The service project | **required** |
-| global.scratchEnabled | Enable scratch mount | Mounting scratch is optional; default is `false` |
 | license | The CryoSPARC license ID | `""` |
 | homeDir |  | `"{{ .Values.global.project }}"` |
 | slurmConf | Slurm configuration of the cluster used for service | `"/etc/slurm/slurm-ascend.conf"` |
@@ -76,7 +75,7 @@ admin:
 | image.pullPolicy |  | `"IfNotPresent"` |
 | mounts.home |  | `"/users/{{ tpl .Values.homeDir . }}/{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}"` |
 | mounts.project |  | `"/fs/ess/{{ required \"Project must be provided\" .Values.global.project }}"` |
-| mounts.scratch |  | `"/fs/scratch/{{ required \"Project must be provided\" .Values.global.project }}"` |
+| mounts.scratch |  | `""` |
 | mounts.rwDir |  | `{}` |
 | admin.email |  | `""` |
 | admin.password |  | `""` |
