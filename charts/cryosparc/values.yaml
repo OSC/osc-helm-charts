@@ -95,6 +95,10 @@ global:
   # -- The service project
   # @default -- **required**
   project: ''
+  # -- Enable scratch mount
+  # @default -- Mounting scratch is optional; default is `false`
+  scratchEnabled: false
+
 
 # -- The CryoSPARC license ID
 license: ''

@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.10.1](https://img.shields.io/badge/Version-0.10.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.0.6-r2](https://img.shields.io/badge/AppVersion-5.0.6--r2-informational?style=flat-square)
+![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.0.6-r2](https://img.shields.io/badge/AppVersion-5.0.6--r2-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -64,6 +64,7 @@ admin:
 | global.alert.receiver |  | `"sciapps"` |
 | global.basePort | The base service port. Must be unique for each CryoSPARC instance | **required** |
 | global.project | The service project | **required** |
+| global.scratchEnabled | Enable scratch mount | Mounting scratch is optional; default is `false` |
 | license | The CryoSPARC license ID | `""` |
 | homeDir |  | `"{{ .Values.global.project }}"` |
 | slurmConf | Slurm configuration of the cluster used for service | `"/etc/slurm/slurm-ascend.conf"` |
