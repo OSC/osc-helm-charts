@@ -1,0 +1,48 @@
+{{ if or .Values.global.ingress.additionalHosts .Values.global.ingress.hostAlias -}}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: {{ include "dynamo.name" . }}-ingress-probe
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+spec:
+  interval: 60s
+  module: {{ .Values.probe.blackbox.module }}
+  prober:
+    url: {{ .Values.probe.blackbox.name }}.{{ .Values.global.networkPolicy.prometheusNamespace }}.svc.cluster.local:{{ .Values.probe.blackbox.port }}
+    path: /probe
+  targets:
+    staticConfig:
+      static:
+      {{- if .Values.global.ingress.additionalHosts }}
+        - https://{{ tpl .Values.probe.host . }}/health
+      {{- end }}
+      {{- if .Values.global.ingress.hostAlias }}
+        - https://{{ .Values.global.ingress.hostAlias }}/health
+      {{- end }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: {{ include "dynamo.name" . }}-ingress-ssl-probe
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+spec:
+  interval: 60s
+  module: {{ .Values.probe.ssl.module }}
+  prober:
+    url: {{ .Values.probe.ssl.name }}.{{ .Values.global.networkPolicy.prometheusNamespace }}.svc.cluster.local:{{ .Values.probe.ssl.port }}
+    path: /probe
+  targets:
+    staticConfig:
+      static:
+      {{- if .Values.global.ingress.additionalHosts }}
+        - https://{{ tpl .Values.probe.host . }}/health
+      {{- end }}
+      {{- if .Values.global.ingress.hostAlias }}
+        - https://{{ .Values.global.ingress.hostAlias }}/health
+      {{- end }}
+{{ end -}}
