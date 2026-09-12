@@ -11,7 +11,7 @@ RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/$PATCH.patch 
     cd /app && patch -p1 < /tmp/$PATCH.patch
 # TODO: Remove once released:
 # https://github.com/open-webui/open-webui/pull/29849
-RUN cd /tmp && curl -L -o /tmp/patch https://github.com/OSC/open-webui/commit/0b281ba446083b5124691e61a5e223217fb45935.patch && \
+RUN cd /tmp && curl -L -o /tmp/patch https://github.com/OSC/open-webui/commit/75b183632294106d0f45be49918677ae6835c126.patch && \
     cd /app && patch -p1 < /tmp/patch && rm -f /tmp/patch
 RUN groupadd -g 4097 PZS0645 && \
     useradd -u 52162 -g 4097 -d /home/dynamo -m dynamo
