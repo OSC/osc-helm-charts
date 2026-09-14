@@ -123,7 +123,8 @@ image:
 mounts:
   home: /users/{{ tpl .Values.homeDir . }}/{{ tpl (include "osc.common.serviceAccountValue" .) . }}
   project: /fs/ess/{{ required "Project must be provided" .Values.global.project }}
-  scratch: /fs/scratch/{{ required "Project must be provided" .Values.global.project }}
+  # -- Set to '/fs/scratch/{{ .Values.global.project }}' to enable
+  scratch: ''
   rwDir: {}
 
 admin:
