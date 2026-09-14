@@ -75,7 +75,7 @@ admin:
 | image.pullPolicy |  | `"IfNotPresent"` |
 | mounts.home |  | `"/users/{{ tpl .Values.homeDir . }}/{{ tpl (include \"osc.common.serviceAccountValue\" .) . }}"` |
 | mounts.project |  | `"/fs/ess/{{ required \"Project must be provided\" .Values.global.project }}"` |
-| mounts.scratch |  | `""` |
+| mounts.scratch | Set to '/fs/scratch/{{ .Values.global.project }}' to enable | `""` |
 | mounts.rwDir |  | `{}` |
 | admin.email |  | `""` |
 | admin.password |  | `""` |
