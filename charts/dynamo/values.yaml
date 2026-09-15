@@ -104,6 +104,7 @@ sharedMemorySize: 8Gi
 # @ignored
 compilationCache:
   name: compilation-cache
+  path: /home/dynamo/.cache/vllm
   annotations:
     osc.edu/fileset: '{{ .Values.global.fileset }}'
   size: 100Gi
@@ -119,6 +120,7 @@ tritonCache:
 # @ignored
 modelCache:
   name: model-cache
+  path: /home/dynamo/.cache/huggingface
   annotations:
     osc.edu/fileset: '{{ .Values.global.fileset }}'
   size: 100Gi
