@@ -18,5 +18,8 @@ global:
   portforwardGroups:
     - portforward
     - portforward2
+  portforwardServiceAccounts:
+    - name: test
+      namespace: test-ns
 service:
   port: 8080

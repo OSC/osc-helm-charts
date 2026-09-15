@@ -48,6 +48,8 @@ global:
   maintenanceGroups: []
   # -- Groups that are allowed to perform port forwarding
   portforwardGroups: []
+  # -- Service accounts that can do port forwarding. Element keys are `name` and `namespace`.
+  portforwardServiceAccounts: []
   webservicesDeploy:
     # -- Create webservices deployment rolebinding
     create: true

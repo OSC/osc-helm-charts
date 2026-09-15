@@ -1,4 +1,4 @@
-{{- if .Values.global.portforwardGroups }}
+{{- if or .Values.global.portforwardGroups .Values.global.portforwardServiceAccounts }}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
@@ -40,5 +40,10 @@ subjects:
   - kind: Group
     name: {{ . | quote }}
     apiGroup: rbac.authorization.k8s.io
+{{- end }}
+{{- range .Values.global.portforwardServiceAccounts }}
+  - kind: ServiceAccount
+    name: {{ .name | quote }}
+    namespace: {{ .namespace | quote }}
 {{- end }}
 {{- end }}
