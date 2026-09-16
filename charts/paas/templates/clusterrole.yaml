@@ -68,6 +68,28 @@ rules:
     - get
     - list
     - watch
+- apiGroups:
+    - batch
+  resources:
+    - cronjobs
+    - jobs
+  verbs:
+    - create
+    - delete
+    - deletecollection
+    - patch
+    - update
+- apiGroups:
+    - batch
+  resources:
+    - cronjobs
+    - cronjobs/status
+    - jobs
+    - jobs/status
+  verbs:
+    - get
+    - list
+    - watch
 - apiGroups: ["networking.k8s.io"]
   resources:
     - ingresses
