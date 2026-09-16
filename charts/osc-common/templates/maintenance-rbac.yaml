@@ -58,11 +58,18 @@ rules:
       - apps
     resources:
       - deployments
+      - deployments/scale
+      - deployments/status
       - replicasets
+      - replicasets/scale
+      - replicasets/status
       - statefulsets
+      - statefulsets/scale
+      - statefulsets/status
     verbs:
       - get
       - list
+      - watch
   - apiGroups:
       - apps
     resources:
@@ -71,7 +78,7 @@ rules:
       - replicasets/scale
       - statefulsets/scale
     verbs:
-      - get
+      - create
       - patch
       - update
 ---
