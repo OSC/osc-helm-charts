@@ -101,8 +101,12 @@
 * [pod-resources](templates/pod-resources.yaml)
   * Rules
     * Validates pod resource requests and limits for user namespaces
-    * Validates pod resource limits do not exceed maximum for user namespaces
     * Validates pod resource requests and limits for webservice namespaces
+  * Applies to: Pod in user-?* namespaces and webservice namespaces
+
+* [pod-resources-limits](templates/pod-resources-limits.yaml)
+  * Rules
+    * Validates pod resource limits do not exceed maximum for user namespaces
     * Validates pod resource limits do not exceed maximum for webservice namespaces except Dynamo workers
   * Applies to: Pod in user-?* namespaces and webservice namespaces
 

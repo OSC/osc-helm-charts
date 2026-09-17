@@ -1,0 +1,175 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-resources-limits
+spec:
+  background: true
+  validationFailureAction: Enforce
+  rules:
+  - name: pods-max-user-resources
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            namespaces:
+            - "user-?*"
+            operations:
+            - CREATE
+            - UPDATE
+        - resources:
+            kinds:
+            - Pod
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
+            operations:
+            - CREATE
+            - UPDATE
+    exclude:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            selector:
+              matchExpressions:
+                - key: nvidia.com/dynamo-component
+                  operator: In
+                  values:
+                    - decode
+                    - prefill
+                    - worker
+            operations:
+            - CREATE
+            - UPDATE
+    validate:
+      message: "CPU and memory limits exceed max 8 CPUs and 32GB of memory"
+      pattern:
+        spec:
+          containers:
+          - name: '*'
+            resources:
+              requests:
+                cpu: '<=8000m'
+                memory: '<=32Gi'
+              limits:
+                cpu: '<=8000m'
+                memory: '<=32Gi'
+          =(initContainers):
+          - name: '*'
+            resources:
+              requests:
+                cpu: '<=8000m'
+                memory: '<=32Gi'
+              limits:
+                cpu: '<=8000m'
+                memory: '<=32Gi'
+  - name: pods-max-user-resources-gen
+    match:
+      any:
+        - resources:
+            kinds:
+            - DaemonSet
+            - Deployment
+            - Job
+            - ReplicaSet
+            - ReplicationController
+            - StatefulSet
+            namespaces:
+            - "user-?*"
+            operations:
+            - CREATE
+            - UPDATE
+        - resources:
+            kinds:
+            - DaemonSet
+            - Deployment
+            - Job
+            - ReplicaSet
+            - ReplicationController
+            - StatefulSet
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
+            operations:
+            - CREATE
+            - UPDATE
+    validate:
+      message: "CPU and memory limits exceed max 8 CPUs and 32GB of memory"
+      pattern:
+        spec:
+          template:
+            spec:
+              containers:
+              - name: '*'
+                resources:
+                  requests:
+                    cpu: '<=8000m'
+                    memory: '<=32Gi'
+                  limits:
+                    cpu: '<=8000m'
+                    memory: '<=32Gi'
+              =(initContainers):
+              - name: '*'
+                resources:
+                  requests:
+                    cpu: '<=8000m'
+                    memory: '<=32Gi'
+                  limits:
+                    cpu: '<=8000m'
+                    memory: '<=32Gi'
+  - name: pods-max-user-resources-cron
+    match:
+      any:
+        - resources:
+            kinds:
+            - CronJob
+            namespaces:
+            - "user-?*"
+            operations:
+            - CREATE
+            - UPDATE
+        - resources:
+            kinds:
+            - CronJob
+            namespaceSelector:
+              matchExpressions:
+              - key: osc.edu/role
+                operator: In
+                values:
+                - webservice
+            operations:
+            - CREATE
+            - UPDATE
+    validate:
+      message: "CPU and memory limits exceed max 8 CPUs and 32GB of memory"
+      pattern:
+        spec:
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                  - name: '*'
+                    resources:
+                      requests:
+                        cpu: '<=8000m'
+                        memory: '<=32Gi'
+                      limits:
+                        cpu: '<=8000m'
+                        memory: '<=32Gi'
+                  =(initContainers):
+                  - name: '*'
+                    resources:
+                      requests:
+                        cpu: '<=8000m'
+                        memory: '<=32Gi'
+                      limits:
+                        cpu: '<=8000m'
+                        memory: '<=32Gi'
