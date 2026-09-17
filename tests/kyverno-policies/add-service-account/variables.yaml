@@ -14,7 +14,31 @@ policies:
           uidMap.data.user-test: '1000'
           gidMap.data.user-test: '1001'
           gidsMap.data.user-test: '["1001","1002"]'
+      - name: webservice-service-account-run-as-gen
+        values:
+          serviceAccount: test
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+          gidsMap.data.user-test: '["1001","1002"]'
+      - name: webservice-service-account-run-as-cron
+        values:
+          serviceAccount: test
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+          gidsMap.data.user-test: '["1001","1002"]'
       - name: paas-service-account-run-as
+        values:
+          serviceAccount: test
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+          gidsMap.data.user-test: '["1001","1002"]'
+      - name: paas-service-account-run-as-gen
+        values:
+          serviceAccount: test
+          uidMap.data.user-test: '1000'
+          gidMap.data.user-test: '1001'
+          gidsMap.data.user-test: '["1001","1002"]'
+      - name: paas-service-account-run-as-cron
         values:
           serviceAccount: test
           uidMap.data.user-test: '1000'
@@ -26,6 +50,12 @@ policies:
           serviceAccount: ''
           namespaceServiceAccount: ''
       - name: test-webservice-service-account-namespace
+        values:
+          namespaceServiceAccount: 'test'
+      - name: test-webservice-service-account-namespace-job
+        values:
+          namespaceServiceAccount: 'test'
+      - name: test-webservice-service-account-namespace-cron
         values:
           namespaceServiceAccount: 'test'
 namespaceSelector:
