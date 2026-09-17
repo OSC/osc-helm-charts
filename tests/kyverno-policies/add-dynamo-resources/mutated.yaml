@@ -9,6 +9,8 @@ spec:
     - name: nginx
       image: nginx:latest
   initContainers:
+    - name: hf-wait
+      image: nginx:latest
     - name: wait-for-leader-mp
       image: foo
       resources:
@@ -18,8 +20,6 @@ spec:
         requests:
           cpu: 500m
           memory: 256Mi
-    - name: hf-wait
-      image: nginx:latest
 ---
 apiVersion: v1
 kind: Pod
@@ -31,6 +31,8 @@ spec:
     - name: nginx
       image: nginx:latest
   initContainers:
+    - name: hf-wait
+      image: nginx:latest
     - name: wait-for-leader
       image: foo
       resources:
@@ -38,10 +40,8 @@ spec:
           cpu: 1
           memory: 512Mi
         requests:
-          cpu: 500m
-          memory: 256Mi
-    - name: hf-wait
-      image: nginx:latest
+          cpu: 250m
+          memory: 64mi
 ---
 apiVersion: v1
 kind: Pod

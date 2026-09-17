@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.46.2](https://img.shields.io/badge/Version-0.46.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
+![Version: 0.46.3](https://img.shields.io/badge/Version-0.46.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 

@@ -22,14 +22,54 @@ spec:
     mutate:
       foreach:
       - list: "request.object.spec.initContainers || []"
-        patchStrategicMerge:
-          spec:
-            initContainers:
-            - (name): "wait-for-leader*"
-              resources:
-                limits:
-                  +(cpu): 1
-                  +(memory): 512Mi
-                requests:
-                  +(cpu): 500m
-                  +(memory): 256Mi
+        preconditions:
+          all:
+            - key: '{{`{{ element.name }}`}}'
+              operator: Equals
+              value: "wait-for-leader*"
+            - key: "{{`{{ element.resources.limits.cpu || '' }}`}}"
+              operator: Equals
+              value: ""
+        patchesJson6902: |-
+          - op: add
+            path: /spec/initContainers/{{`{{ elementIndex }}`}}/resources/limits/cpu
+            value: 1
+      - list: "request.object.spec.initContainers || []"
+        preconditions:
+          all:
+            - key: '{{`{{ element.name }}`}}'
+              operator: Equals
+              value: "wait-for-leader*"
+            - key: "{{`{{ element.resources.limits.memory || '' }}`}}"
+              operator: Equals
+              value: ""
+        patchesJson6902: |-
+          - op: add
+            path: /spec/initContainers/{{`{{ elementIndex }}`}}/resources/limits/memory
+            value: 512Mi
+      - list: "request.object.spec.initContainers || []"
+        preconditions:
+          all:
+            - key: '{{`{{ element.name }}`}}'
+              operator: Equals
+              value: "wait-for-leader*"
+            - key: "{{`{{ element.resources.requests.cpu || '' }}`}}"
+              operator: Equals
+              value: ""
+        patchesJson6902: |-
+          - op: add
+            path: /spec/initContainers/{{`{{ elementIndex }}`}}/resources/requests/cpu
+            value: 500m
+      - list: "request.object.spec.initContainers || []"
+        preconditions:
+          all:
+            - key: '{{`{{ element.name }}`}}'
+              operator: Equals
+              value: "wait-for-leader*"
+            - key: "{{`{{ element.resources.requests.memory || '' }}`}}"
+              operator: Equals
+              value: ""
+        patchesJson6902: |-
+          - op: add
+            path: /spec/initContainers/{{`{{ elementIndex }}`}}/resources/requests/memory
+            value: 256Mi
