@@ -38,6 +38,9 @@ global:
     host: <LLM server host>
   embedding:
     model: <Embedding model name>
+  fileset: <fileset group>
+  pvcAnnotations:
+    osc.edu/fileset: <fileset group>
 database:
   postgresql:
     auth:
@@ -47,11 +50,23 @@ database:
   redis:
     auth:
       password: <redis password>
+    master:
+      persistence:
+        annotations:
+          osc.edu/fileset: <fileset group>
 
 rabbitmq:
+  metrics:
+    serviceMonitor:
+      default:
+        enabled: false
   auth:
     username: <rabbitmq root username>
     password: <rabbitmq root password>
+  persistence:
+    annotations:
+      osc.edu/fileset: <fileset group>
+ 
 
 minio:
   auth:
@@ -59,9 +74,21 @@ minio:
     rootPassword: <minio root password>
   ingress:
     hostname: <minio host name>
+  metrics:
+    serviceMonitor:
+      enabled: false
+  persistence:
+    annotations:
+      osc.edu/fileset: <fileset group>
 
 qdrant:
   apiKey: <qdrant API key>
+  metrics:
+    serviceMonitor:
+      enabled: false
+  snapshotPersistence:
+    annotations:
+      osc.edu/fileset: <fileset group>
 
 secrets:
   api:
