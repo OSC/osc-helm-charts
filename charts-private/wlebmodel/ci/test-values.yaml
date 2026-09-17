@@ -13,3 +13,6 @@ webservice:
     requests:
       cpu: 1
       memory: 256Mi
+
+  mounts:
+    rwDir: null
