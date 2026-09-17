@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.17](https://img.shields.io/badge/Version-0.1.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.17](https://img.shields.io/badge/AppVersion-0.1.17-informational?style=flat-square)
+![Version: 0.1.18](https://img.shields.io/badge/Version-0.1.18-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.18](https://img.shields.io/badge/AppVersion-0.1.18-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -73,7 +73,7 @@ secrets:
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.9 |
+| https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.10 |
 | https://osc.github.io/osc-helm-charts | database | 0.19.3 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.16.1 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |

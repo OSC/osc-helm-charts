@@ -24,6 +24,29 @@ results:
     kind: Pod
     result: skip
   - policy: add-service-account
+    rule: webservice-service-account-run-as-gen
+    resources:
+      - test-webservice-service-account-job
+      - test-webservice-service-account-namespace-job
+    patchedResources: webservice-service-account-mutated.yaml
+    kind: Job
+    result: pass
+  - policy: add-service-account
+    rule: webservice-service-account-run-as-cron
+    resources:
+      - test-webservice-service-account-cron
+      - test-webservice-service-account-namespace-cron
+    patchedResources: webservice-service-account-mutated.yaml
+    kind: CronJob
+    result: pass
+  - policy: add-service-account
+    rule: webservice-service-account-run-as-gen
+    resources:
+      - test-webservice-service-account
+      - test-no-service-account-skip
+    kind: Pod
+    result: skip
+  - policy: add-service-account
     rule: webservice-service-account-run-as
     resources:
       - webservice/test-webservice-service-account-mariadb
@@ -57,3 +80,17 @@ results:
     patchedResources: skip.yaml
     kind: Pod
     result: skip
+  - policy: add-service-account
+    rule: paas-service-account-run-as-gen
+    resources:
+      - test-paas-service-account-job
+    patchedResources: paas-service-account-mutated.yaml
+    kind: Job
+    result: pass
+  - policy: add-service-account
+    rule: paas-service-account-run-as-cron
+    resources:
+      - test-paas-service-account-cron
+    patchedResources: paas-service-account-mutated.yaml
+    kind: CronJob
+    result: pass
