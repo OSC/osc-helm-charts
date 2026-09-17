@@ -55,12 +55,18 @@ spec:
             privileged: false
           workingDir: /home/dynamo
           volumeMounts:
-            - name: model-cache
-              mountPath: /home/dynamo/.cache/huggingface
+            - name: {{ $.Values.modelCache.name }}
+              mountPath: {{ $.Values.modelCache.path }}
       nodeSelector:
         '{{ include "osc.common.nodeSelectorRoleKey" $ }}': ""
       volumes:
-        - name: model-cache
+        - name: {{ $.Values.compilationCache.name }}
+          persistentVolumeClaim:
+            claimName: {{ $.Values.compilationCache.name }}
+        - name: {{ $.Values.tritonCache.name }}
+          persistentVolumeClaim:
+            claimName: {{ $.Values.tritonCache.name }}
+        - name: {{ $.Values.modelCache.name }}
           persistentVolumeClaim:
             claimName: {{ $.Values.modelCache.name }}
 {{- end }}

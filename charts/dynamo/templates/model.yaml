@@ -188,7 +188,7 @@ spec:
                   type: RuntimeDefault
                 privileged: false
               volumeMounts:
-                - name: model-cache
+                - name: {{ $.Values.modelCache.name }}
                   mountPath: {{ $.Values.modelCache.path }}
           nodeSelector:
             '{{ include "osc.common.nodeSelectorRoleKey" $ }}': ""
@@ -199,7 +199,7 @@ spec:
             - name: scripts
               configMap:
                 name: {{ $.Values.configMap.scripts.name }}
-            - name: model-cache
+            - name: {{ $.Values.modelCache.name }}
               persistentVolumeClaim:
                 claimName: {{ $.Values.modelCache.name }}
 ---
@@ -244,6 +244,35 @@ spec:
       {{- end }}
         spec:
           initContainers:
+            - name: create-subpath
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
+              command:
+                - /bin/bash
+                - -c
+              args:
+                - |
+                  set -x
+                  mkdir -p {{ $.Values.compilationCache.path }}/{{ include "dynamo.runtime.version" $ }}
+                  mkdir -p {{ $.Values.tritonCache.path }}/{{ include "dynamo.runtime.version" $ }}
+              resources:
+                {{- with $.Values.init.resources }}
+                  {{- toYaml . | nindent 16 }}
+                {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+              workingDir: /home/dynamo
+              volumeMounts:
+                - name: {{ $.Values.compilationCache.name }}
+                  mountPath: {{ $.Values.compilationCache.path }}
+                - name: {{ $.Values.tritonCache.name }}
+                  mountPath: {{ $.Values.tritonCache.path }}
             - name: hf-wait
               image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
               imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
@@ -334,10 +363,10 @@ spec:
                 - name: {{ $.Values.compilationCache.name }}
                   mountPath: {{ $.Values.compilationCache.path }}
                   subPath: {{ include "dynamo.runtime.version" $ }}
-                - name: triton-cache
+                - name: {{ $.Values.tritonCache.name }}
                   mountPath: {{ $.Values.tritonCache.path }}
                   subPath: {{ include "dynamo.runtime.version" $ }}
-                - name: model-cache
+                - name: {{ $.Values.modelCache.name }}
                   mountPath: {{ $.Values.modelCache.path }}
               env:
               {{- with $.Values.workerEnv }}
@@ -361,10 +390,10 @@ spec:
             - name: scripts
               configMap:
                 name: {{ $.Values.configMap.scripts.name }}
-            - name: triton-cache
+            - name: {{ $.Values.tritonCache.name }}
               persistentVolumeClaim:
                 claimName: {{ $.Values.tritonCache.name }}
-            - name: model-cache
+            - name: {{ $.Values.modelCache.name }}
               persistentVolumeClaim:
                 claimName: {{ $.Values.modelCache.name }}
   {{- if $disagg }}
@@ -393,6 +422,35 @@ spec:
       {{- end }}
         spec:
           initContainers:
+            - name: create-subpath
+              image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
+              imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
+              command:
+                - /bin/bash
+                - -c
+              args:
+                - |
+                  set -x
+                  mkdir -p {{ $.Values.compilationCache.path }}/{{ include "dynamo.runtime.version" $ }}
+                  mkdir -p {{ $.Values.tritonCache.path }}/{{ include "dynamo.runtime.version" $ }}
+              resources:
+                {{- with $.Values.init.resources }}
+                  {{- toYaml . | nindent 16 }}
+                {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+              workingDir: /home/dynamo
+              volumeMounts:
+                - name: {{ $.Values.compilationCache.name }}
+                  mountPath: {{ $.Values.compilationCache.path }}
+                - name: {{ $.Values.tritonCache.name }}
+                  mountPath: {{ $.Values.tritonCache.path }}
             - name: hf-wait
               image: {{ $.Values.init.image.repository }}:{{ $.Values.init.image.tag }}
               imagePullPolicy: {{ $.Values.init.image.pullPolicy }}
@@ -485,10 +543,10 @@ spec:
                 - name: {{ $.Values.compilationCache.name }}
                   mountPath: {{ $.Values.compilationCache.path }}
                   subPath: {{ include "dynamo.runtime.version" $ }}
-                - name: triton-cache
+                - name: {{ $.Values.tritonCache.name }}
                   mountPath: {{ $.Values.tritonCache.path }}
                   subPath: {{ include "dynamo.runtime.version" $ }}
-                - name: model-cache
+                - name: {{ $.Values.modelCache.name }}
                   mountPath: {{ $.Values.modelCache.path }}
               env:
               {{- with $.Values.workerEnv }}
@@ -512,10 +570,10 @@ spec:
             - name: scripts
               configMap:
                 name: {{ $.Values.configMap.scripts.name }}
-            - name: triton-cache
+            - name: {{ $.Values.tritonCache.name }}
               persistentVolumeClaim:
                 claimName: {{ $.Values.tritonCache.name }}
-            - name: model-cache
+            - name: {{ $.Values.modelCache.name }}
               persistentVolumeClaim:
                 claimName: {{ $.Values.modelCache.name }}
   {{- end }}
