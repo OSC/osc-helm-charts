@@ -334,13 +334,17 @@ mongodb:
       requests:
         cpu: 250m
         memory: 128Mi
-  # @ignored
-  serviceMonitor:
-    enabled: true
-    interval: 60s
-    relabelings:
-      - sourceLabels: [__meta_kubernetes_service_label_receiver]
-        targetLabel: receiver
+    # @ignored
+    service:
+      annotations:
+        prometheus.io/scrape: "false"
+    # @ignored
+    serviceMonitor:
+      enabled: true
+      interval: 60s
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_service_label_receiver]
+          targetLabel: receiver
   # @ignored
   networkPolicy:
     enabled: true
@@ -517,13 +521,17 @@ postgresql:
       requests:
         cpu: 250m
         memory: 128Mi
-  # @ignored
-  serviceMonitor:
-    enabled: true
-    interval: 60s
-    relabelings:
-      - sourceLabels: [__meta_kubernetes_service_label_receiver]
-        targetLabel: receiver
+    # @ignored
+    service:
+      annotations:
+        prometheus.io/scrape: "false"
+    # @ignored
+    serviceMonitor:
+      enabled: true
+      interval: 60s
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_service_label_receiver]
+          targetLabel: receiver
 redis:
   # -- Enable Redis subchart by setting to `true`
   enable: false
