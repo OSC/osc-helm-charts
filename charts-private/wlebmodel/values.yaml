@@ -32,3 +32,6 @@ webservice:
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/wlebmodel
+  mounts:
+    rwDir:
+      scratch: /fs/scratch/PAS3187
