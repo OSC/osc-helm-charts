@@ -347,14 +347,11 @@ spec:
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
-                {{- if $disagg }}
+                  drop:
+                    - ALL
                   add:
                     - IPC_LOCK
                     - SYS_RESOURCE
-                {{- else }}
-                  drop:
-                    - ALL
-                {{- end }}
                 seccompProfile:
                   type: RuntimeDefault
                 privileged: false
@@ -527,14 +524,11 @@ spec:
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
-                {{- if $disagg }}
+                  drop:
+                    - ALL
                   add:
                     - IPC_LOCK
                     - SYS_RESOURCE
-                {{- else }}
-                  drop:
-                    - ALL
-                {{- end }}
                 seccompProfile:
                   type: RuntimeDefault
                 privileged: false
