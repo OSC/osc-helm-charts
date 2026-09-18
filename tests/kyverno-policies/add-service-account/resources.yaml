@@ -199,6 +199,37 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
+  name: test-webservice-service-account-job-pod-label
+  namespace: webservice
+spec:
+  template:
+    metadata:
+      labels:
+        osc.edu/service-account: test
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+      initContainers:
+        - name: init
+          image: busybox
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            seccompProfile:
+              type: RuntimeDefault
+            privileged: false
+        - name: init2
+          image: busybox
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
   name: test-webservice-service-account-namespace-job
   namespace: webservice2
 spec:
@@ -222,6 +253,39 @@ spec:
   jobTemplate:
     spec:
       template:
+        spec:
+          containers:
+            - name: nginx
+              image: nginx:latest
+          initContainers:
+            - name: init
+              image: busybox
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+                privileged: false
+            - name: init2
+              image: busybox
+              securityContext:
+                runAsUser: 0
+                runAsGroup: 0
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: test-webservice-service-account-cron-pod-label
+  namespace: webservice
+spec:
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            osc.edu/service-account: test
         spec:
           containers:
             - name: nginx

@@ -27,6 +27,7 @@ results:
     rule: webservice-service-account-run-as-gen
     resources:
       - test-webservice-service-account-job
+      - test-webservice-service-account-job-pod-label
       - test-webservice-service-account-namespace-job
     patchedResources: webservice-service-account-mutated.yaml
     kind: Job
@@ -35,6 +36,7 @@ results:
     rule: webservice-service-account-run-as-cron
     resources:
       - test-webservice-service-account-cron
+      - test-webservice-service-account-cron-pod-label
       - test-webservice-service-account-namespace-cron
     patchedResources: webservice-service-account-mutated.yaml
     kind: CronJob
