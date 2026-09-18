@@ -1,12 +1,12 @@
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 FROM := ghcr.io/open-webui/open-webui
 VERSION := 0.11.3
-RELEASE := 2
+RELEASE := 3
 PATCH := 351ab575461fc106c4a78111d58fc68bed76a1ac
 TAG = docker-registry.osc.edu/kubernetes/open-webui/open-webui:$(VERSION)-osc-r$(RELEASE)
 
 build:
-	docker build --platform linux/amd64 \
+	docker build --platform linux/amd64 --pull always \
 	--build-arg FROM=$(FROM) --build-arg VERSION=$(VERSION) --build-arg PATCH=$(PATCH) \
 	-t $(TAG) $(ROOT_DIR)
 
@@ -14,7 +14,7 @@ push:
 	docker push --platform linux/amd64 $(TAG)
 
 podman-build:
-	podman build \
+	podman build --pull=always \
 	--build-arg FROM=$(FROM) --build-arg VERSION=$(VERSION) --build-arg PATCH=$(PATCH) \
 	-t $(TAG) $(ROOT_DIR)
 
