@@ -130,6 +130,11 @@ OSC Kyverno policies deployment
     * Validates pod has valid group GID for user namespaces
   * Applies to: Pod in user-?* namespaces
 
+* [restrict-adding-capabilities](templates/restrict-adding-capabilities.yaml)
+  * Rules
+    * Validate only IPC_LOCK and SYS_RESOURCE are allowed for Dynamo workers
+  * Applies to: Pod in Dynamo webservice namespaces
+
 * [restrict-host-path](templates/restrict-host-path.yaml)
   * Rules
     * Validates that HostPath volumes are not allowed in user namespaces

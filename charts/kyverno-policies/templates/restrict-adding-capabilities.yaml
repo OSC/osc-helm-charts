@@ -1,0 +1,47 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-adding-capabilities
+  annotations:
+    policies.kyverno.io/title: Restrict Adding Capabilities
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Ensures the only capabilities that can be added to containers are
+      IPC_LOCK and SYS_RESOURCE for Dynamo workers.
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: allowed-capabilities-dynamo
+      match:
+        any:
+          - resources:
+              kinds:
+              - Pod
+              namespaceSelector:
+                matchLabels:
+                  osc.edu/role: webservice
+                  osc.edu/access-dynamo-platform: "true"
+              operations:
+              - CREATE
+              - UPDATE
+      preconditions:
+        all:
+        - key: "{{`{{ request.object.metadata.labels.\"nvidia.com/dynamo-component-type\" || '' }}`}}"
+          operator: AnyIn
+          value:
+              - worker
+              - decode
+              - prefill
+      validate:
+        message: "Only IPC_LOCK and SYS_RESOURCE capabilities are allowed."
+        foreach:
+          - list: "request.object.spec.[ephemeralContainers, initContainers, containers][]"
+            deny:
+              conditions:
+                any:
+                  - key: "{{`{{ element.securityContext.capabilities.add[] || [] }}`}}"
+                    operator: AnyNotIn
+                    value:
+                      - IPC_LOCK
+                      - SYS_RESOURCE
