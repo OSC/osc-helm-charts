@@ -6,7 +6,7 @@ PATCH := 351ab575461fc106c4a78111d58fc68bed76a1ac
 TAG = docker-registry.osc.edu/kubernetes/open-webui/open-webui:$(VERSION)-osc-r$(RELEASE)
 
 build:
-	docker build --platform linux/amd64 --pull always \
+	docker buildx build --platform linux/amd64 --pull \
 	--build-arg FROM=$(FROM) --build-arg VERSION=$(VERSION) --build-arg PATCH=$(PATCH) \
 	-t $(TAG) $(ROOT_DIR)
 
