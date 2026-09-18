@@ -18,7 +18,7 @@ spec:
           app.kubernetes.io/component: authentication-proxy
     - podSelector:
         matchLabels:
-          {{- include "blackbox-exporter.selectorLabels" . | nindent 10 }}
+          app.kubernetes.io/name: prometheus-blackbox-exporter
     - namespaceSelector:
         matchLabels:
           app.kubernetes.io/name: {{ .Values.ingressName }}

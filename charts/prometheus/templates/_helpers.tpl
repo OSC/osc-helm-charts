@@ -50,26 +50,6 @@ app.kubernetes.io/name: prometheus
 {{- end }}
 
 {{/*
-Selector blackbox-exporter labels
-*/}}
-{{- define "blackbox-exporter.selectorLabels" -}}
-app.kubernetes.io/name: {{ .Values.blackboxExporter.name }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Common blackbox-exporter labels
-*/}}
-{{- define "blackbox-exporter.labels" -}}
-helm.sh/chart: {{ include "prometheus.chart" . }}
-{{ include "blackbox-exporter.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Values.blackboxExporter.image.tag | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
 Selector ssl-exporter labels
 */}}
 {{- define "ssl-exporter.selectorLabels" -}}
