@@ -156,6 +156,7 @@ kyverno-policies:
         - key: "{{ request.object.metadata.labels.\"nvidia.com/dynamo-component-type\" || '' }}"
           operator: AnyNotIn
           value:
+            - worker
             - decode
             - prefill
     disallow-capabilities-strict:
@@ -171,6 +172,7 @@ kyverno-policies:
         - key: "{{ request.object.metadata.labels.\"nvidia.com/dynamo-component-type\" || '' }}"
           operator: AnyNotIn
           value:
+            - worker
             - decode
             - prefill
     disallow-privilege-escalation:
