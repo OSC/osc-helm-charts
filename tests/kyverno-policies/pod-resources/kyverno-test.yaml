@@ -44,3 +44,63 @@ results:
       - webservice/test-limits-memory-requests-fail-webservice
     kind: Pod
     result: fail
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - user-test/test-limits-pass-cpu-limits1
+      - user-test/test-limits-pass-cpu-limits2
+    kind: Pod
+    result: pass
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - webservice/test-limits-webservice-pass-limits
+    kind: Pod
+    result: pass
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - user-test/test-limits-with-init-pass-cpu-limits2
+    kind: Pod
+    result: pass
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - user-test/test-limits-fail-cpu-limits1
+      - user-test/test-limits-fail-cpu-limits2
+      - user-test/test-limits-with-init-fail-cpu-limits1
+    kind: Pod
+    result: fail
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - webservice/test-limits-webservice-fail-cpu-limits
+    kind: Pod
+    result: fail
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - user-test/test-limits-pass-mem-limits1
+      - user-test/test-limits-pass-mem-limits2
+      - user-test/test-limits-cpu-requests-missing2
+    kind: Pod
+    result: pass
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - user-test/test-limits-fail-mem-limits1
+      - user-test/test-limits-fail-mem-limits2
+    kind: Pod
+    result: fail
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - webservice/test-limits-webservice-fail-mem-limits
+    kind: Pod
+    result: fail
+  - policy: pod-resources
+    rule: pods-max-user-resources
+    resources:
+      - webservice/test-limits-dynamo-pass-mem-limits
+    kind: Pod
+    result: skip
