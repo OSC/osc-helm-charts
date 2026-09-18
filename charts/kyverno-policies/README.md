@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.46.4](https://img.shields.io/badge/Version-0.46.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
+![Version: 0.46.5](https://img.shields.io/badge/Version-0.46.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -129,6 +129,11 @@ OSC Kyverno policies deployment
     * Validates pod has valid user GID for user namespaces
     * Validates pod has valid group GID for user namespaces
   * Applies to: Pod in user-?* namespaces
+
+* [restrict-adding-capabilities](templates/restrict-adding-capabilities.yaml)
+  * Rules
+    * Validate only IPC_LOCK and SYS_RESOURCE are allowed for Dynamo workers
+  * Applies to: Pod in Dynamo webservice namespaces
 
 * [restrict-host-path](templates/restrict-host-path.yaml)
   * Rules
