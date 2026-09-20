@@ -2,12 +2,12 @@ apiVersion: v2
 name: wlebmodel
 description: OSC wlebmodel web service
 type: application
-version: 0.3.0
+version: 0.3.1
 appVersion: v2.4-1
 maintainers:
   - name: zyou
 dependencies:
   - name: webservice
-    version: 0.40.3
+    version: 0.40.4
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../../charts/webservice

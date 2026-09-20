@@ -86,6 +86,10 @@ jobs:
         run: |
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts-private/${{ matrix.chart }}/ci/*.yaml
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' .github/config/*.yaml
+      - name: Prometheus Operator crds
+        run: |
+          helm install prometheus-operator-crds oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds -n prometheus-operator-crds --create-namespace --version 28.0.1 \
+            --wait --timeout 300s
       - name: Install Keycloak
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
