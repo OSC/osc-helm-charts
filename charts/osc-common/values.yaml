@@ -184,9 +184,14 @@ oauth2-proxy:
     annotations:
       prometheus.io/probe_module: http-healthz
       prometheus.io/probe_path: /ping
-      prometheus.io/scrape: 'true'
-      prometheus.io/match_metrics: 'true'
-      prometheus.io/path: /metrics
+      prometheus.io/scrape: 'false'
+  # @ignored
+  metrics:
+    serviceMonitor:
+      enabled: true
+      relabelings:
+        - sourceLabels: [__meta_kubernetes_service_label_receiver]
+          targetLabel: receiver
   # @ignored
   networkPolicy:
     create: true
