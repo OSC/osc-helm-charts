@@ -1,0 +1,112 @@
+global:
+  oscServiceAccount: nobody
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  storageClass: standard
+  auth:
+    allowGroups:
+      - test1
+      - test2
+    redirectUris:
+      - /oauth/oidc/callback
+  ingress:
+    host: webservice.k8.example.com
+    hostAlias: webservice.example.com
+    additionalHosts:
+      - '*.service.example.com'
+  webui_secret_key: supersecret
+  alert:
+    receiver: test-receiver
+  maintenance:
+    groups:
+      - testgroup
+  database:
+    enable: true
+  postgresql:
+    auth:
+      postgresPassword: secret
+      password: secret
+  redis:
+    password: secret
+ollama:
+  networkPolicy:
+    allowedPodLabels:
+      - app.kubernetes.io/name: ollama
+
+database:
+  postgresql:
+    primary:
+      persistence:
+        size: 50Mi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+    backup:
+      cronjob:
+        schedule: '* * * * *'
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 128Mi
+        storage:
+          accessModes:
+          - ReadWriteOnce
+  redis:
+    master:
+      persistence:
+        size: 50Mi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+open-webui:
+  persistence:
+    storageClass: standard
+    size: 50Mi
+  resources:
+    limits:
+      memory: 1Gi
+      cpu: 2
+    requests:
+      memory: 512Mi
+      cpu: 500m
+  extraEnvVars:
+    - name: HF_HUB_OFFLINE
+      value: '1'
+  podSecurityContext:
+    runAsUser: 1000
+  sso:
+    enableRoleManagement: true
+  ollama:
+    ollama:
+      gpu:
+        enabled: false
+    deployment:
+      labels:
+        osc.edu/service-account: nobody
+    podLabels:
+      osc.edu/service-account: nobody
+    resources:
+      limits:
+        memory: 500Mi
+        cpu: 1
+      requests:
+        memory: 200Mi
+        cpu: 500m
+    podSecurityContext:
+      runAsUser: 1000
+    initContainers: []
+    volumes: []
+    volumeMounts: []
+    extraEnv: []

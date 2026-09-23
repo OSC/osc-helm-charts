@@ -77,14 +77,98 @@ global:
   alert:
     # -- The alert receiver
     receiver:
-  # The Open WebUI secret key
+  # -- The Open WebUI secret key
   # @default -- **required**
   webui_secret_key:
+  # -- Storage class for persistence
+  storageClass: webservices-nfs-client
+  # -- The storage fileset
+  fileset:
+  database:
+    # -- Enable database support
+    enable: false
+    pool:
+      # -- Open WebUI database pool size
+      size: 15
+      # -- Open WebUI database pool max overflow
+      maxOverflow: 20
+  postgresql:
+    auth:
+      # -- postgres password
+      postgresPassword:
+      # @ignored
+      username: openwebui
+      # -- openwebui user password
+      password:
+      # @ignored
+      database: openwebui
+    # @ignored
+    fullnameOverride: open-webui-postgresql
+    # @ignored
+    service:
+      ports:
+        postgresql: 5432
+  redis:
+    # -- Redis password
+    password:
+    # -- Redis max clients
+    maxclients: 10000
+    # -- Redis client timeout
+    timeout: 1800
+# @ignored
+clusterDomain: cluster.local
 
 ollama:
   networkPolicy:
     # -- Array of additional pod labels to allow
     allowedPodLabels: []
+
+database:
+  # @ignored
+  oscCommon:
+    enable: false
+  postgresql:
+    # -- Enable postgresql
+    enable: true
+    # @ignored
+    primary:
+      persistence:
+        annotations:
+          osc.edu/fileset: '{{ .Values.global.fileset }}'
+    # @ignored
+    backup:
+      cronjob:
+        annotations:
+          osc.edu/fileset: '{{ .Values.global.fileset }}'
+  redis:
+    # @ignored
+    enable: true
+    # @ignored
+    auth:
+      enabled: true
+    # @ignored
+    commonConfiguration: |-
+      # Enable AOF https://redis.io/topics/persistence#append-only-file
+      appendonly yes
+      # Disable RDB persistence, AOF persistence already enabled.
+      save ""
+      # Recommended by Open WebUI
+      maxclients {{ .Values.global.redis.maxclients }}
+      timeout {{ .Values.global.redis.timeout }}
+    master:
+      service:
+        ports:
+          # Must match REDIS_URL port for Open WebUI
+          # @ignored
+          redis: 6379
+      persistence:
+        annotations:
+          # -- Fileset for Redis storage
+          osc.edu/fileset: PZS0645
+    # @ignored
+    networkPolicy:
+      ingressNSPodMatchLabels:
+        app.kubernetes.io/name: open-webui
 
 open-webui:
   # @ignored
@@ -108,11 +192,14 @@ open-webui:
   podLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
     receiver: '{{ .Values.global.alert.receiver }}'
+  # @ignored
+  podAnnotations:
+    checksum/secret: '{{ include "osc-open-webui.secret.content" . | sha256sum }}'
   image:
     # -- OSC registry location for Open WebUI image
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
     # -- The Open WebUI image tag.  Must be synced to OSC registry
-    tag: 0.8.11
+    tag: 0.11.4
   # @ignored
   imagePullSecrets:
     - name: '{{ .Values.global.imagePullSecret.name }}'
@@ -141,9 +228,15 @@ open-webui:
     enabled: false
   persistence:
     # @ignored
+    labels:
+      '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    # @ignored
+    annotations:
+      osc.edu/fileset: '{{ .Values.global.fileset }}'
+    # @ignored
     size: 10Gi
     # -- The Open WebUI persistent storage class
-    storageClass: webservices-nfs-client
+    storageClass: '{{ .Values.global.storageClass }}'
   # @ignored
   nodeSelector:
     '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
@@ -151,6 +244,27 @@ open-webui:
   extraEnvVars: []
   # @ignored
   commonEnvVars:
+    # - name: DATABASE_TYPE
+    #   value: '{{ if .Values.global.database.enable }}postgresql{{ else }}sqlite{{ end }}'
+    # - name: DATABASE_USER
+    #   value: '{{ if .Values.global.database.enable }}{{ .Values.global.postgresql.auth.username }}{{ else }}None{{ end }}'
+    # - name: DATABASE_PASSWORD
+    #   value: '{{ if .Values.global.database.enable }}{{ .Values.global.postgresql.auth.password }}{{ else }}None{{ end }}'
+    # - name: DATABASE_HOST
+    #   value: '{{ if .Values.global.database.enable }}{{ printf "%s.%s.svc.%s" .Values.global.postgresql.fullnameOverride .Release.Namespace .Values.clusterDomain }}{{ else }}None{{ end }}'
+    # - name: DATABASE_PORT
+    #   value: '{{ if .Values.global.database.enable }}{{ .Values.global.postgresql.service.ports.postgresql }}{{ else }}None{{ end }}'
+    # - name: DATABASE_NAME
+    #   value: '{{ if .Values.global.database.enable }}{{ .Values.global.postgresql.auth.database }}{{ else }}None{{ end }}'
+    - name: DATABASE_POOL_SIZE
+      value: '{{ .Values.global.database.pool.size }}'
+    - name: DATABASE_POOL_MAX_OVERFLOW
+      value: '{{ .Values.global.database.pool.maxOverflow }}'
+    - name: WEBSOCKET_MANAGER
+      value: '{{ if .Values.global.database.enable }}redis{{ end }}'
+    # TODO: Add 'tpl' upstream to what builds REDIS_URL
+    # - name: REDIS_URL
+    #   value: '{{ if .Values.global.database.enable }}redis://:{{ .Values.global.redis.password }}@open-webui-redis-master.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:6379/0{{ end }}'
     - name: LOG_FORMAT
       value: json
     - name: ENABLE_OAUTH_GROUP_CREATION
