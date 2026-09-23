@@ -5,8 +5,8 @@
 {{ required "database password is required!" .Values.mariadb.auth.password }}
 {{- end -}}
 {{- if .Values.postgresql.enable -}}
-{{ required "database postgres password is required!" .Values.postgresql.auth.postgresPassword }}
-{{ required "database name is required!" .Values.postgresql.auth.database }}
-{{ required "database username is required!" .Values.postgresql.auth.username }}
-{{ required "database password is required!" .Values.postgresql.auth.password }}
+{{ required "database postgres password is required!" (default .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword) }}
+{{ required "database name is required!" (default .Values.global.postgresql.auth.database .Values.postgresql.auth.database) }}
+{{ required "database username is required!" (default .Values.global.postgresql.auth.username .Values.postgresql.auth.username) }}
+{{ required "database password is required!" (default .Values.global.postgresql.auth.password .Values.postgresql.auth.password) }}
 {{- end -}}

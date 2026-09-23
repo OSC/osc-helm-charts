@@ -61,6 +61,16 @@ global:
   backup:
     # -- Number of backups to keep
     keep: 7
+  postgresql:
+    auth:
+      # -- The postgres user admin password
+      postgresPassword:
+      # -- The database name
+      database:
+      # -- The database username
+      username:
+      # -- The database password
+      password:
 
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
