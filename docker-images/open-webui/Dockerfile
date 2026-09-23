@@ -1,18 +1,18 @@
 ARG FROM=ghcr.io/open-webui/open-webui
-ARG VERSION=0.11.3
+ARG VERSION=0.11.4
 FROM $FROM:$VERSION
 LABEL maintainer='Trey Dockendorf <tdockendorf@osc.edu>'
 
 USER root
 # RUN apt-get update && apt-get install -y less vim && rm -rf /var/lib/apt/lists/*
 
-ARG PATCH=351ab575461fc106c4a78111d58fc68bed76a1ac
+ARG PATCH=562e052a2f9beaaaae6723d87a7d89f07966cbb5
 RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/$PATCH.patch && \
     cd /app && patch -p1 < /tmp/$PATCH.patch
 # TODO: Remove once released:
 # https://github.com/open-webui/open-webui/pull/29849
-RUN cd /tmp && curl -L -o /tmp/patch https://github.com/OSC/open-webui/commit/75b183632294106d0f45be49918677ae6835c126.patch && \
-    cd /app && patch -p1 < /tmp/patch && rm -f /tmp/patch
+#RUN cd /tmp && curl -L -o /tmp/patch https://github.com/OSC/open-webui/commit/75b183632294106d0f45be49918677ae6835c126.patch && \
+#    cd /app && patch -p1 < /tmp/patch && rm -f /tmp/patch
 RUN groupadd -g 4097 PZS0645 && \
     useradd -u 52162 -g 4097 -d /home/dynamo -m dynamo
 # COPY openai.py /app/backend/open_webui/routers/
