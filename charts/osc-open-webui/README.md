@@ -146,6 +146,7 @@ open-webui:
 | global.database.pool.maxOverflow | Open WebUI database pool max overflow | `20` |
 | global.postgresql.auth.postgresPassword | postgres password | `nil` |
 | global.postgresql.auth.password | openwebui user password | `nil` |
+| global.postgresql.maxConnections | Max PostgreSQL connections | `200` |
 | global.redis.password | Redis password | `nil` |
 | global.redis.maxclients | Redis max clients | `10000` |
 | global.redis.timeout | Redis client timeout | `1800` |

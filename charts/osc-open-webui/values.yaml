@@ -104,6 +104,8 @@ global:
       database: openwebui
     # @ignored
     fullnameOverride: open-webui-postgresql
+    # -- Max PostgreSQL connections
+    maxConnections: 200
     # @ignored
     service:
       ports:
@@ -132,6 +134,8 @@ database:
     enable: true
     # @ignored
     primary:
+      extendedConfiguration: |
+        max_connections = {{ .Values.global.postgresql.maxConnections }}
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
