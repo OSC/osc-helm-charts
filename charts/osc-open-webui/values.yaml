@@ -340,7 +340,7 @@ open-webui:
               fieldPath: metadata.labels['apps.kubernetes.io/pod-index']
       envFrom:
         - secretRef:
-          name: osc-open-webui-secret
+            name: osc-open-webui-secret
       volumeMounts:
         - name: scripts
           mountPath: /scripts
