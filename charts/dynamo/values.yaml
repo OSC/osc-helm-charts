@@ -62,9 +62,27 @@ global:
       - oscall
       - PZS0645
       - PZS0580
+  # @ignored
+  alert:
+    receiver: ''
   # -- The Open WebUI secret key
   # @default -- **required**
   webui_secret_key:
+  # @ignored
+  database:
+    enable: true
+  postgresql:
+    auth:
+      # -- Password for postgresql
+      # @default -- **required**
+      postgresPassword:
+      # -- Password for openwebui database
+      # @default -- **required**
+      password:
+  redis:
+    # -- Redis password
+    # @default -- **required**
+    password:
   # -- Define models
   models: {}
   # Example:
@@ -294,13 +312,6 @@ osc-open-webui:
       # -- The version of Open WebUI
       tag: 0.11.4-osc-r1
     # @ignored
-    persistence:
-      storageClass: '{{ .Values.global.storageClass }}'
-      labels:
-        '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
-      annotations:
-        osc.edu/fileset: '{{ .Values.global.fileset }}'
-    # @ignored
     extraEnvVars:
       # Avoid restarting Open WebUI with new models as requires WebUI edit
       # - name: OPENAI_API_BASE_URLS
@@ -308,7 +319,7 @@ osc-open-webui:
       # - name: OPENAI_API_CONFIGS
       #   value: '{{ include "dynamo.openai.configs" . }}'
       - name: BYPASS_MODEL_ACCESS_CONTROL
-        value: 'True'
+        value: 'False'
       - name: OAUTH_USERNAME_CLAIM
         value: preferred_username
       - name: ENABLE_FORWARD_USER_INFO_HEADERS
