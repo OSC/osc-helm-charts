@@ -84,6 +84,24 @@ global:
   storageClass: webservices-nfs-client
   # -- The storage fileset
   fileset:
+  # @ignored
+  init:
+    resources:
+      limits:
+        cpu: 1
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 64Mi
+  # @ignored
+  otel:
+    resources:
+      limits:
+        cpu: 2
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 64Mi
   database:
     # -- Enable database support
     enable: false
@@ -312,7 +330,7 @@ open-webui:
     - secretRef:
         name: osc-open-webui-secret
   # @ignored
-  extraInitContainers:
+  extraInitContainers: |
     - name: db-wait
       image: 'docker-registry.osc.edu/kubernetes/portainer/kubectl-shell:2.39.0'
       imagePullPolicy: '{{ .Values.image.pullPolicy }}'
@@ -320,12 +338,7 @@ open-webui:
         - /bin/bash
         - /scripts/db-wait.sh
       resources:
-        limits:
-          cpu: 1
-          memory: 512Mi
-        requests:
-          cpu: 250m
-          memory: 64Mi
+        {{- toYaml .Values.global.init.resources | nindent 4 }}
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
@@ -345,12 +358,7 @@ open-webui:
         - /bin/bash
         - /scripts/db-migrate.sh
       resources:
-        limits:
-          cpu: 1
-          memory: 512Mi
-        requests:
-          cpu: 250m
-          memory: 64Mi
+        {{- toYaml .Values.global.init.resources | nindent 4 }}
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:
@@ -378,12 +386,7 @@ open-webui:
       imagePullPolicy: IfNotPresent
       restartPolicy: Always
       resources:
-        limits:
-          cpu: 1
-          memory: 265Mi
-        requests:
-          cpu: 250m
-          memory: 64Mi
+        {{- toYaml .Values.global.otel.resources | nindent 4 }}
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:

@@ -74,10 +74,10 @@ WEBUI_SECRET_KEY: {{ . | b64enc | quote }}
 {{- end }}
 
 {{- define "osc-open-webui.db-wait.content" -}}
-{{- if not .Values.global.database.enable }}
+{{- if not .Values.global.database.enable -}}
 echo "Not using central database, exit"
 exit 0
-{{- else }}
+{{- else -}}
 echo "Wait for postgresql"
 kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubernetes.io/name=postgresql --timeout=300s
 echo "Wait for redis"
@@ -86,10 +86,10 @@ kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubern
 {{- end }}
 
 {{- define "osc-open-webui.db-migrate.content" -}}
-{{- if not .Values.global.database.enable }}
+{{- if not .Values.global.database.enable -}}
 echo "Not using central database, exit"
 exit 0
-{{- else }}
+{{- else -}}
 cd /app/backend/open_webui
 
 # Get migration versions

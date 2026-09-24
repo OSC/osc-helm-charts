@@ -21,6 +21,22 @@ global:
   maintenance:
     groups:
       - testgroup
+  init:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 125m
+        memory: 64Mi
+  otel:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 125m
+        memory: 64Mi
   database:
     enable: true
   postgresql:
