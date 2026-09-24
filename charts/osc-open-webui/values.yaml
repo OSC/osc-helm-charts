@@ -201,7 +201,8 @@ open-webui:
   # @ignored
   podAnnotations:
     checksum/secret: '{{ include "osc-open-webui.secret.content" . | sha256sum }}'
-    checksum/scripts: '{{ include "osc-open-webui.db-migrate.content" . | sha256sum }}'
+    checksum/db-migrate: '{{ include "osc-open-webui.db-migrate.content" . | sha256sum }}'
+    checksum/db-wait: '{{ include "osc-open-webui.db-wait.content" . | sha256sum }}'
   image:
     # -- OSC registry location for Open WebUI image
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
@@ -312,6 +313,31 @@ open-webui:
         name: osc-open-webui-secret
   # @ignored
   extraInitContainers:
+    - name: db-wait
+      image: 'docker-registry.osc.edu/kubernetes/portainer/kubectl-shell:2.39.0'
+      imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+      command:
+        - /bin/bash
+        - /scripts/db-wait.sh
+      resources:
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+          readOnly: true
     - name: db-migrate
       image: '{{ .Values.image.repository }}:{{ include "open-webui.tag" $ }}'
       imagePullPolicy: '{{ .Values.image.pullPolicy }}'

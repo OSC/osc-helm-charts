@@ -7,3 +7,5 @@ metadata:
 data:
   db-migrate.sh: |
     {{- include "osc-open-webui.db-migrate.content" . | nindent 4 }}
+  db-wait.sh: |
+    {{- include "osc-open-webui.db-wait.content" . | nindent 4 }}
