@@ -351,8 +351,6 @@ open-webui:
       image: 'docker-registry.osc.edu/kubernetes/otel/opentelemetry-collector-contrib:0.161.0'
       imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      command:
-        - "--config=/etc/otelcol/config.yaml"
       resources:
         limits:
           cpu: 1
@@ -370,7 +368,7 @@ open-webui:
         privileged: false
       volumeMounts:
         - name: otel-config
-          mountPath: /etc/otelcol
+          mountPath: /etc/otel
           readOnly: true
       ports:
         - name: metrics
