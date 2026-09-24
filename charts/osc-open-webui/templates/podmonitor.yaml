@@ -1,0 +1,16 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: open-webui
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: open-webui
+      app.kubernetes.io/component: open-webui
+  podMetricsEndpoints:
+  - port: metrics
+    interval: 10s
+    path: /metrics
