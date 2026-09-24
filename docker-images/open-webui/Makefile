@@ -1,7 +1,7 @@
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 FROM := ghcr.io/open-webui/open-webui
 VERSION := 0.11.4
-RELEASE := 0
+RELEASE := 1
 PATCH := 562e052a2f9beaaaae6723d87a7d89f07966cbb5
 TAG = docker-registry.osc.edu/kubernetes/open-webui/open-webui:$(VERSION)-osc-r$(RELEASE)
 
