@@ -59,6 +59,14 @@ database:
         storage:
           accessModes:
           - ReadWriteOnce
+    metrics:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 125m
+          memory: 64Mi
   redis:
     master:
       persistence:
@@ -70,6 +78,14 @@ database:
         requests:
           cpu: 200m
           memory: 256Mi
+    metrics:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 125m
+          memory: 64Mi
 open-webui:
   persistence:
     storageClass: standard
@@ -89,24 +105,4 @@ open-webui:
   sso:
     enableRoleManagement: true
   ollama:
-    ollama:
-      gpu:
-        enabled: false
-    deployment:
-      labels:
-        osc.edu/service-account: nobody
-    podLabels:
-      osc.edu/service-account: nobody
-    resources:
-      limits:
-        memory: 500Mi
-        cpu: 1
-      requests:
-        memory: 200Mi
-        cpu: 500m
-    podSecurityContext:
-      runAsUser: 1000
-    initContainers: []
-    volumes: []
-    volumeMounts: []
-    extraEnv: []
+    enabled: false
