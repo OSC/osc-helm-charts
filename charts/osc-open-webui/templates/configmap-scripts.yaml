@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: osc-open-webui-scripts
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+data:
+  db-migrate.sh: |
+    {{- include "osc-open-webui.db-migrate.content" . | nindent 4 }}

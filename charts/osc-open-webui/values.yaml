@@ -144,6 +144,8 @@ database:
     # @ignored
     enable: true
     # @ignored
+    fullnameOverride: open-webui-redis
+    # @ignored
     auth:
       enabled: true
     # @ignored
@@ -195,6 +197,7 @@ open-webui:
   # @ignored
   podAnnotations:
     checksum/secret: '{{ include "osc-open-webui.secret.content" . | sha256sum }}'
+    checksum/scripts: '{{ include "osc-open-webui.db-migrate.content" . | sha256sum }}'
   image:
     # -- OSC registry location for Open WebUI image
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
@@ -244,6 +247,8 @@ open-webui:
   extraEnvVars: []
   # @ignored
   commonEnvVars:
+    - name: ENABLE_DB_MIGRATIONS
+      value: '{{ if .Values.global.database.enable }}False{{ else }}True{{ end }}'
     # - name: DATABASE_TYPE
     #   value: '{{ if .Values.global.database.enable }}postgresql{{ else }}sqlite{{ end }}'
     # - name: DATABASE_USER
@@ -289,10 +294,91 @@ open-webui:
       value: "True"
     - name: AUDIT_LOG_LEVEL
       value: METADATA
+    - name: ENABLE_OTEL
+      value: "True"
+    - name: ENABLE_OTEL_METRICS
+      value: "True"
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://localhost:4317
+    - name: OTEL_EXPORTER_OTLP_INSECURE
+      value: "True"
   # @ignored
   extraEnvFrom:
     - secretRef:
         name: osc-open-webui-secret
+  # @ignored
+  extraInitContainers:
+    - name: db-migrate
+      image: '{{ .Values.image.repository }}:{{ include "open-webui.tag" $ }}'
+      imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+      command:
+        - /bin/bash
+        - /scripts/db-migrate.sh
+      resources:
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      env:
+        - name: POD_INDEX
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['apps.kubernetes.io/pod-index']
+      envFrom:
+        - secretRef:
+          name: osc-open-webui-secret
+      volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+          readOnly: true
+        - name: data
+          mountPath: /app/backend/data
+    - name: otel
+      image: 'docker-registry.osc.edu/kubernetes/otel/opentelemetry-collector-contrib:0.161.0'
+      imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      command:
+        - "--config=/etc/otelcol/config.yaml"
+      resources:
+        limits:
+          cpu: 1
+          memory: 265Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      volumeMounts:
+        - name: otel-config
+          mountPath: /etc/otelcol
+          readOnly: true
+      ports:
+        - name: metrics
+          containerPort: 8889
+  # @ignored
+  volumes:
+    - name: scripts
+      configMap:
+        name: osc-open-webui-scripts
+    - name: otel-config
+      configMap:
+        name: osc-open-webui-otel
   # @ignored
   service:
     port: 80

@@ -72,3 +72,47 @@ WEBUI_SECRET_KEY: {{ . | b64enc | quote }}
 {{- printf "postgresql://%s:%s@%s:%d/%s" $user $password $host $port $db }}
 {{- end }}
 {{- end }}
+
+{{- define "osc-open-webui.db-migrate.content" -}}
+{{- if not .Values.global.database.enable }}
+echo "Not using central database, exit"
+exit 0
+{{- else }}
+cd /app/backend/open_webui
+
+# Get migration versions
+CURRENT=$(alembic current 2>/dev/null | grep -oP '[0-9a-f]{12}' || echo "")
+HEAD=$(alembic heads 2>/dev/null | grep -oP '[0-9a-f]{12}' || echo "")
+
+echo "Current migration: $CURRENT"
+echo "Expected migration: $HEAD"
+
+TIMEOUT=120
+START_TIME=$(date +%s)
+
+if [ "$POD_INDEX" -eq 0 ]; then
+  # Primary pod: upgrade if needed
+  if [ -n "$HEAD" ] && [ "$CURRENT" != "$HEAD" ]; then
+    echo "POD_INDEX=0: Running alembic upgrade head..."
+    alembic upgrade head
+  else
+    echo "POD_INDEX=0: Migrations already up to date"
+  fi
+else
+  # Non-primary pods: wait for primary to complete with timeout
+  while [ "$CURRENT" != "$HEAD" ]; do
+    ELAPSED=$(($(date +%s) - $START_TIME))
+    if [ $ELAPSED -ge $TIMEOUT ]; then
+      echo "Timeout after ${TIMEOUT}s waiting for migrations to complete"
+      exit 1
+    fi
+    echo "POD_INDEX=$POD_INDEX: Waiting for migrations (elapsed: ${ELAPSED}s, current: $CURRENT, head: $HEAD)"
+    sleep 5
+    CURRENT=$(alembic current 2>/dev/null | grep -oP '[0-9a-f]{12}' || echo "")
+    HEAD=$(alembic heads 2>/dev/null | grep -oP '[0-9a-f]{12}' || echo "")
+  done
+  echo "POD_INDEX=$POD_INDEX: Migrations completed successfully"
+fi
+
+{{- end }}
+{{- end }}
