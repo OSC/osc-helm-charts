@@ -411,6 +411,9 @@ open-webui:
       configMap:
         name: osc-open-webui-otel
   # @ignored
+  serviceAccount:
+    automountServiceAccountToken: true
+  # @ignored
   service:
     port: 80
     labels:
