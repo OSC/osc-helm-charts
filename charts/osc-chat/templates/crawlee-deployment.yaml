@@ -17,6 +17,9 @@ spec:
       labels:
         {{- include "osc-chat.crawlee.selectorLabels" . | nindent 8 }}
         receiver: '{{ index .Values.global.alert.receiver }}'
+      annotations:
+        checksum/config: {{ include "osc-chat.app.config" . | sha256sum }}
+        checksum/secret: {{ include "osc-chat.app.secrets" . | sha256sum }}
     spec:
       imagePullSecrets:
         - name: {{ include "osc.common.imagePullSecret.name" . }}

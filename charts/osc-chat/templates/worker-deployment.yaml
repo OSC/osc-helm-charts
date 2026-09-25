@@ -18,8 +18,8 @@ spec:
         {{- include "osc-chat.worker.selectorLabels" . | nindent 8 }}
         receiver: '{{ index .Values.global.alert.receiver }}'
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+        checksum/config: {{ include "osc-chat.app.config" . | sha256sum }}
+        checksum/secret: {{ include "osc-chat.app.secrets" . | sha256sum }}
     spec:
       imagePullSecrets:
         - name: {{ include "osc.common.imagePullSecret.name" . }}
