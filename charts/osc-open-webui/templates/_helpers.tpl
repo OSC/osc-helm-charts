@@ -129,6 +129,7 @@ fi
 # Check for local database file and migrate if on primary pod
 if [ "$POD_INDEX" -eq 0 ] && [ -f "/app/backend/data/webui.db" ]; then
   echo "Local webui.db found, running postgres migration..."
+  cd /app/backend/data
   if /opt/migration/bin/open-webui-postgres-migration; then
     echo "Migration successful, backing up local database..."
     mv /app/backend/data/webui.db /app/backend/data/webui.db.bak
