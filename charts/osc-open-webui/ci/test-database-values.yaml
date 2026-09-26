@@ -1,0 +1,124 @@
+global:
+  oscServiceAccount: nobody
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  nodeSelectorRole: test
+  storageClass: standard
+  auth:
+    allowGroups:
+      - test1
+      - test2
+    redirectUris:
+      - /oauth/oidc/callback
+  ingress:
+    host: webservice.k8.example.com
+    hostAlias: webservice.example.com
+    additionalHosts:
+      - '*.service.example.com'
+  webui_secret_key: supersecret
+  alert:
+    receiver: test-receiver
+  maintenance:
+    groups:
+      - testgroup
+  init:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 125m
+        memory: 64Mi
+  database:
+    enable: true
+  postgresql:
+    auth:
+      postgresPassword: secret
+      password: secret
+  redis:
+    password: secret
+ollama:
+  networkPolicy:
+    allowedPodLabels:
+      - app.kubernetes.io/name: ollama
+
+database:
+  postgresql:
+    primary:
+      persistence:
+        size: 50Mi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+    backup:
+      cronjob:
+        schedule: '* * * * *'
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        storage:
+          accessModes:
+          - ReadWriteOnce
+    metrics:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 64Mi
+  redis:
+    master:
+      persistence:
+        size: 50Mi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+    metrics:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 125m
+          memory: 64Mi
+open-webui:
+  persistence:
+    storageClass: standard
+    size: 50Mi
+  resources:
+    limits:
+      memory: 1Gi
+      cpu: 2
+    requests:
+      memory: 512Mi
+      cpu: 500m
+  extraEnvVars:
+    - name: HF_HUB_OFFLINE
+      value: '1'
+  podSecurityContext:
+    runAsUser: 1000
+  sso:
+    enableRoleManagement: true
+  ollama:
+    enabled: false
+opentelemetry-collector:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 125m
+      memory: 64Mi

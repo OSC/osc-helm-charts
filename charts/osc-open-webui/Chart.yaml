@@ -2,7 +2,7 @@ apiVersion: v2
 name: osc-open-webui
 description: OSC Open Web UI deployment
 type: application
-version: 0.9.1
+version: 0.10.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
@@ -12,9 +12,26 @@ dependencies:
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../osc-common
     condition: oscCommon.enable
+  - name: database
+    version: 0.19.6
+    repository: https://osc.github.io/osc-helm-charts
+    # repository: file://../database
+    condition: global.database.enable
   - name: open-webui
-    version: 13.1.0
-    repository: https://helm.openwebui.com/
-    # Example of using forked
-    # version: 13.1.0-osc-r1
-    # repository: oci://docker-registry.osc.edu/kubernetes/open-webui
+    # version: 13.1.0
+    # repository: https://helm.openwebui.com/
+    # Use OCI until merged and released:
+    #
+    #   helm package charts/open-webui --version 16.7.0-osc-r0
+    #   helm push open-webui-16.7.0-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/open-webui
+    version: 16.7.0-osc-r0
+    repository: oci://docker-registry.osc.edu/kubernetes/open-webui
+  - name: opentelemetry-collector
+    # version: 0.173.1
+    # repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+    # Use OCI until merged and released:
+    #
+    # helm package charts/opentelemetry-collector --version 0.173.1-osc-r0
+    # helm push opentelemetry-collector-0.173.1-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/otel
+    version: 0.173.1-osc-r0
+    repository: oci://docker-registry.osc.edu/kubernetes/otel
