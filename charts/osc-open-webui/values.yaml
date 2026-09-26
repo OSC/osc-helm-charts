@@ -615,11 +615,18 @@ opentelemetry-collector:
       enabled: false
     metrics:
       enabled: true
+    prometheus:
+      enabled: true
+      containerPort: 8889
+      servicePort: 8889
+      protocol: TCP
   # @ignored
   serviceMonitor:
     enabled: true
     metricsEndpoints:
       - port: metrics
+        interval: 10s
+      - port: prometheus
         interval: 10s
     relabelings:
       - sourceLabels: [__meta_kubernetes_service_label_receiver]
@@ -641,9 +648,9 @@ opentelemetry-collector:
       otlp:
         protocols:
           grpc:
-            endpoint: 0.0.0.0:{{ .Values.ports.otlp.containerPort }}
+            endpoint: ${env:MY_POD_IP}:{{ .Values.ports.otlp.containerPort }}
           http:
-            endpoint: 0.0.0.0:{{ index .Values.ports "otlp-http" "containerPort" }}
+            endpoint: ${env:MY_POD_IP}:{{ index .Values.ports "otlp-http" "containerPort" }}
     processors:
       batch: {}
       transform/add_prefix:
@@ -656,10 +663,9 @@ opentelemetry-collector:
     exporters:
       debug: ~
       prometheus:
-        endpoint: 0.0.0.0:{{ .Values.ports.metrics.containerPort }}
+        endpoint: ${env:MY_POD_IP}:{{ .Values.ports.prometheus.containerPort }}
     service:
       telemetry:
-        metrics: ~
         resource: ~
         logs:
           level: warn
