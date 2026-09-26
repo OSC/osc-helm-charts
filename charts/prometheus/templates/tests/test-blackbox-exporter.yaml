@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['-O-','-S','{{ .Values.blackboxExporter.name }}:{{ .Values.blackboxExporter.service.port }}']
+      args: ['-O-','-S','{{ index .Values "prometheus-blackbox-exporter" "fullnameOverride" }}:{{ index .Values "prometheus-blackbox-exporter" "service" "port" }}']
   restartPolicy: Never
