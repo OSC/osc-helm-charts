@@ -17,6 +17,7 @@ OSC Open Web UI deployment
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.15.1 |
 | https://osc.github.io/osc-helm-charts | database | 0.19.6 |
 | oci://docker-registry.osc.edu/kubernetes/open-webui | open-webui | 16.7.0-osc-r0 |
+| oci://docker-registry.osc.edu/kubernetes/otel | opentelemetry-collector | 0.173.1-osc-r0 |
 
 ## Usage
 
@@ -124,6 +125,7 @@ open-webui:
 | global.imagePullSecret.name | image pull secret name | `"osc-registry"` |
 | global.imagePullSecret.registry | OSC registry address | `"docker-registry.osc.edu"` |
 | global.imagePullSecret.password | The image pull secret password for database images | **required** |
+| global.imageRegistry | OSC registry, must match global.imagePullSecret.registry | `"docker-registry.osc.edu"` |
 | global.networkPolicy.create | Create the network policy | `false` |
 | global.networkPolicy.podSelector | Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"` | `nil` |
 | global.networkPolicy.ingressAllowedPods | Labels of pods allowed to Ingress from the same namespace | `[]` |
@@ -196,3 +198,4 @@ open-webui:
 | open-webui.ollama.extraEnv[2].name |  | `"OLLAMA_FLASH_ATTENTION"` |
 | open-webui.ollama.extraEnv[2].value |  | `"1"` |
 | oscCommon.enable | Enable the osc-common dependency | `true` |
+| opentelemetry-collector.image.tag | otel collector image, must match what's replicated to OSC | `"0.161.0"` |

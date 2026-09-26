@@ -65,3 +65,11 @@ open-webui:
     volumes: []
     volumeMounts: []
     extraEnv: []
+opentelemetry-collector:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 125m
+      memory: 64Mi

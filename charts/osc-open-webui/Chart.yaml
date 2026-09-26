@@ -26,3 +26,12 @@ dependencies:
     #   helm push open-webui-16.7.0-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/open-webui
     version: 16.7.0-osc-r0
     repository: oci://docker-registry.osc.edu/kubernetes/open-webui
+  - name: opentelemetry-collector
+    # version: 0.173.1
+    # repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+    # Use OCI until merged and released:
+    #
+    # helm package charts/opentelemetry-collector --version 0.173.1-osc-r0
+    # helm push opentelemetry-collector-0.173.1-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/otel
+    version: 0.173.1-osc-r0
+    repository: oci://docker-registry.osc.edu/kubernetes/otel
