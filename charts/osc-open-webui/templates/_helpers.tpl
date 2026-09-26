@@ -89,6 +89,8 @@ kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubern
 echo "Wait for redis"
 kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubernetes.io/name=redis --timeout=300s
 {{- end }}
+echo "Wait for otel-collector"
+kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubernetes.io/name=otel-collector --timeout=300s
 {{- end }}
 
 {{- define "osc-open-webui.db-migrate.content" -}}

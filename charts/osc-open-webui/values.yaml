@@ -315,7 +315,7 @@ open-webui:
     - name: ENABLE_OTEL_METRICS
       value: "True"
     - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: http://otel-collector.svc.{{ .Release.Namespace }}.{{ .Values.clusterDomain }}:4317
+      value: http://otel-collector.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:4317
     - name: OTEL_EXPORTER_OTLP_INSECURE
       value: "True"
   # @ignored
@@ -659,7 +659,7 @@ opentelemetry-collector:
           - context: metric
             statements:
               # Prepends "open.webui." to every metric name passing through this processor except osc metrics
-              - set(metric.name, Concat(["open.webui", metric.name], ".")) where not IsMatch(metric.name, "^osc")
+              - set(metric.name, Concat(["open.webui", metric.name], ".")) where not IsMatch(metric.name, "^(osc|dynamo).*") and resource.attributes["service.name"] == "open-webui"
     exporters:
       debug: ~
       prometheus:
