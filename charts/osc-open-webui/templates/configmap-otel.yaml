@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: osc-open-webui-otel
   labels:
-    {{- include "osc-open-webui.labels" . | nindent 4 }}
+    {{- include "osc-open-webui.config.labels" . | nindent 4 }}
 data:
   config.yaml: |
     receivers:
@@ -21,8 +21,8 @@ data:
         metric_statements:
           - context: metric
             statements:
-              # Prepends "open.webui." to every metric name passing through this processor
-              - set(metric.name, Concat(["open.webui", metric.name], "."))
+              # Prepends "open.webui." to every metric name passing through this processor except osc metrics
+              - set(metric.name, Concat(["open.webui", metric.name], ".")) where not IsMatch(metric.name, "^osc")
 
     exporters:
       prometheus:

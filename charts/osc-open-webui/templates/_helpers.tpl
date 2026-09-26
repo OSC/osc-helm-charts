@@ -50,6 +50,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/name: {{ include "osc-open-webui.name" . }}
 {{- end }}
 
+{{- define "osc-open-webui.config.labels" -}}
+helm.sh/chart: {{ include "osc-open-webui.chart" . }}
+{{ include "osc-open-webui.selectorLabels" . }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
 {{- define "osc-open-webui.secret.content" -}}
 {{- if .Values.global.database.enable -}}
 DATABASE_URL: '{{ include "osc-open-webui.database.url" . | b64enc }}'
