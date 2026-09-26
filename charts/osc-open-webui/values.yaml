@@ -263,6 +263,11 @@ open-webui:
   extraEnvVars: []
   # @ignored
   commonEnvVars:
+    - name: K8S_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
     - name: ENABLE_DB_MIGRATIONS
       value: '{{ if .Values.global.database.enable }}False{{ else }}True{{ end }}'
     # - name: DATABASE_TYPE
