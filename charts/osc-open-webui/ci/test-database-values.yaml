@@ -29,14 +29,6 @@ global:
       requests:
         cpu: 125m
         memory: 64Mi
-  otel:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 256Mi
-      requests:
-        cpu: 125m
-        memory: 64Mi
   database:
     enable: true
   postgresql:
@@ -122,3 +114,11 @@ open-webui:
     enableRoleManagement: true
   ollama:
     enabled: false
+opentelemetry-collector:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 125m
+      memory: 64Mi

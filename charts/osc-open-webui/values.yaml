@@ -16,6 +16,8 @@ global:
     # -- The image pull secret password for database images
     # @default -- **required**
     password:
+  # -- OSC registry, must match global.imagePullSecret.registry
+  imageRegistry: docker-registry.osc.edu
   networkPolicy:
     # -- Create the network policy
     create: false
@@ -92,15 +94,6 @@ global:
         memory: 512Mi
       requests:
         cpu: 250m
-        memory: 64Mi
-  # @ignored
-  otel:
-    resources:
-      limits:
-        cpu: 2
-        memory: 512Mi
-      requests:
-        cpu: 500m
         memory: 64Mi
   database:
     # -- Enable database support
@@ -322,7 +315,7 @@ open-webui:
     - name: ENABLE_OTEL_METRICS
       value: "True"
     - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: http://localhost:4317
+      value: http://otel-collector.svc.{{ .Release.Namespace }}.{{ .Values.clusterDomain }}:4317
     - name: OTEL_EXPORTER_OTLP_INSECURE
       value: "True"
   # @ignored
@@ -381,35 +374,11 @@ open-webui:
           readOnly: true
         - name: data
           mountPath: /app/backend/data
-    - name: otel
-      image: 'docker-registry.osc.edu/kubernetes/otel/opentelemetry-collector-contrib:0.161.0'
-      imagePullPolicy: IfNotPresent
-      restartPolicy: Always
-      resources:
-        {{- toYaml .Values.global.otel.resources | nindent 4 }}
-      securityContext:
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-          - ALL
-        seccompProfile:
-          type: RuntimeDefault
-        privileged: false
-      volumeMounts:
-        - name: otel-config
-          mountPath: /etc/otel
-          readOnly: true
-      ports:
-        - name: metrics
-          containerPort: 8889
   # @ignored
   volumes:
     - name: scripts
       configMap:
         name: osc-open-webui-scripts
-    - name: otel-config
-      configMap:
-        name: osc-open-webui-otel
   # @ignored
   serviceAccount:
     automountServiceAccountToken: true
@@ -591,3 +560,113 @@ open-webui:
 oscCommon:
   # -- Enable the osc-common dependency
   enable: true
+
+opentelemetry-collector:
+  # @ignored
+  nameOverride: otel-collector
+  # @ignored
+  fullnameOverride: otel-collector
+  # @ignored
+  mode: deployment
+  image:
+    # @ignored
+    repository: kubernetes/otel/opentelemetry-collector-contrib
+    # -- otel collector image, must match what's replicated to OSC
+    tag: 0.161.0
+  # @ignored
+  imagePullSecrets:
+    - name: '{{ .Values.global.imagePullSecret.name }}'
+  # @ignored
+  resources:
+    limits:
+      cpu: 2
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 64Mi
+  # @ignored
+  podSecurityContext:
+    runAsNonRoot: true
+  # @ignored
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+  # @ignored
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+  # @ignored
+  additionalLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    receiver: '{{ .Values.global.alert.receiver }}'
+  # @ignored
+  ports:
+    jaeger-compact:
+      enabled: false
+    jaeger-thrift:
+      enabled: false
+    jaeger-grpc:
+      enabled: false
+    zipkin:
+      enabled: false
+    metrics:
+      enabled: true
+  # @ignored
+  serviceMonitor:
+    enabled: true
+    metricsEndpoints:
+      - port: metrics
+        interval: 10s
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
+  # @ignored
+  networkPolicy:
+    enabled: true
+    allowIngressFrom:
+      - podSelector: {}
+      - namespaceSelector:
+          matchLabels:
+            app.kubernetes.io/name: '{{ .Values.global.networkPolicy.prometheusNamespace }}'
+  # @ignored
+  config:
+    receivers:
+      jaeger: ~
+      prometheus: ~
+      zipkin: ~
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:{{ .Values.ports.otlp.containerPort }}
+          http:
+            endpoint: 0.0.0.0:{{ index .Values.ports "otlp-http" "containerPort" }}
+    processors:
+      batch: {}
+      transform/add_prefix:
+        error_mode: ignore
+        metric_statements:
+          - context: metric
+            statements:
+              # Prepends "open.webui." to every metric name passing through this processor except osc metrics
+              - set(metric.name, Concat(["open.webui", metric.name], ".")) where not IsMatch(metric.name, "^osc")
+    exporters:
+      debug: ~
+      prometheus:
+        endpoint: 0.0.0.0:{{ .Values.ports.metrics.containerPort }}
+    service:
+      telemetry:
+        metrics: ~
+        resource: ~
+        logs:
+          level: warn
+      pipelines:
+        logs: ~
+        traces: ~
+        metrics:
+          receivers: [otlp]
+          processors: [transform/add_prefix, batch]
+          exporters: [prometheus]
