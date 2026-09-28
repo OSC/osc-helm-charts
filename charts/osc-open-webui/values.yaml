@@ -411,6 +411,11 @@ open-webui:
         - name: otel-config
           mountPath: /etc/otel
           readOnly: true
+      env:
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
       ports:
         - name: metrics
           containerPort: 8889

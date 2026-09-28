@@ -10,9 +10,9 @@ data:
       otlp:
         protocols:
           grpc:
-            endpoint: 0.0.0.0:4317
+            endpoint: localhost:4317
           http:
-            endpoint: 0.0.0.0:4318
+            endpoint: localhost:4318
     processors:
       batch:
       transform/add_prefix:
@@ -24,10 +24,10 @@ data:
               - set(metric.name, Concat(["open.webui", metric.name], ".")) where not IsMatch(metric.name, "^(osc|dynamo).*")
     exporters:
       prometheus:
-        endpoint: 0.0.0.0:8889
+        endpoint: ${env:MY_POD_IP}:8889
     extensions:
       health_check:
-        endpoint: 0.0.0.0:13133
+        endpoint: ${env:MY_POD_IP}:13133
     service:
       extensions:
       - health_check
