@@ -409,7 +409,7 @@ open-webui:
         privileged: false
       volumeMounts:
         - name: otel-config
-          mountPath: /etc/otel
+          mountPath: /etc/otelcol-contrib
           readOnly: true
       env:
         - name: MY_POD_IP

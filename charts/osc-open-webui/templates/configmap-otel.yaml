@@ -6,6 +6,9 @@ metadata:
     {{- include "osc-open-webui.config.labels" . | nindent 4 }}
 data:
   config.yaml: |
+    extensions:
+      health_check:
+        endpoint: ${env:MY_POD_IP}:13133
     receivers:
       otlp:
         protocols:
@@ -25,12 +28,7 @@ data:
     exporters:
       prometheus:
         endpoint: ${env:MY_POD_IP}:8889
-    extensions:
-      health_check:
-        endpoint: ${env:MY_POD_IP}:13133
     service:
-      extensions:
-      - health_check
       telemetry:
         logs:
           level: warn
@@ -42,6 +40,7 @@ data:
                 prometheus:
                   host: "0.0.0.0"
                   port: 8888
+      extensions: [health_check]
       pipelines:
         metrics:
           receivers: [otlp]
