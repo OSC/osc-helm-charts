@@ -141,6 +141,7 @@ open-webui:
 | global.webui_secret_key | The Open WebUI secret key | **required** |
 | global.storageClass | Storage class for persistence | `"webservices-nfs-client"` |
 | global.fileset | The storage fileset | `nil` |
+| global.otel.image.tag | The otel collector tag, must be replicated to OSC | `"0.161.0"` |
 | global.database.enable | Enable database support | `false` |
 | global.database.pool.size | Open WebUI database pool size | `15` |
 | global.database.pool.maxOverflow | Open WebUI database pool max overflow | `20` |

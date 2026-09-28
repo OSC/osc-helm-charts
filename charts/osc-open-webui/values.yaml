@@ -93,8 +93,13 @@ global:
       requests:
         cpu: 250m
         memory: 64Mi
-  # @ignored
   otel:
+    image:
+      # @ignored
+      repository: kubernetes/otel/opentelemetry-collector-contrib
+      # -- The otel collector tag, must be replicated to OSC
+      tag: '0.161.0'
+    # @ignored
     resources:
       limits:
         cpu: 2
@@ -392,7 +397,7 @@ open-webui:
         - name: data
           mountPath: /app/backend/data
     - name: otel
-      image: 'docker-registry.osc.edu/kubernetes/otel/opentelemetry-collector-contrib:0.161.0'
+      image: '{{ .Values.global.imagePullSecret.registry }}/{{ .Values.global.otel.image.repository }}:{{ .Values.global.otel.image.tag }}'
       imagePullPolicy: IfNotPresent
       restartPolicy: Always
       resources:
