@@ -37,9 +37,9 @@ data:
           readers:
             - pull:
                 exporter:
-                prometheus:
-                  host: "0.0.0.0"
-                  port: 8888
+                  prometheus:
+                    host: "0.0.0.0"
+                    port: 8888
       extensions: [health_check]
       pipelines:
         metrics:
