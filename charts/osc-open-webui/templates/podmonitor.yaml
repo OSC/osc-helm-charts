@@ -14,3 +14,7 @@ spec:
   - port: metrics
     interval: 10s
     path: /metrics
+    relabelings:
+      - sourceLabels:
+        - __meta_kubernetes_pod_label_receiver
+        targetLabel: receiver
