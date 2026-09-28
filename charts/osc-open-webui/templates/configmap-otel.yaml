@@ -13,7 +13,6 @@ data:
             endpoint: 0.0.0.0:4317
           http:
             endpoint: 0.0.0.0:4318
-
     processors:
       batch:
       transform/add_prefix:
@@ -23,12 +22,15 @@ data:
             statements:
               # Prepends "open.webui." to every metric name passing through this processor except osc metrics
               - set(metric.name, Concat(["open.webui", metric.name], ".")) where not IsMatch(metric.name, "^(osc|dynamo).*")
-
     exporters:
       prometheus:
         endpoint: 0.0.0.0:8889
-
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
     service:
+      extensions:
+      - health_check
       telemetry:
         logs:
           level: warn
