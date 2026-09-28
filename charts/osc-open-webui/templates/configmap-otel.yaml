@@ -22,7 +22,7 @@ data:
           - context: metric
             statements:
               # Prepends "open.webui." to every metric name passing through this processor except osc metrics
-              - set(metric.name, Concat(["open.webui", metric.name], ".")) where not IsMatch(metric.name, "^osc")
+              - set(metric.name, Concat(["open.webui", metric.name], ".")) where not IsMatch(metric.name, "^(osc|dynamo).*")
 
     exporters:
       prometheus:
@@ -32,6 +32,14 @@ data:
       telemetry:
         logs:
           level: warn
+        metrics:
+          level: "normal"
+          readers:
+            - pull:
+                exporter:
+                prometheus:
+                  host: "0.0.0.0"
+                  port: 8888
       pipelines:
         metrics:
           receivers: [otlp]
