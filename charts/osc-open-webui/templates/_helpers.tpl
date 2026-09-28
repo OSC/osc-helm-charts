@@ -85,9 +85,9 @@ echo "Not using central database, exit"
 exit 0
 {{- else -}}
 echo "Wait for postgresql"
-kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubernetes.io/name=postgresql --timeout=300s
+kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubernetes.io/name=postgresql -l app.kubernetes.io/component=primary --timeout=300s
 echo "Wait for redis"
-kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubernetes.io/name=redis --timeout=300s
+kubectl wait -n {{ .Release.Namespace }} --for=condition=ready pod -l app.kubernetes.io/name=redis -l app.kubernetes.io/component=master --timeout=300s
 {{- end }}
 {{- end }}
 

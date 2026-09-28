@@ -194,10 +194,6 @@ database:
         annotations:
           # -- Fileset for Redis storage
           osc.edu/fileset: PZS0645
-    # @ignored
-    networkPolicy:
-      ingressNSPodMatchLabels:
-        app.kubernetes.io/name: open-webui
 
 open-webui:
   # @ignored
@@ -221,6 +217,7 @@ open-webui:
   podLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
     receiver: '{{ .Values.global.alert.receiver }}'
+    open-webui-redis-client: 'true'
   # @ignored
   podAnnotations:
     checksum/secret: '{{ include "osc-open-webui.secret.content" . | sha256sum }}'
