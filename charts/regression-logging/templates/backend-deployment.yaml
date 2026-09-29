@@ -1,0 +1,48 @@
+{{- $fullName := include "regression-logging.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}-backend
+  labels:
+    {{- include "regression-logging.labels" . | nindent 4 }}
+    component: backend
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "regression-logging.labels" . | nindent 6 }}
+      component: backend
+  template:
+    metadata:
+      labels:
+        {{- include "regression-logging.labels" . | nindent 8 }}
+        component: backend
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.global.imagePullSecret.name }}
+      #securityContext:
+      #  runAsNonRoot: true
+      #  runAsUser: 1000
+      #  runAsGroup: 1000
+      #  fsGroup: 1000
+      containers:
+        - name: backend
+          image: {{ include "regression-logging.image" (dict "imageRoot" .Values.backend.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: {{ .Values.backend.service.port }}
+          env:
+            - name: MONGODB_URI
+              value: "mongodb://{{ .Release.Name }}-mongodb:27017"
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+      nodeSelector:
+        {{- toYaml .Values.backend.nodeSelector | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.backend.tolerations | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.backend.affinity | nindent 8 }}

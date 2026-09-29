@@ -1,0 +1,58 @@
+{{- $fullName := include "regression-logging.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}-frontend
+  labels:
+    {{- include "regression-logging.labels" . | nindent 4 }}
+    component: frontend
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "regression-logging.labels" . | nindent 6 }}
+      component: frontend
+  template:
+    metadata:
+      labels:
+        {{- include "regression-logging.labels" . | nindent 8 }}
+        component: frontend
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.global.imagePullSecret.name }}
+      #securityContext:
+      #  runAsNonRoot: true
+      #  runAsUser: 101
+      #  runAsGroup: 101
+      #  fsGroup: 101
+      containers:
+        - name: frontend
+          image: {{ include "regression-logging.image" (dict "imageRoot" .Values.frontend.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: {{ .Values.frontend.service.port }}
+          #env:
+          #  - name: API_BASE_URL
+          #    value: {{ (printf "http://%s:%s/api" (include "regression-logging.backend.host" .) (include "regression-logging.backend.port" .)) | quote }}
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+          #securityContext:
+          #  runAsNonRoot: true
+          #  runAsUser: 101
+          #  allowPrivilegeEscalation: false
+          #volumeMounts:
+          #  - name: nginx-cache
+          #    mountPath: /var/cache/nginx
+          #  - name: nginx-run
+          #    mountPath: /var/run
+      #volumes:
+      #  - name: nginx-cache
+      #    emptyDir: {}
+      #  - name: nginx-run
+      #    emptyDir: {}
+      nodeSelector:
+        {{- toYaml .Values.frontend.nodeSelector | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.frontend.tolerations | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.frontend.affinity | nindent 8 }}

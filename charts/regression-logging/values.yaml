@@ -1,0 +1,98 @@
+global:
+  imageRegistry: docker-registry.osc.edu
+  imagePullSecret:
+    name: osc-registry
+    # -- OSC registry password
+    # @default -- **required**
+    password:
+  database:
+    allowIngress: true
+  oscServiceAccount: hpcsa
+  # -- Storage class for PVC (uncomment to use PVC instead of hostPath)
+  storageClass: paas-nfs-client
+  # Disable webservices-deploy rolebinding to avoid RBAC permission issues
+  webservicesDeploy:
+    create: false
+  ingress:
+    host: ""
+    hostAlias: ""
+  maintenanceGroups:
+    - sappstf
+  portforwardGroups:
+    - oscstaff
+  alert:
+    receiver: sciapps
+
+database:
+  serviceMonitor:
+    enabled: false
+  mongodb:
+    enable: true
+    backup:
+      enabled: false
+    persistence:
+      enabled: true
+      name: datadir
+      size: 8Gi
+      storageClass: paas-nfs-client
+      mountPath: /bitnami/mongodb
+    networkPolicy:
+      enabled: false
+    pdb:
+      create: false
+    metrics:
+      serviceMonitor:
+        enabled: false
+    extraVolumes: []
+    extraVolumeMounts: []
+    initContainers: []
+
+backend:
+  image:
+    repository: kubernetes/barrt/backend
+    tag: v0.1.0
+    pullPolicy: Always
+  replicaCount: 1
+  port: 8000
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+    requests:
+      cpu: 1
+      memory: 1Gi
+
+frontend:
+  image:
+    repository: kubernetes/barrt/frontend
+    tag: v0.1.0
+    pullPolicy: Always
+  replicaCount: 1
+  port: 80
+  service:
+    type: ClusterIP
+    port: 8080
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+      nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.hostAlias }}'
+    host: '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
+    tls:
+      - hosts:
+        - '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
+        - '{{ required "Ingress hostAlias must be defined in the global settings" .Values.global.ingress.hostAlias }}'
+        secretName: regression-logging-frontend
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
