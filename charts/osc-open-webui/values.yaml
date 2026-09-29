@@ -168,6 +168,12 @@ database:
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
+      # @ignored
+      initdb:
+        scripts:
+          vector.sh: |
+            export PGPASSWORD="$(cat $POSTGRES_POSTGRES_PASSWORD_FILE)"
+            psql -h localhost -p $POSTGRESQL_PORT_NUMBER -U postgres -d $POSTGRES_DATABASE -c "CREATE EXTENSION IF NOT EXISTS vector;"
     # @ignored
     backup:
       cronjob:
@@ -290,6 +296,10 @@ open-webui:
           fieldPath: metadata.name
     - name: ENABLE_DB_MIGRATIONS
       value: '{{ if .Values.global.database.enable }}False{{ else }}True{{ end }}'
+    - name: VECTOR_DB
+      value: '{{ if .Values.global.database.enable }}pgvector{{ else }}chroma{{ end }}'
+    - name: PGVECTOR_CREATE_EXTENSION
+      value: 'false'
     # - name: DATABASE_TYPE
     #   value: '{{ if .Values.global.database.enable }}postgresql{{ else }}sqlite{{ end }}'
     # - name: DATABASE_USER
