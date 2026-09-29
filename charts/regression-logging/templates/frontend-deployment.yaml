@@ -51,7 +51,7 @@ spec:
       #  - name: nginx-run
       #    emptyDir: {}
       nodeSelector:
-        {{- toYaml .Values.frontend.nodeSelector | nindent 8 }}
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
       tolerations:
         {{- toYaml .Values.frontend.tolerations | nindent 8 }}
       affinity:
