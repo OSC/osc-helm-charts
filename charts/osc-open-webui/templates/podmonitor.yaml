@@ -30,7 +30,7 @@ spec:
         action: drop
       - sourceLabels:
         - http_route
-        regex: '^/static/.+'
+        regex: '^/(static|assets)/.+'
         action: drop
       - sourceLabels:
         - http_route
