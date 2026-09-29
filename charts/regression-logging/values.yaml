@@ -56,7 +56,7 @@ backend:
   image:
     repository: kubernetes/barrt/backend
     tag: v0.1.0
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicaCount: 1
   port: 8000
   service:
@@ -74,7 +74,7 @@ frontend:
   image:
     repository: kubernetes/barrt/frontend
     tag: v0.1.0
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicaCount: 1
   port: 80
   service:
