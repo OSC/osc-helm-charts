@@ -20,11 +20,6 @@ spec:
     spec:
       imagePullSecrets:
         - name: {{ .Values.global.imagePullSecret.name }}
-      #securityContext:
-      #  runAsNonRoot: true
-      #  runAsUser: 1000
-      #  runAsGroup: 1000
-      #  fsGroup: 1000
       containers:
         - name: backend
           image: {{ include "regression-logging.image" (dict "imageRoot" .Values.backend.image "global" .Values.global) }}
@@ -36,10 +31,6 @@ spec:
               value: "mongodb://{{ .Release.Name }}-mongodb:27017"
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            allowPrivilegeEscalation: false
       nodeSelector:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
       tolerations:
