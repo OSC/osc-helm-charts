@@ -12,3 +12,7 @@ dependencies:
   - name: database
     version: 0.19.5
     repository: https://osc.github.io/osc-helm-charts
+  - name: osc-common
+    version: 0.17.0
+    repository: https://osc.github.io/osc-helm-charts
+    condition: osc-common.enabled
