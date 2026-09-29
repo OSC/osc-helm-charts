@@ -10,7 +10,7 @@ spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
-      {{- include "regression-logging.labels" . | nindent 6 }}
+      {{- include "regression-logging.selectorLabels" . | nindent 6 }}
       component: frontend
   template:
     metadata:
