@@ -27,8 +27,6 @@ global:
     receiver: sciapps
 
 database:
-  serviceMonitor:
-    enabled: false
   mongodb:
     enable: true
     backup:
