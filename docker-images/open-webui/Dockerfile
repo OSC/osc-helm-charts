@@ -9,6 +9,8 @@ USER root
 ARG PATCH=562e052a2f9beaaaae6723d87a7d89f07966cbb5
 RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/$PATCH.patch && \
     cd /app && patch -p1 < /tmp/$PATCH.patch
+RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/894561392ed966facc9df538a2d3e0f461774a0b.patch && \
+    cd /app && patch -p1 < /tmp/894561392ed966facc9df538a2d3e0f461774a0b.patch
 # TODO: Remove once released:
 # https://github.com/open-webui/open-webui/pull/29849
 #RUN cd /tmp && curl -L -o /tmp/patch https://github.com/OSC/open-webui/commit/75b183632294106d0f45be49918677ae6835c126.patch && \
