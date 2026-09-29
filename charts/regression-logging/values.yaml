@@ -32,6 +32,8 @@ database:
       enabled: false
     persistence:
       enabled: true
+      annotations:
+        osc.edu/fileset: '{{ .Values.global.fileset }}'
       name: datadir
       size: 8Gi
       storageClass: paas-nfs-client
