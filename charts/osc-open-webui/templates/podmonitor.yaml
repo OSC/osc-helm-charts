@@ -30,6 +30,22 @@ spec:
         action: drop
       - sourceLabels:
         - http_route
+        regex: '^/static/.+'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '^/_app/version.json'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '^/robots.txt'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '^/manifest.json'
+        action: drop
+      - sourceLabels:
+        - http_route
         regex: '/.git/.+'
         action: drop
       - sourceLabels:

@@ -172,7 +172,7 @@ database:
       initdb:
         scripts:
           vector.sh: |
-            export PGPASSWORD="$(cat $POSTGRES_POSTGRES_PASSWORD_FILE)"
+            export PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD"
             psql -h localhost -p $POSTGRESQL_PORT_NUMBER -U postgres -d $POSTGRES_DATABASE -c "CREATE EXTENSION IF NOT EXISTS vector;"
     # @ignored
     backup:
