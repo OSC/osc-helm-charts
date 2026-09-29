@@ -18,3 +18,20 @@ spec:
       - sourceLabels:
         - __meta_kubernetes_pod_label_receiver
         targetLabel: receiver
+      # TODO: Hardcode until addressed
+      # https://github.com/open-webui/open-webui/issues/31609
+      - sourceLabels:
+        - http_route
+        regex: '/_app/immutable/.+'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '/.git/.+'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '.*/(.env|env).*'
+        action: drop
+    {{- with .Values.podMonitor.relabelings }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}

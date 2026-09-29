@@ -143,6 +143,10 @@ global:
 # @ignored
 clusterDomain: cluster.local
 
+podMonitor:
+  # -- Additional relabelings
+  relabelings: []
+
 ollama:
   networkPolicy:
     # -- Array of additional pod labels to allow
