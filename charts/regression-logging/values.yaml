@@ -5,14 +5,8 @@ global:
     # -- OSC registry password
     # @default -- **required**
     password:
-  database:
-    allowIngress: true
   oscServiceAccount: hpcsa
-  # -- Storage class for PVC (uncomment to use PVC instead of hostPath)
-  storageClass: paas-nfs-client
-  # Disable webservices-deploy rolebinding to avoid RBAC permission issues
-  webservicesDeploy:
-    create: false
+  storageClass: local-ess
   ingress:
     host: ""
     hostAlias: ""
@@ -25,27 +19,23 @@ global:
       namespace: sciappstest
   alert:
     receiver: sciapps
+  fileset: PZS0530
 
 database:
   mongodb:
     enable: true
     backup:
-      enabled: false
+      cronjob:
+        annotations:
+          osc.edu/fileset: '{{ .Values.global.fileset }}'
     persistence:
       enabled: true
       annotations:
         osc.edu/fileset: '{{ .Values.global.fileset }}'
       name: datadir
       size: 8Gi
-      storageClass: paas-nfs-client
+      storageClass: '{{ .Values.global.storageClass }}'
       mountPath: /bitnami/mongodb
-    networkPolicy:
-      enabled: false
-    pdb:
-      create: false
-    metrics:
-      serviceMonitor:
-        enabled: false
     extraVolumes: []
     extraVolumeMounts: []
     initContainers: []
