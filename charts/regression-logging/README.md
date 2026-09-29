@@ -33,6 +33,7 @@ global:
 | Repository | Name | Version |
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts | database | 0.19.5 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.17.0 |
 
 ## Values
 
@@ -41,32 +42,30 @@ global:
 | global.imageRegistry | string | `"docker-registry.osc.edu"` |  |
 | global.imagePullSecret.name | string | `"osc-registry"` |  |
 | global.imagePullSecret.password | string | **required** | OSC registry password |
-| global.database.allowIngress | bool | `true` |  |
 | global.oscServiceAccount | string | `"hpcsa"` |  |
-| global.storageClass | string | `"paas-nfs-client"` | Storage class for PVC (uncomment to use PVC instead of hostPath) |
-| global.webservicesDeploy.create | bool | `false` |  |
+| global.storageClass | string | `"local-ess"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
 | global.maintenanceGroups[0] | string | `"sappstf"` |  |
 | global.portforwardGroups[0] | string | `"oscstaff"` |  |
+| global.portforwardServiceAccounts[0].name | string | `"sciappstest"` |  |
+| global.portforwardServiceAccounts[0].namespace | string | `"sciappstest"` |  |
 | global.alert.receiver | string | `"sciapps"` |  |
-| database.serviceMonitor.enabled | bool | `false` |  |
+| global.fileset | string | `"PZS0530"` |  |
 | database.mongodb.enable | bool | `true` |  |
-| database.mongodb.backup.enabled | bool | `false` |  |
+| database.mongodb.backup.cronjob.annotations."osc.edu/fileset" | string | `"{{ .Values.global.fileset }}"` |  |
 | database.mongodb.persistence.enabled | bool | `true` |  |
+| database.mongodb.persistence.annotations."osc.edu/fileset" | string | `"{{ .Values.global.fileset }}"` |  |
 | database.mongodb.persistence.name | string | `"datadir"` |  |
 | database.mongodb.persistence.size | string | `"8Gi"` |  |
-| database.mongodb.persistence.storageClass | string | `"paas-nfs-client"` |  |
+| database.mongodb.persistence.storageClass | string | `"{{ .Values.global.storageClass }}"` |  |
 | database.mongodb.persistence.mountPath | string | `"/bitnami/mongodb"` |  |
-| database.mongodb.networkPolicy.enabled | bool | `false` |  |
-| database.mongodb.pdb.create | bool | `false` |  |
-| database.mongodb.metrics.serviceMonitor.enabled | bool | `false` |  |
 | database.mongodb.extraVolumes | list | `[]` |  |
 | database.mongodb.extraVolumeMounts | list | `[]` |  |
 | database.mongodb.initContainers | list | `[]` |  |
 | backend.image.repository | string | `"kubernetes/barrt/backend"` |  |
 | backend.image.tag | string | `"v0.1.0"` |  |
-| backend.image.pullPolicy | string | `"Always"` |  |
+| backend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | backend.replicaCount | int | `1` |  |
 | backend.port | int | `8000` |  |
 | backend.service.type | string | `"ClusterIP"` |  |
@@ -77,25 +76,20 @@ global:
 | backend.resources.requests.memory | string | `"1Gi"` |  |
 | frontend.image.repository | string | `"kubernetes/barrt/frontend"` |  |
 | frontend.image.tag | string | `"v0.1.0"` |  |
-| frontend.image.pullPolicy | string | `"Always"` |  |
+| frontend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.port | int | `80` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
 | frontend.service.port | int | `8080` |  |
-| frontend.ingress.enabled | bool | `true` |  |
-| frontend.ingress.className | string | `"nginx"` |  |
-| frontend.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt"` |  |
-| frontend.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
-| frontend.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" | string | `"16k"` |  |
-| frontend.ingress.annotations."nginx.ingress.kubernetes.io/server-alias" | string | `"{{ .Values.global.ingress.hostAlias }}"` |  |
-| frontend.ingress.host | string | `"{{ required \"Ingress host must be defined in the global settings\" .Values.global.ingress.host }}"` |  |
-| frontend.ingress.tls[0].hosts[0] | string | `"{{ required \"Ingress host must be defined in the global settings\" .Values.global.ingress.host }}"` |  |
-| frontend.ingress.tls[0].hosts[1] | string | `"{{ required \"Ingress hostAlias must be defined in the global settings\" .Values.global.ingress.hostAlias }}"` |  |
-| frontend.ingress.tls[0].secretName | string | `"regression-logging-frontend"` |  |
 | frontend.resources.limits.cpu | string | `"500m"` |  |
 | frontend.resources.limits.memory | string | `"512Mi"` |  |
 | frontend.resources.requests.cpu | string | `"250m"` |  |
 | frontend.resources.requests.memory | string | `"256Mi"` |  |
+| osc-common.enabled | bool | `true` |  |
+| osc-common.oauth2-proxy.ingress.extraPaths[0].path | string | `"/api"` |  |
+| osc-common.oauth2-proxy.ingress.extraPaths[0].pathType | string | `"Prefix"` |  |
+| osc-common.oauth2-proxy.ingress.extraPaths[0].backend.service.name | string | `"{{ .Release.Name }}-regression-logging-backend"` |  |
+| osc-common.oauth2-proxy.ingress.extraPaths[0].backend.service.port.name | string | `"http"` |  |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
