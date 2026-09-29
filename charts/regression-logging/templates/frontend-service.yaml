@@ -14,5 +14,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "regression-logging.labels" . | nindent 4 }}
+    {{- include "regression-logging.selectorLabels" . | nindent 4 }}
     component: frontend
