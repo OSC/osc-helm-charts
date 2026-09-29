@@ -18,6 +18,10 @@ spec:
       - sourceLabels:
         - __meta_kubernetes_pod_label_receiver
         targetLabel: receiver
+    {{- with .Values.podMonitor.relabelings }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    metricRelabelings:
       # TODO: Hardcode until addressed
       # https://github.com/open-webui/open-webui/issues/31609
       - sourceLabels:
@@ -32,6 +36,6 @@ spec:
         - http_route
         regex: '.*/(.env|env).*'
         action: drop
-    {{- with .Values.podMonitor.relabelings }}
+    {{- with .Values.podMonitor.metricRelabelings }}
       {{- toYaml . | nindent 6 }}
     {{- end }}

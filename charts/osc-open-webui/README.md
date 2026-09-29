@@ -152,6 +152,7 @@ open-webui:
 | global.redis.maxclients | Redis max clients | `10000` |
 | global.redis.timeout | Redis client timeout | `1800` |
 | podMonitor.relabelings | Additional relabelings | `[]` |
+| podMonitor.metricRelabelings | Additional metric relabelings | `[]` |
 | ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |
 | database.postgresql.enable | Enable postgresql | `true` |
 | database.redis.master.service.ports |  | `{}` |

@@ -146,6 +146,8 @@ clusterDomain: cluster.local
 podMonitor:
   # -- Additional relabelings
   relabelings: []
+  # -- Additional metric relabelings
+  metricRelabelings: []
 
 ollama:
   networkPolicy:
