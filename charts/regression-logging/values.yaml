@@ -75,3 +75,16 @@ frontend:
     requests:
       cpu: 250m
       memory: 256Mi
+
+osc-common:
+  enabled: true
+  oauth2-proxy:
+    ingress:
+      extraPaths:
+        - path: /api
+          pathType: Prefix
+          backend:
+            service:
+              name: "{{ .Release.Name }}-regression-logging-backend"
+              port:
+                name: http
