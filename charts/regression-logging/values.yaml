@@ -20,6 +20,9 @@ global:
     - sappstf
   portforwardGroups:
     - oscstaff
+  portforwardServiceAccounts:
+    - name: sciappstest
+      namespace: sciappstest
   alert:
     receiver: sciapps
 
