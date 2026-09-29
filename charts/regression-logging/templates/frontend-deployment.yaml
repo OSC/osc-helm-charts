@@ -30,7 +30,3 @@ spec:
             {{- toYaml .Values.frontend.resources | nindent 12 }}
       nodeSelector:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
-      tolerations:
-        {{- toYaml .Values.frontend.tolerations | nindent 8 }}
-      affinity:
-        {{- toYaml .Values.frontend.affinity | nindent 8 }}
