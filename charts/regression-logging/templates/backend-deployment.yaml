@@ -41,7 +41,7 @@ spec:
             runAsUser: 1000
             allowPrivilegeEscalation: false
       nodeSelector:
-        {{- toYaml .Values.backend.nodeSelector | nindent 8 }}
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
       tolerations:
         {{- toYaml .Values.backend.tolerations | nindent 8 }}
       affinity:
