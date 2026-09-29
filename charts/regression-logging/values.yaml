@@ -68,20 +68,6 @@ frontend:
   service:
     type: ClusterIP
     port: 8080
-  ingress:
-    enabled: true
-    className: "nginx"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
-      nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.hostAlias }}'
-    host: '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
-    tls:
-      - hosts:
-        - '{{ required "Ingress host must be defined in the global settings" .Values.global.ingress.host }}'
-        - '{{ required "Ingress hostAlias must be defined in the global settings" .Values.global.ingress.hostAlias }}'
-        secretName: regression-logging-frontend
   resources:
     limits:
       cpu: 500m
