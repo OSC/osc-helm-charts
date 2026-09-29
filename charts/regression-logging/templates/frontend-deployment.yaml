@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "regression-logging.labels" . | nindent 8 }}
+        {{- include "regression-logging.selectorLabels" . | nindent 8 }}
         component: frontend
     spec:
       imagePullSecrets:
