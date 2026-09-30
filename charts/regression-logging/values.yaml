@@ -24,10 +24,6 @@ global:
 database:
   mongodb:
     enable: true
-    backup:
-      cronjob:
-        annotations:
-          osc.edu/fileset: '{{ .Values.global.fileset }}'
     persistence:
       enabled: true
       annotations:
