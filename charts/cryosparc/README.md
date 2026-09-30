@@ -1,6 +1,6 @@
 # cryosparc
 
-![Version: 0.12.0](https://img.shields.io/badge/Version-0.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.0.6-r2](https://img.shields.io/badge/AppVersion-5.0.6--r2-informational?style=flat-square)
+![Version: 0.12.1](https://img.shields.io/badge/Version-0.12.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 5.0.6-r2](https://img.shields.io/badge/AppVersion-5.0.6--r2-informational?style=flat-square)
 
 OSC CryoSPARC bootstrap Helm Chart
 
@@ -79,6 +79,7 @@ admin:
 | mounts.rwDir |  | `{}` |
 | admin.email |  | `""` |
 | admin.password |  | `""` |
+| terminationGracePeriodSeconds | Pod termination grace period seconds | `30` |
 | nodeSelector |  | `{}` |
 | osc-common.oauth2-proxy.resources.limits.cpu | CPU limit for OAuth2 Proxy pods | `1` |
 | osc-common.oauth2-proxy.resources.limits.memory | Memory limit for OAuth2 Proxy pods | `"512Mi"` |
