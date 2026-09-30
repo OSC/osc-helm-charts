@@ -80,7 +80,6 @@ frontend:
       memory: 256Mi
 
 osc-common:
-  enabled: true
   oauth2-proxy:
     ingress:
       extraPaths:
