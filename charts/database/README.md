@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.19.6](https://img.shields.io/badge/Version-0.19.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.20.0](https://img.shields.io/badge/Version-0.20.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -108,15 +108,13 @@ redis:
 | global.networkPolicy.podSelector | Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"` | `nil` |
 | global.networkPolicy.ingressAllowedPods | Labels of pods allowed to Ingress from the same namespace | `[]` |
 | global.storageClass | The persistent storage class | `"webservices-nfs-client"` |
+| global.fileset | The fileset for local-ess or local-scratch storage | `""` |
 | global.imageRegistry | Global value to pass down to database charts to set registry to pull images from | `"docker-registry.osc.edu"` |
 | global.imagePullSecrets | The OSC image pull secret name to use to pull images | `["osc-registry"]` |
 | global.debugGroups | Groups that debug pods | `[]` |
 | global.maintenanceGroups | Groups that can perform maintenance operations | `[]` |
 | global.portforwardGroups | Groups that are allowed to perform port forwarding | `[]` |
 | global.webservicesDeploy.create | Create webservices deployment rolebinding | `true` |
-| global.dataDir.path | Base path for storing MongoDB data | `nil` |
-| global.dataDir.subPath | Subpath for dataDir storage | `nil` |
-| global.security.allowInsecureImages |  | `true` |
 | global.alert.receiver | The alert receiver name | `""` |
 | global.backup.keep | Number of backups to keep | `7` |
 | global.postgresql.auth.postgresPassword | The postgres user admin password | `nil` |
@@ -137,7 +135,6 @@ redis:
 | mongodb.image.tag | The version of MongoDB image. This tag should be replicated into the OSC registry | `"8.0.13-debian-12-r0"` |
 | mongodb.resources | Set limits for the MongoDB pod | `{"limits":{"cpu":4,"memory":"4Gi"},"requests":{"cpu":1,"memory":"256Mi"}}` |
 | mongodb.backup.cronjob.schedule | MongoDB cron backup schedule | `"@daily"` |
-| mongodb.backup.cronjob.annotations | Backup cronjob and cronjob storage annotations | `{}` |
 | mongodb.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mongodb-exporter"` |
 | mongodb.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.47.0-debian-12-r1"` |
 | postgresql.enable | Enable PostgreSQL subchart by setting to `true` | `false` |
