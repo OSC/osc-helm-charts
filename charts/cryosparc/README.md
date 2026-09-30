@@ -79,6 +79,7 @@ admin:
 | mounts.rwDir |  | `{}` |
 | admin.email |  | `""` |
 | admin.password |  | `""` |
+| terminationGracePeriodSeconds | Pod termination grace period seconds | `30` |
 | nodeSelector |  | `{}` |
 | osc-common.oauth2-proxy.resources.limits.cpu | CPU limit for OAuth2 Proxy pods | `1` |
 | osc-common.oauth2-proxy.resources.limits.memory | Memory limit for OAuth2 Proxy pods | `"512Mi"` |
