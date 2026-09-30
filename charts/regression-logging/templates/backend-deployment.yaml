@@ -28,7 +28,7 @@ spec:
             - containerPort: {{ .Values.backend.service.port }}
           env:
             - name: MONGODB_URI
-              value: "mongodb://{{ .Release.Name }}-mongodb:27017"
+              value: "{{ .Values.database.mongodb.service.nameOverride }}:{{ .Values.database.mongodb.service.ports.mongodb }}"
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
       nodeSelector:
