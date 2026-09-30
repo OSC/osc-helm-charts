@@ -10,11 +10,15 @@ global:
     - testgroup1
 mongodb:
   enable: true
+  containerSecurityContext:
+    runAsUser: 65534
+    runAsGroup: 65534
+  podSecurityContext:
+    fsGroup: 65534
   persistence:
-    enabled: true
-    name: datadir
-    mountPath: /bitnami/mongodb
     size: 50Mi
+    accessModes:
+    - ReadWriteOnce
   resources:
     limits:
       cpu: 500m
@@ -22,12 +26,12 @@ mongodb:
     requests:
       cpu: 200m
       memory: 256Mi
-  initContainers: []
-  extraVolumeMounts: []
-  extraVolumes: []
   backup:
     cronjob:
       schedule: '* * * * *'
+      containerSecurityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
       resources:
         limits:
           cpu: 500m

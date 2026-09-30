@@ -34,6 +34,8 @@ global:
     #
   # -- The persistent storage class
   storageClass: webservices-nfs-client
+  # -- The fileset for local-ess or local-scratch storage
+  fileset: ''
   # -- Global value to pass down to database charts to set registry to pull images from
   imageRegistry: docker-registry.osc.edu
   # -- The OSC image pull secret name to use to pull images
@@ -48,11 +50,7 @@ global:
   webservicesDeploy:
     # -- Create webservices deployment rolebinding
     create: true
-  dataDir:
-    # -- Base path for storing MongoDB data
-    path: ~
-    # -- Subpath for dataDir storage
-    subPath: ~
+  # @ignored
   security:
     allowInsecureImages: true
   alert:
@@ -237,45 +235,11 @@ mongodb:
     '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   # @ignored
   persistence:
-    enabled: false
-    name: empty
-    mountPath: /empty
-  # @ignored
-  initContainers:
-  - name: create-data-dir
-    image: '{{ include "mongodb.image" . }}'
-    command: ['sh', '-c', 'mkdir -p /bitnami/mongodb/{{ .Values.global.dataDir.subPath }}/{{ include "osc.common.environment" . }}']
-    securityContext:
-      runAsNonRoot: true
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      seccompProfile:
-        type: RuntimeDefault
-      privileged: false
-    resources:
-      limits:
-        cpu: 1
-        memory: 512Mi
-      requests:
-        cpu: 250m
-        memory: 128Mi
-    volumeMounts:
-      - name: data
-        mountPath: /bitnami/mongodb
-  # @ignored
-  extraVolumeMounts:
-    - name: data
-      mountPath: /bitnami/mongodb
-      subPath: '{{ .Values.global.dataDir.subPath }}/{{ include "osc.common.environment" . }}'
-      readOnly: false
-  # @ignored
-  extraVolumes:
-    - name: data
-      hostPath:
-        path: '{{ .Values.global.dataDir.path }}'
-        type: Directory
+    enabled: true
+    accessModes:
+    - ReadWriteMany
+    annotations:
+      osc.edu/fileset: '{{ .Values.global.fileset }}'
   backup:
     # @ignored
     enabled: true
@@ -310,8 +274,9 @@ mongodb:
       storage:
         accessModes:
         - ReadWriteMany
-      # -- Backup cronjob and cronjob storage annotations
-      annotations: {}
+      # @ignored
+      annotations:
+        osc.edu/fileset: '{{ .Values.global.fileset }}'
   metrics:
     # @ignored
     enabled: true
