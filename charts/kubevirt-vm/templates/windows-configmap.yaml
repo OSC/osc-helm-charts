@@ -1,0 +1,133 @@
+{{- range $name, $vm := .Values.vms }}
+{{- if eq $vm.os "windows11" }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-sysprep-config" $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "kubevirt-vm.labels" $ | nindent 4 }}
+    {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+data:
+  autounattend.xml: |-
+    <?xml version="1.0" encoding="utf-8"?>
+    <!-- responsible for installing windows, ignored on sysprepped images -->
+  unattend.xml: |-
+    <?xml version="1.0" encoding="utf-8"?>
+    <unattend xmlns="urn:schemas-microsoft-com:unattend">
+      <settings pass="oobeSystem">
+        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+          <OOBE>
+            <HideEULAPage>true</HideEULAPage>
+            <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+            <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+            <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+            <NetworkLocation>Work</NetworkLocation>
+            <SkipUserOOBE>true</SkipUserOOBE>
+            <SkipMachineOOBE>true</SkipMachineOOBE>
+            <ProtectYourPC>3</ProtectYourPC>
+          </OOBE>
+          <AutoLogon>
+            <Password>
+              <Value>123456</Value>
+              <PlainText>true</PlainText>
+            </Password>
+            <Enabled>true</Enabled>
+            <Username>Administrator</Username>
+          </AutoLogon>
+          <UserAccounts>
+           <AdministratorPassword>
+              <Value>123456</Value>
+              <PlainText>true</PlainText>
+            </AdministratorPassword>
+          </UserAccounts>
+          <RegisteredOrganization>Ohio Supercomputer Center</RegisteredOrganization>
+          <RegisteredOwner>OSC</RegisteredOwner>
+          <TimeZone>Eastern Standard Time</TimeZone>
+          <FirstLogonCommands>
+            <SynchronousCommand wcm:action="add">
+              <CommandLine>powershell -ExecutionPolicy Bypass -NoProfile d:\customize.ps1</CommandLine>
+              <RequiresUserInput>false</RequiresUserInput>
+              <Order>1</Order>
+              <Description>Customize Script</Description>
+            </SynchronousCommand>
+            <SynchronousCommand wcm:action="add">
+              <CommandLine>powershell -ExecutionPolicy Bypass -NoProfile e:\finalize.ps1</CommandLine>
+              <RequiresUserInput>false</RequiresUserInput>
+              <Order>2</Order>
+              <Description>Customize Script</Description>
+            </SynchronousCommand>
+          </FirstLogonCommands>
+        </component>
+      </settings>
+    </unattend>
+  customize.ps1: |-
+    # Enable logging
+    Start-Transcript -Path "C:\Windows\Logs\Scripts\customize.log" -Append
+
+    # Enable RDP
+    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0
+    Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+    # Resize C:
+    Write-Host "Resize partition"
+    $size = (Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber 4)
+    Resize-Partition -DiskNumber 0 -PartitionNumber 4 -Size $size.SizeMax
+
+    Write-Host "Rename"
+    Rename-Computer -NewName "{{ $vm.hostname | default $name }}" -Force
+
+    $dnsSuffix = "{{ $vm.domain | default $.Values.vm.defaults.domain }}"
+    Write-Host "Set domain name to $dnsSuffix"
+    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "Domain" -Value $dnsSuffix
+    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "NV Domain" -Value $dnsSuffix
+
+    Write-Host "Setup DNS"
+    $DNSServers = @(
+    {{- range $.Values.windows11.defaults.dnsServers }}
+      "{{ . }}",
+    {{- end }}
+    )
+    $DNSSearch = @(
+    {{- range $.Values.windows11.defaults.dnsSearch }}
+      "{{ . }}",
+    {{- end }}
+    )
+    Set-DnsClientServerAddress -InterfaceIndex 4 -ServerAddresses $DNSServers
+    Set-DnsClientGlobalSetting -SuffixSearchList $DNSSearch
+
+  {{- if $.Values.vm.defaults.sshPubKeys }}
+    # Add ssh authorized_key for administrator
+    # https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_keymanagement
+    $MyDir = $MyInvocation.MyCommand.Path | Split-Path -Parent
+    $PublicKey = Get-Content -Path $MyDir\id_rsa.pub
+    $authrized_keys_path = $env:ProgramData + "\ssh\administrators_authorized_keys"
+    Add-Content -Path $authrized_keys_path -Value $PublicKey
+    icacls.exe $authrized_keys_path /inheritance:r /grant "Administrators:F" /grant "SYSTEM:F"
+  {{- end }}
+
+    New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH SSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+
+    # install application via exe file installer from url
+    function Install-Exe {
+      $dlurl = $args[0]
+      $installerPath = Join-Path $env:TEMP (Split-Path $dlurl -Leaf)
+      Invoke-WebRequest -UseBasicParsing $dlurl -OutFile $installerPath
+      Start-Process -FilePath $installerPath -Args "/S" -Verb RunAs -Wait
+      Remove-Item $installerPath
+    }
+
+    # Import the module
+    Write-Host "Perform Windows Updates"
+    Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser
+    # Search for, download, and install all available updates, automatically accepting agreements
+    Get-WindowsUpdate -Install -AcceptAll -MicrosoftUpdate -IgnoreReboot
+  {{- if $.Values.vm.defaults.sshPubKeys }}
+  id_rsa.pub: |-
+  {{- range $.Values.vm.defaults.sshPubKeys }}
+    {{ . }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}

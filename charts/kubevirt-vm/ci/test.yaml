@@ -1,0 +1,19 @@
+vms:
+  windows11-test:
+    os: windows11
+    joinDomain: true
+    ports:
+      ssh: 22
+      rdp: 3389
+windows11:
+  defaults:
+    dnsServers:
+      - dns1-ip
+      - dns2-ip
+    dnsSearch:
+      - domain1
+      - domain2
+    adminPassword: supersecret
+    msadDomain: domain
+    domainAdminUser: supersecret
+    domainAdminPassword: supersecret

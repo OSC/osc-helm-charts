@@ -1,0 +1,26 @@
+{{- range $name, $vm := .Values.vms }}
+{{- if $vm.ports }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "kubevirt-vm.labels" $ | nindent 4 }}
+    {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+  annotations:
+    prometheus.io/probe_skip: 'true'
+spec:
+  ports:
+{{- range $port, $portNum := $vm.ports }}
+  - name: {{ $port }}
+    port: {{ $portNum }}
+    protocol: TCP
+    targetPort: {{ $portNum }}
+{{- end }}
+  selector:
+    {{- include "kubevirt-vm.vm.selectorLabels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+  type: ClusterIP
+{{- end }}
+{{- end }}

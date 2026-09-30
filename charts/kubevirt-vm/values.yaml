@@ -1,0 +1,44 @@
+global:
+  # -- The storageClassName for KubeVirt storage
+  storageClassName: nfs-kubevirt
+
+# -- VMs to deploy
+vms: {}
+
+windows11:
+  base:
+    # -- Name of the Windows 11 base
+    name: windows11-base
+    # -- Namespace of Windows 11 base
+    namespace: kubevirt-templates
+  defaults:
+    # -- The amount of space default space for Windows 11
+    storageRequest: 100Gi
+    # -- DNS servers, should be MSAD servers
+    # @default -- **required**
+    dnsServers:
+    # -- Default DNS search domains
+    # @default -- **required**
+    dnsSearch:
+    # -- Default Administrator password
+    # @default -- **required**
+    adminPassword:
+    # -- Default MSAD domain
+    # @default -- **required**
+    msadDomain:
+    # -- Default domain admin user
+    # @default -- **required**
+    domainAdminUser:
+    # -- Default domain admin password
+    # @default -- **required**
+    domainAdminPassword:
+    # -- Default Windows core count
+    cores: 2
+    # -- Default Windows memory
+    memory: 4Gi
+vm:
+  defaults:
+    # -- Default domain name for VMs
+    domain: ten.osc.edu
+    # -- SSH public keys to automatically add
+    sshPubKeys: []
