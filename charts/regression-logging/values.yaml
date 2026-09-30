@@ -22,6 +22,9 @@ global:
   fileset: PZS0530
 
 database:
+  # @ignored
+  oscCommon:
+    enable: true
   mongodb:
     enable: true
     service:
