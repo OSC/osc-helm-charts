@@ -24,6 +24,10 @@ global:
 database:
   mongodb:
     enable: true
+    service:
+      nameOverride: regression-logging-mongodb
+      ports:
+        mongodb: 27017
     persistence:
       enabled: true
       annotations:
