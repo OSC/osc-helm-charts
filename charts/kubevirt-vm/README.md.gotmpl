@@ -35,6 +35,7 @@ vms:
     # cores: defaults to windows11.defaults.cores
     # memory: defaults to windows11.defaults.memory
     # gpu: nvidia.com/A100_40G
+    # gpuDriver: default windows11.defaults.gpuDriver
     ports:
       ssh: 22
       rdp: 3389
@@ -50,6 +51,8 @@ windows11:
     msadDomain: domain
     domainAdminUser: supersecret
     domainAdminPassword: supersecret
+vm:
+  repoServer: repo.example.com
 ```
 
 {{ template "chart.requirementsSection" . }}

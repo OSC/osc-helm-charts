@@ -5,6 +5,7 @@ vms:
     ports:
       ssh: 22
       rdp: 3389
+    gpu: nvidia.com/A100_40G
 windows11:
   defaults:
     dnsServers:
@@ -17,3 +18,5 @@ windows11:
     msadDomain: domain
     domainAdminUser: supersecret
     domainAdminPassword: supersecret
+vm:
+  repoServer: repo.example.com

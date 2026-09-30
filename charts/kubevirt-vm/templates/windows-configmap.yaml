@@ -117,6 +117,15 @@ data:
       Start-Process -FilePath $installerPath -Args "/S" -Verb RunAs -Wait
       Remove-Item $installerPath
     }
+  {{- if $vm.gpu }}
+    Write-Host "Install NVIDIA driver {{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}"
+    Invoke-WebRequest -Uri "https://{{ $.Values.vm.repoServer }}/internal/nvidia/{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}" -OutFile "C:\Users\Administrator\Downloads\{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}"
+    mkdir C:\Windows\Temp\nvidia
+    mkdir C:\Windows\Logs\nvidia
+    tar -xf  C:\Users\Administrator\Downloads\{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }} -C  C:\Windows\Temp\nvidia
+    Start-Process -FilePath "C:\Windows\Temp\nvidia\setup.exe" -ArgumentList "-s", "-n", "-noreboot", "-log:C:\Windows\Logs\nvidia", "-loglevel:6" -Wait
+    Remove-Item -Path C:\Windows\Temp\nvidia -Recurse
+  {{- end }}
 
     # Import the module
     Write-Host "Perform Windows Updates"

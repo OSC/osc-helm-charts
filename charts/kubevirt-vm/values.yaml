@@ -36,9 +36,14 @@ windows11:
     cores: 2
     # -- Default Windows memory
     memory: 4Gi
+    # -- GPU driver file
+    gpuDriver: 596.36_grid_win10_win11_server2022_server2025_dch_64bit_international.exe
 vm:
   defaults:
     # -- Default domain name for VMs
     domain: ten.osc.edu
     # -- SSH public keys to automatically add
     sshPubKeys: []
+  # -- OSC repo server host
+  # @default -- **required**
+  repoServer:

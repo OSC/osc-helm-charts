@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "kubevirt-vm.vm.selectorLabels" (dict "root" $ "name" $name "vm" $vm) | nindent 8 }}
+        {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 8 }}
     spec:
       domain:
         clock:
