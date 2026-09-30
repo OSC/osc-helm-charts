@@ -163,7 +163,6 @@ open-webui:
 | open-webui.resources.limits.cpu | Open WebUI pod CPU limit | `2` |
 | open-webui.resources.requests.memory | Open WebUI pod memory request | `"2Gi"` |
 | open-webui.resources.requests.cpu | Open WebUI pod CPU request | `1` |
-| open-webui.persistence.storageClass | The Open WebUI persistent storage class | `"{{ .Values.global.storageClass }}"` |
 | open-webui.extraEnvVars | Additional Open WebUI environment variables | `[]` |
 | open-webui.sso.enableRoleManagement | Enables role access controls in Open WebUI | `false` |
 | open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |

@@ -266,16 +266,13 @@ open-webui:
   # @ignored
   ingress:
     enabled: false
+  # @ignored
   persistence:
-    # @ignored
     labels:
       '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
-    # @ignored
     annotations:
       osc.edu/fileset: '{{ .Values.global.fileset }}'
-    # @ignored
     size: 10Gi
-    # -- The Open WebUI persistent storage class
     storageClass: '{{ .Values.global.storageClass }}'
   # @ignored
   nodeSelector:
@@ -300,27 +297,12 @@ open-webui:
       value: '{{ if .Values.global.database.enable }}pgvector{{ else }}chroma{{ end }}'
     - name: PGVECTOR_CREATE_EXTENSION
       value: 'false'
-    # - name: DATABASE_TYPE
-    #   value: '{{ if .Values.global.database.enable }}postgresql{{ else }}sqlite{{ end }}'
-    # - name: DATABASE_USER
-    #   value: '{{ if .Values.global.database.enable }}{{ .Values.global.postgresql.auth.username }}{{ else }}None{{ end }}'
-    # - name: DATABASE_PASSWORD
-    #   value: '{{ if .Values.global.database.enable }}{{ .Values.global.postgresql.auth.password }}{{ else }}None{{ end }}'
-    # - name: DATABASE_HOST
-    #   value: '{{ if .Values.global.database.enable }}{{ printf "%s.%s.svc.%s" .Values.global.postgresql.fullnameOverride .Release.Namespace .Values.clusterDomain }}{{ else }}None{{ end }}'
-    # - name: DATABASE_PORT
-    #   value: '{{ if .Values.global.database.enable }}{{ .Values.global.postgresql.service.ports.postgresql }}{{ else }}None{{ end }}'
-    # - name: DATABASE_NAME
-    #   value: '{{ if .Values.global.database.enable }}{{ .Values.global.postgresql.auth.database }}{{ else }}None{{ end }}'
     - name: DATABASE_POOL_SIZE
       value: '{{ .Values.global.database.pool.size }}'
     - name: DATABASE_POOL_MAX_OVERFLOW
       value: '{{ .Values.global.database.pool.maxOverflow }}'
     - name: WEBSOCKET_MANAGER
       value: '{{ if .Values.global.database.enable }}redis{{ end }}'
-    # TODO: Add 'tpl' upstream to what builds REDIS_URL
-    # - name: REDIS_URL
-    #   value: '{{ if .Values.global.database.enable }}redis://:{{ .Values.global.redis.password }}@open-webui-redis-master.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:6379/0{{ end }}'
     - name: LOG_FORMAT
       value: json
     - name: ENABLE_OAUTH_GROUP_CREATION
