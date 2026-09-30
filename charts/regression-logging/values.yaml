@@ -24,7 +24,7 @@ global:
 database:
   # @ignored
   oscCommon:
-    enable: true
+    enable: false
   mongodb:
     enable: true
     service:
