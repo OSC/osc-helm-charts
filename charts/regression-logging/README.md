@@ -32,7 +32,7 @@ global:
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts | database | 0.19.5 |
+| https://osc.github.io/osc-helm-charts | database | 0.20.0 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.17.0 |
 
 ## Values
@@ -53,16 +53,8 @@ global:
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.fileset | string | `"PZS0530"` |  |
 | database.mongodb.enable | bool | `true` |  |
-| database.mongodb.backup.cronjob.annotations."osc.edu/fileset" | string | `"{{ .Values.global.fileset }}"` |  |
-| database.mongodb.persistence.enabled | bool | `true` |  |
-| database.mongodb.persistence.annotations."osc.edu/fileset" | string | `"{{ .Values.global.fileset }}"` |  |
-| database.mongodb.persistence.name | string | `"datadir"` |  |
-| database.mongodb.persistence.size | string | `"8Gi"` |  |
-| database.mongodb.persistence.storageClass | string | `"{{ .Values.global.storageClass }}"` |  |
-| database.mongodb.persistence.mountPath | string | `"/bitnami/mongodb"` |  |
-| database.mongodb.extraVolumes | list | `[]` |  |
-| database.mongodb.extraVolumeMounts | list | `[]` |  |
-| database.mongodb.initContainers | list | `[]` |  |
+| database.mongodb.service.nameOverride | string | `"regression-logging-mongodb"` |  |
+| database.mongodb.service.ports.mongodb | int | `27017` |  |
 | backend.image.repository | string | `"kubernetes/barrt/backend"` |  |
 | backend.image.tag | string | `"v0.1.0"` |  |
 | backend.image.pullPolicy | string | `"IfNotPresent"` |  |
@@ -85,7 +77,6 @@ global:
 | frontend.resources.limits.memory | string | `"512Mi"` |  |
 | frontend.resources.requests.cpu | string | `"250m"` |  |
 | frontend.resources.requests.memory | string | `"256Mi"` |  |
-| osc-common.enabled | bool | `true` |  |
 | osc-common.oauth2-proxy.ingress.extraPaths[0].path | string | `"/api"` |  |
 | osc-common.oauth2-proxy.ingress.extraPaths[0].pathType | string | `"Prefix"` |  |
 | osc-common.oauth2-proxy.ingress.extraPaths[0].backend.service.name | string | `"{{ .Release.Name }}-regression-logging-backend"` |  |
