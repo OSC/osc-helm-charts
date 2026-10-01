@@ -28,7 +28,7 @@ spec:
               tickPolicy: catchup
           utc: {}
         cpu:
-          cores: {{ $vm.cores | default $.Values.windows11.defaults.cores }}
+          cores: {{ $vm.cores | default $.Values.vm.defaults.cores }}
         devices:
           disks:
           - disk:
@@ -73,7 +73,7 @@ spec:
           type: q35
         resources:
           requests:
-            memory: {{ $vm.memory | default $.Values.windows11.defaults.memory }}
+            memory: {{ $vm.memory | default $.Values.vm.defaults.memory }}
       networks:
       - name: default
         pod: {}

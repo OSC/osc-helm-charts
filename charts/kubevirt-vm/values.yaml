@@ -12,8 +12,6 @@ windows11:
     # -- Namespace of Windows 11 base
     namespace: kubevirt-templates
   defaults:
-    # -- The amount of space default space for Windows 11
-    storageRequest: 100Gi
     # -- DNS servers, should be MSAD servers
     # @default -- **required**
     dnsServers:
@@ -32,14 +30,16 @@ windows11:
     # -- Default domain admin password
     # @default -- **required**
     domainAdminPassword:
-    # -- Default Windows core count
-    cores: 2
-    # -- Default Windows memory
-    memory: 4Gi
     # -- GPU driver file
     gpuDriver: 596.36_grid_win10_win11_server2022_server2025_dch_64bit_international.exe
 vm:
   defaults:
+    # -- The amount of space default space for VMs
+    storageRequest: 100Gi
+    # -- Default VM core count
+    cores: 2
+    # -- Default VM memory
+    memory: 4Gi
     # -- Default domain name for VMs
     domain: ten.osc.edu
     # -- SSH public keys to automatically add

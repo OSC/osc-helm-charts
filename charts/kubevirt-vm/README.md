@@ -62,16 +62,16 @@ vm:
 | vms | object | `{}` | VMs to deploy |
 | windows11.base.name | string | `"windows11-base"` | Name of the Windows 11 base |
 | windows11.base.namespace | string | `"kubevirt-templates"` | Namespace of Windows 11 base |
-| windows11.defaults.storageRequest | string | `"100Gi"` | The amount of space default space for Windows 11 |
 | windows11.defaults.dnsServers | string | **required** | DNS servers, should be MSAD servers |
 | windows11.defaults.dnsSearch | string | **required** | Default DNS search domains |
 | windows11.defaults.adminPassword | string | **required** | Default Administrator password |
 | windows11.defaults.msadDomain | string | **required** | Default MSAD domain |
 | windows11.defaults.domainAdminUser | string | **required** | Default domain admin user |
 | windows11.defaults.domainAdminPassword | string | **required** | Default domain admin password |
-| windows11.defaults.cores | int | `2` | Default Windows core count |
-| windows11.defaults.memory | string | `"4Gi"` | Default Windows memory |
 | windows11.defaults.gpuDriver | string | `"596.36_grid_win10_win11_server2022_server2025_dch_64bit_international.exe"` | GPU driver file |
+| vm.defaults.storageRequest | string | `"100Gi"` | The amount of space default space for VMs |
+| vm.defaults.cores | int | `2` | Default VM core count |
+| vm.defaults.memory | string | `"4Gi"` | Default VM memory |
 | vm.defaults.domain | string | `"ten.osc.edu"` | Default domain name for VMs |
 | vm.defaults.sshPubKeys | list | `[]` | SSH public keys to automatically add |
 | vm.repoServer | string | **required** | OSC repo server host |
