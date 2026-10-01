@@ -55,7 +55,7 @@ global:
 | database.mongodb.enable | bool | `true` |  |
 | database.mongodb.service.nameOverride | string | `"regression-logging-mongodb"` |  |
 | database.mongodb.service.ports.mongodb | int | `27017` |  |
-| backend.image.repository | string | `"kubernetes/barrt/backend"` |  |
+| backend.image.repository | string | `"kubernetes/barrt/mongodb-viz-backend"` |  |
 | backend.image.tag | string | `"v0.1.0"` |  |
 | backend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | backend.replicaCount | int | `1` |  |
@@ -67,7 +67,7 @@ global:
 | backend.resources.requests.cpu | int | `1` |  |
 | backend.resources.requests.memory | string | `"1Gi"` |  |
 | backend.apiKey | string | `""` |  |
-| frontend.image.repository | string | `"kubernetes/barrt/frontend"` |  |
+| frontend.image.repository | string | `"kubernetes/barrt/mongodb-viz-frontend"` |  |
 | frontend.image.tag | string | `"v0.1.0"` |  |
 | frontend.image.pullPolicy | string | `"IfNotPresent"` |  |
 | frontend.replicaCount | int | `1` |  |
