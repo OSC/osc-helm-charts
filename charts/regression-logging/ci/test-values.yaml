@@ -19,9 +19,6 @@ mongodb:
     requests:
       cpu: 200m
       memory: 256Mi
-  initContainers: []
-  extraVolumeMounts: []
-  extraVolumes: []
   backup:
     cronjob:
       schedule: '* * * * *'
