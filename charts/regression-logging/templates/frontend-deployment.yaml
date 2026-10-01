@@ -26,7 +26,19 @@ spec:
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy | default "IfNotPresent" }}
           ports:
             - containerPort: {{ .Values.frontend.service.port }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/share/nginx/html/config.json
+              subPath: config.json
+              readOnly: true
           resources:
             {{- toYaml .Values.frontend.resources | nindent 12 }}
       nodeSelector:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ include "regression-logging.fullname" . }}-frontend-config
+            items:
+              - key: config.json
+                path: config.json

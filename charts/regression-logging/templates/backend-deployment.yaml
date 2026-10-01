@@ -29,6 +29,11 @@ spec:
           env:
             - name: MONGODB_URI
               value: "mongodb://{{ .Values.database.mongodb.service.nameOverride }}:{{ .Values.database.mongodb.service.ports.mongodb }}"
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "regression-logging.fullname" . }}-api-key
+                  key: api-key
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
       nodeSelector:
