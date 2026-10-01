@@ -33,7 +33,7 @@ database:
         mongodb: 27017
 backend:
   image:
-    repository: kubernetes/barrt/backend
+    repository: kubernetes/barrt/mongodb-viz-backend
     tag: v0.1.0
     pullPolicy: IfNotPresent
   replicaCount: 1
