@@ -66,6 +66,7 @@ global:
 | backend.resources.limits.memory | string | `"8Gi"` |  |
 | backend.resources.requests.cpu | int | `1` |  |
 | backend.resources.requests.memory | string | `"1Gi"` |  |
+| backend.apiKey | string | `""` |  |
 | frontend.image.repository | string | `"kubernetes/barrt/frontend"` |  |
 | frontend.image.tag | string | `"v0.1.0"` |  |
 | frontend.image.pullPolicy | string | `"IfNotPresent"` |  |
