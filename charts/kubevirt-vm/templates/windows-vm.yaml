@@ -28,7 +28,9 @@ spec:
               tickPolicy: catchup
           utc: {}
         cpu:
+          sockets: {{ $vm.sockets | default 1 }}
           cores: {{ $vm.cores | default $.Values.vm.defaults.cores }}
+          threads: {{ $vm.threads | default 1 }}
         devices:
           disks:
           - disk:
