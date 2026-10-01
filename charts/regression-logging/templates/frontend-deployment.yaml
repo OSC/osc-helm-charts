@@ -37,8 +37,8 @@ spec:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
       volumes:
         - name: config-volume
-          configMap:
-            name: {{ include "regression-logging.fullname" . }}-frontend-config
+          secret:
+            secretName: {{ include "regression-logging.fullname" . }}-api-key
             items:
               - key: config.json
                 path: config.json
