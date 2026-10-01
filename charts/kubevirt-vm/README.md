@@ -25,7 +25,7 @@ vms:
   windows11-test:
     os: windows11
     deployed: false # Change to true once deployed
-    # runStrategy: defaults to Always
+    # runStrategy: defaults to RerunOnFailure
     # storageRequest: 100Gi , defaults to windows11.defaults.storageRequest
     # hostname: <defaults to VM name>
     # domain: <defaults to vm.defaults.domain>

@@ -10,7 +10,7 @@ metadata:
     {{- include "kubevirt-vm.labels" $ | nindent 4 }}
     {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
 spec:
-  runStrategy: {{ $vm.runStrategy | default "Always" }}
+  runStrategy: {{ $vm.runStrategy | default "RerunOnFailure" }}
   template:
     metadata:
       labels:
