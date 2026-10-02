@@ -72,8 +72,9 @@ data:
 
     # Resize C:
     Write-Host "Resize partition"
-    $size = (Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber 4)
-    Resize-Partition -DiskNumber 0 -PartitionNumber 4 -Size $size.SizeMax
+    $partNum = (Get-Partition -DriveLetter C).PartitionNumber
+    $size = (Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber $partNum)
+    Resize-Partition -DiskNumber 0 -PartitionNumber $partNum -Size $size.SizeMax
 
     Write-Host "Rename"
     Rename-Computer -NewName "{{ $vm.hostname | default $name }}" -Force
@@ -85,16 +86,27 @@ data:
 
     Write-Host "Setup DNS"
     $DNSServers = @(
-    {{- range $.Values.windows11.defaults.dnsServers }}
-      "{{ . }}",
+    {{- $lastServer := sub (len $.Values.windows11.defaults.dnsServers) 1 -}}
+    {{- range $index, $item := $.Values.windows11.defaults.dnsServers }}
+      {{- if eq $index $lastServer }}
+      "{{ $item }}"
+      {{- else }}
+      "{{ $item }}",
+      {{- end }}
     {{- end }}
     )
     $DNSSearch = @(
-    {{- range $.Values.windows11.defaults.dnsSearch }}
-      "{{ . }}",
+    {{- $lastSearch := sub (len $.Values.windows11.defaults.dnsSearch) 1 -}}
+    {{- range $index, $item := $.Values.windows11.defaults.dnsSearch }}
+      {{- if eq $index $lastSearch }}
+      "{{ $item }}"
+      {{- else }}
+      "{{ $item }}",
+      {{- end }}
     {{- end }}
     )
-    Set-DnsClientServerAddress -InterfaceIndex 4 -ServerAddresses $DNSServers
+    $ifIndex = (Get-NetAdapter -Name "Ethernet").ifIndex
+    Set-DnsClientServerAddress -InterfaceIndex $ifIndex -ServerAddresses $DNSServers
     Set-DnsClientGlobalSetting -SuffixSearchList $DNSSearch
 
   {{- if $.Values.vm.defaults.sshPubKeys }}
