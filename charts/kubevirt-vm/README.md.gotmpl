@@ -1,0 +1,64 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+## KubeVirt VM Chart
+
+This chart is used to deploy KubeVirt VMs at OSC.
+
+Components:
+
+* DataVolume to bootstrap the OS disk from an image (Windows 11 only)
+* ConfigMap to hold Sysprep configs (Windows 11 only)
+* Secret to hold finalizer scripts (Windows 11 only)
+* VirtualMachine to deploy the actual VM
+
+## Usage
+
+The following is the minimal values to deploy this chart:
+
+```yaml
+---
+vms:
+  windows11-test:
+    os: windows11
+    deployed: false # Change to true once deployed
+    # runStrategy: defaults to RerunOnFailure
+    # storageRequest: 100Gi , defaults to windows11.defaults.storageRequest
+    # hostname: <defaults to VM name>
+    # domain: <defaults to vm.defaults.domain>
+    # adminPassword: defaults to windows11.defaults.adminPassword
+    # joinDomain: defaults windows11.defaults.joinDomain (true)
+    # sockets: defaults to 1
+    # cores: defaults to windows11.defaults.cores
+    # threads: defaults to 1
+    # memory: defaults to windows11.defaults.memory
+    # gpu: nvidia.com/A100_40G
+    # gpuDriver: default windows11.defaults.gpuDriver
+    ports:
+      ssh: 22
+      rdp: 3389
+windows11:
+  defaults:
+    dnsServers:
+      - dns1-ip
+      - dns2-ip
+    dnsSearch:
+      - domain1
+      - domain2
+    adminPassword: supersecret
+    msadDomain: domain
+    domainAdminUser: supersecret
+    domainAdminPassword: supersecret
+vm:
+  repoServer: repo.example.com
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
