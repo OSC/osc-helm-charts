@@ -49,6 +49,7 @@ spec:
           - masquerade: {}
             model: virtio
             name: default
+          networkInterfaceMultiqueue: true
           tpm:
             persistent: true
         {{- if $vm.gpu }}
