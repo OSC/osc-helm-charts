@@ -1,5 +1,5 @@
 {{- range $name, $vm := .Values.vms }}
-{{- if eq $vm.os "windows11" }}
+{{- if and (eq $vm.os "windows11") (not (eq $vm.deployed true)) }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -70,11 +70,35 @@ data:
     Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0
     Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
+    $recovery = $(Get-Partition -DiskNumber 0 | Where-Object Type -eq "Recovery").PartitionNumber
+    $partNum = (Get-Partition -DriveLetter C).PartitionNumber
+    if ($recovery -gt $partNum) {
+      # Remove recovery partition
+      Write-Host "Remove recovery partition"
+      reagentc /disable
+      Remove-Partition -DiskNumber 0 -PartitionNumber $recovery -Confirm:$false
+    }
+
     # Resize C:
     Write-Host "Resize partition"
-    $partNum = (Get-Partition -DriveLetter C).PartitionNumber
-    $size = (Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber $partNum)
+    $size = ((Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber $partNum) - 1GB)
     Resize-Partition -DiskNumber 0 -PartitionNumber $partNum -Size $size.SizeMax
+
+    # Re-create recovery
+    if ($recovery -gt $partNum) {
+      Write-Host "Re-create recovery"
+      $newPartition = New-Partition -DiskNumber 0 -UseMaximumSize -GptType "{de94bba4-06d1-4d40-a16a-bfd50179d6ac}"
+      Format-Volume -Partition $newPartition -FileSystem NTFS -NewFileSystemLabel "Recovery" -Force
+      $recovery = $(Get-Partition -DiskNumber 0 | Where-Object Type -eq "Recovery").PartitionNumber
+    $null = @"
+    select disk 0
+    select partition $($recovery)
+    gpt attributes=0x8000000000000001
+    assign letter=R
+    exit
+    "@ | diskpart.exe
+      reagentc /enable
+    }
 
     Write-Host "Rename"
     Rename-Computer -NewName "{{ $vm.hostname | default $name }}" -Force
