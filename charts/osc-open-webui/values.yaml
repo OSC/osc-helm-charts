@@ -329,6 +329,8 @@ open-webui:
       value: "True"
     - name: AUDIT_LOG_LEVEL
       value: METADATA
+    - name: AUDIT_EXCLUDED_PATHS
+      value: /chats,/chat,/folders,/socket.io
     - name: ENABLE_OTEL
       value: "True"
     - name: ENABLE_OTEL_METRICS
