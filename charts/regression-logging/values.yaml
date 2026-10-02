@@ -10,7 +10,7 @@ global:
   # @ignored
   auth:
     enable: true
-    upstream: "regression-logging-frontend.{{ .Release.Namespace }}.svc.cluster.local:8080"
+    upstream: "http://regression-logging-frontend.{{ .Release.Namespace }}.svc.cluster.local:8080"
     allowGroups:
     - sappstf
   ingress:
