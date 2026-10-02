@@ -27,7 +27,7 @@ mongodb:
           cpu: 500m
           memory: 512Mi
         requests:
-          cpu: 200m
+          cpu: 10m
           memory: 128Mi
       storage:
         accessModes:
@@ -39,7 +39,7 @@ frontend:
       cpu: 500m
       memory: 512Mi
     requests:
-      cpu: 200m
+      cpu: 10m
       memory: 256Mi
 
 backend:
@@ -48,5 +48,5 @@ backend:
       cpu: 500m
       memory: 512Mi
     requests:
-      cpu: 200m
+      cpu: 10m
       memory: 256Mi
