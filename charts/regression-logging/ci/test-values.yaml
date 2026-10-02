@@ -8,30 +8,34 @@ global:
     - testgroup
   portforwardGroups:
     - testgroup1
-mongodb:
-  enable: true
-  persistence:
-    size: 50Mi
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 200m
-      memory: 256Mi
-  backup:
-    cronjob:
-      schedule: '* * * * *'
-      resources:
-        limits:
-          cpu: 500m
-          memory: 512Mi
-        requests:
-          cpu: 10m
-          memory: 128Mi
-      storage:
-        accessModes:
-        - ReadWriteOnce
+
+database:
+  mongodb:
+    persistence:
+      accessModes:
+      - ReadWriteOnce
+      size: 50Mi
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    backup:
+      cronjob:
+        schedule: '* * * * *'
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+        storage:
+          accessModes:
+          - ReadWriteOnce
+          size: 50Mi
 
 frontend:
   resources:

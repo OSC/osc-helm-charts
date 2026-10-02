@@ -7,6 +7,12 @@ global:
     password:
   oscServiceAccount: hpcsa
   storageClass: local-ess
+  # @ignored
+  auth:
+    enable: true
+    upstream: "regression-logging-frontend.{{ .Release.Namespace }}.svc.cluster.local:8080"
+    allowGroups:
+    - sappstf
   ingress:
     host: ""
     hostAlias: ""
@@ -68,8 +74,16 @@ frontend:
       cpu: 250m
       memory: 256Mi
 
+# @ignored
 osc-common:
   oauth2-proxy:
+    resources:
+      limits:
+        cpu: 1
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
     ingress:
       extraPaths:
         - path: /api
