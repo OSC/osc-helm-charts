@@ -1,7 +1,6 @@
 vms:
   windows11-test:
     os: windows11
-    joinDomain: true
     ports:
       ssh: 22
       rdp: 3389

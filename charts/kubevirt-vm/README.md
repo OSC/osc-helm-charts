@@ -30,7 +30,7 @@ vms:
     # hostname: <defaults to VM name>
     # domain: <defaults to vm.defaults.domain>
     # adminPassword: defaults to windows11.defaults.adminPassword
-    # joinDomain: true
+    # joinDomain: defaults windows11.defaults.joinDomain (true)
     # sockets: defaults to 1
     # cores: defaults to windows11.defaults.cores
     # threads: defaults to 1
@@ -67,6 +67,7 @@ vm:
 | windows11.defaults.dnsServers | string | **required** | DNS servers, should be MSAD servers |
 | windows11.defaults.dnsSearch | string | **required** | Default DNS search domains |
 | windows11.defaults.adminPassword | string | **required** | Default Administrator password |
+| windows11.defaults.joinDomain | bool | `true` | Default whether to join the domain |
 | windows11.defaults.msadDomain | string | **required** | Default MSAD domain |
 | windows11.defaults.domainAdminUser | string | **required** | Default domain admin user |
 | windows11.defaults.domainAdminPassword | string | **required** | Default domain admin password |

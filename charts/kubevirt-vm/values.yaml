@@ -21,6 +21,8 @@ windows11:
     # -- Default Administrator password
     # @default -- **required**
     adminPassword:
+    # -- Default whether to join the domain
+    joinDomain: true
     # -- Default MSAD domain
     # @default -- **required**
     msadDomain:
