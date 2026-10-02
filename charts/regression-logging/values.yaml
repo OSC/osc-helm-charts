@@ -1,0 +1,95 @@
+global:
+  imageRegistry: docker-registry.osc.edu
+  imagePullSecret:
+    name: osc-registry
+    # -- OSC registry password
+    # @default -- **required**
+    password:
+  oscServiceAccount: hpcsa
+  storageClass: local-ess
+  # @ignored
+  auth:
+    enable: true
+    upstream: "http://regression-logging-frontend.{{ .Release.Namespace }}.svc.cluster.local:8080"
+    allowGroups:
+    - sappstf
+  ingress:
+    host: ""
+    hostAlias: ""
+  maintenanceGroups:
+    - sappstf
+  portforwardGroups:
+    - oscstaff
+  portforwardServiceAccounts:
+    - name: sciappstest
+      namespace: sciappstest
+  alert:
+    receiver: sciapps
+  fileset: PZS0530
+
+database:
+  # @ignored
+  oscCommon:
+    enable: false
+  mongodb:
+    enable: true
+    service:
+      nameOverride: regression-logging-mongodb
+      ports:
+        mongodb: 27017
+backend:
+  image:
+    repository: kubernetes/barrt/mongodb-viz-backend
+    tag: v0.1.0
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  port: 8000
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    limits:
+      cpu: 4
+      memory: 8Gi
+    requests:
+      cpu: 1
+      memory: 1Gi
+  apiKey: ""
+
+frontend:
+  image:
+    repository: kubernetes/barrt/mongodb-viz-frontend
+    tag: v0.1.0
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  port: 80
+  service:
+    type: ClusterIP
+    port: 8080
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+# @ignored
+osc-common:
+  oauth2-proxy:
+    resources:
+      limits:
+        cpu: 1
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    ingress:
+      extraPaths:
+        - path: /api
+          pathType: Prefix
+          backend:
+            service:
+              name: "{{ .Release.Name }}-regression-logging-backend"
+              port:
+                name: http

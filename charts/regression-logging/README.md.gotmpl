@@ -1,0 +1,36 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+## Regression Logging Chart
+
+This chart handles the deployment for regression logging resources.
+
+Components:
+
+* MongoDB
+* Viz Frontend
+* Viz Backend
+
+## Usage
+
+The following is the minimal values to deploy this chart:
+
+```yaml
+---
+global:
+  imagePullSecret:
+    password: <webservices-read password>
+  ingress:
+    host: <Ingress host>
+    hostAlias: <Ingress host alias>
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

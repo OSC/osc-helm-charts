@@ -3,7 +3,13 @@ image:
 postgresql:
   image:
     repository: bitnamilegacy/postgresql
-resourcesPreset: large
+resources:
+  limits:
+    cpu: 1
+    memory: 3072Mi
+  requests:
+    cpu: 100m
+    memory: 1024Mi
 auth:
   adminUser: admin
   adminPassword: secret
