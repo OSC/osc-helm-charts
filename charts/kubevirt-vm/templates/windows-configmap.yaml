@@ -52,12 +52,6 @@ data:
               <Order>1</Order>
               <Description>Customize Script</Description>
             </SynchronousCommand>
-            <SynchronousCommand wcm:action="add">
-              <CommandLine>powershell -ExecutionPolicy Bypass -NoProfile e:\finalize.ps1</CommandLine>
-              <RequiresUserInput>false</RequiresUserInput>
-              <Order>2</Order>
-              <Description>Customize Script</Description>
-            </SynchronousCommand>
           </FirstLogonCommands>
         </component>
       </settings>
@@ -168,6 +162,16 @@ data:
     Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser
     # Search for, download, and install all available updates, automatically accepting agreements
     Get-WindowsUpdate -Install -AcceptAll -MicrosoftUpdate -IgnoreReboot
+
+    Write-Host "Add RunOnce for finalize"
+    $RegistryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+    $Name = "Finalize"
+    $Value = "powershell.exe -ExecutionPolicy Bypass -WindowStyle Normal -NoProfile e:\finalize.ps1"
+    Set-ItemProperty -Path $RegistryPath -Name $Name -Value $Value
+
+    # Reboot the system to finalize installation
+    Write-Host "Restart"
+    Restart-Computer -Force
   {{- if $.Values.vm.defaults.sshPubKeys }}
   id_rsa.pub: |-
   {{- range $.Values.vm.defaults.sshPubKeys }}
