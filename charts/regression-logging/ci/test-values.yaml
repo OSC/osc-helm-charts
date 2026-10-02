@@ -8,6 +8,8 @@ global:
     - testgroup
   portforwardGroups:
     - testgroup1
+  ingress:
+    host: test.example.com
 
 database:
   mongodb:
