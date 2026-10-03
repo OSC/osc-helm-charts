@@ -11,8 +11,8 @@ RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/$PATCH.patch 
     cd /app && patch -p1 < /tmp/$PATCH.patch
 RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/894561392ed966facc9df538a2d3e0f461774a0b.patch && \
     cd /app && patch -p1 < /tmp/894561392ed966facc9df538a2d3e0f461774a0b.patch
-RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/a1acd22d0a42c17541c4194c5feb6cad60271432.patch && \
-    cd /app && patch -p1 < /tmp/a1acd22d0a42c17541c4194c5feb6cad60271432.patch
+#RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/a1acd22d0a42c17541c4194c5feb6cad60271432.patch && \
+#    cd /app && patch -p1 < /tmp/a1acd22d0a42c17541c4194c5feb6cad60271432.patch
 RUN cd /tmp && curl -L -O https://github.com/OSC/open-webui/commit/761b5e5178df05b5caed75b974e0b3d1b30db614.patch && \
     cd /app && patch -p1 < /tmp/761b5e5178df05b5caed75b974e0b3d1b30db614.patch
 # TODO: Remove once released:
