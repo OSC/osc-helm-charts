@@ -159,7 +159,7 @@ open-webui:
 | database.redis.master.persistence.annotations."osc.edu/fileset" | Fileset for Redis storage | `"PZS0645"` |
 | open-webui.websocket.enabled | Enable web sockets. **required when using databases** | `false` |
 | open-webui.image.repository | OSC registry location for Open WebUI image | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
-| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"0.11.4"` |
+| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"0.11.4-osc-r4"` |
 | open-webui.resources.limits.memory | Open WebUI pod memory limit | `"4Gi"` |
 | open-webui.resources.limits.cpu | Open WebUI pod CPU limit | `2` |
 | open-webui.resources.requests.memory | Open WebUI pod memory request | `"2Gi"` |

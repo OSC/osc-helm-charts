@@ -248,7 +248,7 @@ open-webui:
     # -- OSC registry location for Open WebUI image
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
     # -- The Open WebUI image tag.  Must be synced to OSC registry
-    tag: 0.11.4
+    tag: 0.11.4-osc-r4
   # @ignored
   imagePullSecrets:
     - name: '{{ .Values.global.imagePullSecret.name }}'
