@@ -310,8 +310,6 @@ open-webui:
       value: '{{ .Values.global.database.pool.size }}'
     - name: DATABASE_POOL_MAX_OVERFLOW
       value: '{{ .Values.global.database.pool.maxOverflow }}'
-    - name: WEBSOCKET_MANAGER
-      value: '{{ if .Values.global.database.enable }}redis{{ end }}'
     - name: LOG_FORMAT
       value: json
     - name: ENABLE_OAUTH_GROUP_CREATION
