@@ -96,7 +96,7 @@ hfToken:
 | Repository | Name | Version |
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.15.3 |
-| oci://docker-registry.osc.edu/webservices | osc-open-webui | 0.10.0-rc0 |
+| oci://docker-registry.osc.edu/webservices | osc-open-webui | 0.10.0-rc1 |
 
 ## Values
 
