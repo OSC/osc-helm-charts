@@ -12,6 +12,7 @@ metadata:
     prometheus.io/probe_scheme: 'https'
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
     prometheus.io/probe_path: /health
     {{- if or .Values.global.ingress.hostAlias .Values.global.ingress.additionalHosts }}
     {{- $aliases := list }}

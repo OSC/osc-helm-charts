@@ -77,14 +77,137 @@ global:
   alert:
     # -- The alert receiver
     receiver:
-  # The Open WebUI secret key
+  # -- The Open WebUI secret key
   # @default -- **required**
   webui_secret_key:
+  # -- Storage class for persistence
+  storageClass: webservices-nfs-client
+  # -- The storage fileset
+  fileset:
+  # @ignored
+  init:
+    resources:
+      limits:
+        cpu: 1
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 64Mi
+  otel:
+    image:
+      # @ignored
+      repository: kubernetes/otel/opentelemetry-collector-contrib
+      # -- The otel collector tag, must be replicated to OSC
+      tag: '0.161.0'
+    # @ignored
+    resources:
+      limits:
+        cpu: 2
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 64Mi
+  database:
+    # -- Enable database support
+    enable: false
+    pool:
+      # -- Open WebUI database pool size
+      size: 15
+      # -- Open WebUI database pool max overflow
+      maxOverflow: 20
+  postgresql:
+    auth:
+      # -- postgres password
+      postgresPassword:
+      # @ignored
+      username: openwebui
+      # -- openwebui user password
+      password:
+      # @ignored
+      database: openwebui
+    # @ignored
+    fullnameOverride: open-webui-postgresql
+    # -- Max PostgreSQL connections
+    maxConnections: 200
+    # @ignored
+    service:
+      ports:
+        postgresql: 5432
+  redis:
+    # -- Redis password
+    password:
+    # -- Redis max clients
+    maxclients: 10000
+    # -- Redis client timeout
+    timeout: 1800
+# @ignored
+clusterDomain: cluster.local
+
+podMonitor:
+  # -- Additional relabelings
+  relabelings: []
+  # -- Additional metric relabelings
+  metricRelabelings: []
 
 ollama:
   networkPolicy:
     # -- Array of additional pod labels to allow
     allowedPodLabels: []
+
+database:
+  # @ignored
+  oscCommon:
+    enable: false
+  postgresql:
+    # -- Enable postgresql
+    enable: true
+    # @ignored
+    primary:
+      extendedConfiguration: |
+        max_connections = {{ .Values.global.postgresql.maxConnections }}
+      persistence:
+        annotations:
+          osc.edu/fileset: '{{ .Values.global.fileset }}'
+      # @ignored
+      initdb:
+        scripts:
+          vector.sh: |
+            export PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD"
+            psql -h localhost -p $POSTGRESQL_PORT_NUMBER -U postgres -d $POSTGRES_DATABASE -c "CREATE EXTENSION IF NOT EXISTS vector;"
+          metrics.sql: |
+            GRANT pg_monitor TO {{ .Values.global.postgresql.auth.username }};
+    # @ignored
+    backup:
+      cronjob:
+        annotations:
+          osc.edu/fileset: '{{ .Values.global.fileset }}'
+  redis:
+    # @ignored
+    enable: true
+    # @ignored
+    fullnameOverride: open-webui-redis
+    # @ignored
+    auth:
+      enabled: true
+    # @ignored
+    commonConfiguration: |-
+      # Enable AOF https://redis.io/topics/persistence#append-only-file
+      appendonly yes
+      # Disable RDB persistence, AOF persistence already enabled.
+      save ""
+      # Recommended by Open WebUI
+      maxclients {{ .Values.global.redis.maxclients }}
+      timeout {{ .Values.global.redis.timeout }}
+    master:
+      service:
+        ports:
+          # Must match REDIS_URL port for Open WebUI
+          # @ignored
+          redis: 6379
+      persistence:
+        annotations:
+          # -- Fileset for Redis storage
+          osc.edu/fileset: PZS0645
 
 open-webui:
   # @ignored
@@ -96,9 +219,16 @@ open-webui:
   # @ignored
   pipelines:
     enabled: false
-  # @ignored
   websocket:
+    # -- Enable web sockets. **required when using databases**
     enabled: false
+    # @ignored
+    existingSecret: osc-open-webui-secret
+    # @ignored
+    existingSecretKey: REDIS_URL
+    # @ignored
+    redis:
+      enabled: false
   # @ignored
   extraLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
@@ -108,11 +238,17 @@ open-webui:
   podLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
     receiver: '{{ .Values.global.alert.receiver }}'
+    open-webui-redis-client: 'true'
+  # @ignored
+  podAnnotations:
+    checksum/secret: '{{ include "osc-open-webui.secret.content" . | sha256sum }}'
+    checksum/db-migrate: '{{ include "osc-open-webui.db-migrate.content" . | sha256sum }}'
+    checksum/db-wait: '{{ include "osc-open-webui.db-wait.content" . | sha256sum }}'
   image:
     # -- OSC registry location for Open WebUI image
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
     # -- The Open WebUI image tag.  Must be synced to OSC registry
-    tag: 0.8.11
+    tag: 0.11.4-osc-r4
   # @ignored
   imagePullSecrets:
     - name: '{{ .Values.global.imagePullSecret.name }}'
@@ -139,11 +275,14 @@ open-webui:
   # @ignored
   ingress:
     enabled: false
+  # @ignored
   persistence:
-    # @ignored
+    labels:
+      '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    annotations:
+      osc.edu/fileset: '{{ .Values.global.fileset }}'
     size: 10Gi
-    # -- The Open WebUI persistent storage class
-    storageClass: webservices-nfs-client
+    storageClass: '{{ .Values.global.storageClass }}'
   # @ignored
   nodeSelector:
     '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
@@ -151,6 +290,26 @@ open-webui:
   extraEnvVars: []
   # @ignored
   commonEnvVars:
+    - name: K8S_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: OTEL_SERVICE_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.name
+    - name: ENABLE_DB_MIGRATIONS
+      value: '{{ if .Values.global.database.enable }}False{{ else }}True{{ end }}'
+    - name: VECTOR_DB
+      value: '{{ if .Values.global.database.enable }}pgvector{{ else }}chroma{{ end }}'
+    - name: PGVECTOR_CREATE_EXTENSION
+      value: 'false'
+    - name: DATABASE_POOL_SIZE
+      value: '{{ .Values.global.database.pool.size }}'
+    - name: DATABASE_POOL_MAX_OVERFLOW
+      value: '{{ .Values.global.database.pool.maxOverflow }}'
     - name: LOG_FORMAT
       value: json
     - name: ENABLE_OAUTH_GROUP_CREATION
@@ -175,10 +334,120 @@ open-webui:
       value: "True"
     - name: AUDIT_LOG_LEVEL
       value: METADATA
+    - name: AUDIT_EXCLUDED_PATHS
+      value: /chats,/chat,/folders,/socket.io
+    # Part of OSC specific patch
+    - name: GLOBAL_UVICORN_LOG_LEVEL
+      value: WARNING
+    - name: ENABLE_OTEL
+      value: "True"
+    - name: ENABLE_OTEL_METRICS
+      value: "True"
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://localhost:4317
+    - name: OTEL_EXPORTER_OTLP_INSECURE
+      value: "True"
   # @ignored
   extraEnvFrom:
     - secretRef:
         name: osc-open-webui-secret
+  # @ignored
+  extraInitContainers: |
+    - name: db-wait
+      image: 'docker-registry.osc.edu/kubernetes/portainer/kubectl-shell:2.39.0'
+      imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+      command:
+        - /bin/bash
+        - /scripts/db-wait.sh
+      resources:
+        {{- toYaml .Values.global.init.resources | nindent 4 }}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+          readOnly: true
+    - name: db-migrate
+      image: '{{ .Values.image.repository }}:{{ include "open-webui.tag" $ }}'
+      imagePullPolicy: '{{ .Values.image.pullPolicy }}'
+      command:
+        - /bin/bash
+        - /scripts/db-migrate.sh
+      resources:
+        {{- toYaml .Values.global.init.resources | nindent 4 }}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      env:
+        - name: POD_INDEX
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['apps.kubernetes.io/pod-index']
+      envFrom:
+        - secretRef:
+            name: osc-open-webui-secret
+      volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+          readOnly: true
+        - name: data
+          mountPath: /app/backend/data
+    - name: otel
+      image: '{{ .Values.global.imagePullSecret.registry }}/{{ .Values.global.otel.image.repository }}:{{ .Values.global.otel.image.tag }}'
+      imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      resources:
+        {{- toYaml .Values.global.otel.resources | nindent 4 }}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+        privileged: false
+      volumeMounts:
+        - name: otel-config
+          mountPath: /etc/otelcol-contrib
+          readOnly: true
+      env:
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+      ports:
+        - name: metrics
+          containerPort: 8889
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 13133
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 13133
+  # @ignored
+  volumes:
+    - name: scripts
+      configMap:
+        name: osc-open-webui-scripts
+    - name: otel-config
+      configMap:
+        name: osc-open-webui-otel
+  # @ignored
+  serviceAccount:
+    automountServiceAccountToken: true
   # @ignored
   service:
     port: 80
