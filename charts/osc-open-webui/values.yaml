@@ -331,6 +331,9 @@ open-webui:
       value: METADATA
     - name: AUDIT_EXCLUDED_PATHS
       value: /chats,/chat,/folders,/socket.io
+    # Part of OSC specific patch
+    - name: UVICORN_LOG_LEVEL
+      value: WARNING
     - name: ENABLE_OTEL
       value: "True"
     - name: ENABLE_OTEL_METRICS
