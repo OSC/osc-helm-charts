@@ -138,7 +138,7 @@ hfToken:
 | frontend.resources.requests.cpu | int | `2` | Default frontend cpu request |
 | frontend.resources.requests.memory | string | `"4Gi"` | Default frontend memory request |
 | keepalive.interval | int | `300` | Interval in seconds of how often to do keepalive for persistent multi-node jobs |
-| osc-open-webui.open-webui.image.tag | string | `"0.11.4-osc-r3"` | The version of Open WebUI |
+| osc-open-webui.open-webui.image.tag | string | `"0.11.4-osc-r4"` | The version of Open WebUI |
 | osc-open-webui.open-webui.sso.enableRoleManagement | bool | `true` | Enables role access controls in Open WebUI |
 
 ----------------------------------------------
