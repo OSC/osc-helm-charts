@@ -219,9 +219,16 @@ open-webui:
   # @ignored
   pipelines:
     enabled: false
-  # @ignored
   websocket:
+    # -- Enable web sockets. **required when using databases**
     enabled: false
+    # @ignored
+    existingSecret: osc-open-webui-secret
+    # @ignored
+    existingSecretKey: REDIS_URL
+    # @ignored
+    redis:
+      enabled: false
   # @ignored
   extraLabels:
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'

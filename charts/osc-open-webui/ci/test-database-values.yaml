@@ -116,6 +116,8 @@ open-webui:
   extraEnvVars:
     - name: HF_HUB_OFFLINE
       value: '1'
+  websocket:
+    enabled: true
   podSecurityContext:
     runAsUser: 1000
   sso:
