@@ -32,6 +32,12 @@ global:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
   webui_secret_key: <Open WebUI webui secret>
+  postgresql:
+    auth:
+      postgresPassword: <postgres user password>
+      password: <openwebui user password>
+  redis:
+    password: <redis password>
   models:
     qwen3:
       model: Qwen/Qwen3-0.6B

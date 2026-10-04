@@ -301,6 +301,13 @@ osc-open-webui:
   # @ignored
   oscCommon:
     enable: false
+  database:
+    redis:
+      master:
+        persistence:
+          annotations:
+            # -- Must match global.fileset
+            osc.edu/fileset: PZS0645
   open-webui:
     # @ignored
     nameOverride: open-webui

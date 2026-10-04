@@ -31,6 +31,12 @@ global:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
   webui_secret_key: <Open WebUI webui secret>
+  postgresql:
+    auth:
+      postgresPassword: <postgres user password>
+      password: <openwebui user password>
+  redis:
+    password: <redis password>
   models:
     qwen3:
       model: Qwen/Qwen3-0.6B
@@ -138,6 +144,7 @@ hfToken:
 | frontend.resources.requests.cpu | int | `2` | Default frontend cpu request |
 | frontend.resources.requests.memory | string | `"4Gi"` | Default frontend memory request |
 | keepalive.interval | int | `300` | Interval in seconds of how often to do keepalive for persistent multi-node jobs |
+| osc-open-webui.database.redis.master.persistence.annotations."osc.edu/fileset" | string | `"PZS0645"` | Must match global.fileset |
 | osc-open-webui.open-webui.image.tag | string | `"0.11.4-osc-r4"` | The version of Open WebUI |
 | osc-open-webui.open-webui.sso.enableRoleManagement | bool | `true` | Enables role access controls in Open WebUI |
 
