@@ -337,7 +337,7 @@ open-webui:
     - name: AUDIT_EXCLUDED_PATHS
       value: /chats,/chat,/folders,/socket.io
     # Part of OSC specific patch
-    - name: GLOBAL_UVICORN_LOG_LEVEL
+    - name: UVICORN_LOGGER_LOG_LEVEL
       value: WARNING
     - name: ENABLE_OTEL
       value: "True"
