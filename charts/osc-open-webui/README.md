@@ -155,7 +155,6 @@ open-webui:
 | podMonitor.metricRelabelings | Additional metric relabelings | `[]` |
 | ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |
 | database.postgresql.enable | Enable postgresql | `true` |
-| database.redis.master.service.ports |  | `{}` |
 | database.redis.master.persistence.annotations."osc.edu/fileset" | Fileset for Redis storage | `"PZS0645"` |
 | open-webui.websocket.enabled | Enable web sockets. **required when using databases** | `false` |
 | open-webui.image.repository | OSC registry location for Open WebUI image | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |

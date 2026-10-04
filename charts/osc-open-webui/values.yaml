@@ -199,10 +199,10 @@ database:
       maxclients {{ .Values.global.redis.maxclients }}
       timeout {{ .Values.global.redis.timeout }}
     master:
+      # @ignored
       service:
         ports:
           # Must match REDIS_URL port for Open WebUI
-          # @ignored
           redis: 6379
       persistence:
         annotations:
