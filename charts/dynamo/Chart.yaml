@@ -30,12 +30,11 @@ dependencies:
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../osc-common
   - name: osc-open-webui
-    # version: 0.9.1
-    # repository: https://osc.github.io/osc-helm-charts/
+    version: 0.10.0
+    repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../osc-open-webui
-    # Use OCI until merged and released:
-    # https://github.com/OSC/osc-helm-charts/pull/540
+    # Left as example
     #   helm package charts/osc-open-webui --version 0.10.0-rc1
     #   helm push osc-open-webui-0.10.0-rc1.tgz oci://docker-registry.osc.edu/webservices
-    version: 0.10.0-rc1
-    repository: oci://docker-registry.osc.edu/webservices
+    # version: 0.10.0-rc1
+    # repository: oci://docker-registry.osc.edu/webservices
