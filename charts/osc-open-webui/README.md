@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.9.1](https://img.shields.io/badge/Version-0.9.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -14,8 +14,9 @@ OSC Open Web UI deployment
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://helm.openwebui.com/ | open-webui | 13.1.0 |
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.15.1 |
+| https://osc.github.io/osc-helm-charts | database | 0.19.6 |
+| oci://docker-registry.osc.edu/kubernetes/open-webui | open-webui | 16.7.0-osc-r0 |
 
 ## Usage
 
@@ -62,6 +63,30 @@ open-webui:
         hostPath:
           path: /users/PROJECT/USER
           type: Directory
+```
+
+To add PostgreSQL and Redis to the base settings:
+
+```
+global:
+  fileset: <storage fileset>
+  database:
+    enable: true
+  postgresql:
+    auth:
+      postgresPassword: <postgres user password>
+      password: <openwebui user password>
+  redis:
+    password: <redis password>
+database:
+  redis:
+    master:
+      persistence:
+        annotations:
+          osc.edu/fileset: <must match global.fileset>
+open-webui:
+  websocket:
+    enabled: true
 ```
 
 Below is an example of PAAS usage:
@@ -137,15 +162,30 @@ open-webui:
 | global.auth.redirectUris | Additional redirect URIs | `[]` |
 | global.auth.allowGroups | Restrict access to these groups | `[]` |
 | global.alert.receiver | The alert receiver | `nil` |
-| global.webui_secret_key |  | `nil` |
+| global.webui_secret_key | The Open WebUI secret key | **required** |
+| global.storageClass | Storage class for persistence | `"webservices-nfs-client"` |
+| global.fileset | The storage fileset | `nil` |
+| global.otel.image.tag | The otel collector tag, must be replicated to OSC | `"0.161.0"` |
+| global.database.enable | Enable database support | `false` |
+| global.database.pool.size | Open WebUI database pool size | `15` |
+| global.database.pool.maxOverflow | Open WebUI database pool max overflow | `20` |
+| global.postgresql.auth.postgresPassword | postgres password | `nil` |
+| global.postgresql.auth.password | openwebui user password | `nil` |
+| global.postgresql.maxConnections | Max PostgreSQL connections | `200` |
+| global.redis.password | Redis password | `nil` |
+| global.redis.maxclients | Redis max clients | `10000` |
+| global.redis.timeout | Redis client timeout | `1800` |
+| podMonitor.relabelings | Additional relabelings | `[]` |
+| podMonitor.metricRelabelings | Additional metric relabelings | `[]` |
 | ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |
+| database.redis.master.persistence.annotations."osc.edu/fileset" | Fileset for Redis storage | `"PZS0645"` |
+| open-webui.websocket.enabled | Enable web sockets. **required when using databases** | `false` |
 | open-webui.image.repository | OSC registry location for Open WebUI image | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
-| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"0.8.11"` |
+| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"0.11.4-osc-r4"` |
 | open-webui.resources.limits.memory | Open WebUI pod memory limit | `"4Gi"` |
 | open-webui.resources.limits.cpu | Open WebUI pod CPU limit | `2` |
 | open-webui.resources.requests.memory | Open WebUI pod memory request | `"2Gi"` |
 | open-webui.resources.requests.cpu | Open WebUI pod CPU request | `1` |
-| open-webui.persistence.storageClass | The Open WebUI persistent storage class | `"webservices-nfs-client"` |
 | open-webui.extraEnvVars | Additional Open WebUI environment variables | `[]` |
 | open-webui.sso.enableRoleManagement | Enables role access controls in Open WebUI | `false` |
 | open-webui.ollama.image.repository |  | `"docker-registry.osc.edu/kubernetes/ollama/ollama"` |
