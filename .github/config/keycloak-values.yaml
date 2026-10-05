@@ -8,8 +8,8 @@ resources:
     cpu: 1
     memory: 3072Mi
   requests:
-    cpu: 100m
-    memory: 1024Mi
+    cpu: 250m
+    memory: 2048Mi
 auth:
   adminUser: admin
   adminPassword: secret
