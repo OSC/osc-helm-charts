@@ -97,11 +97,6 @@ data:
     Write-Host "Rename"
     Rename-Computer -NewName "{{ $vm.hostname | default $name }}" -Force
 
-    $dnsSuffix = "{{ $vm.domain | default $.Values.vm.defaults.domain }}"
-    Write-Host "Set domain name to $dnsSuffix"
-    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "Domain" -Value $dnsSuffix
-    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "NV Domain" -Value $dnsSuffix
-
     Write-Host "Setup DNS"
     $DNSServers = @(
     {{- $lastServer := sub (len $.Values.windows11.defaults.dnsServers) 1 -}}
@@ -156,6 +151,21 @@ data:
     Start-Process -FilePath "C:\Windows\Temp\nvidia\setup.exe" -ArgumentList "-s", "-n", "-noreboot", "-log:C:\Windows\Logs\nvidia", "-loglevel:6" -Wait
     Remove-Item -Path C:\Windows\Temp\nvidia -Recurse
   {{- end }}
+
+    Write-Host "Install Puppet Agent"
+    $puppetServer = "{{ $.Values.vm.puppetServer }}"
+    $puppetCA = "{{ $.Values.vm.puppetCA }}"
+    $fqdn = "{{ $vm.hostname | default $name }}.{{ $vm.domain | default $.Values.vm.defaults.domain }}"
+    $puppetEnv = "{{ $vm.puppetEnv | default "production" }}"
+    choco install puppet-agent --yes --version={{ $.Values.vm.defaults.puppetVersion }} --install-arguments="'PUPPET_SERVER=$puppetServer PUPPET_AGENT_CERTNAME=$fqdn PUPPET_CA_SERVER=$puppetCA PUPPET_AGENT_ENVIRONMENT=$puppetEnv PUPPET_AGENT_STARTUP_MODE=Disabled'"
+
+    Write-Host "Create facts"
+    if(!(test-path "C:\ProgramData\PuppetLabs\facter\facts.d")) {
+      New-Item -ItemType Directory -Force -Path "C:\ProgramData\PuppetLabs\facter\facts.d"
+    }
+    Set-Content -Value "virtual=kubevirt" -Path C:\ProgramData\PuppetLabs\facter\facts.d\virtual.txt
+    $hostgroup = "{{ $vm.hostgroup | default $.Values.vm.defaults.hostgroup }}"
+    Set-Content -Value "hostgroup=$hostgroup" -Path C:\ProgramData\PuppetLabs\facter\facts.d\hostgroup.txt
 
     # Import the module
     Write-Host "Perform Windows Updates"

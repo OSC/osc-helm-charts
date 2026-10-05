@@ -1,0 +1,28 @@
+{{- range $name, $vm := .Values.vms }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "kubevirt-vm.labels" $ | nindent 4 }}
+    {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "kubevirt-vm.vm.selectorLabels" (dict "root" $ "name" $name "vm" $vm) | nindent 6 }}
+  endpoints:
+  - port: exporter
+    interval: 60s
+    path: /metrics
+    relabelings:
+      - sourceLabels:
+        - __meta_kubernetes_service_label_host
+        targetLabel: host
+      - sourceLabels:
+        - __address__
+        regex: '([^:]+)(:[0-9]+)?'
+        targetLabel: instance
+        replacement: '{{ $vm.hostname | default $name }}.{{ $vm.domain | default $.Values.vm.defaults.domain }}${2}'
+{{- end }}

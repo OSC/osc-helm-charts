@@ -34,6 +34,10 @@ windows11:
     domainAdminPassword:
     # -- GPU driver file
     gpuDriver: 596.36_grid_win10_win11_server2022_server2025_dch_64bit_international.exe
+    # -- Windows exporter port
+    exporterPort: 9182
+    # -- Windows Puppet hostgroup
+    hostgroup: windows
 vm:
   defaults:
     # -- The amount of space default space for VMs
@@ -49,3 +53,11 @@ vm:
   # -- OSC repo server host
   # @default -- **required**
   repoServer:
+  # -- OSC Puppet server
+  # @default -- **required**
+  puppetServer:
+  # -- OSC Puppet CA
+  # @default -- **required**
+  puppetCA:
+  # -- Puppet version
+  puppetVersion: '8.8.1'
