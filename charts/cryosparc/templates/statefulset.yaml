@@ -36,6 +36,7 @@ spec:
         hostnames:
         {{- $nodes | toYaml | nindent 8 }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       initContainers:
       - name: init-{{ include "cryosparc.name" . }}
         image: docker-registry.osc.edu/kubernetes/busybox:latest
@@ -69,7 +70,7 @@ spec:
         lifecycle:
           preStop:
             exec:
-              command: ['sh', '-c', 'cryosparcm', 'stop']   # Fix rollout restart issue
+              command: ["sh", "/scripts/prestop.sh"]
         workingDir: /opt/cryosparc_master
         env:
         - name: TZ

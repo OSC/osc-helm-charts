@@ -16,3 +16,14 @@ metadata:
 data:
   run.sh: |
     {{- include "cryosparc.run.content" . | nindent 4 }}
+  prestop.sh: |
+    exec &> >(tee -a "/opt/cryosparc_master/run/preStop_hook_$(date +'%Y_%m_%d_%Hh%M').log")
+    echo "Kill running jobs: $(date)"
+    cryosparcm job status | sed -nE 's/^ *│ *(P[0-9]+) *│ *(J[0-9]+) *│.*/\1 \2/p' | while read x
+    do
+      echo $x
+      cryosparcm job kill $x
+    done
+    echo "Stop CryoSPARC: $(date)"
+    cryosparcm stop
+    echo "Completed: $(date)"
