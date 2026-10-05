@@ -1,0 +1,57 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: open-webui
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: open-webui
+      app.kubernetes.io/component: open-webui
+  podMetricsEndpoints:
+  - port: metrics
+    interval: 10s
+    path: /metrics
+    relabelings:
+      - sourceLabels:
+        - __meta_kubernetes_pod_label_receiver
+        targetLabel: receiver
+    {{- with .Values.podMonitor.relabelings }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    metricRelabelings:
+      # TODO: Hardcode until addressed
+      # https://github.com/open-webui/open-webui/issues/31609
+      - sourceLabels:
+        - http_route
+        regex: '/_app/immutable/.+'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '^/(static|assets)/.+'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '^/_app/version.json'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '^/robots.txt'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '^/manifest.json'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '/.git/.+'
+        action: drop
+      - sourceLabels:
+        - http_route
+        regex: '.*/(.env|env).*'
+        action: drop
+    {{- with .Values.podMonitor.metricRelabelings }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}

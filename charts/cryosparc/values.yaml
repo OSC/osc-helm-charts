@@ -131,6 +131,9 @@ admin:
   email: ''
   password: ''
 
+# -- Pod termination grace period seconds
+terminationGracePeriodSeconds: 30
+
 nodeSelector: {}
 
 # @ignored
