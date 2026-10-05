@@ -65,6 +65,30 @@ open-webui:
           type: Directory
 ```
 
+To add PostgreSQL and Redis to the base settings:
+
+```
+global:
+  fileset: <storage fileset>
+  database:
+    enable: true
+  postgresql:
+    auth:
+      postgresPassword: <postgres user password>
+      password: <openwebui user password>
+  redis:
+    password: <redis password>
+database:
+  redis:
+    master:
+      persistence:
+        annotations:
+          osc.edu/fileset: <must match global.fileset>
+open-webui:
+  websocket:
+    enabled: true
+```
+
 Below is an example of PAAS usage:
 
 ```yaml
@@ -154,7 +178,6 @@ open-webui:
 | podMonitor.relabelings | Additional relabelings | `[]` |
 | podMonitor.metricRelabelings | Additional metric relabelings | `[]` |
 | ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |
-| database.postgresql.enable | Enable postgresql | `true` |
 | database.redis.master.persistence.annotations."osc.edu/fileset" | Fileset for Redis storage | `"PZS0645"` |
 | open-webui.websocket.enabled | Enable web sockets. **required when using databases** | `false` |
 | open-webui.image.repository | OSC registry location for Open WebUI image | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |

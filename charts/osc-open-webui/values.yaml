@@ -158,8 +158,9 @@ database:
   # @ignored
   oscCommon:
     enable: false
+  # @ignored
   postgresql:
-    # -- Enable postgresql
+    # @ignored
     enable: true
     # @ignored
     primary:
