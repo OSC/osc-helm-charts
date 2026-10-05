@@ -1,4 +1,5 @@
 {{- range $name, $vm := .Values.vms }}
+{{- if or (not (eq $vm.os "windows11")) (eq $vm.deployed true) }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -25,4 +26,5 @@ spec:
         regex: '([^:]+)(:[0-9]+)?'
         targetLabel: instance
         replacement: '{{ $vm.hostname | default $name }}.{{ $vm.domain | default $.Values.vm.defaults.domain }}${2}'
+{{- end }}
 {{- end }}

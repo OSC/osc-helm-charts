@@ -122,6 +122,12 @@ data:
     Set-DnsClientServerAddress -InterfaceIndex $ifIndex -ServerAddresses $DNSServers
     Set-DnsClientGlobalSetting -SuffixSearchList $DNSSearch
 
+    $domain = "{{ $vm.domain | default $.Values.vm.defaults.domain }}"
+    Write-Host "Set domain name to $domain"
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "SyncDomainWithMembership" -Value 0
+    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "Domain" -Value $domain
+    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "NV Domain" -Value $domain
+
   {{- if $.Values.vm.defaults.sshPubKeys }}
     # Add ssh authorized_key for administrator
     # https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_keymanagement
