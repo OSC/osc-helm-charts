@@ -52,6 +52,8 @@ global:
 | global.portforwardServiceAccounts[0].namespace | string | `"sciappstest"` |  |
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.fileset | string | `"PZS0530"` |  |
+| nameOverride | string | `"regression-logging"` |  |
+| fullnameOverride | string | `"regression-logging"` |  |
 | database.mongodb.enable | bool | `true` |  |
 | database.mongodb.service.nameOverride | string | `"regression-logging-mongodb"` |  |
 | database.mongodb.service.ports.mongodb | int | `27017` |  |
