@@ -383,6 +383,8 @@ dcgm-exporter:
       value: "NONE"
   service:
     port: 9400
+    annotations:
+      prometheus.io/probe_skip: 'true'
   serviceMonitor:
     enabled: true
     interval: 60s
