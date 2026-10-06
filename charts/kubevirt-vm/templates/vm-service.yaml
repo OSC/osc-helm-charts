@@ -9,8 +9,6 @@ metadata:
     {{- include "kubevirt-vm.labels" $ | nindent 4 }}
     {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
     host: "{{ $vm.hostname | default $name }}"
-  annotations:
-    prometheus.io/probe_skip: 'true'
 spec:
   ports:
 {{- range $port, $portNum := ($vm.ports | default list) }}
