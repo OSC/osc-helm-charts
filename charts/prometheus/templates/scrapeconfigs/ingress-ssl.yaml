@@ -1,13 +1,13 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: legacy-ingress-probe
+  name: ingress-ssl
   namespace: {{ .Release.Namespace }}
   labels:
     discovery: annotations
     {{- include "prometheus.labels" . | nindent 4 }}
 spec:
-  jobName: ingress-probe
+  jobName: ingress-ssl
   scrapeInterval: 3m
   scrapeTimeout: 1m
   kubernetesSDConfigs:
@@ -21,13 +21,9 @@ spec:
     - sourceLabels: [__meta_kubernetes_ingress_annotation_prometheus_io_probe_skip]
       action: drop
       regex: 'true'
-    # A way to find legacy scrapes
-    - targetLabel: 'discovery'
-      replacement: 'annotations'
-    - sourceLabels: [__meta_kubernetes_ingress_annotation_prometheus_io_probe_scheme]
-      regex: (.+)
-      replacement: ${1}
-      targetLabel: __meta_kubernetes_ingress_scheme
+    - sourceLabels: [__meta_kubernetes_ingress_scheme]
+      action: keep
+      regex: https
     - sourceLabels: [__meta_kubernetes_ingress_scheme, __address__, __meta_kubernetes_ingress_path]
       regex: (.+);(.+);(.+)
       replacement: ${1}://${2}${3}
@@ -36,12 +32,8 @@ spec:
       regex: (.+);(.+);(.+)
       replacement: ${1}://${2}${3}
       targetLabel: __param_target
-    - sourceLabels: [__meta_kubernetes_ingress_scheme]
-      regex: (.+)
-      replacement: ${1}
-      targetLabel: __param_module
     - targetLabel: __address__
-      replacement: 'blackbox-exporter.{{ .Release.Namespace }}.svc.cluster.local:9115'
+      replacement: ssl-exporter.{{ .Release.Namespace }}.svc.cluster.local:9219
     - sourceLabels: [__param_target]
       targetLabel: instance
     - action: labelmap

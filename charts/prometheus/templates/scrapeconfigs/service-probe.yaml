@@ -1,13 +1,13 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: legacy-services
+  name: service-probe
   namespace: {{ .Release.Namespace }}
   labels:
     discovery: annotations
     {{- include "prometheus.labels" . | nindent 4 }}
 spec:
-  jobName: services
+  jobName: service-probe
   kubernetesSDConfigs:
     - role: Service
   scheme: http
@@ -25,9 +25,6 @@ spec:
     - sourceLabels: [__meta_kubernetes_service_port_protocol]
       action: keep
       regex: TCP
-    # A way to find legacy scrapes
-    - targetLabel: 'discovery'
-      replacement: 'annotations'
     - sourceLabels: [__address__]
       targetLabel: __param_target
     - targetLabel: __address__
