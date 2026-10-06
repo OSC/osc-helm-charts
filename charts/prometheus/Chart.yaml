@@ -20,6 +20,6 @@ dependencies:
     version: 4.8.3
     repository: https://nvidia.github.io/dcgm-exporter/helm-charts
   - name: osc-common
-    version: 0.14.1
+    version: 0.17.0
     repository: https://osc.github.io/osc-helm-charts/
     # repository: file://../common

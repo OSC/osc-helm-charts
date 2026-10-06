@@ -381,14 +381,18 @@ dcgm-exporter:
   extraEnv:
     - name: "__DCGM_DBG_LVL"
       value: "NONE"
-  podAnnotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/port: '9400'
   service:
-    enable: false
     port: 9400
   serviceMonitor:
-    enabled: false
+    enabled: true
+    interval: 60s
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_node_name]
+      regex: '(.+)'
+      replacement: '$1'
+      targetLabel: host
+    - sourceLabels: [host]
+      targetLabel: node
   resources:
     limits:
       cpu: '2'
