@@ -26,6 +26,15 @@ global:
 nameOverride: ""
 fullnameOverride: ""
 
+networkPolicy:
+  allowNamespaces:
+    - ingress-nginx
+    - k8-namespace-reaper
+    - keda
+    - headlamp
+    - kube-system
+    - kai-scheduler
+
 kube-prometheus-stack:
   fullnameOverride: prometheus
   crds:
@@ -340,11 +349,6 @@ sslExporter:
   service:
     type: ClusterIP
     port: 9219
-
-ingressName: ingress-nginx
-namespaceReaper: k8-namespace-reaper
-kedaNamespace: keda
-headlampNamespace: headlamp
 
 kube-state-metrics:
   nameOverride: kube-state-metrics
