@@ -19,18 +19,8 @@ spec:
     - podSelector:
         matchLabels:
           {{- include "blackbox-exporter.selectorLabels" . | nindent 10 }}
+  {{- range .Values.networkPolicy.allowNamespaces }}
     - namespaceSelector:
         matchLabels:
-          app.kubernetes.io/name: {{ .Values.ingressName }}
-    - namespaceSelector:
-        matchLabels:
-          app.kubernetes.io/name: {{ .Values.namespaceReaper }}
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: {{ .Values.kedaNamespace }}
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: {{ .Values.headlampNamespace }}
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: kube-system
+          app.kubernetes.io/name: {{ . }}
+  {{- end }}
