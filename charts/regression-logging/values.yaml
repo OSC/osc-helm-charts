@@ -27,6 +27,9 @@ global:
     receiver: sciapps
   fileset: PZS0530
 
+nameOverride: regression-logging
+fullnameOverride: regression-logging
+
 database:
   # @ignored
   oscCommon:
@@ -90,6 +93,6 @@ osc-common:
           pathType: Prefix
           backend:
             service:
-              name: "{{ .Release.Name }}-regression-logging-backend"
+              name: "regression-logging-backend"
               port:
                 name: http
