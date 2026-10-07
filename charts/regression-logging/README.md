@@ -32,7 +32,7 @@ global:
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts | database | 0.20.0 |
+| https://osc.github.io/osc-helm-charts | database | 0.20.1 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.17.0 |
 
 ## Values
