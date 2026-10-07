@@ -46,8 +46,8 @@ global:
 | global.storageClass | string | `"local-ess"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
-| global.maintenanceGroups[0] | string | `"sappstf"` |  |
-| global.portforwardGroups[0] | string | `"oscstaff"` |  |
+| global.maintenanceGroups[0] | string | `"oscall"` |  |
+| global.portforwardGroups[0] | string | `"oscall"` |  |
 | global.portforwardServiceAccounts[0].name | string | `"sciappstest"` |  |
 | global.portforwardServiceAccounts[0].namespace | string | `"sciappstest"` |  |
 | global.alert.receiver | string | `"sciapps"` |  |
