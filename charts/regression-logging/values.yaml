@@ -59,8 +59,10 @@ backend:
     requests:
       cpu: 1
       memory: 1Gi
+  # @ignored
   podSecurityContext:
     runAsNonRoot: true
+  # @ignored
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -89,8 +91,10 @@ frontend:
     requests:
       cpu: 250m
       memory: 256Mi
+  # @ignored
   podSecurityContext:
     runAsNonRoot: true
+  # @ignored
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
