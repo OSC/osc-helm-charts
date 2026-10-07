@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "regression-logging.labels" . | nindent 4 }}
     component: backend
+    receiver: '{{ .Values.global.alert.receiver }}'
 spec:
   type: {{ .Values.backend.service.type }}
   ports:

@@ -6,6 +6,8 @@ global:
     # @default -- **required**
     password:
   oscServiceAccount: hpcsa
+  # @ignored
+  nodeSelectorRole: webservices
   storageClass: local-ess
   # @ignored
   auth:
@@ -57,6 +59,19 @@ backend:
     requests:
       cpu: 1
       memory: 1Gi
+  # @ignored
+  podSecurityContext:
+    runAsNonRoot: true
+  # @ignored
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+    runAsNonRoot: true
   apiKey: ""
 
 frontend:
@@ -76,6 +91,19 @@ frontend:
     requests:
       cpu: 250m
       memory: 256Mi
+  # @ignored
+  podSecurityContext:
+    runAsNonRoot: true
+  # @ignored
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+    runAsNonRoot: true
 
 # @ignored
 osc-common:
