@@ -1,0 +1,44 @@
+{{- $fullName := include "regression-logging.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}-frontend
+  labels:
+    {{- include "regression-logging.labels" . | nindent 4 }}
+    component: frontend
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "regression-logging.selectorLabels" . | nindent 6 }}
+      component: frontend
+  template:
+    metadata:
+      labels:
+        {{- include "regression-logging.selectorLabels" . | nindent 8 }}
+        component: frontend
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.global.imagePullSecret.name }}
+      containers:
+        - name: frontend
+          image: {{ include "regression-logging.image" (dict "imageRoot" .Values.frontend.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: {{ .Values.frontend.service.port }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/share/nginx/html/config.json
+              subPath: config.json
+              readOnly: true
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+      nodeSelector:
+        '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+      volumes:
+        - name: config-volume
+          secret:
+            secretName: {{ include "regression-logging.fullname" . }}-api-key
+            items:
+              - key: config.json
+                path: config.json

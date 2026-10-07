@@ -61,6 +61,7 @@ jobs:
           - paas
           - osc-open-webui
           - cryosparc
+          - regression-logging
     name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
