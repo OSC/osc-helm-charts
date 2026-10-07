@@ -1,6 +1,6 @@
 # regression-logging
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 Helm chart for regression logging and visualization
 
@@ -46,7 +46,6 @@ global:
 | global.storageClass | string | `"local-ess"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
-| global.maintenanceGroups[0] | string | `"oscall"` |  |
 | global.portforwardGroups[0] | string | `"oscall"` |  |
 | global.portforwardServiceAccounts[0].name | string | `"sciappstest"` |  |
 | global.portforwardServiceAccounts[0].namespace | string | `"sciappstest"` |  |
