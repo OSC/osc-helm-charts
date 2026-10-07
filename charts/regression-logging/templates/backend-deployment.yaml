@@ -6,6 +6,8 @@ metadata:
   labels:
     {{- include "regression-logging.labels" . | nindent 4 }}
     component: backend
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+    receiver: '{{ .Values.global.alert.receiver }}'
 spec:
   replicas: {{ .Values.backend.replicaCount }}
   selector:
@@ -17,9 +19,13 @@ spec:
       labels:
         {{- include "regression-logging.selectorLabels" . | nindent 8 }}
         component: backend
+        '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+        receiver: '{{ .Values.global.alert.receiver }}'
     spec:
       imagePullSecrets:
         - name: {{ .Values.global.imagePullSecret.name }}
+      securityContext:
+        {{- toYaml .Values.backend.podSecurityContext | nindent 8 }}
       containers:
         - name: backend
           image: {{ include "regression-logging.image" (dict "imageRoot" .Values.backend.image "global" .Values.global) }}
@@ -36,5 +42,7 @@ spec:
                   key: api-key
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.backend.securityContext | nindent 12 }}
       nodeSelector:
         '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
