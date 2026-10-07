@@ -12,14 +12,14 @@ global:
     enable: true
     upstream: "http://regression-logging-frontend.{{ .Release.Namespace }}.svc.cluster.local:80"
     allowGroups:
-    - sappstf
+    - oscall
   ingress:
     host: ""
     hostAlias: ""
   maintenanceGroups:
-    - sappstf
+    - oscall
   portforwardGroups:
-    - oscstaff
+    - oscall
   portforwardServiceAccounts:
     - name: sciappstest
       namespace: sciappstest
