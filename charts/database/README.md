@@ -1,6 +1,6 @@
 # database
 
-![Version: 0.20.1](https://img.shields.io/badge/Version-0.20.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.21.0](https://img.shields.io/badge/Version-0.21.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC database service Helm Chart
 
@@ -121,6 +121,7 @@ redis:
 | global.postgresql.auth.database | The database name | `nil` |
 | global.postgresql.auth.username | The database username | `nil` |
 | global.postgresql.auth.password | The database password | `nil` |
+| global.mongodb.auth.rootPassword | The MongoDB root password | `nil` |
 | imagePullSecret.enable | Manage the image pull secret from osc-common. Disable if this chart is used as a subchart. | `true` |
 | mariadb.enable | Enable MariaDB subchart by setting to `true` | `false` |
 | mariadb.image.repository | The OSC registry path to mariadb replicated image. This value should not need to be changed. | `"webservices/mariadb"` |
@@ -131,12 +132,16 @@ redis:
 | mariadb.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mysqld-exporter"` |
 | mariadb.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.17.2-debian-12-r16"` |
 | mongodb.enable | Enable MongoDB subchart by setting to `true` | `false` |
+| mongodb.auth.usernames | The MongoDB usernames | `[]` |
+| mongodb.auth.passwords | The MongoDB passwords | `[]` |
+| mongodb.auth.databases | The MongoDB databases | `[]` |
 | mongodb.image.repository | The OSC registry path to mongodb replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mongodb"` |
 | mongodb.image.tag | The version of MongoDB image. This tag should be replicated into the OSC registry | `"8.0.13-debian-12-r0"` |
 | mongodb.resources | Set limits for the MongoDB pod | `{"limits":{"cpu":4,"memory":"4Gi"},"requests":{"cpu":1,"memory":"256Mi"}}` |
 | mongodb.backup.cronjob.schedule | MongoDB cron backup schedule | `"@daily"` |
 | mongodb.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mongodb-exporter"` |
 | mongodb.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.47.0-debian-12-r1"` |
+| mongodb.metrics.password | MongoDB metrics password | `nil` |
 | postgresql.enable | Enable PostgreSQL subchart by setting to `true` | `false` |
 | postgresql.image.repository | The OSC registry path to postgresql replicated image. This value should not need to be changed. | `"webservices/postgresql"` |
 | postgresql.image.tag | The version of MariaDB image. **This version of must built by this repo** | `"17.6.0-debian-12-r4"` |

@@ -69,6 +69,10 @@ global:
       username:
       # -- The database password
       password:
+  mongodb:
+    auth:
+      # -- The MongoDB root password
+      rootPassword:
 
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
@@ -193,8 +197,19 @@ mongodb:
   architecture: standalone
   # @ignored
   useStatefulSet: true
-  # @ignored
   auth:
+    # @ignored
+    enabled: true
+    # @ignored
+    rootPassword: '{{ required "MongoDB root password required" .Values.global.mongodb.auth.rootPassword }}'
+    # -- The MongoDB usernames
+    usernames: []
+    # -- The MongoDB passwords
+    passwords: []
+    # -- The MongoDB databases
+    databases: []
+  # @ignored
+  passwordUpdateJob:
     enabled: false
   # @ignored
   disableSystemLog: true
@@ -312,6 +327,10 @@ mongodb:
       requests:
         cpu: 250m
         memory: 128Mi
+    # @ignored
+    username: metrics
+    # -- MongoDB metrics password
+    password:
     # @ignored
     service:
       annotations:
