@@ -69,6 +69,10 @@ global:
       username:
       # -- The database password
       password:
+  mongodb:
+    auth:
+      # -- The MongoDB root password
+      rootPassword:
 
 imagePullSecret:
   # -- Manage the image pull secret from osc-common.
@@ -196,8 +200,8 @@ mongodb:
   auth:
     # @ignored
     enabled: true
-    # -- The MongoDB root password
-    rootPassword:
+    # @ignored
+    rootPassword: '{{ required "MongoDB root password required" .Values.global.mongodb.auth.rootPassword }}'
     # -- The MongoDB usernames
     usernames: []
     # -- The MongoDB passwords
@@ -206,7 +210,7 @@ mongodb:
     databases: []
   # @ignored
   passwordUpdateJob:
-    enabled: true
+    enabled: false
   # @ignored
   disableSystemLog: true
   image:

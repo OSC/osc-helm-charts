@@ -121,6 +121,7 @@ redis:
 | global.postgresql.auth.database | The database name | `nil` |
 | global.postgresql.auth.username | The database username | `nil` |
 | global.postgresql.auth.password | The database password | `nil` |
+| global.mongodb.auth.rootPassword | The MongoDB root password | `nil` |
 | imagePullSecret.enable | Manage the image pull secret from osc-common. Disable if this chart is used as a subchart. | `true` |
 | mariadb.enable | Enable MariaDB subchart by setting to `true` | `false` |
 | mariadb.image.repository | The OSC registry path to mariadb replicated image. This value should not need to be changed. | `"webservices/mariadb"` |
@@ -131,7 +132,6 @@ redis:
 | mariadb.metrics.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/mysqld-exporter"` |
 | mariadb.metrics.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"0.17.2-debian-12-r16"` |
 | mongodb.enable | Enable MongoDB subchart by setting to `true` | `false` |
-| mongodb.auth.rootPassword | The MongoDB root password | `nil` |
 | mongodb.auth.usernames | The MongoDB usernames | `[]` |
 | mongodb.auth.passwords | The MongoDB passwords | `[]` |
 | mongodb.auth.databases | The MongoDB databases | `[]` |

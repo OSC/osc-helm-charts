@@ -8,11 +8,11 @@ global:
     - testgroup
   portforwardGroups:
     - testgroup1
-
+  mongodb:
+    auth:
+      rootPassword: supersecret
 mongodb:
   enable: true
-  auth:
-    rootPassword: supersecret
   containerSecurityContext:
     runAsUser: 65534
     runAsGroup: 65534
