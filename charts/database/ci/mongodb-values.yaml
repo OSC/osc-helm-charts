@@ -13,10 +13,6 @@ mongodb:
   enable: true
   auth:
     rootPassword: supersecret
-    usernames:
-    - test
-    passwords:
-    - secret
   containerSecurityContext:
     runAsUser: 65534
     runAsGroup: 65534
