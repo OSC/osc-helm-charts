@@ -193,9 +193,20 @@ mongodb:
   architecture: standalone
   # @ignored
   useStatefulSet: true
-  # @ignored
   auth:
-    enabled: false
+    # @ignored
+    enabled: true
+    # -- The MongoDB root password
+    rootPassword:
+    # -- The MongoDB usernames
+    usernames: []
+    # -- The MongoDB passwords
+    passwords: []
+    # -- The MongoDB databases
+    databases: []
+  # @ignored
+  passwordUpdateJob:
+    enabled: true
   # @ignored
   disableSystemLog: true
   image:
@@ -312,6 +323,10 @@ mongodb:
       requests:
         cpu: 250m
         memory: 128Mi
+    # @ignored
+    username: metrics
+    # -- MongoDB metrics password
+    password:
     # @ignored
     service:
       annotations:

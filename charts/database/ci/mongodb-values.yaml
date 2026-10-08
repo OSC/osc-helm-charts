@@ -8,8 +8,15 @@ global:
     - testgroup
   portforwardGroups:
     - testgroup1
+
 mongodb:
   enable: true
+  auth:
+    rootPassword: supersecret
+    usernames:
+    - test
+    passwords:
+    - secret
   containerSecurityContext:
     runAsUser: 65534
     runAsGroup: 65534
@@ -42,3 +49,5 @@ mongodb:
       storage:
         accessModes:
         - ReadWriteOnce
+  metrics:
+    password: metricssecret
