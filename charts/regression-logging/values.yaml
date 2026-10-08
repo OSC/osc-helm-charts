@@ -18,8 +18,9 @@ global:
   ingress:
     host: ""
     hostAlias: ""
+  # @ignored
   maintenanceGroups:
-    - oscall
+    - sappstf
   portforwardGroups:
     - oscall
   portforwardServiceAccounts:
