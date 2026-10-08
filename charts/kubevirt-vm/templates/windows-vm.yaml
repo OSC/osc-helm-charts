@@ -1,0 +1,102 @@
+{{- range $name, $vm := .Values.vms }}
+{{- if eq $vm.os "windows11" }}
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "kubevirt-vm.labels" $ | nindent 4 }}
+    {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+spec:
+  runStrategy: {{ $vm.runStrategy | default "RerunOnFailure" }}
+  template:
+    metadata:
+      labels:
+        {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 8 }}
+    spec:
+      domain:
+        clock:
+          timer:
+            hpet:
+              present: false
+            hyperv: {}
+            pit:
+              tickPolicy: delay
+            rtc:
+              tickPolicy: catchup
+          utc: {}
+        cpu:
+          sockets: {{ $vm.sockets | default 1 }}
+          cores: {{ $vm.cores | default $.Values.vm.defaults.cores }}
+          threads: {{ $vm.threads | default 1 }}
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            bootOrder: 1
+            name: pvcdisk
+        {{- if not (eq $vm.deployed true) }}
+          - name: sysprep
+            cdrom:
+              bus: sata
+          - name: finalize
+            cdrom:
+              bus: sata
+        {{- end }}
+          interfaces:
+          - masquerade: {}
+            model: virtio
+            name: default
+          networkInterfaceMultiqueue: true
+          tpm:
+            persistent: true
+        {{- if $vm.gpu }}
+          gpus:
+            - deviceName: {{ $vm.gpu }}
+              name: gpu1
+        {{- end }}
+        features:
+          acpi: {}
+          apic: {}
+          hyperv:
+            relaxed: {}
+            spinlocks:
+              spinlocks: 8191
+            vapic: {}
+          smm: {}
+        firmware:
+          bootloader:
+            efi:
+              secureBoot: false
+              persistent: true
+          uuid: 5d307ca9-b3ef-428c-8861-06e72d69f223
+        machine:
+          type: q35
+        resources:
+          requests:
+            memory: {{ $vm.memory | default $.Values.vm.defaults.memory }}
+      networks:
+      - name: default
+        pod: {}
+      terminationGracePeriodSeconds: 0
+    {{- if not $vm.gpu }}
+      evictionStrategy: LiveMigrate
+    {{- end }}
+      volumes:
+      - name: pvcdisk
+        dataVolume:
+          name: {{ $name }}
+    {{- if not (eq $vm.deployed true) }}
+      - name: sysprep
+        sysprep:
+          configMap:
+            name: {{ printf "%s-sysprep-config" $name }}
+      - name: finalize
+        sysprep:
+          secret:
+            name: {{ printf "%s-finalize" $name }}
+    {{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,29 @@
+{{- range $name, $vm := .Values.vms }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "kubevirt-vm.labels" $ | nindent 4 }}
+    {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+    host: "{{ $vm.hostname | default $name }}"
+spec:
+  ports:
+{{- range $port, $portNum := ($vm.ports | default list) }}
+  - name: {{ $port }}
+    port: {{ $portNum }}
+    protocol: TCP
+    targetPort: {{ $portNum }}
+{{- end }}
+{{- if eq $vm.os "windows11" }}
+  - name: exporter
+    port: {{ $.Values.windows11.defaults.exporterPort }}
+    protocol: TCP
+    targetPort: {{ $.Values.windows11.defaults.exporterPort }}
+{{- end }}
+  selector:
+    {{- include "kubevirt-vm.vm.selectorLabels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+  type: ClusterIP
+{{- end }}

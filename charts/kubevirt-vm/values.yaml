@@ -1,0 +1,63 @@
+global:
+  # -- The storageClassName for KubeVirt storage
+  storageClassName: nfs-kubevirt
+
+# -- VMs to deploy
+vms: {}
+
+windows11:
+  base:
+    # -- Name of the Windows 11 base
+    name: windows11-base
+    # -- Namespace of Windows 11 base
+    namespace: kubevirt-templates
+  defaults:
+    # -- DNS servers, should be MSAD servers
+    # @default -- **required**
+    dnsServers:
+    # -- Default DNS search domains
+    # @default -- **required**
+    dnsSearch:
+    # -- Default Administrator password
+    # @default -- **required**
+    adminPassword:
+    # -- Default whether to join the domain
+    joinDomain: true
+    # -- Default MSAD domain
+    # @default -- **required**
+    msadDomain:
+    # -- Default domain admin user
+    # @default -- **required**
+    domainAdminUser:
+    # -- Default domain admin password
+    # @default -- **required**
+    domainAdminPassword:
+    # -- GPU driver file
+    gpuDriver: 596.36_grid_win10_win11_server2022_server2025_dch_64bit_international.exe
+    # -- Windows exporter port
+    exporterPort: 9182
+    # -- Windows Puppet hostgroup
+    hostgroup: windows
+vm:
+  defaults:
+    # -- The amount of space default space for VMs
+    storageRequest: 100Gi
+    # -- Default VM core count
+    cores: 2
+    # -- Default VM memory
+    memory: 4Gi
+    # -- Default domain name for VMs
+    domain: ten.osc.edu
+    # -- SSH public keys to automatically add
+    sshPubKeys: []
+  # -- OSC repo server host
+  # @default -- **required**
+  repoServer:
+  # -- OSC Puppet server
+  # @default -- **required**
+  puppetServer:
+  # -- OSC Puppet CA
+  # @default -- **required**
+  puppetCA:
+  # -- Puppet version
+  puppetVersion: '8.8.1'

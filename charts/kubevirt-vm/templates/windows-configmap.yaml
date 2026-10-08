@@ -1,0 +1,198 @@
+{{- range $name, $vm := .Values.vms }}
+{{- if and (eq $vm.os "windows11") (not (eq $vm.deployed true)) }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-sysprep-config" $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "kubevirt-vm.labels" $ | nindent 4 }}
+    {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+data:
+  autounattend.xml: |-
+    <?xml version="1.0" encoding="utf-8"?>
+    <!-- responsible for installing windows, ignored on sysprepped images -->
+  unattend.xml: |-
+    <?xml version="1.0" encoding="utf-8"?>
+    <unattend xmlns="urn:schemas-microsoft-com:unattend">
+      <settings pass="oobeSystem">
+        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+          <OOBE>
+            <HideEULAPage>true</HideEULAPage>
+            <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+            <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+            <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+            <NetworkLocation>Work</NetworkLocation>
+            <SkipUserOOBE>true</SkipUserOOBE>
+            <SkipMachineOOBE>true</SkipMachineOOBE>
+            <ProtectYourPC>3</ProtectYourPC>
+          </OOBE>
+          <AutoLogon>
+            <Password>
+              <Value>123456</Value>
+              <PlainText>true</PlainText>
+            </Password>
+            <Enabled>true</Enabled>
+            <Username>Administrator</Username>
+          </AutoLogon>
+          <UserAccounts>
+           <AdministratorPassword>
+              <Value>123456</Value>
+              <PlainText>true</PlainText>
+            </AdministratorPassword>
+          </UserAccounts>
+          <RegisteredOrganization>Ohio Supercomputer Center</RegisteredOrganization>
+          <RegisteredOwner>OSC</RegisteredOwner>
+          <TimeZone>Eastern Standard Time</TimeZone>
+          <FirstLogonCommands>
+            <SynchronousCommand wcm:action="add">
+              <CommandLine>powershell -ExecutionPolicy Bypass -NoProfile d:\customize.ps1</CommandLine>
+              <RequiresUserInput>false</RequiresUserInput>
+              <Order>1</Order>
+              <Description>Customize Script</Description>
+            </SynchronousCommand>
+          </FirstLogonCommands>
+        </component>
+      </settings>
+    </unattend>
+  customize.ps1: |-
+    # Enable logging
+    Start-Transcript -Path "C:\Windows\Logs\Scripts\customize.log" -Append
+
+    # Enable RDP
+    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0
+    Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+    $recovery = $(Get-Partition -DiskNumber 0 | Where-Object Type -eq "Recovery").PartitionNumber
+    $partNum = (Get-Partition -DriveLetter C).PartitionNumber
+    if ($recovery -gt $partNum) {
+      # Remove recovery partition
+      Write-Host "Remove recovery partition"
+      reagentc /disable
+      Remove-Partition -DiskNumber 0 -PartitionNumber $recovery -Confirm:$false
+    }
+
+    # Resize C:
+    Write-Host "Resize partition"
+    $size = ((Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber $partNum) - 1GB)
+    Resize-Partition -DiskNumber 0 -PartitionNumber $partNum -Size $size.SizeMax
+
+    # Re-create recovery
+    if ($recovery -gt $partNum) {
+      Write-Host "Re-create recovery"
+      $newPartition = New-Partition -DiskNumber 0 -UseMaximumSize -GptType "{de94bba4-06d1-4d40-a16a-bfd50179d6ac}"
+      Format-Volume -Partition $newPartition -FileSystem NTFS -NewFileSystemLabel "Recovery" -Force
+      $recovery = $(Get-Partition -DiskNumber 0 | Where-Object Type -eq "Recovery").PartitionNumber
+    $null = @"
+    select disk 0
+    select partition $($recovery)
+    gpt attributes=0x8000000000000001
+    assign letter=R
+    exit
+    "@ | diskpart.exe
+      reagentc /enable
+    }
+
+    Write-Host "Rename"
+    Rename-Computer -NewName "{{ $vm.hostname | default $name }}" -Force
+
+    Write-Host "Setup DNS"
+    $DNSServers = @(
+    {{- $lastServer := sub (len $.Values.windows11.defaults.dnsServers) 1 -}}
+    {{- range $index, $item := $.Values.windows11.defaults.dnsServers }}
+      {{- if eq $index $lastServer }}
+      "{{ $item }}"
+      {{- else }}
+      "{{ $item }}",
+      {{- end }}
+    {{- end }}
+    )
+    $DNSSearch = @(
+    {{- $lastSearch := sub (len $.Values.windows11.defaults.dnsSearch) 1 -}}
+    {{- range $index, $item := $.Values.windows11.defaults.dnsSearch }}
+      {{- if eq $index $lastSearch }}
+      "{{ $item }}"
+      {{- else }}
+      "{{ $item }}",
+      {{- end }}
+    {{- end }}
+    )
+    $ifIndex = (Get-NetAdapter -Name "Ethernet").ifIndex
+    Set-DnsClientServerAddress -InterfaceIndex $ifIndex -ServerAddresses $DNSServers
+    Set-DnsClientGlobalSetting -SuffixSearchList $DNSSearch
+
+    $domain = "{{ $vm.domain | default $.Values.vm.defaults.domain }}"
+    Write-Host "Set domain name to $domain"
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "SyncDomainWithMembership" -Value 0
+    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "Domain" -Value $domain
+    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name "NV Domain" -Value $domain
+
+  {{- if $.Values.vm.defaults.sshPubKeys }}
+    # Add ssh authorized_key for administrator
+    # https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_keymanagement
+    $MyDir = $MyInvocation.MyCommand.Path | Split-Path -Parent
+    $PublicKey = Get-Content -Path $MyDir\id_rsa.pub
+    $authrized_keys_path = $env:ProgramData + "\ssh\administrators_authorized_keys"
+    Add-Content -Path $authrized_keys_path -Value $PublicKey
+    icacls.exe $authrized_keys_path /inheritance:r /grant "Administrators:F" /grant "SYSTEM:F"
+  {{- end }}
+
+    New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH SSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+
+    # install application via exe file installer from url
+    function Install-Exe {
+      $dlurl = $args[0]
+      $installerPath = Join-Path $env:TEMP (Split-Path $dlurl -Leaf)
+      Invoke-WebRequest -UseBasicParsing $dlurl -OutFile $installerPath
+      Start-Process -FilePath $installerPath -Args "/S" -Verb RunAs -Wait
+      Remove-Item $installerPath
+    }
+  {{- if $vm.gpu }}
+    Write-Host "Install NVIDIA driver {{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}"
+    Invoke-WebRequest -Uri "https://{{ $.Values.vm.repoServer }}/internal/nvidia/{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}" -OutFile "C:\Users\Administrator\Downloads\{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}"
+    mkdir C:\Windows\Temp\nvidia
+    mkdir C:\Windows\Logs\nvidia
+    tar -xf  C:\Users\Administrator\Downloads\{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }} -C  C:\Windows\Temp\nvidia
+    Start-Process -FilePath "C:\Windows\Temp\nvidia\setup.exe" -ArgumentList "-s", "-n", "-noreboot", "-log:C:\Windows\Logs\nvidia", "-loglevel:6" -Wait
+    Remove-Item -Path C:\Windows\Temp\nvidia -Recurse
+  {{- end }}
+
+    Write-Host "Install Puppet Agent"
+    $puppetServer = "{{ $.Values.vm.puppetServer }}"
+    $puppetCA = "{{ $.Values.vm.puppetCA }}"
+    $fqdn = "{{ $vm.hostname | default $name }}.{{ $vm.domain | default $.Values.vm.defaults.domain }}"
+    $puppetEnv = "{{ $vm.puppetEnv | default "production" }}"
+    choco install puppet-agent --yes --version={{ $.Values.vm.defaults.puppetVersion }} --install-arguments="'PUPPET_SERVER=$puppetServer PUPPET_AGENT_CERTNAME=$fqdn PUPPET_CA_SERVER=$puppetCA PUPPET_AGENT_ENVIRONMENT=$puppetEnv PUPPET_AGENT_STARTUP_MODE=Disabled'"
+
+    Write-Host "Create facts"
+    if(!(test-path "C:\ProgramData\PuppetLabs\facter\facts.d")) {
+      New-Item -ItemType Directory -Force -Path "C:\ProgramData\PuppetLabs\facter\facts.d"
+    }
+    Set-Content -Value "virtual=kubevirt" -Path C:\ProgramData\PuppetLabs\facter\facts.d\virtual.txt
+    $hostgroup = "{{ $vm.hostgroup | default $.Values.vm.defaults.hostgroup }}"
+    Set-Content -Value "hostgroup=$hostgroup" -Path C:\ProgramData\PuppetLabs\facter\facts.d\hostgroup.txt
+
+    # Import the module
+    Write-Host "Perform Windows Updates"
+    Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser
+    # Search for, download, and install all available updates, automatically accepting agreements
+    Get-WindowsUpdate -Install -AcceptAll -MicrosoftUpdate -IgnoreReboot
+
+    Write-Host "Add RunOnce for finalize"
+    $RegistryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+    $Name = "Finalize"
+    $Value = "powershell.exe -ExecutionPolicy Bypass -WindowStyle Normal -NoProfile e:\finalize.ps1"
+    Set-ItemProperty -Path $RegistryPath -Name $Name -Value $Value
+
+    # Reboot the system to finalize installation
+    Write-Host "Restart"
+    Restart-Computer -Force
+  {{- if $.Values.vm.defaults.sshPubKeys }}
+  id_rsa.pub: |-
+  {{- range $.Values.vm.defaults.sshPubKeys }}
+    {{ . }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
