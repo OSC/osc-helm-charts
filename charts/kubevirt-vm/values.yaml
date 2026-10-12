@@ -32,6 +32,9 @@ windows11:
     # -- Default domain admin password
     # @default -- **required**
     domainAdminPassword:
+    # -- Windows 11 activation key
+    # @default -- **required**
+    activationKey:
     # -- GPU driver file
     gpuDriver: 596.36_grid_win10_win11_server2022_server2025_dch_64bit_international.exe
     # -- Windows exporter port

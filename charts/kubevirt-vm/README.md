@@ -73,6 +73,7 @@ vm:
 | windows11.defaults.msadDomain | string | **required** | Default MSAD domain |
 | windows11.defaults.domainAdminUser | string | **required** | Default domain admin user |
 | windows11.defaults.domainAdminPassword | string | **required** | Default domain admin password |
+| windows11.defaults.activationKey | string | **required** | Windows 11 activation key |
 | windows11.defaults.gpuDriver | string | `"596.36_grid_win10_win11_server2022_server2025_dch_64bit_international.exe"` | GPU driver file |
 | windows11.defaults.exporterPort | int | `9182` | Windows exporter port |
 | windows11.defaults.hostgroup | string | `"windows"` | Windows Puppet hostgroup |
