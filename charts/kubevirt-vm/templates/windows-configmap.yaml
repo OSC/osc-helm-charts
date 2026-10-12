@@ -158,18 +158,18 @@ data:
     Remove-Item -Path C:\Windows\Temp\nvidia -Recurse
   {{- end }}
 
-    Write-Host "Install Puppet Agent"
+    Write-Host "Configure Puppet Agent"
     $puppetServer = "{{ $.Values.vm.puppetServer }}"
     $puppetCA = "{{ $.Values.vm.puppetCA }}"
     $fqdn = "{{ $vm.hostname | default $name }}.{{ $vm.domain | default $.Values.vm.defaults.domain }}"
     $puppetEnv = "{{ $vm.puppetEnv | default "production" }}"
-    choco install puppet-agent --yes --version={{ $.Values.vm.defaults.puppetVersion }} --install-arguments="'PUPPET_SERVER=$puppetServer PUPPET_AGENT_CERTNAME=$fqdn PUPPET_CA_SERVER=$puppetCA PUPPET_AGENT_ENVIRONMENT=$puppetEnv PUPPET_AGENT_STARTUP_MODE=Disabled'"
+    puppet config set --section main server $puppetServer
+    puppet config set --section main ca_server $puppetCA
+    puppet config set --section main certname $fqdn
+    puppet config set --section main environment $puppetEnv
+    puppet config set --section agent environment $puppetEnv
 
-    Write-Host "Create facts"
-    if(!(test-path "C:\ProgramData\PuppetLabs\facter\facts.d")) {
-      New-Item -ItemType Directory -Force -Path "C:\ProgramData\PuppetLabs\facter\facts.d"
-    }
-    Set-Content -Value "virtual=kubevirt" -Path C:\ProgramData\PuppetLabs\facter\facts.d\virtual.txt
+    Write-Host "Set facts"
     $hostgroup = "{{ $vm.hostgroup | default $.Values.vm.defaults.hostgroup }}"
     Set-Content -Value "hostgroup=$hostgroup" -Path C:\ProgramData\PuppetLabs\facter\facts.d\hostgroup.txt
 
