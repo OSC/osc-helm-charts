@@ -143,6 +143,17 @@ global:
 # @ignored
 clusterDomain: cluster.local
 
+scaling:
+  # -- Enable auto scaling
+  # **Requires enabling database**
+  enabled: false
+  # -- Max number of replicas
+  maxReplicas: 2
+  # -- Scaling threshold
+  threshold: 2
+  # -- Prometheus URL
+  prometheusURL: http://prometheus-prometheus.prometheus.svc:9090
+
 podMonitor:
   # -- Additional relabelings
   relabelings: []
@@ -215,6 +226,9 @@ open-webui:
   fullnameOverride: open-webui
   # @ignored
   nameOverride: open-webui
+  # @ignored
+  workload:
+    kind: StatefulSet
   # @ignored
   openaiApiKey: false
   # @ignored

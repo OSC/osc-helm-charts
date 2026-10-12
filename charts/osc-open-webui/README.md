@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.10.0](https://img.shields.io/badge/Version-0.10.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.11.0](https://img.shields.io/badge/Version-0.11.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -16,7 +16,7 @@ OSC Open Web UI deployment
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.15.1 |
 | https://osc.github.io/osc-helm-charts | database | 0.19.6 |
-| oci://docker-registry.osc.edu/kubernetes/open-webui | open-webui | 16.7.0-osc-r0 |
+| oci://docker-registry.osc.edu/kubernetes/open-webui | open-webui | 17.1.0-osc-r1 |
 
 ## Usage
 
@@ -175,6 +175,10 @@ open-webui:
 | global.redis.password | Redis password | `nil` |
 | global.redis.maxclients | Redis max clients | `10000` |
 | global.redis.timeout | Redis client timeout | `1800` |
+| scaling.enabled | Enable auto scaling **Requires enabling database** | `false` |
+| scaling.maxReplicas | Max number of replicas | `2` |
+| scaling.threshold | Scaling threshold | `2` |
+| scaling.prometheusURL | Prometheus URL | `"http://prometheus-prometheus.prometheus.svc:9090"` |
 | podMonitor.relabelings | Additional relabelings | `[]` |
 | podMonitor.metricRelabelings | Additional metric relabelings | `[]` |
 | ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |

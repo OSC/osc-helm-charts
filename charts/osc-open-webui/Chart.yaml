@@ -2,7 +2,7 @@ apiVersion: v2
 name: osc-open-webui
 description: OSC Open Web UI deployment
 type: application
-version: 0.10.0
+version: 0.11.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
@@ -22,7 +22,7 @@ dependencies:
     # repository: https://helm.openwebui.com/
     # Use OCI until merged and released:
     #   https://github.com/open-webui/helm-charts/pull/444
-    # helm package charts/open-webui --version 16.7.0-osc-r0
-    # helm push open-webui-16.7.0-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/open-webui
-    version: 16.7.0-osc-r0
+    # helm package charts/open-webui --version 17.1.0-osc-r1
+    # helm push open-webui-17.1.0-osc-r1.tgz oci://docker-registry.osc.edu/kubernetes/open-webui
+    version: 17.1.0-osc-r1
     repository: oci://docker-registry.osc.edu/kubernetes/open-webui

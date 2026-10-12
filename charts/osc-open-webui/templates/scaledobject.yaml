@@ -1,0 +1,27 @@
+{{- if and .Values.global.database.enable .Values.scaling.enabled }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: open-webui
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: '{{ index .Values "open-webui" "fullnameOverride" }}'
+  pollingInterval: 10
+  useCachedMetrics: true
+  minReplicaCount: 1
+  maxReplicaCount: {{ .Values.scaling.maxReplicas | default 2 }}
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: {{ .Values.scaling.prometheusURL }}
+      metricName: open-webui-request-rate
+      query: |
+        sum(rate(open_webui_http_server_requests_total{namespace="{{ .Release.Namespace }}"}[5m]))
+      threshold: "{{ .Values.scaling.threshold }}"
+{{- end }}
