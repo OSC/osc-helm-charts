@@ -319,6 +319,8 @@ osc-open-webui:
       # -- The version of Open WebUI
       tag: 0.11.4-osc-r4
     # @ignored
+    setReplicas: false
+    # @ignored
     websocket:
       enabled: true
     # @ignored
