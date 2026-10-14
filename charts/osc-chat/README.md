@@ -67,6 +67,7 @@ secrets:
   api:
     openaiKey: <LLM server API key>
     posthogKey: <posthost key>
+    ingestApiKey: <ingest api key>
 ```
 
 ## Requirements
