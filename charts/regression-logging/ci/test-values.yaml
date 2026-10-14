@@ -51,6 +51,7 @@ frontend:
     runAsUser: 1000
 
 backend:
+  apiKey: supersecret
   resources:
     limits:
       cpu: 500m
