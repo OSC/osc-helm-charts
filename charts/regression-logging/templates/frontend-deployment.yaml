@@ -21,6 +21,8 @@ spec:
         component: frontend
         '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
         receiver: '{{ .Values.global.alert.receiver }}'
+      annotations:
+        checksum/secret: {{ pick (include (print $.Template.BasePath "/api-key-secret.yaml") . | fromYaml) "data" | toYaml | sha256sum }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.global.imagePullSecret.name }}
