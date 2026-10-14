@@ -75,8 +75,8 @@ data:
 
     # Resize C:
     Write-Host "Resize partition"
-    $size = ((Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber $partNum) - 1GB)
-    Resize-Partition -DiskNumber 0 -PartitionNumber $partNum -Size $size.SizeMax
+    $size = ((Get-PartitionSupportedSize -DiskNumber 0 -PartitionNumber $partNum).SizeMax - 1GB)
+    Resize-Partition -DiskNumber 0 -PartitionNumber $partNum -Size $size
 
     # Re-create recovery
     if ($recovery -gt $partNum) {
@@ -188,6 +188,17 @@ data:
     # Reboot the system to finalize installation
     Write-Host "Restart"
     Restart-Computer -Force
+  puppet.ps1: |-
+    Start-Transcript -Path "C:\Windows\Logs\Scripts\puppet-runonce.log" -Append
+
+    Write-Host "Run Puppet for Crowdstrike"
+    puppet agent -t --tags crowdstrike
+
+    Write-Host "Run Puppet"
+    puppet agent -t
+
+    Write-Host "Shutdown"
+    Stop-Computer -Force
   {{- if $.Values.vm.defaults.sshPubKeys }}
   id_rsa.pub: |-
   {{- range $.Values.vm.defaults.sshPubKeys }}

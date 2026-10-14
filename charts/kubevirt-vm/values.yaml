@@ -62,5 +62,3 @@ vm:
   # -- OSC Puppet CA
   # @default -- **required**
   puppetCA:
-  # -- Puppet version
-  puppetVersion: '8.8.1'
