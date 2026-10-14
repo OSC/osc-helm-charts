@@ -175,6 +175,7 @@ secrets:
 | backend.service.type | string | `"ClusterIP"` |  |
 | backend.service.port | int | `8001` |  |
 | backend.env.FLASK_ENV | string | `"production"` |  |
+| backend.env.QWEN_QUERY_INSTRUCTION | string | `""` |  |
 | backend.resources.limits.cpu | int | `4` |  |
 | backend.resources.limits.memory | string | `"8Gi"` |  |
 | backend.resources.requests.cpu | int | `1` |  |
@@ -210,6 +211,7 @@ secrets:
 | huggingfaceCache.storageClassName | string | `"{{ .Values.global.storageClass }}"` |  |
 | secrets.api.openaiKey | string | `"your_strong_key"` | Open AI key |
 | secrets.api.posthogKey | string | `"secret"` | posthog key |
+| secrets.api.ingestApiKey | string | `"your_strong_key"` | Ingest key |
 | crawlee.enabled | bool | `true` |  |
 | crawlee.image.repository | string | `"kubernetes/hpcgpt/crawlee"` |  |
 | crawlee.image.tag | string | `"v0.1.1"` |  |

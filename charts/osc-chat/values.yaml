@@ -255,6 +255,7 @@ backend:
     port: 8001
   env:
     FLASK_ENV: production
+    QWEN_QUERY_INSTRUCTION: ""
   resources:
     limits:
       cpu: 4
@@ -321,6 +322,8 @@ secrets:
     openaiKey: "your_strong_key"
     # -- posthog key
     posthogKey: "secret"
+    # -- Ingest key
+    ingestApiKey: "your_strong_key"
 
 crawlee:
   enabled: true
@@ -345,10 +348,10 @@ crawlee:
       enabled: true
   resources:
     limits:
-      cpu: 1000m
+      cpu: 2000m
       memory: 2Gi
     requests:
-      cpu: 500m
+      cpu: 1000m
       memory: 1Gi
 
 
