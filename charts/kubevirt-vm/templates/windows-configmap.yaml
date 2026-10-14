@@ -150,10 +150,13 @@ data:
     }
   {{- if $vm.gpu }}
     Write-Host "Install NVIDIA driver {{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}"
+    Write-Host "Download NVIDIA driver"
     Invoke-WebRequest -Uri "https://{{ $.Values.vm.repoServer }}/internal/nvidia/{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}" -OutFile "C:\Users\Administrator\Downloads\{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }}"
     mkdir C:\Windows\Temp\nvidia
     mkdir C:\Windows\Logs\nvidia
+    Write-Host "Extract NVIDIA driver"
     tar -xf  C:\Users\Administrator\Downloads\{{ $vm.gpuDriver | default $.Values.windows11.defaults.gpuDriver }} -C  C:\Windows\Temp\nvidia
+    Write-Host "Install NVIDIA driver"
     Start-Process -FilePath "C:\Windows\Temp\nvidia\setup.exe" -ArgumentList "-s", "-n", "-noreboot", "-log:C:\Windows\Logs\nvidia", "-loglevel:6" -Wait
     Remove-Item -Path C:\Windows\Temp\nvidia -Recurse
   {{- end }}
@@ -199,6 +202,7 @@ data:
 
     Write-Host "Disable auto login"
     Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "AutoAdminLogon" -Value 0
+    Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "DefaultPassword" -Value '123456'
 
     Write-Host "Shutdown"
     Stop-Computer -Force
