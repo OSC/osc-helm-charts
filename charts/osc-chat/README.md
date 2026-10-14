@@ -168,7 +168,7 @@ secrets:
 | backend.enabled | bool | `true` |  |
 | backend.ingress.enabled | bool | `false` |  |
 | backend.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
-| backend.image.tag | string | `"v0.1.2"` |  |
+| backend.image.tag | string | `"v0.1.3"` |  |
 | backend.image.pullPolicy | string | `"Always"` |  |
 | backend.imagePullSecret.enable | bool | `false` |  |
 | backend.replicaCount | int | `1` |  |
@@ -182,7 +182,7 @@ secrets:
 | backend.resources.requests.memory | string | `"1Gi"` |  |
 | worker.enabled | bool | `true` |  |
 | worker.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
-| worker.image.tag | string | `"v0.1.2"` |  |
+| worker.image.tag | string | `"v0.1.3"` |  |
 | worker.image.pullPolicy | string | `"Always"` |  |
 | worker.replicaCount | int | `1` |  |
 | worker.env.QDRANT_COLLECTION_NAME | string | `"{{ include \"osc-chat.name\" . }}"` |  |
@@ -204,6 +204,7 @@ secrets:
 | osc-mcp.extraInitContainers[0].command[3] | string | `"-c"` |  |
 | osc-mcp.extraInitContainers[0].command[4] | string | `"until curl -sf http://{{ .Release.Name }}-frontend:3000/api/healthcheck | jq -e '.healthy == true' >/dev/null\ndo\n  sleep 5\ndone\n"` |  |
 | osc-mcp.osc_chat.chatEndpoint | string | `"http://{{ .Release.Name }}-frontend:3000/api/chat-api/chat"` |  |
+| osc-mcp.osc_chat.image.tag | string | `"v0.1.3"` |  |
 | ollama.enabled | bool | `false` |  |
 | huggingfaceCache.enabled | bool | `true` |  |
 | huggingfaceCache.mountPath | string | `"/var/cache/huggingface"` |  |
@@ -225,14 +226,14 @@ secrets:
 | crawlee.env.AWS_REGION | string | `"us-east-1"` |  |
 | crawlee.probes.liveness.enabled | bool | `true` |  |
 | crawlee.probes.readiness.enabled | bool | `true` |  |
-| crawlee.resources.limits.cpu | string | `"1000m"` |  |
+| crawlee.resources.limits.cpu | string | `"2000m"` |  |
 | crawlee.resources.limits.memory | string | `"2Gi"` |  |
-| crawlee.resources.requests.cpu | string | `"500m"` |  |
+| crawlee.resources.requests.cpu | string | `"1000m"` |  |
 | crawlee.resources.requests.memory | string | `"1Gi"` |  |
 | keycloak.enabled | bool | `false` |  |
 | frontend.enabled | bool | `true` |  |
 | frontend.image.repository | string | `"kubernetes/hpcgpt/frontend"` |  |
-| frontend.image.tag | string | `"v0.1.9"` |  |
+| frontend.image.tag | string | `"v0.1.10"` |  |
 | frontend.image.pullPolicy | string | `"Always"` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |

@@ -245,7 +245,7 @@ backend:
     enabled: false
   image:
     repository: kubernetes/hpcgpt/backend
-    tag: v0.1.2
+    tag: v0.1.3
     pullPolicy: Always
   imagePullSecret:
     enable: false
@@ -268,7 +268,7 @@ worker:
   enabled: true
   image:
     repository: kubernetes/hpcgpt/backend
-    tag: v0.1.2
+    tag: v0.1.3
     pullPolicy: Always
   replicaCount: 1
   env:
@@ -306,6 +306,8 @@ osc-mcp:
           done
   osc_chat:
     chatEndpoint: http://{{ .Release.Name }}-frontend:3000/api/chat-api/chat
+    image:
+      tag: v0.1.3
 
 ollama:
   enabled: false
@@ -362,7 +364,7 @@ frontend:
   enabled: true
   image:
     repository: kubernetes/hpcgpt/frontend
-    tag: v0.1.9
+    tag: v0.1.10
     pullPolicy: Always
   replicaCount: 1
   service:
