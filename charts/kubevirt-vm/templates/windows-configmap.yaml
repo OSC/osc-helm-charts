@@ -197,6 +197,9 @@ data:
     Write-Host "Run Puppet"
     puppet agent -t
 
+    Write-Host "Disable auto login"
+    Set-ItemProperty -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name "AutoAdminLogon" -Value 0
+
     Write-Host "Shutdown"
     Stop-Computer -Force
   {{- if $.Values.vm.defaults.sshPubKeys }}
