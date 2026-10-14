@@ -205,7 +205,7 @@ secrets:
 | osc-mcp.extraInitContainers[0].command[3] | string | `"-c"` |  |
 | osc-mcp.extraInitContainers[0].command[4] | string | `"until curl -sf http://{{ .Release.Name }}-frontend:3000/api/healthcheck | jq -e '.healthy == true' >/dev/null\ndo\n  sleep 5\ndone\n"` |  |
 | osc-mcp.osc_chat.chatEndpoint | string | `"http://{{ .Release.Name }}-frontend:3000/api/chat-api/chat"` |  |
-| osc-mcp.osc_chat.image.tag | string | `"v0.1.2"` |  |
+| osc-mcp.osc_chat.image.tag | string | `"v0.1.3"` |  |
 | ollama.enabled | bool | `false` |  |
 | huggingfaceCache.enabled | bool | `true` |  |
 | huggingfaceCache.mountPath | string | `"/var/cache/huggingface"` |  |
@@ -216,7 +216,7 @@ secrets:
 | secrets.api.ingestApiKey | string | `"your_strong_key"` | Ingest key |
 | crawlee.enabled | bool | `true` |  |
 | crawlee.image.repository | string | `"kubernetes/hpcgpt/crawlee"` |  |
-| crawlee.image.tag | string | `"v0.1.1"` |  |
+| crawlee.image.tag | string | `"v0.1.2"` |  |
 | crawlee.image.pullPolicy | string | `"Always"` |  |
 | crawlee.imagePullSecret.enable | bool | `false` |  |
 | crawlee.replicaCount | int | `1` |  |
