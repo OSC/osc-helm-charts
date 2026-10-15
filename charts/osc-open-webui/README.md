@@ -177,8 +177,10 @@ open-webui:
 | global.redis.timeout | Redis client timeout | `1800` |
 | scaling.enabled | Enable auto scaling **Requires enabling database** | `false` |
 | scaling.maxReplicas | Max number of replicas | `2` |
-| scaling.threshold | Scaling threshold | `2` |
 | scaling.prometheusURL | Prometheus URL | `"http://prometheus-prometheus.prometheus.svc:9090"` |
+| scaling.scaleDown.stabilizationWindowSeconds | HPA scale down stabilizationWindowSeconds | `600` |
+| scaling.scaleUp.stabilizationWindowSeconds | HPA scale up stabilizationWindowSeconds | `0` |
+| scaling.triggers | Scaling triggers | `[]` |
 | podMonitor.relabelings | Additional relabelings | `[]` |
 | podMonitor.metricRelabelings | Additional metric relabelings | `[]` |
 | ollama.networkPolicy.allowedPodLabels | Array of additional pod labels to allow | `[]` |

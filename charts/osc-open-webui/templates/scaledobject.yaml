@@ -16,12 +16,21 @@ spec:
   useCachedMetrics: true
   minReplicaCount: 1
   maxReplicaCount: {{ .Values.scaling.maxReplicas | default 2 }}
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: {{ .Values.scaling.scaleDown.stabilizationWindowSeconds }}
+        scaleUp:
+          stabilizationWindowSeconds: {{ .Values.scaling.scaleUp.stabilizationWindowSeconds }}
   triggers:
+  {{- range .Values.scaling.triggers }}
   - type: prometheus
     metadata:
-      serverAddress: {{ .Values.scaling.prometheusURL }}
-      metricName: open-webui-request-rate
+      serverAddress: {{ $.Values.scaling.prometheusURL }}
+      metricName: {{ .name }}
       query: |
-        sum(rate(open_webui_http_server_requests_total{namespace="{{ .Release.Namespace }}"}[5m]))
-      threshold: "{{ .Values.scaling.threshold }}"
+        {{ tpl .query $ }}
+      threshold: {{ .threshold | quote }}
+  {{- end }}
 {{- end }}
