@@ -9,6 +9,8 @@ metadata:
     {{- include "kubevirt-vm.labels" $ | nindent 4 }}
     {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
     host: "{{ $vm.hostname | default $name }}"
+    receiver: {{ $vm.receiver | default $.Values.vm.defaults.receiver | quote }}
+    cluster: {{ $vm.cluster | default $.Values.vm.defaults.cluster | quote }}
 {{- if not (eq $vm.deployed true) }}
   annotations:
     prometheus.io/probe_skip: 'true'

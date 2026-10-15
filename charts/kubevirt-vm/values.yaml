@@ -57,6 +57,10 @@ vm:
     domain: ten.osc.edu
     # -- SSH public keys to automatically add
     sshPubKeys: []
+    # -- Default alert receiver
+    receiver: ""
+    # -- Cluster value
+    cluster: ""
   # -- OSC repo server host
   # @default -- **required**
   repoServer:

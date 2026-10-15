@@ -42,6 +42,8 @@ vms:
       rdp: 3389
     # puppetEnv: default to production
     # hostgroup: default to windows11.defaults.hostgroup
+    # receiver: default to vm.defaults.receiver
+    # cluster: default to vm.defaults.cluster
 windows11:
   defaults:
     dnsServers:
@@ -84,6 +86,8 @@ vm:
 | vm.defaults.memory | string | `"4Gi"` | Default VM memory |
 | vm.defaults.domain | string | `"ten.osc.edu"` | Default domain name for VMs |
 | vm.defaults.sshPubKeys | list | `[]` | SSH public keys to automatically add |
+| vm.defaults.receiver | string | `""` | Default alert receiver |
+| vm.defaults.cluster | string | `""` | Cluster value |
 | vm.repoServer | string | **required** | OSC repo server host |
 | vm.puppetServer | string | **required** | OSC Puppet server |
 | vm.puppetCA | string | **required** | OSC Puppet CA |
