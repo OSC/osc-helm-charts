@@ -112,7 +112,7 @@ global:
     enable: false
     pool:
       # -- Open WebUI database pool size
-      size: 15
+      size: 25
       # -- Open WebUI database pool max overflow
       maxOverflow: 20
   postgresql:
@@ -148,7 +148,8 @@ scaling:
   # **Requires enabling database**
   enabled: false
   # -- Max number of replicas
-  maxReplicas: 2
+  # @default -- Based on database connection pools and max database connections
+  maxReplicas: '{{ include "osc-open-webui.scaling.max-replicas" . }}'
   # -- Prometheus URL
   prometheusURL: http://prometheus-prometheus.prometheus.svc:9090
   scaleDown:

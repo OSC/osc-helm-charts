@@ -15,7 +15,7 @@ spec:
   pollingInterval: 10
   useCachedMetrics: true
   minReplicaCount: 1
-  maxReplicaCount: {{ .Values.scaling.maxReplicas | default 2 }}
+  maxReplicaCount: {{ tpl .Values.scaling.maxReplicas . | default 2 }}
   advanced:
     horizontalPodAutoscalerConfig:
       behavior:

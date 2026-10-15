@@ -133,3 +133,9 @@ else
 fi
 {{- end }}
 {{- end }}
+
+{{- define "osc-open-webui.scaling.max-replicas" -}}
+{{- $connsPerReplica := add .Values.global.database.pool.size .Values.global.database.pool.maxOverflow }}
+{{- $maxDBConns := sub .Values.global.postgresql.maxConnections 20 }}
+{{- div $maxDBConns $connsPerReplica }}
+{{- end }}

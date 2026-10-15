@@ -167,7 +167,7 @@ open-webui:
 | global.fileset | The storage fileset | `nil` |
 | global.otel.image.tag | The otel collector tag, must be replicated to OSC | `"0.161.0"` |
 | global.database.enable | Enable database support | `false` |
-| global.database.pool.size | Open WebUI database pool size | `15` |
+| global.database.pool.size | Open WebUI database pool size | `25` |
 | global.database.pool.maxOverflow | Open WebUI database pool max overflow | `20` |
 | global.postgresql.auth.postgresPassword | postgres password | `nil` |
 | global.postgresql.auth.password | openwebui user password | `nil` |
@@ -176,7 +176,7 @@ open-webui:
 | global.redis.maxclients | Redis max clients | `10000` |
 | global.redis.timeout | Redis client timeout | `1800` |
 | scaling.enabled | Enable auto scaling **Requires enabling database** | `false` |
-| scaling.maxReplicas | Max number of replicas | `2` |
+| scaling.maxReplicas | Max number of replicas | Based on database connection pools and max database connections |
 | scaling.prometheusURL | Prometheus URL | `"http://prometheus-prometheus.prometheus.svc:9090"` |
 | scaling.scaleDown.stabilizationWindowSeconds | HPA scale down stabilizationWindowSeconds | `600` |
 | scaling.scaleUp.stabilizationWindowSeconds | HPA scale up stabilizationWindowSeconds | `0` |
