@@ -307,4 +307,7 @@ POSTHOG_API_KEY: {{ .Values.secrets.api.posthogKey | b64enc | quote }}
 {{- else }}
 POSTHOG_API_KEY: {{ "dummy-posthog-key" | b64enc | quote }}
 {{- end }}
+{{- if .Values.secrets.api.ingestApiKey }}
+INGEST_API_KEY: {{ .Values.secrets.api.ingestApiKey | b64enc | quote }}
+{{- end }}
 {{- end }}

@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.20](https://img.shields.io/badge/Version-0.1.20-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.20](https://img.shields.io/badge/AppVersion-0.1.20-informational?style=flat-square)
+![Version: 0.1.21](https://img.shields.io/badge/Version-0.1.21-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.21](https://img.shields.io/badge/AppVersion-0.1.21-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -67,6 +67,7 @@ secrets:
   api:
     openaiKey: <LLM server API key>
     posthogKey: <posthost key>
+    ingestApiKey: <ingest api key>
 ```
 
 ## Requirements
@@ -168,20 +169,21 @@ secrets:
 | backend.enabled | bool | `true` |  |
 | backend.ingress.enabled | bool | `false` |  |
 | backend.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
-| backend.image.tag | string | `"v0.1.2"` |  |
+| backend.image.tag | string | `"v0.1.3"` |  |
 | backend.image.pullPolicy | string | `"Always"` |  |
 | backend.imagePullSecret.enable | bool | `false` |  |
 | backend.replicaCount | int | `1` |  |
 | backend.service.type | string | `"ClusterIP"` |  |
 | backend.service.port | int | `8001` |  |
 | backend.env.FLASK_ENV | string | `"production"` |  |
+| backend.env.QWEN_QUERY_INSTRUCTION | string | `""` |  |
 | backend.resources.limits.cpu | int | `4` |  |
 | backend.resources.limits.memory | string | `"8Gi"` |  |
 | backend.resources.requests.cpu | int | `1` |  |
 | backend.resources.requests.memory | string | `"1Gi"` |  |
 | worker.enabled | bool | `true` |  |
 | worker.image.repository | string | `"kubernetes/hpcgpt/backend"` |  |
-| worker.image.tag | string | `"v0.1.2"` |  |
+| worker.image.tag | string | `"v0.1.3"` |  |
 | worker.image.pullPolicy | string | `"Always"` |  |
 | worker.replicaCount | int | `1` |  |
 | worker.env.QDRANT_COLLECTION_NAME | string | `"{{ include \"osc-chat.name\" . }}"` |  |
@@ -203,6 +205,7 @@ secrets:
 | osc-mcp.extraInitContainers[0].command[3] | string | `"-c"` |  |
 | osc-mcp.extraInitContainers[0].command[4] | string | `"until curl -sf http://{{ .Release.Name }}-frontend:3000/api/healthcheck | jq -e '.healthy == true' >/dev/null\ndo\n  sleep 5\ndone\n"` |  |
 | osc-mcp.osc_chat.chatEndpoint | string | `"http://{{ .Release.Name }}-frontend:3000/api/chat-api/chat"` |  |
+| osc-mcp.osc_chat.image.tag | string | `"v0.1.5"` |  |
 | ollama.enabled | bool | `false` |  |
 | huggingfaceCache.enabled | bool | `true` |  |
 | huggingfaceCache.mountPath | string | `"/var/cache/huggingface"` |  |
@@ -210,9 +213,10 @@ secrets:
 | huggingfaceCache.storageClassName | string | `"{{ .Values.global.storageClass }}"` |  |
 | secrets.api.openaiKey | string | `"your_strong_key"` | Open AI key |
 | secrets.api.posthogKey | string | `"secret"` | posthog key |
+| secrets.api.ingestApiKey | string | `"your_strong_key"` | Ingest key |
 | crawlee.enabled | bool | `true` |  |
 | crawlee.image.repository | string | `"kubernetes/hpcgpt/crawlee"` |  |
-| crawlee.image.tag | string | `"v0.1.1"` |  |
+| crawlee.image.tag | string | `"v0.1.2"` |  |
 | crawlee.image.pullPolicy | string | `"Always"` |  |
 | crawlee.imagePullSecret.enable | bool | `false` |  |
 | crawlee.replicaCount | int | `1` |  |
@@ -223,14 +227,14 @@ secrets:
 | crawlee.env.AWS_REGION | string | `"us-east-1"` |  |
 | crawlee.probes.liveness.enabled | bool | `true` |  |
 | crawlee.probes.readiness.enabled | bool | `true` |  |
-| crawlee.resources.limits.cpu | string | `"1000m"` |  |
+| crawlee.resources.limits.cpu | string | `"2000m"` |  |
 | crawlee.resources.limits.memory | string | `"2Gi"` |  |
-| crawlee.resources.requests.cpu | string | `"500m"` |  |
+| crawlee.resources.requests.cpu | string | `"1000m"` |  |
 | crawlee.resources.requests.memory | string | `"1Gi"` |  |
 | keycloak.enabled | bool | `false` |  |
 | frontend.enabled | bool | `true` |  |
 | frontend.image.repository | string | `"kubernetes/hpcgpt/frontend"` |  |
-| frontend.image.tag | string | `"v0.1.9"` |  |
+| frontend.image.tag | string | `"v0.1.10"` |  |
 | frontend.image.pullPolicy | string | `"Always"` |  |
 | frontend.replicaCount | int | `1` |  |
 | frontend.service.type | string | `"ClusterIP"` |  |
