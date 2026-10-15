@@ -1,0 +1,30 @@
+{{- range $name, $vm := .Values.vms }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "kubevirt-vm.labels" $ | nindent 4 }}
+    {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "kubevirt-vm.vm.selectorLabels" (dict "root" $ "name" $name "vm" $vm) | nindent 6 }}
+  ingress:
+  - from:
+    - podSelector: {}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ $.Values.global.networkPolicy.ingressNamespace }}
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: {{ $.Values.global.networkPolicy.prometheusNamespace }}
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kubevirt
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: cdi
+{{- end }}

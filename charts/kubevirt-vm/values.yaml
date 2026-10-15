@@ -1,6 +1,10 @@
 global:
   # -- The storageClassName for KubeVirt storage
   storageClassName: nfs-kubevirt
+  # @ignored
+  networkPolicy:
+    ingressNamespace: ingress-nginx
+    prometheusNamespace: prometheus
 
 # -- VMs to deploy
 vms: {}
