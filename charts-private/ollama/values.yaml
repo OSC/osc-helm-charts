@@ -1,0 +1,165 @@
+global:
+  # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
+  oscServiceAccount: '{{ include "ollama.fullname" . }}'
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The nodeSelector role
+  nodeSelectorRole: webservices
+  imagePullSecret:
+    # -- Create the image pull secret
+    create: true
+    # -- imagePullSecret name
+    name: osc-registry
+    # -- imagePullSecret registry
+    registry: docker-registry.osc.edu
+    # -- imagePullSecret username
+    username: robot$webservices-read
+    # -- imagePullSecret password.
+    # This value will be set by OSC's Puppet.
+    # This value must be set to IMAGE-PULL-PASSWORD for CI tests.
+    password:
+  # @ignored
+  networkPolicy:
+    # -- Create the network policy
+    create: false
+    # -- Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"`
+    podSelector: ~
+    # Example define podSelector labels
+    #  podSelector:
+    #    app.kubernetes.io/name: test
+    #
+    # -- Labels of pods allowed to Ingress from the same namespace
+    ingressAllowedPods: []
+    # Example additional ingress labels
+    #  ingressAllowedPods:
+    #    - require: test
+    #    - client: test
+    #
+    # @ignored
+    ingressNamespace: ingress-nginx
+    # @ignored
+    prometheusNamespace: prometheus
+  # @ignored
+  webservicesDeploy:
+    # -- Create webservices deployment rolebinding
+    create: false
+  # -- Groups that debug pods
+  debugGroups:
+    - sappstf
+  # -- Groups that can perform maintenance operations
+  maintenanceGroups:
+    - sappstf
+  # -- Groups that are allowed to perform port forwarding
+  portforwardGroups: []
+  auth:
+    # @ignored
+    enable: false
+    # @ignored
+    allowGroups: []
+  ingress:
+    # -- Ingress host
+    # @default -- **required**
+    host: ""
+    # -- Ingress host alias
+    # @default -- **required**
+    hostAlias: ""
+  alert:
+    # -- The alert receiver
+    receiver: sciapps
+  # -- The service project
+  # @default -- **required**
+  project: ''
+
+ollama:
+  # -- Map of labels to add to the pods
+  podLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ tpl (include "osc.common.serviceAccountValue" .) . }}'
+    receiver: '{{ .Values.global.alert.receiver }}'
+
+  deployment:
+    # -- Labels to add to the deployment
+    labels:
+      '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+      receiver: '{{ .Values.global.alert.receiver }}'
+
+  # -- Docker registry secret names as an array
+  imagePullSecrets:
+  - name: '{{ .Values.global.imagePullSecret.name }}'
+
+  image:
+    # -- Docker image registry
+    repository: docker-registry.osc.edu/kubernetes/ollama/ollama
+    # -- Docker image tag, overrides the image tag whose default is the chart appVersion.
+    tag: '0.18.3'
+
+  ollama:
+    mountPath: /ollama
+    gpu:
+      # -- Enable GPU integration
+      enabled: true
+      type: nvidia
+      # -- Specify the number of GPU
+      number: 1
+    models:
+      # -- List of models to pull at container startup
+      # The more you add, the longer the container will take to start if models are not present
+      pull: []
+
+  # -- Node labels for pod assignment.
+  nodeSelector:
+    nvidia.com/gpu.product: NVIDIA-A100-PCIE-40GB-MIG-1g.5gb
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+
+  service:
+    # -- Labels to add to the service
+    labels:
+      receiver: '{{ .Values.global.alert.receiver }}'
+    # -- Annotations to add to the service
+    annotations:
+      prometheus.io/probe_module: http
+      prometheus.io/probe_scheme: http
+
+  # -- Pod Security Context
+  podSecurityContext:
+    runAsNonRoot: true
+
+  # -- Container Security Context
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+
+  resources:
+    limits:
+      memory: 8Gi
+      cpu: 4
+    requests:
+      memory: 4Gi
+      cpu: 2
+
+  extraEnv:
+  - name: OLLAMA_MODELS
+    value: /ollama
+  - name: HOME
+    value: /ollama
+  - name: OLLAMA_FLASH_ATTENTION
+    value: '1'
+
+  persistentVolume:
+    # -- Enable persistence using PVC
+    enabled: true
+    accessModes:
+    - ReadWriteMany
+    annotations:
+      osc.edu/fileset: '{{ .Values.global.project }}'
+    size: 500Gi
+    storageClass: local-ess
+
+  serviceAccount:
+    # -- Specifies whether a service account should be created
+    create: true
