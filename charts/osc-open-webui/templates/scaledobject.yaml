@@ -1,0 +1,34 @@
+{{- if and .Values.global.database.enable .Values.scaling.enabled }}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: open-webui
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "osc-open-webui.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: '{{ index .Values "open-webui" "fullnameOverride" }}'
+  minReplicaCount: 1
+  maxReplicaCount: {{ tpl .Values.scaling.maxReplicas . | default 2 }}
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: {{ .Values.scaling.scaleDown.stabilizationWindowSeconds }}
+        scaleUp:
+          stabilizationWindowSeconds: {{ .Values.scaling.scaleUp.stabilizationWindowSeconds }}
+  triggers:
+  {{- range .Values.scaling.triggers }}
+  - type: prometheus
+    metadata:
+      serverAddress: {{ $.Values.scaling.prometheusURL }}
+      metricName: {{ .name }}
+      query: |
+        {{ tpl .query $ }}
+      threshold: {{ .threshold | quote }}
+  {{- end }}
+{{- end }}
