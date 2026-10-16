@@ -12,8 +12,6 @@ spec:
     apiVersion: apps/v1
     kind: StatefulSet
     name: '{{ index .Values "open-webui" "fullnameOverride" }}'
-  pollingInterval: 10
-  useCachedMetrics: true
   minReplicaCount: 1
   maxReplicaCount: {{ tpl .Values.scaling.maxReplicas . | default 2 }}
   advanced:
