@@ -173,7 +173,7 @@ data:
     puppet config set --section agent environment $puppetEnv
 
     Write-Host "Set facts"
-    $hostgroup = "{{ $vm.hostgroup | default $.Values.vm.defaults.hostgroup }}"
+    $hostgroup = "{{ $vm.hostgroup | default $.Values.windows11.defaults.hostgroup }}"
     Set-Content -Value "hostgroup=$hostgroup" -Path C:\ProgramData\PuppetLabs\facter\facts.d\hostgroup.txt
 
     # Import the module
