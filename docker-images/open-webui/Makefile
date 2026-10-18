@@ -1,13 +1,16 @@
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-FROM := ghcr.io/open-webui/open-webui
-VERSION := 0.11.4
-RELEASE := 4
-PATCH := 562e052a2f9beaaaae6723d87a7d89f07966cbb5
-TAG = docker-registry.osc.edu/kubernetes/open-webui/open-webui:$(VERSION)-osc-r$(RELEASE)
+SUFFIX := -slim
+UPSTREAM_FROM := ghcr.io/open-webui/open-webui
+UPSTREAM_VERSION := 0.11.4$(SUFFIX)
+FROM := ghcr.io/osc/open-webui
+VERSION := osc-0.11.4-r0$(SUFFIX)
+RELEASE := 0
+TAG = docker-registry.osc.edu/kubernetes/open-webui/open-webui:$(VERSION)-build$(RELEASE)
 
 build:
 	docker buildx build --platform linux/amd64 --pull \
-	--build-arg FROM=$(FROM) --build-arg VERSION=$(VERSION) --build-arg PATCH=$(PATCH) \
+	--build-arg UPSTREAM_FROM=$(UPSTREAM_FROM) --build-arg UPSTREAM_VERSION=$(UPSTREAM_VERSION) \
+	--build-arg FROM=$(FROM) --build-arg VERSION=$(VERSION) \
 	-t $(TAG) $(ROOT_DIR)
 
 push:
@@ -15,7 +18,8 @@ push:
 
 podman-build:
 	podman build --pull=always \
-	--build-arg FROM=$(FROM) --build-arg VERSION=$(VERSION) --build-arg PATCH=$(PATCH) \
+	--build-arg UPSTREAM_FROM=$(UPSTREAM_FROM) --build-arg UPSTREAM_VERSION=$(UPSTREAM_VERSION) \
+	--build-arg FROM=$(FROM) --build-arg VERSION=$(VERSION) \
 	-t $(TAG) $(ROOT_DIR)
 
 podman-push:
