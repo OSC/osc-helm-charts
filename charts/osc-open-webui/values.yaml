@@ -291,6 +291,11 @@ open-webui:
       cpu: 1
   # @ignored
   copyAppData:
+    command:
+      - /bin/bash
+    args:
+      - -c
+      - 'exit 0'
     resources:
       limits:
         memory: 1Gi
