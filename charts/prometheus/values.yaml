@@ -117,11 +117,9 @@ kube-prometheus-stack:
         app.kubernetes.io/component: server
     prometheusSpec:
       image:
-        # TODO: Use old version if upgrade is problematic
-        # tag: v2.44.0
         # Allow debugging by not using distroless
-        # tag: v3.11.3-distroless
-        tag: v3.11.3
+        # tag: v3.13.5-distroless
+        tag: v3.13.5
       persistentVolumeClaimRetentionPolicy:
         whenDeleted: Retain
         whenScaled: Retain
