@@ -6,7 +6,7 @@ global:
     - sappstf
   # -- Groups that can perform maintenance operations
   maintenanceGroups:
-    - sciapps
+    - sappstf
   auth:
     # @ignored
     enable: true
@@ -34,4 +34,4 @@ webservice:
     repository: docker-registry.osc.edu/webservices/wlebmodel
   mounts:
     rwDir:
-      scratch: /fs/scratch/PAS3187
+      ess: /fs/ess/PAS3457
