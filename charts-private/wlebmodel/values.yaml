@@ -16,7 +16,7 @@ global:
   alert:
     # Also pulled from global.env.$environment.alert.receiver
     receiver: sciapps
-  imageTag: v2.4-1
+  imageTag: v2.7.2-1
   env:
     production:
       image:
@@ -35,3 +35,4 @@ webservice:
   mounts:
     rwDir:
       ess: /fs/ess/PAS3457
+      scratch: /fs/scratch/PAS3457
