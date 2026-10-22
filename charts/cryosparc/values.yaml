@@ -55,6 +55,12 @@ global:
   alert:
     # Also pulled from global.env.$environment.alert.receiver
     receiver: sciapps
+    # @ignored
+    storage:
+      role: cryosparc-storage-alert
+      serviceAccount:
+        name: cryosparc-storage-alert
+        namespace: default
   # @ignored
   env:
     production:

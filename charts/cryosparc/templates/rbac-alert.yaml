@@ -1,0 +1,16 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "cryosparc.name" . }}-storage-alert
+  namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "cryosparc.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.global.alert.storage.role }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.global.alert.storage.serviceAccount.name }}
+  namespace: {{ .Values.global.alert.storage.serviceAccount.namespace }}
