@@ -8,6 +8,7 @@ Charts for deploying OSC specific Kubernetes services using Helm
   - [webservice](#webservice)
   - [osc-open-webui](#osc-open-webui)
   - [database](#database)
+  - [dynamo](#dynamo)
 - [Helm Chart Values Patterns](#helm-chart-values-patterns)
   - [Environment-Specific Values](#environment-specific-values)
 - [Infrastructure charts](#infrastructure-charts)
@@ -61,6 +62,10 @@ The [database](charts/database/README.md) chart provides database service deploy
 - Redis
 
 It includes integration with osc-common for consistent security and configuration practices.
+
+### dynamo
+
+The [dynamo](charts/dynamo/README.md) chart handles deploying Dynamo and resources related to Dynamo at OSC.
 
 ## Helm Chart Values Patterns
 
