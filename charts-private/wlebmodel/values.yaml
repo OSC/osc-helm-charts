@@ -32,7 +32,14 @@ webservice:
   workingDir: /app
   image:
     repository: docker-registry.osc.edu/webservices/wlebmodel
+  env:
+  - name: SLURM_CONF
+    value: '/etc/slurm/slurm-pitzer.conf'
   mounts:
     rwDir:
       ess: /fs/ess/PAS3457
       scratch: /fs/scratch/PAS3457
+    roDir:
+      slurm-conf: /etc/slurm
+    socket:
+      munge-socket: /var/run/munge/munge.socket.2
