@@ -16,3 +16,5 @@ webservice:
 
   mounts:
     rwDir: null
+    roDir: null
+    socket: null
