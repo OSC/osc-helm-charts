@@ -274,7 +274,7 @@ open-webui:
     # -- OSC registry location for Open WebUI image
     repository: docker-registry.osc.edu/kubernetes/open-webui/open-webui
     # -- The Open WebUI image tag.  Must be synced to OSC registry
-    tag: osc-0.11.4-r0-slim-build0
+    tag: osc-0.12.5-r0-slim-build0
   # @ignored
   imagePullSecrets:
     - name: '{{ .Values.global.imagePullSecret.name }}'
@@ -367,9 +367,10 @@ open-webui:
       value: METADATA
     - name: AUDIT_EXCLUDED_PATHS
       value: /chats,/chat,/folders,/socket.io
-    # Part of OSC specific patch
-    - name: UVICORN_LOGGER_LOG_LEVEL
-      value: WARNING
+    - name: UVICORN_ACCESS_LOG
+      value: 'false'
+    - name: AUDIT_UVICORN_LOGGER_NAMES
+      value: ''
     - name: ENABLE_OTEL
       value: "True"
     - name: ENABLE_OTEL_METRICS
@@ -378,6 +379,8 @@ open-webui:
       value: http://localhost:4317
     - name: OTEL_EXPORTER_OTLP_INSECURE
       value: "True"
+    - name: OTEL_PYTHON_FASTAPI_EXCLUDED_URLS
+      value: '/health,/health/db,/_app/immutable/.*,/static/.*,/assets/.*,/_app/version.json,/robots.txt,/manifest.json,/.git/.*.,.*/(.env|env).*'
   # @ignored
   extraEnvFrom:
     - secretRef:

@@ -1,6 +1,6 @@
 # osc-open-webui
 
-![Version: 0.12.0](https://img.shields.io/badge/Version-0.12.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.13.0](https://img.shields.io/badge/Version-0.13.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC Open Web UI deployment
 
@@ -187,7 +187,7 @@ open-webui:
 | database.redis.master.persistence.annotations."osc.edu/fileset" | Fileset for Redis storage | `"PZS0645"` |
 | open-webui.websocket.enabled | Enable web sockets. **required when using databases** | `false` |
 | open-webui.image.repository | OSC registry location for Open WebUI image | `"docker-registry.osc.edu/kubernetes/open-webui/open-webui"` |
-| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"osc-0.11.4-r0-slim-build0"` |
+| open-webui.image.tag | The Open WebUI image tag.  Must be synced to OSC registry | `"osc-0.12.5-r0-slim-build0"` |
 | open-webui.resources.limits.memory | Open WebUI pod memory limit | `"4Gi"` |
 | open-webui.resources.limits.cpu | Open WebUI pod CPU limit | `2` |
 | open-webui.resources.requests.memory | Open WebUI pod memory request | `"2Gi"` |
