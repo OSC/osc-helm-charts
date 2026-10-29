@@ -145,7 +145,7 @@ hfToken:
 | frontend.resources.requests.memory | string | `"4Gi"` | Default frontend memory request |
 | keepalive.interval | int | `300` | Interval in seconds of how often to do keepalive for persistent multi-node jobs |
 | osc-open-webui.database.redis.master.persistence.annotations."osc.edu/fileset" | string | `"PZS0645"` | Must match global.fileset |
-| osc-open-webui.open-webui.image.tag | string | `"osc-0.11.4-r0-slim-build0"` | The version of Open WebUI |
+| osc-open-webui.open-webui.image.tag | string | `"osc-0.12.5-r0-slim-build0"` | The version of Open WebUI |
 | osc-open-webui.open-webui.sso.enableRoleManagement | bool | `true` | Enables role access controls in Open WebUI |
 
 ----------------------------------------------

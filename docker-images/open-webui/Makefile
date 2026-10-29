@@ -1,9 +1,9 @@
 ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 SUFFIX := -slim
 UPSTREAM_FROM := ghcr.io/open-webui/open-webui
-UPSTREAM_VERSION := 0.11.4$(SUFFIX)
+UPSTREAM_VERSION := 0.12.5$(SUFFIX)
 FROM := ghcr.io/osc/open-webui
-VERSION := osc-0.11.4-r0$(SUFFIX)
+VERSION := osc-0.12.5-r0$(SUFFIX)
 RELEASE := 0
 TAG = docker-registry.osc.edu/kubernetes/open-webui/open-webui:$(VERSION)-build$(RELEASE)
 

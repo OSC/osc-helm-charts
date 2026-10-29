@@ -1,7 +1,7 @@
 ARG UPSTREAM_FROM=ghcr.io/open-webui/open-webui
-ARG UPSTREAM_VERSION=0.11.4-slim
+ARG UPSTREAM_VERSION=0.12.5-slim
 ARG FROM=ghcr.io/osc/open-webui
-ARG VERSION=osc-0.11.4-r0-slim
+ARG VERSION=osc-0.12.5-r0-slim
 
 FROM $UPSTREAM_FROM:$UPSTREAM_VERSION AS upstream
 
