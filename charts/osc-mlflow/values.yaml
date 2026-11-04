@@ -1,0 +1,297 @@
+global:
+  imageRegistry: docker-registry.osc.edu
+  imagePullSecret:
+    name: osc-registry
+    # -- OSC registry password
+    # @default -- **required**
+    password:
+  oscServiceAccount: oscchat
+  storageClass: webservices-nfs-client
+  ingress:
+    host: ""
+    hostAlias: ""
+  # -- Authentication configuration
+  auth:
+    # -- Enable OAuth2 proxy authentication (disabled - using basic auth instead)
+    enable: false
+    #keycloakClient:
+    #  forceCreate: false  # Disabled - not using OAuth2
+    #  config:
+    #    publicClient: true
+    #    webOrigins: []
+    #upstream: "http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80"
+    #allowGroups:
+    #  - oscall
+  alert:
+    receiver: sciapps
+  security:
+    allowInsecureImages: true
+  nodeSelectorRole: webservices
+  debugGroups:
+    - sappstf
+  maintenanceGroups:
+    - sappstf
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Database configuration (PostgreSQL for MLFlow backend)
+database:
+  # -- Enable database dependency
+  enable: true
+  # -- OSC common configuration for database
+  oscCommon:
+    enable: false
+  postgresql:
+    # -- Enable PostgreSQL
+    enable: true
+    auth:
+      # -- PostgreSQL admin password (required)
+      postgresPassword: changeme-postgres
+      # -- Database name
+      database: mlflow
+      # -- Database username
+      username: mlflow
+      # -- Database password (required)
+      password: changeme-mlflow
+    primary:
+      persistence:
+        # -- Storage class for PostgreSQL
+        storageClass: paas-nfs-client
+        # -- PVC annotations
+        annotations: {}
+    # -- Resource limits for PostgreSQL
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+
+minio:
+  enable: true
+  auth:
+    rootUser: mlflowadmin
+    rootPassword: changeme-minio
+  defaultBuckets: "mlflow-artifacts"
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
+  image:
+    repository: kubernetes/bitnami/minio
+    tag: 2025.7.23-debian-12-r5
+    pullSecrets:
+      - osc-registry
+  persistence:
+    enabled: true
+    storageClass: paas-nfs-client
+    size: 100Gi
+    annotations:
+      osc.edu/fileset: PZS0645
+  service:
+    type: ClusterIP
+    rpcPort: 9000
+    consolePort: 9001
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      interval: 60s
+      relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
+  console:
+    image:
+      repository: kubernetes/bitnami/minio-object-browser
+      tag: 2.0.2-debian-12-r3
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+    - name: gateway
+      sectionName: http
+  hostnames:
+    - chart-example.local
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+# -- Horizontal Pod Autoscaler configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ""
+
+# -- Pod Disruption Budget
+podDisruptionBudget:
+  enabled: false
+  minAvailable: ""
+  maxUnavailable: ""
+
+# -- Basic auth configuration for ingress (disabled)
+basicAuth:
+  # -- Enable basic auth at ingress level
+  enabled: false  # Disabled - using no authentication at ingress level
+  # -- Username for basic auth
+  username: admin
+  # -- Password for basic auth (change in production!)
+  # Note: This password will be hashed using Apache's apr1 algorithm for htpasswd
+  password: changeme-admin
+  # -- Use existing secret instead of creating a new one
+  existingSecretName: ""
+
+# -- Ingress configuration (enabled with basic auth)
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+  # Paths to configure (simplified structure for custom template)
+  paths:
+    - path: /
+      pathType: ImplementationSpecific
+
+# @ignored
+# osc-common configuration (oauth2-proxy disabled - using basic auth)
+osc-common:
+  # oauth2-proxy is disabled since we're using basic auth
+  oauth2-proxy:
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    ingress:
+      extraPaths: []
+
+mlflow:
+  image:
+    repository: docker-registry.osc.edu/kubernetes/mlflow
+    tag: "3.16.0"
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 4Gi
+    limits:
+      cpu: 4000m
+      memory: 16Gi
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 5000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 5000
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+  initImages:
+    dbchecker:
+      repository: docker-registry.osc.edu/kubernetes/busybox
+      tag: "1.38.0"
+      pullPolicy: IfNotPresent
+    mlflowDbMigration:
+      repository: docker-registry.osc.edu/kubernetes/mlflow
+      tag: "3.16.0"
+      pullPolicy: IfNotPresent
+    iniFileInitializer:
+      repository: docker-registry.osc.edu/kubernetes/busybox
+      tag: "1.38.0"
+      pullPolicy: IfNotPresent
+  # PostgreSQL backend store configuration
+  backendStore:
+    #databaseMigration: false
+    databaseMigration: true
+    databaseConnectionCheck: true
+    defaultSqlitePath: ":memory:"
+    postgres:
+      enabled: true
+      host: "osc-mlflow-postgresql"
+      port: 5432
+      database: "mlflow"
+      user: "mlflow"
+      password: "changeme-mlflow"
+      driver: "psycopg2"
+  # Artifact storage configuration
+  artifactRoot:
+    proxiedArtifactStorage: true
+    defaultArtifactRoot: "./mlruns"
+    defaultArtifactsDestination: "s3://mlflow-artifacts/"
+  # Environment variables for MLFlow subchart (uses extraEnvVars as object)
+  extraEnvVars:
+    AWS_ACCESS_KEY_ID: "mlflowadmin"
+    AWS_SECRET_ACCESS_KEY: "changeme-minio"
+    AWS_DEFAULT_REGION: "us-east-1"
+    MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-minio:9000"
+    MLFLOW_SERVER_ALLOWED_HOSTS: "skhuvis-mlflow.k8.osc.edu"
+    MLFLOW_SERVER_CORS_ALLOWED_ORIGINS: "https://skhuvis-mlflow.k8.osc.edu"
+    MLFLOW_BACKEND_STORE_URI: "postgresql://mlflow:changeme-mlflow@osc-mlflow-postgresql:5432/mlflow"
+    # Use MinIO for artifact storage (instead of local filesystem)
+    MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://mlflow-artifacts/"
+
+  # Ingress configuration (managed by parent chart with basic auth)
+  ingress:
+    enabled: false  # Disabled - parent chart handles ingress with basic auth
+
+  # Enable MLflow's built-in basic authentication
+  auth:
+    enabled: true  # Enable MLflow basic auth
+    # -- Admin username for basic auth
+    adminUsername: admin
+    # -- Admin password for basic auth (change in production!)
+    adminPassword: changeme-admin
+#    # -- Default permission for all users (READ, EDIT, MANAGE, NO_PERMISSIONS)
+#    defaultPermission: "READ"
+#    # -- Authentication app name
+#    appName: "basic-auth"
+#    # -- Authentication function
+#    authorizationFunction: "mlflow.server.auth:authenticate_request_basic_auth"
+#    # -- PostgreSQL-based centralized authentication database
+    postgres:
+      enabled: true
+      host: "osc-mlflow-postgresql"
+      port: 5432
+      database: "mlflow"
+      user: "mlflow"
+      password: "changeme-mlflow"
+  oidcAuth:
+    enabled: false  # Disable native OIDC
+  # Disable oauth2-proxy sidecar - using basic auth instead
+  oauth2Proxy:
+    enabled: false  # Disabled - using basic auth
+
+# Secrets configuration (for reference in templates)
+secrets:
+  # -- MinIO access key
+  minioAccessKey: "mlflowadmin"
+  # -- MinIO secret key
+  minioSecretKey: ""
+  # -- PostgreSQL password
+  postgresPassword: ""
+  # -- MLFlow database password
+  mlflowDbPassword: ""

@@ -1,0 +1,45 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "mlflow.fullname" . -}}
+{{- $annotations := deepCopy .Values.ingress.annotations -}}
+{{- if .Values.basicAuth.enabled -}}
+{{- $_ := set $annotations "nginx.ingress.kubernetes.io/auth-type" "basic" -}}
+{{- $_ := set $annotations "nginx.ingress.kubernetes.io/auth-secret" (printf "%s-basic-auth-secret" .Release.Name) -}}
+{{- $_ := set $annotations "nginx.ingress.kubernetes.io/auth-realm" "Authentication Required" -}}
+{{- end -}}
+{{- $ingressHost := .Values.global.ingress.host -}}
+{{- if eq $ingressHost "" -}}
+{{- $ingressHost = "chart-example.local" -}}
+{{- end -}}
+{{- $tlsEnabled := and .Values.global.ingress.host (ne .Values.global.ingress.host "") -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "mlflow.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml $annotations | nindent 4 }}
+spec:
+  {{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  {{- if $tlsEnabled }}
+  tls:
+    - hosts:
+        - {{ $ingressHost | quote }}
+      secretName: {{ $fullName }}-cert
+  {{- end }}
+  rules:
+    - host: {{ $ingressHost | quote }}
+      http:
+        paths:
+          {{- range .Values.ingress.paths }}
+          - path: {{ .path | default "/" }}
+            pathType: {{ .pathType | default "ImplementationSpecific" }}
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: 80
+          {{- end }}
+{{- end }}
