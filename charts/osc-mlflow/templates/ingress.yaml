@@ -1,11 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "mlflow.fullname" . -}}
 {{- $annotations := deepCopy .Values.ingress.annotations -}}
-{{- if .Values.basicAuth.enabled -}}
-{{- $_ := set $annotations "nginx.ingress.kubernetes.io/auth-type" "basic" -}}
-{{- $_ := set $annotations "nginx.ingress.kubernetes.io/auth-secret" (printf "%s-basic-auth-secret" .Release.Name) -}}
-{{- $_ := set $annotations "nginx.ingress.kubernetes.io/auth-realm" "Authentication Required" -}}
-{{- end -}}
 {{- $ingressHost := .Values.global.ingress.host -}}
 {{- if eq $ingressHost "" -}}
 {{- $ingressHost = "chart-example.local" -}}

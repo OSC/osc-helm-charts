@@ -1,24 +1,13 @@
 1. Get the MLFlow application URL:
 
-   {{- if .Values.global.auth.enable }}
-   With OAuth2 proxy enabled:
-   https://{{ .Values.global.ingress.host }}
-
-   The OAuth2 proxy will handle authentication via Keycloak.
-   {{- else }}
    {{- if .Values.ingress.enabled }}
    http{{ if .Values.global.ingress.host }}s{{ end }}://{{ .Values.global.ingress.host | default "chart-example.local" }}
 
-   {{- if .Values.basicAuth.enabled }}
-   Basic Authentication is enabled at the ingress level.
-   You will be prompted for credentials when accessing the URL.
-   {{- end }}
    {{- else }}
    Export the environment variables and port-forward:
    export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mlflow.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
    kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 5000:5000
    Visit http://127.0.0.1:5000
-   {{- end }}
    {{- end }}
 
 2. Access the MLFlow UI:
@@ -28,14 +17,10 @@
 3. Important Notes:
    - PostgreSQL database is configured for MLFlow metadata storage
    - MinIO is configured for artifact storage (models, experiments, etc.)
-   - Basic Authentication is enabled at the ingress level (instead of OAuth2 proxy)
-   - MLFlow's built-in basic auth is also enabled for API access
+   - MLFlow's built-in basic auth is enabled for API access
    - Default bucket 'mlflow-artifacts' is created in MinIO
 
 4. Default Credentials (CHANGE THESE IN PRODUCTION):
-   - Ingress Basic Auth:
-     - Username: {{ .Values.basicAuth.username }}
-     - Password: {{ .Values.basicAuth.password }}
    - MLFlow Built-in Auth:
      - Username: {{ .Values.mlflow.auth.adminUsername }}
      - Password: {{ .Values.mlflow.auth.adminPassword }}
@@ -61,18 +46,5 @@
 
 6. Next Steps:
    - Update the passwords in values.yaml before deploying to production
-   - For production, create a proper htpasswd secret:
-     htpasswd -nbC 10 <username> <strong-password> | kubectl create secret generic {{ .Release.Name }}-basic-auth-secret --from-file=htpasswd=/dev/stdin
    - Configure your MLFlow client to connect to the URL shown above
    - Set up backup strategies for PostgreSQL and MinIO data
-
-7. Basic Auth Setup Instructions:
-   # Generate htpasswd entry with bcrypt (recommended):
-   htpasswd -nbC 10 admin your-secure-password
-
-   # Create or update the secret:
-   kubectl create secret generic {{ .Release.Name }}-basic-auth-secret \
-     --from-literal=htpasswd="$(htpasswd -nbC 10 admin your-secure-password)" \
-     -n {{ .Release.Namespace }}
-
-   # Or use an existing secret by setting basicAuth.existingSecretName in values.yaml

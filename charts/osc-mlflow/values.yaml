@@ -10,18 +10,6 @@ global:
   ingress:
     host: ""
     hostAlias: ""
-  # -- Authentication configuration
-  auth:
-    # -- Enable OAuth2 proxy authentication (disabled - using basic auth instead)
-    enable: false
-    #keycloakClient:
-    #  forceCreate: false  # Disabled - not using OAuth2
-    #  config:
-    #    publicClient: true
-    #    webOrigins: []
-    #upstream: "http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80"
-    #allowGroups:
-    #  - oscall
   alert:
     receiver: sciapps
   security:
@@ -32,35 +20,23 @@ global:
   maintenanceGroups:
     - sappstf
 
-nameOverride: ""
-fullnameOverride: ""
-
-# Database configuration (PostgreSQL for MLFlow backend)
 database:
-  # -- Enable database dependency
-  enable: true
-  # -- OSC common configuration for database
+  # @ignored
   oscCommon:
     enable: false
   postgresql:
-    # -- Enable PostgreSQL
+    # @ignored
     enable: true
     auth:
-      # -- PostgreSQL admin password (required)
       postgresPassword: changeme-postgres
-      # -- Database name
       database: mlflow
-      # -- Database username
       username: mlflow
-      # -- Database password (required)
       password: changeme-mlflow
+    # @ignored
     primary:
       persistence:
-        # -- Storage class for PostgreSQL
-        storageClass: paas-nfs-client
-        # -- PVC annotations
-        annotations: {}
-    # -- Resource limits for PostgreSQL
+        annotations:
+          osc.edu/fileset: '{{ .Values.global.fileset }}'
     resources:
       limits:
         cpu: 2000m
@@ -71,6 +47,11 @@ database:
       requests:
         cpu: 500m
         memory: 1Gi
+#    # @ignored
+#    backup:
+#      cronjob:
+#        annotations:
+#          osc.edu/fileset: '{{ .Values.global.fileset }}'
 
 minio:
   enable: true
@@ -91,6 +72,7 @@ minio:
     size: 100Gi
     annotations:
       osc.edu/fileset: PZS0645
+      helm.sh/resource-policy: keep
   service:
     type: ClusterIP
     rpcPort: 9000
@@ -115,46 +97,6 @@ minio:
       repository: kubernetes/bitnami/minio-object-browser
       tag: 2.0.2-debian-12-r3
 
-httpRoute:
-  enabled: false
-  annotations: {}
-  parentRefs:
-    - name: gateway
-      sectionName: http
-  hostnames:
-    - chart-example.local
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-
-# -- Horizontal Pod Autoscaler configuration
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: ""
-
-# -- Pod Disruption Budget
-podDisruptionBudget:
-  enabled: false
-  minAvailable: ""
-  maxUnavailable: ""
-
-# -- Basic auth configuration for ingress (disabled)
-basicAuth:
-  # -- Enable basic auth at ingress level
-  enabled: false  # Disabled - using no authentication at ingress level
-  # -- Username for basic auth
-  username: admin
-  # -- Password for basic auth (change in production!)
-  # Note: This password will be hashed using Apache's apr1 algorithm for htpasswd
-  password: changeme-admin
-  # -- Use existing secret instead of creating a new one
-  existingSecretName: ""
-
 # -- Ingress configuration (enabled with basic auth)
 ingress:
   enabled: true
@@ -168,25 +110,25 @@ ingress:
     - path: /
       pathType: ImplementationSpecific
 
-# @ignored
-# osc-common configuration (oauth2-proxy disabled - using basic auth)
-osc-common:
-  # oauth2-proxy is disabled since we're using basic auth
-  oauth2-proxy:
-    resources:
-      limits:
-        cpu: 200m
-        memory: 128Mi
-      requests:
-        cpu: 100m
-        memory: 64Mi
-    ingress:
-      extraPaths: []
-
+## @ignored
+## osc-common configuration (oauth2-proxy disabled - using basic auth)
+#osc-common:
+#  # oauth2-proxy is disabled since we're using basic auth
+#  oauth2-proxy:
+#    resources:
+#      limits:
+#        cpu: 200m
+#        memory: 128Mi
+#      requests:
+#        cpu: 100m
+#        memory: 64Mi
+#    ingress:
+#      extraPaths: []
+#
 mlflow:
   image:
     repository: docker-registry.osc.edu/kubernetes/mlflow
-    tag: "3.16.0"
+    tag: "v3.17.1-full"
   resources:
     requests:
       cpu: 1000m
@@ -217,7 +159,7 @@ mlflow:
       pullPolicy: IfNotPresent
     mlflowDbMigration:
       repository: docker-registry.osc.edu/kubernetes/mlflow
-      tag: "3.16.0"
+      tag: "v3.17.1-full"
       pullPolicy: IfNotPresent
     iniFileInitializer:
       repository: docker-registry.osc.edu/kubernetes/busybox
@@ -254,24 +196,15 @@ mlflow:
     # Use MinIO for artifact storage (instead of local filesystem)
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://mlflow-artifacts/"
 
-  # Ingress configuration (managed by parent chart with basic auth)
-  ingress:
-    enabled: false  # Disabled - parent chart handles ingress with basic auth
+#  # Ingress configuration (managed by parent chart with basic auth)
+#  ingress:
+#    enabled: false  # Disabled - parent chart handles ingress with basic auth
 
   # Enable MLflow's built-in basic authentication
   auth:
     enabled: true  # Enable MLflow basic auth
-    # -- Admin username for basic auth
     adminUsername: admin
-    # -- Admin password for basic auth (change in production!)
     adminPassword: changeme-admin
-#    # -- Default permission for all users (READ, EDIT, MANAGE, NO_PERMISSIONS)
-#    defaultPermission: "READ"
-#    # -- Authentication app name
-#    appName: "basic-auth"
-#    # -- Authentication function
-#    authorizationFunction: "mlflow.server.auth:authenticate_request_basic_auth"
-#    # -- PostgreSQL-based centralized authentication database
     postgres:
       enabled: true
       host: "osc-mlflow-postgresql"
@@ -279,19 +212,8 @@ mlflow:
       database: "mlflow"
       user: "mlflow"
       password: "changeme-mlflow"
-  oidcAuth:
-    enabled: false  # Disable native OIDC
-  # Disable oauth2-proxy sidecar - using basic auth instead
-  oauth2Proxy:
-    enabled: false  # Disabled - using basic auth
-
-# Secrets configuration (for reference in templates)
-secrets:
-  # -- MinIO access key
-  minioAccessKey: "mlflowadmin"
-  # -- MinIO secret key
-  minioSecretKey: ""
-  # -- PostgreSQL password
-  postgresPassword: ""
-  # -- MLFlow database password
-  mlflowDbPassword: ""
+#  oidcAuth:
+#    enabled: false  # Disable native OIDC
+#  # Disable oauth2-proxy sidecar - using basic auth instead
+#  oauth2Proxy:
+#    enabled: false  # Disabled - using basic auth
