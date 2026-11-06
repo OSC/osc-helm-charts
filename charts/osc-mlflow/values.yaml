@@ -97,7 +97,6 @@ minio:
       repository: kubernetes/bitnami/minio-object-browser
       tag: 2.0.2-debian-12-r3
 
-# -- Ingress configuration (enabled with basic auth)
 ingress:
   enabled: true
   className: "nginx"
@@ -105,26 +104,10 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
-  # Paths to configure (simplified structure for custom template)
   paths:
     - path: /
       pathType: ImplementationSpecific
 
-## @ignored
-## osc-common configuration (oauth2-proxy disabled - using basic auth)
-#osc-common:
-#  # oauth2-proxy is disabled since we're using basic auth
-#  oauth2-proxy:
-#    resources:
-#      limits:
-#        cpu: 200m
-#        memory: 128Mi
-#      requests:
-#        cpu: 100m
-#        memory: 64Mi
-#    ingress:
-#      extraPaths: []
-#
 mlflow:
   image:
     repository: docker-registry.osc.edu/kubernetes/mlflow
@@ -195,11 +178,6 @@ mlflow:
     MLFLOW_BACKEND_STORE_URI: "postgresql://mlflow:changeme-mlflow@osc-mlflow-postgresql:5432/mlflow"
     # Use MinIO for artifact storage (instead of local filesystem)
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://mlflow-artifacts/"
-
-#  # Ingress configuration (managed by parent chart with basic auth)
-#  ingress:
-#    enabled: false  # Disabled - parent chart handles ingress with basic auth
-
   # Enable MLflow's built-in basic authentication
   auth:
     enabled: true  # Enable MLflow basic auth
