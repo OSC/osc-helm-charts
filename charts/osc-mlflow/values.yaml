@@ -159,26 +159,21 @@ mlflow:
       host: "osc-mlflow-postgresql"
       port: 5432
       database: "mlflow"
-      user: "mlflow"
-      password: "changeme-mlflow"
       driver: "psycopg2"
-  # Artifact storage configuration
+    existingDatabaseSecret:
+      name: "osc-mlflow-app-secrets"
+      usernameKey: "pg_username"
+      passwordKey: "pg_password"
   artifactRoot:
     proxiedArtifactStorage: true
     defaultArtifactRoot: "./mlruns"
     defaultArtifactsDestination: "s3://mlflow-artifacts/"
-  # Environment variables for MLFlow subchart (uses extraEnvVars as object)
   extraEnvVars:
-    AWS_ACCESS_KEY_ID: "mlflowadmin"
-    AWS_SECRET_ACCESS_KEY: "changeme-minio"
     AWS_DEFAULT_REGION: "us-east-1"
     MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-minio:9000"
-    MLFLOW_SERVER_ALLOWED_HOSTS: "skhuvis-mlflow.k8.osc.edu"
-    MLFLOW_SERVER_CORS_ALLOWED_ORIGINS: "https://skhuvis-mlflow.k8.osc.edu"
-    MLFLOW_BACKEND_STORE_URI: "postgresql://mlflow:changeme-mlflow@osc-mlflow-postgresql:5432/mlflow"
-    # Use MinIO for artifact storage (instead of local filesystem)
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://mlflow-artifacts/"
-  # Enable MLflow's built-in basic authentication
+  extraSecretNamesForEnvFrom:
+    - osc-mlflow-app-secrets
   auth:
     enabled: true  # Enable MLflow basic auth
     adminUsername: admin
@@ -188,10 +183,7 @@ mlflow:
       host: "osc-mlflow-postgresql"
       port: 5432
       database: "mlflow"
-      user: "mlflow"
-      password: "changeme-mlflow"
-#  oidcAuth:
-#    enabled: false  # Disable native OIDC
-#  # Disable oauth2-proxy sidecar - using basic auth instead
-#  oauth2Proxy:
-#    enabled: false  # Disabled - using basic auth
+      existingSecret:
+        name: "osc-mlflow-app-secrets"
+        usernameKey: "pg_username"
+        passwordKey: "pg_password"
