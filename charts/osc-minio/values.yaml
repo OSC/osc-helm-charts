@@ -1,0 +1,216 @@
+global:
+  # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
+  oscServiceAccount: ""
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The nodeSelector role
+  nodeSelectorRole: webservices
+  # @ignored
+  imageRegistry: docker-registry.osc.edu
+  imagePullSecret:
+    # @ignored
+    create: false
+    # @ignored
+    name: osc-registry
+    # @ignored
+    registry: docker-registry.osc.edu
+    # -- The image pull secret password for database images
+    # @default -- **required**
+    password:
+  # @ignored
+  networkPolicy:
+    create: false
+    # @ignored
+    ingressNamespace: ingress-nginx
+    # @ignored
+    prometheusNamespace: prometheus
+  # @ignored
+  webservicesDeploy:
+    create: false
+  ingress:
+    minio:
+      # -- Minio API host
+      api: ""
+      # -- Minio console host
+      console: ""
+  auth:
+    # @ignored
+    enable: true
+    # @ignored
+    upstream: "http://minio-console.{{ .Release.Namespace }}.svc.cluster.local:9090"
+    # -- Restrict access to these groups
+    allowGroups: []
+    # @ignored
+    keycloakClient:
+      secret:
+        name: "minio-auth-secret"
+      configmap:
+        name: "minio-auth-config"
+  alert:
+    # -- The alert receiver
+    receiver: ""
+  # -- Storage class for persistence
+  storageClass: webservices-nfs-client
+  # @ignored
+  imagePullSecrets:
+    - '{{ include "osc.common.imagePullSecret.name" . }}'
+  # -- The storage fileset
+  fileset:
+  # @ignored
+  security:
+    allowInsecureImages: true
+  minio:
+    auth:
+      # -- The minio root user
+      rootUser: "minioadmin"
+      # -- The minio root password
+      rootPassword: "minioadmin"
+
+minio:
+  # -- Enable minio chart
+  enable: true
+  # @ignored
+  fullnameOverride: minio
+  # @ignored
+  nameOverride: minio
+  image:
+    # -- Minio image registry path
+    repository: kubernetes/bitnami/minio
+    # -- Minio image tag
+    tag: 2025.7.23-debian-12-r5
+  # @ignored
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+  # @ignored
+  resources:
+    limits:
+      cpu: 2
+      memory: 1024Mi
+    requests:
+      cpu: 1
+      memory: 512Mi
+  # -- Default minio bucket
+  defaultBuckets:
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+  clientImage:
+    # -- Minio client image registry path
+    repository: kubernetes/bitnami/minio-client
+    # -- Minio client image tag
+    tag: 2025.7.21-debian-12-r3
+  # @ignored
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      interval: 60s
+      relabelings:
+      - sourceLabels: [__meta_kubernetes_service_label_receiver]
+        targetLabel: receiver
+  # @ignored
+  persistence:
+    enabled: true
+    size: 100Gi
+    accessModes:
+    - ReadWriteMany
+    annotations:
+      osc.edu/fileset: '{{ .Values.global.fileset }}'
+  # @ignored
+  auth:
+    rootUser: "{{ .Values.global.minio.auth.rootUser }}"
+    rootPassword: "{{ .Values.global.minio.auth.rootPassword }}"
+    forcePassword: true
+  # @ignored
+  networkPolicy:
+    enabled: true
+    allowExternal: false
+    ingressNSMatchLabels:
+      kubernetes.io/metadata.name: '{{ .Values.global.networkPolicy.prometheusNamespace }}'
+    extraIngress:
+      - from:
+          - podSelector: {}
+          - namespaceSelector:
+              matchLabels:
+                kubernetes.io/metadata.name: '{{ .Values.global.networkPolicy.ingressNamespace }}'
+  # @ignored
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hostname: '{{ required "ingress api host required at global.ingress.minio.api" .Values.global.ingress.minio.api }}'
+    tls: true
+    path: /
+    pathType: Prefix
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+      prometheus.io/probe_path: /minio/health/live
+      prometheus.io/probe_scheme: https
+  console:
+    image:
+      # -- Minio object browser registry path
+      repository: kubernetes/bitnami/minio-object-browser
+      # -- Minio object browser tag
+      tag: 2.0.2-debian-12-r3
+    # @ignored
+    nodeSelector:
+      '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+    # @ignored
+    resources:
+      limits:
+        cpu: 2
+        memory: 1024Mi
+      requests:
+        cpu: 1
+        memory: 512Mi
+    # @ignored
+    service:
+      ports:
+        http: 9090
+    # @ignored
+    ingress:
+      enabled: false
+    # @ignored
+    networkPolicy:
+      enabled: true
+      allowExternal: false
+      ingressNSMatchLabels:
+        kubernetes.io/metadata.name: '{{ .Values.global.networkPolicy.prometheusNamespace }}'
+      extraIngress:
+        - from:
+            - podSelector: {}
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: '{{ .Values.global.networkPolicy.ingressNamespace }}'
+
+# @ignored
+osc-common:
+  nameOverride: minio
+  fullnameOverride: minio
+  imagePullSecret:
+    create: false
+  keycloakClient:
+    secret:
+      name: minio-auth-secret
+    configmap:
+      name: minio-auth-config
+  rbac:
+    create: false
+  oauth2-proxy:
+    fullnameOverride: minio-oauth2-proxy
+    nameOverride: minio-oauth2-proxy
+    config:
+      existingSecret: minio-auth-secret
+    envFrom:
+      - configMapRef:
+          name: minio-auth-config
+    ingress:
+      hosts:
+        - '{{ required "minio console host required at global.ingress.minio.console" .Values.global.ingress.minio.console }}'
+      tls:
+        - secretName: '{{ .Release.Name }}-cert'
+          hosts:
+            - '{{ .Values.global.ingress.minio.console }}'
