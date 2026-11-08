@@ -15,7 +15,7 @@ OSC Open Web UI deployment
 | Repository | Name | Version |
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.15.1 |
-| https://osc.github.io/osc-helm-charts | database | 0.19.6 |
+| https://osc.github.io/osc-helm-charts | database | 0.21.1 |
 | oci://docker-registry.osc.edu/kubernetes/open-webui | open-webui | 17.1.0-osc-r1 |
 
 ## Usage
