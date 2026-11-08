@@ -34,19 +34,6 @@ global:
       api: ""
       # -- Minio console host
       console: ""
-  auth:
-    # @ignored
-    enable: true
-    # @ignored
-    upstream: "http://minio-console.{{ .Release.Namespace }}.svc.cluster.local:9090"
-    # -- Restrict access to these groups
-    allowGroups: []
-    # @ignored
-    keycloakClient:
-      secret:
-        name: "minio-auth-secret"
-      configmap:
-        name: "minio-auth-config"
   alert:
     # -- The alert receiver
     receiver: ""
@@ -61,6 +48,9 @@ global:
   security:
     allowInsecureImages: true
   minio:
+    # -- Groups allowed to access console
+    allowedGroups:
+      - sysstf
     auth:
       # -- The minio root user
       rootUser: "minioadmin"
@@ -206,13 +196,19 @@ osc-common:
   rbac:
     create: false
   oauth2-proxy:
+    enable: true
     fullnameOverride: minio-oauth2-proxy
     nameOverride: minio-oauth2-proxy
     config:
       existingSecret: minio-auth-secret
+    extraArgs:
+      upstream: "http://minio-console.{{ .Release.Namespace }}.svc.cluster.local:9090"
     envFrom:
       - configMapRef:
           name: minio-auth-config
+    extraEnv:
+      - name: OAUTH2_PROXY_ALLOWED_GROUPS
+        value: '{{ .Values.global.minio.allowedGroups | join "," }}'
     ingress:
       hosts:
         - '{{ required "minio console host required at global.ingress.minio.console" .Values.global.ingress.minio.console }}'
