@@ -103,6 +103,10 @@ secrets:
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
+| global.ingress.minio.api | string | `""` | Minio API host |
+| global.ingress.minio.console | string | `""` | Minio console host |
+| global.minio.auth.rootUser | string | `"minioadmin"` | The minio root user |
+| global.minio.auth.rootPassword | string | `"minioadmin"` | The minio root password |
 | global.networkPolicy.ingressAllowedPods[0]."app.kubernetes.io/name" | string | `"osc-mcp"` |  |
 | database.postgresql.auth.postgresPassword | string | `"secret"` |  |
 | database.postgresql.auth.database | string | `"name"` |  |

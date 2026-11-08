@@ -47,6 +47,17 @@ global:
   ingress:
     host: ""
     hostAlias: ""
+    minio:
+      # -- Minio API host
+      api: ""
+      # -- Minio console host
+      console: ""
+  minio:
+    auth:
+      # -- The minio root user
+      rootUser: "minioadmin"
+      # -- The minio root password
+      rootPassword: "minioadmin"
   networkPolicy:
     ingressAllowedPods:
       - app.kubernetes.io/name: "osc-mcp"
