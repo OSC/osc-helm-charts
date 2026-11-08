@@ -6,9 +6,11 @@ global:
   environment: production
   # -- The nodeSelector role
   nodeSelectorRole: webservices
+  # @ignored
+  imageRegistry: docker-registry.osc.edu
   imagePullSecret:
     # -- Create the image pull secret
-    create: true
+    create: false
     # -- image pull secret name
     name: osc-registry
     # -- OSC registry address
@@ -33,18 +35,11 @@ global:
   webservicesDeploy:
     create: false
   ingress:
-    # -- Ingress host
-    # @default -- **required**
-    host: ""
-    # -- Ingress host alias
-    # @default -- **required**
-    hostAlias: ""
-    # -- Minio API host
-    apiHost: ""
-    # -- Ingress additional hosts
-    additionalHosts: []
-    # -- Additional Ingress annotations for the Ingress resource
-    annotations: ~
+    minio:
+      # -- Minio API host
+      api: ""
+      # -- Minio console host
+      console: ""
   auth:
     # @ignored
     enable: true
@@ -138,7 +133,7 @@ minio:
   ingress:
     enabled: true
     ingressClassName: "nginx"
-    hostname: '{{ required "ingress api host required" .Values.global.ingress.apiHost }}'
+    hostname: '{{ required "ingress api host required at global.ingress.minio.api" .Values.global.ingress.minio.api }}'
     tls: true
     path: /
     pathType: Prefix
@@ -146,6 +141,8 @@ minio:
       cert-manager.io/cluster-issuer: letsencrypt
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+      prometheus.io/probe_path: /minio/health/live
+      prometheus.io/probe_scheme: https
   console:
     image:
       # -- Minio object browser registry path
@@ -182,3 +179,18 @@ minio:
             - namespaceSelector:
                 matchLabels:
                   kubernetes.io/metadata.name: '{{ .Values.global.networkPolicy.ingressNamespace }}'
+
+# @ignored
+osc-common:
+  nameOverride: minio
+  fullnameOverride: minio
+  oauth2-proxy:
+    fullnameOverride: minio-oauth2-proxy
+    nameOverride: minio-oauth2-proxy
+    ingress:
+      hosts:
+        - '{{ required "minio console host required at global.ingress.minio.console" .Values.global.ingress.minio.console }}'
+      tls:
+        - secretName: '{{ .Release.Name }}-cert'
+          hosts:
+            - '{{ .Values.global.ingress.minio.console }}'

@@ -23,9 +23,9 @@ global:
   imagePullSecret:
     password: SECRET
   ingress:
-    host: testuser.k8.osc.edu
-    hostAlias: testuser.osc.edu
-    apiHost: minio-api.k8.osc.edu
+    minio:
+      api: minio-api.k8.osc.edu
+      console: minio-console.k8.osc.edu
   auth:
     allowGroups:
       - group

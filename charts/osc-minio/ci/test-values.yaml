@@ -1,8 +1,12 @@
 global:
   oscServiceAccount: nobody
+  imagePullSecret:
+    create: true
+    password: IMAGE-PULL-PASSWORD
   ingress:
-    host: test.example.com
-    apiHost: test-api.example.com
+    minio:
+      api: test-api.example.com
+      console: test-minio-console.example.com
   storageClass: standard
 
 minio:

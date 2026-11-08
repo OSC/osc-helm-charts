@@ -14,7 +14,7 @@ A Helm chart for Minio
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts | osc-common | 0.17.0 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.17.1 |
 | oci://registry-1.docker.io/bitnamicharts | minio | 17.0.21 |
 
 ## Usage
@@ -27,9 +27,9 @@ global:
   imagePullSecret:
     password: SECRET
   ingress:
-    host: testuser.k8.osc.edu
-    hostAlias: testuser.osc.edu
-    apiHost: minio-api.k8.osc.edu
+    minio:
+      api: minio-api.k8.osc.edu
+      console: minio-console.k8.osc.edu
   auth:
     allowGroups:
       - group
@@ -49,18 +49,15 @@ minio:
 | global.oscServiceAccount | string | `""` | The service account used by OSC deployments. Also pulled from global.env.<env>.serviceAccount |
 | global.environment | string | `"production"` | The deployment's OSC environment |
 | global.nodeSelectorRole | string | `"webservices"` | The nodeSelector role |
-| global.imagePullSecret.create | bool | `true` | Create the image pull secret |
+| global.imagePullSecret.create | bool | `false` | Create the image pull secret |
 | global.imagePullSecret.name | string | `"osc-registry"` | image pull secret name |
 | global.imagePullSecret.registry | string | `"docker-registry.osc.edu"` | OSC registry address |
 | global.imagePullSecret.password | string | **required** | The image pull secret password for database images |
 | global.debugGroups | list | `[]` | Groups that debug pods |
 | global.maintenanceGroups | list | `[]` | Groups that can perform maintenance operations |
 | global.portforwardGroups | list | `[]` | Groups that are allowed to perform port forwarding |
-| global.ingress.host | string | **required** | Ingress host |
-| global.ingress.hostAlias | string | **required** | Ingress host alias |
-| global.ingress.apiHost | string | `""` | Minio API host |
-| global.ingress.additionalHosts | list | `[]` | Ingress additional hosts |
-| global.ingress.annotations | string | `nil` | Additional Ingress annotations for the Ingress resource |
+| global.ingress.minio.api | string | `""` | Minio API host |
+| global.ingress.minio.console | string | `""` | Minio console host |
 | global.auth.allowGroups | list | `[]` | Restrict access to these groups |
 | global.alert.receiver | string | `""` | The alert receiver |
 | global.storageClass | string | `"webservices-nfs-client"` | Storage class for persistence |

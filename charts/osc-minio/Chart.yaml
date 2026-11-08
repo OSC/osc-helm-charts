@@ -30,5 +30,5 @@ dependencies:
     repository: "oci://registry-1.docker.io/bitnamicharts"
     condition: minio.enable
   - name: osc-common
-    version: 0.17.0
+    version: 0.17.1
     repository: https://osc.github.io/osc-helm-charts
