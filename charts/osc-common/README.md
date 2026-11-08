@@ -104,6 +104,7 @@ global:
 | global.alert.receiver | The alert receiver name | `""` |
 | keycloakClient.secret.name | The secret name for the Keycloak Client secret | global.auth.keycloakClient.secret.name |
 | keycloakClient.configmap.name | The configmap name for the Keycloak Client config | global.auth.keycloakClient.configmap.name |
+| rbac.create | Create common RBAC when global items defined | `true` |
 | oauth2-proxy.image.registry | The OSC registry | The OSC registry hostname |
 | oauth2-proxy.image.repository | Path to oauth2-proxy on the OSC registry | `"kubernetes/oauth2-proxy"` |
 | oauth2-proxy.image.tag | oauth2-proxy image tag.  **must be replicated to the OSC registry** | `"v7.15.2"` |

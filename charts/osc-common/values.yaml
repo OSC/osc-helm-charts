@@ -118,6 +118,10 @@ keycloakClient:
     # @default -- global.auth.keycloakClient.configmap.name
     name: "{{ tpl .Values.global.auth.keycloakClient.configmap.name . }}"
 
+rbac:
+  # -- Create common RBAC when global items defined
+  create: true
+
 oauth2-proxy:
   image:
     # -- The OSC registry
