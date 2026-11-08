@@ -1,0 +1,27 @@
+global:
+  oscServiceAccount: nobody
+  ingress:
+    host: test.example.com
+    apiHost: test-api.example.com
+  storageClass: standard
+
+minio:
+  resources:
+    limits:
+      cpu: 1
+      memory: 128Mi
+    requests:
+      cpu: 250m
+      memory: 64Mi
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    size: 50Mi
+  console:
+    resources:
+      limits:
+        cpu: 1
+        memory: 128Mi
+      requests:
+        cpu: 250m
+        memory: 64Mi
