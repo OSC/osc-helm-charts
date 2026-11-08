@@ -44,7 +44,7 @@ global:
     # @ignored
     enable: true
     # @ignored
-    upstream: "minio-console.{{ .Release.Namespace }}.svc.cluster.local:9090"
+    upstream: "http://minio-console.{{ .Release.Namespace }}.svc.cluster.local:9090"
     # -- Restrict access to these groups
     allowGroups: []
     # @ignored
