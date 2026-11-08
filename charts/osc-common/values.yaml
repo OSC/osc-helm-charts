@@ -118,6 +118,10 @@ keycloakClient:
     # @default -- global.auth.keycloakClient.configmap.name
     name: "{{ tpl .Values.global.auth.keycloakClient.configmap.name . }}"
 
+imagePullSecret:
+  # -- Create the image pull secret
+  create: true
+
 rbac:
   # -- Create common RBAC when global items defined
   create: true

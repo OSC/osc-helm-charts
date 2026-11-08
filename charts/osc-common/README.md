@@ -104,6 +104,7 @@ global:
 | global.alert.receiver | The alert receiver name | `""` |
 | keycloakClient.secret.name | The secret name for the Keycloak Client secret | global.auth.keycloakClient.secret.name |
 | keycloakClient.configmap.name | The configmap name for the Keycloak Client config | global.auth.keycloakClient.configmap.name |
+| imagePullSecret.create | Create the image pull secret | `true` |
 | rbac.create | Create common RBAC when global items defined | `true` |
 | oauth2-proxy.image.registry | The OSC registry | The OSC registry hostname |
 | oauth2-proxy.image.repository | Path to oauth2-proxy on the OSC registry | `"kubernetes/oauth2-proxy"` |
