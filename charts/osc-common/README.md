@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.17.1](https://img.shields.io/badge/Version-0.17.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.17.2](https://img.shields.io/badge/Version-0.17.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -95,13 +95,17 @@ global:
 | global.auth.defaultClientScopes | Default client scopes for the Keycloak client | `["web-origins","roles","profile","groups","osc-oidc-clients","basic","email"]` |
 | global.auth.extraDefaultClientScropes | Extra default client scopes for the Keycloak client | `[]` |
 | global.auth.keycloakClient.forceCreate | Force creating KeycloakClient when Oauth2 Proxy management is disabled | `false` |
-| global.auth.keycloakClient.secret.name | The secret name for the Keycloak Client secret @default <Release name>-secret | `""` |
-| global.auth.keycloakClient.configmap.name | The configmap name for the Keycloak Client config @default <Release name>-config | `""` |
+| global.auth.keycloakClient.secret.name | The secret name for the Keycloak Client secret | <Release name>-auth-secret |
+| global.auth.keycloakClient.configmap.name | The configmap name for the Keycloak Client config | <Release name>-auth-config |
 | global.auth.keycloakClient.config | Additional Keycloak Client configs | `{}` |
 | global.ingress.host | Ingress host value | `""` |
 | global.ingress.hostAlias | Ingress host alias | `""` |
 | global.ingress.additionalHosts | Ingress additional hosts | `[]` |
 | global.alert.receiver | The alert receiver name | `""` |
+| keycloakClient.secret.name | The secret name for the Keycloak Client secret | global.auth.keycloakClient.secret.name |
+| keycloakClient.configmap.name | The configmap name for the Keycloak Client config | global.auth.keycloakClient.configmap.name |
+| imagePullSecret.create | Create the image pull secret | `true` |
+| rbac.create | Create common RBAC when global items defined | `true` |
 | oauth2-proxy.image.registry | The OSC registry | The OSC registry hostname |
 | oauth2-proxy.image.repository | Path to oauth2-proxy on the OSC registry | `"kubernetes/oauth2-proxy"` |
 | oauth2-proxy.image.tag | oauth2-proxy image tag.  **must be replicated to the OSC registry** | `"v7.15.2"` |

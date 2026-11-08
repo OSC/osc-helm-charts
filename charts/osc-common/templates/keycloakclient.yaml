@@ -30,11 +30,11 @@ spec:
   {{- tpl (toYaml .Values.global.auth.keycloakClient.config) . | nindent 2 }}
   {{- end }}
   clientSecretRef:
-    name: {{ include "osc.common.auth.secret.name" . }}
+    name: {{ tpl .Values.keycloakClient.secret.name . }}
     key: client-secret
     create: true
     envVarKeys: false
   configMap:
-    name: {{ include "osc.common.auth.configmap.name" . }}
+    name: {{ tpl .Values.keycloakClient.configmap.name . }}
     envVarKeys: true
 {{- end }}
