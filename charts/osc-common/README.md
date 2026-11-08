@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.17.2](https://img.shields.io/badge/Version-0.17.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.17.3](https://img.shields.io/badge/Version-0.17.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -102,6 +102,9 @@ global:
 | global.ingress.hostAlias | Ingress host alias | `""` |
 | global.ingress.additionalHosts | Ingress additional hosts | `[]` |
 | global.alert.receiver | The alert receiver name | `""` |
+| keycloakClient.useGlobal | Use global values for redirectUris | `true` |
+| keycloakClient.redirectUris | redirect URIs | `[]` |
+| keycloakClient.config | Additional Keycloak Client configs | global.auth.keycloakClient.config |
 | keycloakClient.secret.name | The secret name for the Keycloak Client secret | global.auth.keycloakClient.secret.name |
 | keycloakClient.configmap.name | The configmap name for the Keycloak Client config | global.auth.keycloakClient.configmap.name |
 | imagePullSecret.create | Create the image pull secret | `true` |

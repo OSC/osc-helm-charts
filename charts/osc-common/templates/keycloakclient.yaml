@@ -6,7 +6,7 @@ metadata:
     {{- include "osc.common.labels" . | nindent 4 }}
   name: {{ include "osc.common.name" . | quote }}
 spec:
-  {{- if or (default "" ((((.Values).global).ingress).host)) (default "" ((((.Values).global).ingress).hostAlias)) (default list ((((.Values).global).auth).redirectUris)) }}
+  {{- if and .Values.keycloakClient.useGlobal (or (default "" ((((.Values).global).ingress).host)) (default "" ((((.Values).global).ingress).hostAlias)) (default list ((((.Values).global).auth).redirectUris))) }}
   redirectUris:
     - https://{{ tpl .Values.global.ingress.host . }}{{ .Values.global.auth.redirectUriPath }}
   {{- if .Values.global.ingress.hostAlias }}
@@ -19,6 +19,12 @@ spec:
   {{- range (default list ((((.Values).global).auth).redirectUris)) }}
     - {{ tpl . $ | quote }}
   {{- end }}
+  {{- if and (not .Values.keycloakClient.useGlobal) .Values.keycloakClient.redirectUris }}
+  redirectUris:
+  {{- range .Values.keycloakClient.redirectUris }}
+    - {{ tpl . $ | quote }}
+  {{- end }}
+  {{- end }}
   defaultClientScopes:
   {{- range .Values.global.auth.defaultClientScopes }}
     - {{ . }}
@@ -26,8 +32,9 @@ spec:
   {{- range .Values.global.auth.extraDefaultClientScropes }}
     - {{ . }}
   {{- end }}
-  {{- if .Values.global.auth.keycloakClient.config }}
-  {{- tpl (toYaml .Values.global.auth.keycloakClient.config) . | nindent 2 }}
+  {{- $config := .Values.keycloakClient.config | default .Values.global.auth.keycloakClient.config }}
+  {{- if $config }}
+  {{- tpl (toYaml $config) . | nindent 2 }}
   {{- end }}
   clientSecretRef:
     name: {{ tpl .Values.keycloakClient.secret.name . }}

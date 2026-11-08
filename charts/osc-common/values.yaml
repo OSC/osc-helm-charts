@@ -109,6 +109,13 @@ global:
     receiver: ""
 
 keycloakClient:
+  # -- Use global values for redirectUris
+  useGlobal: true
+  # -- redirect URIs
+  redirectUris: []
+  # -- Additional Keycloak Client configs
+  # @default -- global.auth.keycloakClient.config
+  config: {}
   secret:
     # -- The secret name for the Keycloak Client secret
     # @default -- global.auth.keycloakClient.secret.name
