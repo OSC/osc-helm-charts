@@ -3,7 +3,6 @@ global:
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   auth:
-    enable: true
     upstream: http://{{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:80
     skipAuthRoutes:
       - '/api($|/.*)'
@@ -25,3 +24,5 @@ keycloakClient:
     webOrigins:
       - https://{{ .Values.global.ingress.host }}
       - '{{ printf "https://%s" (.Values.global.ingress.hostAlias | default .Values.global.ingress.host) }}'
+oauth2-proxy:
+  enable: true

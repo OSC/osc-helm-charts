@@ -58,7 +58,7 @@ global:
     # -- OSC managed webservices-deploy ServiceAccount name
     serviceAccount: webservices-deploy
   auth:
-    # -- Enable auth management
+    # -- Enable auth management, also `oauth2-proxy.enable` supported
     enable: false
     # -- The upstream service for the OAuth2 proxy. **required** when auth is enabled
     upstream: ""
@@ -134,6 +134,9 @@ rbac:
   create: true
 
 oauth2-proxy:
+  # -- Enable oauth2-proxy
+  # @default -- false
+  enable:
   image:
     # -- The OSC registry
     # @default -- The OSC registry hostname
