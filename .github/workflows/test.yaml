@@ -185,3 +185,4 @@ jobs:
           set +e
           kubectl logs -n kyverno -l app.kubernetes.io/component=admission-controller
           kubectl logs -n keycloak -l app.kubernetes.io/instance=keycloak --tail=200
+          kubectl logs -n keycloak-cr-operator -l app.kubernetes.io/name=keycloak-cr-operator --tail=200
