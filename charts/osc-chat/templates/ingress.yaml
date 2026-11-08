@@ -51,16 +51,6 @@ spec:
                 name: {{ $fullName }}-backend
                 port:
                   number: {{ $backendPort }}
-          {{- if $.Values.minio.enable }}
-          # MinIO console under /minio
-          - path: /minio
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $fullName }}-minio
-                port:
-                  number: 9000
-          {{- end }}
           {{- if $.Values.ollama.enabled }}
           # Ollama API under /ollama
           - path: {{ default "/ollama" $.Values.paths.ollama }}

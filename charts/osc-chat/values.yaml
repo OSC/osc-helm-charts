@@ -91,55 +91,19 @@ database:
         annotations:
           osc.edu/fileset: PZS0645
 
-minio:
+# @ignored
+osc-minio:
   enable: true
-  image:
-    repository: kubernetes/bitnami/minio
-    tag: 2025.7.23-debian-12-r5
-    pullSecrets:
-      - osc-registry
-  defaultBuckets: "osc-chat"
-  commonLabels:
-    receiver: '{{ index .Values.global.alert.receiver }}'
-  clientImage:
-    repository: kubernetes/bitnami/minio-client
-    tag: 2025.7.21-debian-12-r3
-    pullSecrets:
-      - osc-registry
-  console:
-    image:
-      repository: kubernetes/bitnami/minio-object-browser
-      tag: 2.0.2-debian-12-r3
-      pullSecrets:
-        - osc-registry
-  imagePullSecret:
-    enable: false
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      interval: 60s
-      relabelings:
-      - sourceLabels: [__meta_kubernetes_service_label_receiver]
-        targetLabel: receiver
-  persistence:
-    annotations:
-      osc.edu/fileset: PZS0645
-  auth:
-    rootUser: "minioadmin"
-    rootPassword: "minioadmin"
-  ingress:
-    enabled: true
-    ingressClassName: "nginx"
-    hostname: ""
-    tls: true
-    path: /
-    pathType: Prefix
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
-
+  minio:
+    # Keep same names as before the dedicated chart
+    fullnameOverride: osc-chat-minio
+    defaultBuckets: "osc-chat"
+    persistence:
+      # Kept to avoid attempts to change misconfigured previous PVC before shared chart
+      accessModes:
+        - ReadWriteOnce
+      # Kept to avoid attempts to change misconfigured previous PVC before shared chart
+      size: 8Gi
 
 qdrant:
   enable: true
@@ -271,9 +235,10 @@ worker:
     tag: v0.1.3
     pullPolicy: Always
   replicaCount: 1
+  # @ignored
   env:
     QDRANT_COLLECTION_NAME: '{{ include "osc-chat.name" . }}'
-    S3_BUCKET_NAME: '{{ include "osc-chat.name" . }}'
+    S3_BUCKET_NAME: '{{ index .Values "osc-minio" "minio" "defaultBuckets" }}'
   resources:
     limits:
       cpu: 4
