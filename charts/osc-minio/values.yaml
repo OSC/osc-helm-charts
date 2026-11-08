@@ -193,10 +193,16 @@ osc-common:
   imagePullSecret:
     create: false
   keycloakClient:
+    useGlobal: false
     secret:
       name: minio-auth-secret
     configmap:
       name: minio-auth-config
+    redirectUris:
+      - https://{{ .Values.global.ingress.minio.console }}
+    config:
+      webOrigins:
+        - https://{{ .Values.global.ingress.minio.console }}
   rbac:
     create: false
   oauth2-proxy:
