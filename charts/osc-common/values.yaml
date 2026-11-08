@@ -89,12 +89,12 @@ global:
       forceCreate: false
       secret:
         # -- The secret name for the Keycloak Client secret
-        # @default <Release name>-secret
-        name: ""
+        # @default -- <Release name>-auth-secret
+        name: "{{ .Release.Name }}-auth-secret"
       configmap:
         # -- The configmap name for the Keycloak Client config
-        # @default <Release name>-config
-        name: ""
+        # @default -- <Release name>-auth-config
+        name: "{{ .Release.Name }}-auth-config"
       # -- Additional Keycloak Client configs
       config: {}
   ingress:
@@ -108,6 +108,16 @@ global:
     # -- The alert receiver name
     receiver: ""
 
+keycloakClient:
+  secret:
+    # -- The secret name for the Keycloak Client secret
+    # @default -- global.auth.keycloakClient.secret.name
+    name: "{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"
+  configmap:
+    # -- The configmap name for the Keycloak Client config
+    # @default -- global.auth.keycloakClient.configmap.name
+    name: "{{ tpl .Values.global.auth.keycloakClient.configmap.name . }}"
+
 oauth2-proxy:
   image:
     # -- The OSC registry
@@ -119,7 +129,7 @@ oauth2-proxy:
     tag: v7.15.2
   # @ignored
   config:
-    existingSecret: '{{ include "osc.common.auth.secret.name" . }}'
+    existingSecret: "{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"
     cookieName: _{{ include "osc.common.name" . }}{{ include "osc.common.environment" . }}
     configFile: |-
       {{- if ((((.Values).global).auth).skipAuthRoutes) }}
@@ -143,7 +153,7 @@ oauth2-proxy:
   # @ignored
   envFrom:
     - configMapRef:
-        name: '{{ include "osc.common.auth.configmap.name" . }}'
+        name: "{{ tpl .Values.global.auth.keycloakClient.configmap.name . }}"
   # @ignored
   extraArgs:
     provider: oidc
