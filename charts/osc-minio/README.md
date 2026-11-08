@@ -14,7 +14,7 @@ A Helm chart for Minio
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts | osc-common | 0.17.1 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.17.2 |
 | oci://registry-1.docker.io/bitnamicharts | minio | 17.0.21 |
 
 ## Usage
@@ -48,13 +48,7 @@ global:
 | global.oscServiceAccount | string | `""` | The service account used by OSC deployments. Also pulled from global.env.<env>.serviceAccount |
 | global.environment | string | `"production"` | The deployment's OSC environment |
 | global.nodeSelectorRole | string | `"webservices"` | The nodeSelector role |
-| global.imagePullSecret.create | bool | `false` | Create the image pull secret |
-| global.imagePullSecret.name | string | `"osc-registry"` | image pull secret name |
-| global.imagePullSecret.registry | string | `"docker-registry.osc.edu"` | OSC registry address |
 | global.imagePullSecret.password | string | **required** | The image pull secret password for database images |
-| global.debugGroups | list | `[]` | Groups that debug pods |
-| global.maintenanceGroups | list | `[]` | Groups that can perform maintenance operations |
-| global.portforwardGroups | list | `[]` | Groups that are allowed to perform port forwarding |
 | global.ingress.minio.api | string | `""` | Minio API host |
 | global.ingress.minio.console | string | `""` | Minio console host |
 | global.auth.allowGroups | list | `[]` | Restrict access to these groups |

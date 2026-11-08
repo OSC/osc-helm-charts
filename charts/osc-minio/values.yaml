@@ -9,11 +9,11 @@ global:
   # @ignored
   imageRegistry: docker-registry.osc.edu
   imagePullSecret:
-    # -- Create the image pull secret
+    # @ignored
     create: false
-    # -- image pull secret name
+    # @ignored
     name: osc-registry
-    # -- OSC registry address
+    # @ignored
     registry: docker-registry.osc.edu
     # -- The image pull secret password for database images
     # @default -- **required**
@@ -25,12 +25,6 @@ global:
     ingressNamespace: ingress-nginx
     # @ignored
     prometheusNamespace: prometheus
-  # -- Groups that debug pods
-  debugGroups: []
-  # -- Groups that can perform maintenance operations
-  maintenanceGroups: []
-  # -- Groups that are allowed to perform port forwarding
-  portforwardGroups: []
   # @ignored
   webservicesDeploy:
     create: false
@@ -196,14 +190,23 @@ minio:
 osc-common:
   nameOverride: minio
   fullnameOverride: minio
+  imagePullSecret:
+    create: false
+  keycloakClient:
+    secret:
+      name: minio-auth-secret
+    configmap:
+      name: minio-auth-config
+  rbac:
+    create: false
   oauth2-proxy:
     fullnameOverride: minio-oauth2-proxy
     nameOverride: minio-oauth2-proxy
     config:
-      existingSecret: '{{ .Values.global.auth.keycloakClient.secret.name }}'
+      existingSecret: minio-auth-secret
     envFrom:
       - configMapRef:
-          name: '{{ .Values.global.auth.keycloakClient.configmap.name }}'
+          name: minio-auth-config
     ingress:
       hosts:
         - '{{ required "minio console host required at global.ingress.minio.console" .Values.global.ingress.minio.console }}'

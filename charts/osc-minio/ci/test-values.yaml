@@ -8,7 +8,9 @@ global:
       api: test-api.example.com
       console: test-minio-console.example.com
   storageClass: standard
-
+osc-common:
+  imagePullSecret:
+    create: true
 minio:
   resources:
     limits:
