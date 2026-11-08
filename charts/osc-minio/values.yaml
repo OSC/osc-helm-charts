@@ -47,6 +47,12 @@ global:
     upstream: "minio-console.{{ .Release.Namespace }}.svc.cluster.local:9090"
     # -- Restrict access to these groups
     allowGroups: []
+    # @ignored
+    keycloakClient:
+      secret:
+        name: "minio-auth-secret"
+      configmap:
+        name: "minio-auth-config"
   alert:
     # -- The alert receiver
     receiver: ""
@@ -193,6 +199,11 @@ osc-common:
   oauth2-proxy:
     fullnameOverride: minio-oauth2-proxy
     nameOverride: minio-oauth2-proxy
+    config:
+      existingSecret: '{{ .Values.global.auth.keycloakClient.secret.name }}'
+    envFrom:
+      - configMapRef:
+          name: '{{ .Values.global.auth.keycloakClient.configmap.name }}'
     ingress:
       hosts:
         - '{{ required "minio console host required at global.ingress.minio.console" .Values.global.ingress.minio.console }}'
