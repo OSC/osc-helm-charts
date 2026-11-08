@@ -60,13 +60,19 @@ global:
   # @ignored
   security:
     allowInsecureImages: true
+  minio:
+    auth:
+      # -- The minio root user
+      rootUser: "minioadmin"
+      # -- The minio root password
+      rootPassword: "minioadmin"
 
 minio:
   # -- Enable minio chart
   enable: true
   # @ignored
   fullnameOverride: minio
-  # @inored
+  # @ignored
   nameOverride: minio
   image:
     # -- Minio image registry path
@@ -112,11 +118,11 @@ minio:
     - ReadWriteMany
     annotations:
       osc.edu/fileset: '{{ .Values.global.fileset }}'
+  # @ignored
   auth:
-    # -- The minio root user
-    rootUser: "minioadmin"
-    # -- The minio root password
-    rootPassword: "minioadmin"
+    rootUser: "{{ .Values.global.minio.auth.rootUser }}"
+    rootPassword: "{{ .Values.global.minio.auth.rootPassword }}"
+    forcePassword: true
   # @ignored
   networkPolicy:
     enabled: true

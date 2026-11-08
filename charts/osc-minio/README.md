@@ -35,11 +35,10 @@ global:
       - group
   alert:
     receiver: group
-
-minio:
-  auth:
-    rootUser: "minioadmin"
-    rootPassword: "supersecret"
+  minio:
+    auth:
+      rootUser: "minioadmin"
+      rootPassword: "supersecret"
 ```
 
 ## Values
@@ -62,15 +61,14 @@ minio:
 | global.alert.receiver | string | `""` | The alert receiver |
 | global.storageClass | string | `"webservices-nfs-client"` | Storage class for persistence |
 | global.fileset | string | `nil` | The storage fileset |
+| global.minio.auth.rootUser | string | `"minioadmin"` | The minio root user |
+| global.minio.auth.rootPassword | string | `"minioadmin"` | The minio root password |
 | minio.enable | bool | `true` | Enable minio chart |
-| minio.nameOverride | string | `"minio"` |  |
 | minio.image.repository | string | `"kubernetes/bitnami/minio"` | Minio image registry path |
 | minio.image.tag | string | `"2025.7.23-debian-12-r5"` | Minio image tag |
 | minio.defaultBuckets | string | `nil` | Default minio bucket |
 | minio.clientImage.repository | string | `"kubernetes/bitnami/minio-client"` | Minio client image registry path |
 | minio.clientImage.tag | string | `"2025.7.21-debian-12-r3"` | Minio client image tag |
-| minio.auth.rootUser | string | `"minioadmin"` | The minio root user |
-| minio.auth.rootPassword | string | `"minioadmin"` | The minio root password |
 | minio.console.image.repository | string | `"kubernetes/bitnami/minio-object-browser"` | Minio object browser registry path |
 | minio.console.image.tag | string | `"2.0.2-debian-12-r3"` | Minio object browser tag |
 

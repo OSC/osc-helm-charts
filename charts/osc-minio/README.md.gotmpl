@@ -31,11 +31,10 @@ global:
       - group
   alert:
     receiver: group
-
-minio:
-  auth:
-    rootUser: "minioadmin"
-    rootPassword: "supersecret"
+  minio:
+    auth:
+      rootUser: "minioadmin"
+      rootPassword: "supersecret"
 ```
 
 {{ template "chart.valuesSection" . }}
