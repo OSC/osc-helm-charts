@@ -22,4 +22,6 @@ global:
   project: test1
 keycloakClient:
   config:
-    publicClient: true
+    webOrigins:
+      - https://{{ .Values.global.ingress.host }}
+      - '{{ printf "https://%s" (.Values.global.ingress.hostAlias | default .Values.global.ingress.host) }}'
