@@ -1,4 +1,4 @@
-{{- if or .Values.global.auth.enable .Values.global.auth.keycloakClient.forceCreate }}
+{{- if or .Values.global.auth.enable .Values.global.auth.keycloakClient.forceCreate (index .Values "oauth2-proxy" "enable")}}
 apiVersion: keycloak.osc.edu/v1alpha1
 kind: KeycloakClient
 metadata:

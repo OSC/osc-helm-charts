@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.17.3](https://img.shields.io/badge/Version-0.17.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.17.4](https://img.shields.io/badge/Version-0.17.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -85,7 +85,7 @@ global:
 | global.webservicesDeploy.create | Create webservices deployment rolebinding | `true` |
 | global.webservicesDeploy.clusterRole | OSC managed webservices-deploy ClusterRole name | `"webservices-deploy"` |
 | global.webservicesDeploy.serviceAccount | OSC managed webservices-deploy ServiceAccount name | `"webservices-deploy"` |
-| global.auth.enable | Enable auth management | `false` |
+| global.auth.enable | Enable auth management, also `oauth2-proxy.enable` supported | `false` |
 | global.auth.upstream | The upstream service for the OAuth2 proxy. **required** when auth is enabled | `""` |
 | global.auth.skipAuthRoutes | Routes to skip auth | `[]` |
 | global.auth.allowGroups | Restrict access to these groups | `[]` |
@@ -109,6 +109,7 @@ global:
 | keycloakClient.configmap.name | The configmap name for the Keycloak Client config | global.auth.keycloakClient.configmap.name |
 | imagePullSecret.create | Create the image pull secret | `true` |
 | rbac.create | Create common RBAC when global items defined | `true` |
+| oauth2-proxy.enable | Enable oauth2-proxy | false |
 | oauth2-proxy.image.registry | The OSC registry | The OSC registry hostname |
 | oauth2-proxy.image.repository | Path to oauth2-proxy on the OSC registry | `"kubernetes/oauth2-proxy"` |
 | oauth2-proxy.image.tag | oauth2-proxy image tag.  **must be replicated to the OSC registry** | `"v7.15.2"` |

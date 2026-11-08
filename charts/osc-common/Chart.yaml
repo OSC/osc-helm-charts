@@ -2,7 +2,7 @@ apiVersion: v2
 name: osc-common
 description: OSC common Helm Chart
 type: application
-version: 0.17.3
+version: 0.17.4
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
@@ -10,4 +10,4 @@ dependencies:
   - name: oauth2-proxy
     version: 10.6.0
     repository: https://oauth2-proxy.github.io/manifests
-    condition: global.auth.enable
+    condition: oauth2-proxy.enable,global.auth.enable
