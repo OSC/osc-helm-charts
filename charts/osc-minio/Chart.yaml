@@ -2,7 +2,7 @@ apiVersion: v2
 name: osc-minio
 description: A Helm chart for Minio
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "2025.7.23-debian-12-r5"
 maintainers:
   - name: treydock
@@ -12,5 +12,5 @@ dependencies:
     repository: "oci://registry-1.docker.io/bitnamicharts"
     condition: minio.enable
   - name: osc-common
-    version: 0.17.2
+    version: 0.17.3
     repository: https://osc.github.io/osc-helm-charts

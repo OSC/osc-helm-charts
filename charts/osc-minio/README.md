@@ -1,6 +1,6 @@
 # osc-minio
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2025.7.23-debian-12-r5](https://img.shields.io/badge/AppVersion-2025.7.23--debian--12--r5-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2025.7.23-debian-12-r5](https://img.shields.io/badge/AppVersion-2025.7.23--debian--12--r5-informational?style=flat-square)
 
 A Helm chart for Minio
 
@@ -14,7 +14,7 @@ A Helm chart for Minio
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts | osc-common | 0.17.2 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.17.3 |
 | oci://registry-1.docker.io/bitnamicharts | minio | 17.0.21 |
 
 ## Usage
