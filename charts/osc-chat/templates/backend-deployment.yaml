@@ -70,7 +70,7 @@ spec:
                   name: {{ include "osc-chat.fullname" . }}-app-config
                   key: RABBITMQ_QUEUE
             - name: S3_ENDPOINT
-              value: "http://minio:9000"
+              value: "http://{{ index .Values "osc-minio" "minio" "fullnameOverride" }}:9000"
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
