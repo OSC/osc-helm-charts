@@ -74,7 +74,7 @@ minio:
       - osc-registry
   persistence:
     enabled: true
-    storageClass: paas-nfs-client
+    storageClass: local-ess
     size: 100Gi
     annotations:
       osc.edu/fileset: PZS0645
