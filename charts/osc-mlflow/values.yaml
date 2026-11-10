@@ -15,6 +15,12 @@ global:
   security:
     allowInsecureImages: true
   nodeSelectorRole: webservices
+  postgresql:
+    auth:
+      username: mlflow
+      password: changeme-mlflow
+      postgresPassword: changeme-postgres
+      database: mlflow
   debugGroups:
     - sappstf
   maintenanceGroups:
@@ -28,10 +34,10 @@ database:
     # @ignored
     enable: true
     auth:
-      postgresPassword: changeme-postgres
-      database: mlflow
-      username: mlflow
-      password: changeme-mlflow
+      postgresPassword: '{{ .Values.global.postgresql.auth.postgresPassword }}'
+      database: '{{ .Values.global.postgresql.database }}'
+      username: '{{ .Values.global.postgresql.auth.username }}'
+      password: '{{ .Values.global.postgresql.auth.password }}'
     # @ignored
     primary:
       persistence:
@@ -156,14 +162,12 @@ mlflow:
     defaultSqlitePath: ":memory:"
     postgres:
       enabled: true
-      host: "osc-mlflow-postgresql"
+      host: '{{ .Release.Name }}-postgresql'
       port: 5432
-      database: "mlflow"
+      database: '{{ .Values.global.postgresql.auth.database }}'
       driver: "psycopg2"
-    existingDatabaseSecret:
-      name: "osc-mlflow-app-secrets"
-      usernameKey: "pg_username"
-      passwordKey: "pg_password"
+      user: '{{ .Values.global.postgresql.auth.username }}'
+      password: '{{ .Values.global.postgresql.auth.password }}'
   artifactRoot:
     proxiedArtifactStorage: true
     defaultArtifactRoot: "./mlruns"
@@ -182,8 +186,6 @@ mlflow:
       enabled: true
       host: "osc-mlflow-postgresql"
       port: 5432
-      database: "mlflow"
-      existingSecret:
-        name: "osc-mlflow-app-secrets"
-        usernameKey: "pg_username"
-        passwordKey: "pg_password"
+      database: '{{ .Values.global.postgresql.auth.database }}'
+      user: '{{ .Values.global.postgresql.auth.username }}'
+      password: '{{ .Values.global.postgresql.auth.password }}'
