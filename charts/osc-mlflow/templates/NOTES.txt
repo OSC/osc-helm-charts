@@ -20,18 +20,7 @@
    - MLFlow's built-in basic auth is enabled for API access
    - Default bucket 'mlflow-artifacts' is created in MinIO
 
-4. Default Credentials (CHANGE THESE IN PRODUCTION):
-   - MLFlow Built-in Auth:
-     - Username: {{ .Values.mlflow.auth.adminUsername }}
-     - Password: {{ .Values.mlflow.auth.adminPassword }}
-   - PostgreSQL:
-     - Username: {{ .Values.database.postgresql.auth.username }}
-     - Password: {{ .Values.database.postgresql.auth.password }}
-   - MinIO:
-     - Username: {{ .Values.minio.auth.rootUser }}
-     - Password: {{ .Values.minio.auth.rootPassword }}
-
-5. Useful Commands:
+4. Useful Commands:
    # Check pod status
    kubectl get pods -l "app.kubernetes.io/instance={{ .Release.Name }}"
 
@@ -44,7 +33,7 @@
    # Port-forward MinIO console
    kubectl port-forward svc/{{ include "mlflow.fullname" . }}-minio 9001:9001 -n {{ .Release.Namespace }}
 
-6. Next Steps:
+5. Next Steps:
    - Update the passwords in values.yaml before deploying to production
    - Configure your MLFlow client to connect to the URL shown above
    - Set up backup strategies for PostgreSQL and MinIO data
