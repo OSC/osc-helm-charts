@@ -71,6 +71,8 @@ spec:
                   key: RABBITMQ_QUEUE
             - name: S3_ENDPOINT
               value: "http://{{ index .Values "osc-minio" "minio" "fullnameOverride" }}:9000"
+            - name: MINIO_URL
+              value: "http://{{ index .Values "osc-minio" "minio" "fullnameOverride" }}:9000"
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
