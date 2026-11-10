@@ -213,6 +213,6 @@ osc-common:
       hosts:
         - '{{ required "minio console host required at global.ingress.minio.console" .Values.global.ingress.minio.console }}'
       tls:
-        - secretName: '{{ .Release.Name }}-cert'
+        - secretName: 'minio-console-cert'
           hosts:
             - '{{ .Values.global.ingress.minio.console }}'
