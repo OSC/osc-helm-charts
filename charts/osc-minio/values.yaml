@@ -189,7 +189,7 @@ osc-common:
     configmap:
       name: minio-auth-config
     redirectUris:
-      - https://{{ .Values.global.ingress.minio.console }}
+      - https://{{ .Values.global.ingress.minio.console }}/oauth2/callback
     config:
       webOrigins:
         - https://{{ .Values.global.ingress.minio.console }}
