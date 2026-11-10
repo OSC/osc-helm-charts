@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.21](https://img.shields.io/badge/Version-0.1.21-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.21](https://img.shields.io/badge/AppVersion-0.1.21-informational?style=flat-square)
+![Version: 0.1.22](https://img.shields.io/badge/Version-0.1.22-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.22](https://img.shields.io/badge/AppVersion-0.1.22-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -34,6 +34,13 @@ global:
   ingress:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
+    minio:
+      api: <minio host name>
+      console: <minio console host name>
+  minio:
+    auth:
+      rootUser: <minio root username>
+      rootPassword: <minio root password>
   llm:
     host: <LLM server host>
   embedding:
@@ -53,13 +60,6 @@ rabbitmq:
     username: <rabbitmq root username>
     password: <rabbitmq root password>
 
-minio:
-  auth:
-    rootUser: <minio root username>
-    rootPassword: <minio root password>
-  ingress:
-    hostname: <minio host name>
-
 qdrant:
   apiKey: <qdrant API key>
 
@@ -75,11 +75,11 @@ secrets:
 | Repository | Name | Version |
 |------------|------|---------|
 | https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.10 |
-| https://osc.github.io/osc-helm-charts | database | 0.19.5 |
+| https://osc.github.io/osc-helm-charts | database | 0.21.1 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.16.1 |
+| https://osc.github.io/osc-helm-charts | osc-minio | 0.1.2 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
 | oci://docker-registry.osc.edu/kubernetes/vllm | vllm-stack | 0.1.11-osc-r1 |
-| oci://registry-1.docker.io/bitnamicharts | minio | 17.0.21 |
 | oci://registry-1.docker.io/bitnamicharts | rabbitmq | 16.0.14 |
 
 ## Values
@@ -103,6 +103,10 @@ secrets:
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
+| global.ingress.minio.api | string | `""` | Minio API host |
+| global.ingress.minio.console | string | `""` | Minio console host |
+| global.minio.auth.rootUser | string | `"minioadmin"` | The minio root user |
+| global.minio.auth.rootPassword | string | `"minioadmin"` | The minio root password |
 | global.networkPolicy.ingressAllowedPods[0]."app.kubernetes.io/name" | string | `"osc-mcp"` |  |
 | database.postgresql.auth.postgresPassword | string | `"secret"` |  |
 | database.postgresql.auth.database | string | `"name"` |  |
@@ -111,36 +115,6 @@ secrets:
 | database.redis.enable | bool | `true` |  |
 | database.redis.auth.password | string | `"secret"` |  |
 | database.redis.master.persistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
-| minio.enable | bool | `true` |  |
-| minio.image.repository | string | `"kubernetes/bitnami/minio"` |  |
-| minio.image.tag | string | `"2025.7.23-debian-12-r5"` |  |
-| minio.image.pullSecrets[0] | string | `"osc-registry"` |  |
-| minio.defaultBuckets | string | `"osc-chat"` |  |
-| minio.commonLabels.receiver | string | `"{{ index .Values.global.alert.receiver }}"` |  |
-| minio.clientImage.repository | string | `"kubernetes/bitnami/minio-client"` |  |
-| minio.clientImage.tag | string | `"2025.7.21-debian-12-r3"` |  |
-| minio.clientImage.pullSecrets[0] | string | `"osc-registry"` |  |
-| minio.console.image.repository | string | `"kubernetes/bitnami/minio-object-browser"` |  |
-| minio.console.image.tag | string | `"2.0.2-debian-12-r3"` |  |
-| minio.console.image.pullSecrets[0] | string | `"osc-registry"` |  |
-| minio.imagePullSecret.enable | bool | `false` |  |
-| minio.metrics.enabled | bool | `true` |  |
-| minio.metrics.serviceMonitor.enabled | bool | `true` |  |
-| minio.metrics.serviceMonitor.interval | string | `"60s"` |  |
-| minio.metrics.serviceMonitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_service_label_receiver"` |  |
-| minio.metrics.serviceMonitor.relabelings[0].targetLabel | string | `"receiver"` |  |
-| minio.persistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
-| minio.auth.rootUser | string | `"minioadmin"` |  |
-| minio.auth.rootPassword | string | `"minioadmin"` |  |
-| minio.ingress.enabled | bool | `true` |  |
-| minio.ingress.ingressClassName | string | `"nginx"` |  |
-| minio.ingress.hostname | string | `""` |  |
-| minio.ingress.tls | bool | `true` |  |
-| minio.ingress.path | string | `"/"` |  |
-| minio.ingress.pathType | string | `"Prefix"` |  |
-| minio.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt"` |  |
-| minio.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
-| minio.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" | string | `"16k"` |  |
 | qdrant.enable | bool | `true` |  |
 | qdrant.resources.limits.cpu | int | `4` |  |
 | qdrant.resources.limits.memory | string | `"8Gi"` |  |
@@ -186,8 +160,6 @@ secrets:
 | worker.image.tag | string | `"v0.1.3"` |  |
 | worker.image.pullPolicy | string | `"Always"` |  |
 | worker.replicaCount | int | `1` |  |
-| worker.env.QDRANT_COLLECTION_NAME | string | `"{{ include \"osc-chat.name\" . }}"` |  |
-| worker.env.S3_BUCKET_NAME | string | `"{{ include \"osc-chat.name\" . }}"` |  |
 | worker.resources.limits.cpu | int | `4` |  |
 | worker.resources.limits.memory | string | `"2Gi"` |  |
 | worker.resources.requests.cpu | int | `2` |  |
