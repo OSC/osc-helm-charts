@@ -59,7 +59,8 @@ database:
 #        annotations:
 #          osc.edu/fileset: '{{ .Values.global.fileset }}'
 
-minio:
+osc-minio:
+  minio:
   enable: true
   auth:
     rootUser: mlflowadmin

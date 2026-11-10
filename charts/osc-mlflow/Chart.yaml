@@ -34,10 +34,10 @@ dependencies:
     #repository: oci://ghcr.io/mlflow/charts
     version: 1.11.7
     repository: https://community-charts.github.io/helm-charts
-  - name: minio
+  - name: osc-minio
     version: 17.0.21
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    condition: minio.enable
+    condition: osc-minio.enable
   - name: osc-common
     version: 0.17.4
     repository: https://osc.github.io/osc-helm-charts
