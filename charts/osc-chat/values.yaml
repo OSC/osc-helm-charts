@@ -115,6 +115,10 @@ osc-minio:
         - ReadWriteOnce
       # Kept to avoid attempts to change misconfigured previous PVC before shared chart
       size: 8Gi
+  osc-common:
+    oauth2-proxy:
+      extraArgs:
+        upstream: "http://osc-chat-minio-console.{{ .Release.Namespace }}.svc.cluster.local:9090"
 
 qdrant:
   enable: true
