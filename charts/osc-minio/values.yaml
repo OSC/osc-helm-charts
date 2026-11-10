@@ -189,7 +189,7 @@ osc-common:
     configmap:
       name: minio-auth-config
     redirectUris:
-      - https://{{ .Values.global.ingress.minio.console }}
+      - https://{{ .Values.global.ingress.minio.console }}/oauth2/callback
     config:
       webOrigins:
         - https://{{ .Values.global.ingress.minio.console }}
@@ -213,6 +213,6 @@ osc-common:
       hosts:
         - '{{ required "minio console host required at global.ingress.minio.console" .Values.global.ingress.minio.console }}'
       tls:
-        - secretName: '{{ .Release.Name }}-cert'
+        - secretName: 'minio-console-cert'
           hosts:
             - '{{ .Values.global.ingress.minio.console }}'
