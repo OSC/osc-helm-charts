@@ -18,6 +18,7 @@ global:
   security:
     allowInsecureImages: true
   nodeSelectorRole: webservices
+  fileset: PZS0645
   postgresql:
     auth:
       username: mlflow
@@ -152,12 +153,12 @@ mlflow:
   extraSecretNamesForEnvFrom:
     - osc-mlflow-app-secrets
   auth:
-    enabled: true  # Enable MLflow basic auth
-    adminUsername: admin
-    adminPassword: changeme-admin
+    enabled: true
+    adminUsername: '{{ .Values.global.mlflow.auth.adminUsername }}'
+    adminPassword: '{{ .Values.global.mlflow.auth.adminPassword }}'
     postgres:
       enabled: true
-      host: "osc-mlflow-postgresql"
+      host: '{{ .Release.Name }}-postgresql'
       port: 5432
       database: '{{ .Values.global.postgresql.auth.database }}'
       user: '{{ .Values.global.postgresql.auth.username }}'
