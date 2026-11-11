@@ -10,6 +10,9 @@ global:
   ingress:
     host: ""
     hostAlias: ""
+    minio:
+      api: ""
+      console: ""
   alert:
     receiver: sciapps
   security:
@@ -21,6 +24,14 @@ global:
       password: changeme-mlflow
       postgresPassword: changeme-postgres
       database: mlflow
+  minio:
+    auth:
+      rootUser: mlflowadmin
+      rootPassword: changeme-minio
+  mlflow:
+    auth:
+      adminUsername: admin
+      adminPassword: changeme-admin
   debugGroups:
     - sappstf
   maintenanceGroups:
@@ -60,49 +71,10 @@ database:
 #          osc.edu/fileset: '{{ .Values.global.fileset }}'
 
 osc-minio:
-  minio:
   enable: true
-  auth:
-    rootUser: mlflowadmin
-    rootPassword: changeme-minio
-  defaultBuckets: "mlflow-artifacts"
-  commonLabels:
-    receiver: '{{ index .Values.global.alert.receiver }}'
-  image:
-    repository: kubernetes/bitnami/minio
-    tag: 2025.7.23-debian-12-r5
-    pullSecrets:
-      - osc-registry
-  persistence:
-    enabled: true
-    storageClass: local-ess
-    size: 100Gi
-    annotations:
-      osc.edu/fileset: PZS0645
-      helm.sh/resource-policy: keep
-  service:
-    type: ClusterIP
-    rpcPort: 9000
-    consolePort: 9001
-  resources:
-    limits:
-      cpu: 2000m
-      memory: 4Gi
-    requests:
-      cpu: 500m
-      memory: 1Gi
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      interval: 60s
-      relabelings:
-      - sourceLabels: [__meta_kubernetes_service_label_receiver]
-        targetLabel: receiver
-  console:
-    image:
-      repository: kubernetes/bitnami/minio-object-browser
-      tag: 2.0.2-debian-12-r3
+  minio:
+   fullnameOverride: osc-mlflow-minio
+   defaultBuckets: "mlflow-artifacts"
 
 ingress:
   enabled: true
