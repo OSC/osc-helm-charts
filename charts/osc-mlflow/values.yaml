@@ -6,7 +6,7 @@ global:
     # @default -- **required**
     password:
   oscServiceAccount: oscchat
-  storageClass: webservices-nfs-client
+  storageClass: local-ess
   ingress:
     host: ""
     hostAlias: ""
