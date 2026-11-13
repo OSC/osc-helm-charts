@@ -71,7 +71,7 @@ database:
 osc-minio:
   enable: true
   minio:
-   fullnameOverride: osc-mlflow-minio
+    fullnameOverride: osc-mlflow-minio
    defaultBuckets: "mlflow-artifacts"
 
 mlflow:
