@@ -115,6 +115,11 @@ mlflow:
     periodSeconds: 5
     timeoutSeconds: 3
     failureThreshold: 3
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   initImages:
     dbchecker:
       repository: docker-registry.osc.edu/kubernetes/busybox
