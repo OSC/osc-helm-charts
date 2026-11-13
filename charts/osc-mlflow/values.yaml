@@ -113,11 +113,11 @@ mlflow:
       pullPolicy: IfNotPresent
     mlflowDbMigration:
       repository: docker-registry.osc.edu/kubernetes/mlflow
-      tag: "v3.17.1-full"
+      tag: "{{ .Values.image.tag }}"
       pullPolicy: IfNotPresent
     iniFileInitializer:
       repository: docker-registry.osc.edu/kubernetes/busybox
-      tag: "1.38.0"
+      tag: "{{ .Values.initImages.dbchecker.tag }}"
       pullPolicy: IfNotPresent
   # PostgreSQL backend store configuration
   backendStore:
