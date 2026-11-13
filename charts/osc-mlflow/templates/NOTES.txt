@@ -1,6 +1,6 @@
 1. Get the MLFlow application URL:
 
-   {{- if .Values.ingress.enabled }}
+   {{- if .Values.mlflow.ingress.enabled }}
    http{{ if .Values.global.ingress.host }}s{{ end }}://{{ .Values.global.ingress.host | default "chart-example.local" }}
 
    {{- else }}
