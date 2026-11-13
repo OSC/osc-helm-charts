@@ -5,7 +5,7 @@
 
    {{- else }}
    Export the environment variables and port-forward:
-   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mlflow.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "osc-mlflow.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
    kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 5000:5000
    Visit http://127.0.0.1:5000
    {{- end }}
@@ -28,10 +28,10 @@
    kubectl logs -l "app.kubernetes.io/instance={{ .Release.Name }}"
 
    # Port-forward MLFlow server
-   kubectl port-forward svc/{{ include "mlflow.fullname" . }} 5000:5000 -n {{ .Release.Namespace }}
+   kubectl port-forward svc/{{ include "osc-mlflow.fullname" . }} 5000:5000 -n {{ .Release.Namespace }}
 
    # Port-forward MinIO console
-   kubectl port-forward svc/{{ include "mlflow.fullname" . }}-minio 9001:9001 -n {{ .Release.Namespace }}
+   kubectl port-forward svc/{{ include "osc-mlflow.fullname" . }}-minio 9001:9001 -n {{ .Release.Namespace }}
 
 5. Next Steps:
    - Update the passwords in values.yaml before deploying to production
