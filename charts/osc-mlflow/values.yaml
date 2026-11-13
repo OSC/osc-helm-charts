@@ -121,7 +121,6 @@ mlflow:
       pullPolicy: IfNotPresent
   # PostgreSQL backend store configuration
   backendStore:
-    #databaseMigration: false
     databaseMigration: true
     databaseConnectionCheck: true
     defaultSqlitePath: ":memory:"
