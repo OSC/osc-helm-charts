@@ -77,17 +77,6 @@ osc-minio:
    fullnameOverride: osc-mlflow-minio
    defaultBuckets: "mlflow-artifacts"
 
-ingress:
-  enabled: true
-  className: "nginx"
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
-  paths:
-    - path: /
-      pathType: ImplementationSpecific
-
 mlflow:
   image:
     repository: docker-registry.osc.edu/kubernetes/mlflow
@@ -151,6 +140,21 @@ mlflow:
     proxiedArtifactStorage: true
     defaultArtifactRoot: "./mlruns"
     defaultArtifactsDestination: "s3://mlflow-artifacts/"
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    hosts:
+      - host: '{{ .Values.global.ingress.host }}'
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - secretName: osc-mlflow-cert
+        hosts:
+          - '{{ .Values.global.ingress.host }}'
   extraEnvVars:
     AWS_DEFAULT_REGION: "us-east-1"
     MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-minio:9000"
