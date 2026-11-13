@@ -2,7 +2,7 @@ apiVersion: v2
 name: osc-open-webui
 description: OSC Open Web UI deployment
 type: application
-version: 0.12.0
+version: 0.13.0
 appVersion: "0.1.0"
 maintainers:
   - name: treydock
@@ -13,7 +13,7 @@ dependencies:
     # repository: file://../osc-common
     condition: oscCommon.enable
   - name: database
-    version: 0.19.6
+    version: 0.21.1
     repository: https://osc.github.io/osc-helm-charts
     # repository: file://../database
     condition: global.database.enable
