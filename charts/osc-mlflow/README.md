@@ -48,10 +48,10 @@ mlflow:
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://community-charts.github.io/helm-charts | mlflow | 1.11.7 |
-| https://osc.github.io/osc-helm-charts | database | 0.21.0 |
-| https://osc.github.io/osc-helm-charts | osc-common | 0.17.0 |
-| oci://registry-1.docker.io/bitnamicharts | minio | 17.0.21 |
+| https://khsa1.github.io/helm-charts | mlflow | 1.11.8 |
+| https://osc.github.io/osc-helm-charts | database | 0.21.1 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.17.4 |
+| https://osc.github.io/osc-helm-charts | osc-minio | 0.1.3 |
 
 ## Values
 
@@ -60,59 +60,39 @@ mlflow:
 | global.imageRegistry | string | `"docker-registry.osc.edu"` |  |
 | global.imagePullSecret.name | string | `"osc-registry"` |  |
 | global.imagePullSecret.password | string | **required** | OSC registry password |
-| global.oscServiceAccount | string | `"oscchat"` |  |
-| global.storageClass | string | `"webservices-nfs-client"` |  |
+| global.oscServiceAccount | string | `"mlflow"` |  |
+| global.storageClass | string | `"local-ess"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
+| global.ingress.minio.api | string | `""` |  |
+| global.ingress.minio.console | string | `""` |  |
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.security.allowInsecureImages | bool | `true` |  |
 | global.nodeSelectorRole | string | `"webservices"` |  |
+| global.fileset | string | `"PZS0645"` |  |
+| global.postgresql.auth.username | string | `"mlflow"` |  |
+| global.postgresql.auth.password | string | `"changeme-mlflow"` |  |
+| global.postgresql.auth.postgresPassword | string | `"changeme-postgres"` |  |
+| global.postgresql.auth.database | string | `"mlflow"` |  |
+| global.minio.auth.rootUser | string | `"mlflowadmin"` |  |
+| global.minio.auth.rootPassword | string | `"changeme-minio"` |  |
+| global.mlflow.auth.adminUsername | string | `"admin"` |  |
+| global.mlflow.auth.adminPassword | string | `"changeme-admin"` |  |
 | global.debugGroups[0] | string | `"sappstf"` |  |
 | global.maintenanceGroups[0] | string | `"sappstf"` |  |
-| database.postgresql.auth.postgresPassword | string | `"changeme-postgres"` |  |
-| database.postgresql.auth.database | string | `"mlflow"` |  |
-| database.postgresql.auth.username | string | `"mlflow"` |  |
-| database.postgresql.auth.password | string | `"changeme-mlflow"` |  |
+| database.postgresql.auth.postgresPassword | string | `"{{ .Values.global.postgresql.auth.postgresPassword }}"` |  |
+| database.postgresql.auth.database | string | `"{{ .Values.global.postgresql.database }}"` |  |
+| database.postgresql.auth.username | string | `"{{ .Values.global.postgresql.auth.username }}"` |  |
+| database.postgresql.auth.password | string | `"{{ .Values.global.postgresql.auth.password }}"` |  |
 | database.postgresql.resources.limits.cpu | string | `"2000m"` |  |
 | database.postgresql.resources.limits.memory | string | `"4Gi"` |  |
 | database.postgresql.resources.requests.cpu | string | `"1000m"` |  |
 | database.postgresql.resources.requests.memory | string | `"2Gi"` |  |
 | database.postgresql.resources.requests.cpu | string | `"500m"` |  |
 | database.postgresql.resources.requests.memory | string | `"1Gi"` |  |
-| minio.enable | bool | `true` |  |
-| minio.auth.rootUser | string | `"mlflowadmin"` |  |
-| minio.auth.rootPassword | string | `"changeme-minio"` |  |
-| minio.defaultBuckets | string | `"mlflow-artifacts"` |  |
-| minio.commonLabels.receiver | string | `"{{ index .Values.global.alert.receiver }}"` |  |
-| minio.image.repository | string | `"kubernetes/bitnami/minio"` |  |
-| minio.image.tag | string | `"2025.7.23-debian-12-r5"` |  |
-| minio.image.pullSecrets[0] | string | `"osc-registry"` |  |
-| minio.persistence.enabled | bool | `true` |  |
-| minio.persistence.storageClass | string | `"paas-nfs-client"` |  |
-| minio.persistence.size | string | `"100Gi"` |  |
-| minio.persistence.annotations."osc.edu/fileset" | string | `"PZS0645"` |  |
-| minio.persistence.annotations."helm.sh/resource-policy" | string | `"keep"` |  |
-| minio.service.type | string | `"ClusterIP"` |  |
-| minio.service.rpcPort | int | `9000` |  |
-| minio.service.consolePort | int | `9001` |  |
-| minio.resources.limits.cpu | string | `"2000m"` |  |
-| minio.resources.limits.memory | string | `"4Gi"` |  |
-| minio.resources.requests.cpu | string | `"500m"` |  |
-| minio.resources.requests.memory | string | `"1Gi"` |  |
-| minio.metrics.enabled | bool | `true` |  |
-| minio.metrics.serviceMonitor.enabled | bool | `true` |  |
-| minio.metrics.serviceMonitor.interval | string | `"60s"` |  |
-| minio.metrics.serviceMonitor.relabelings[0].sourceLabels[0] | string | `"__meta_kubernetes_service_label_receiver"` |  |
-| minio.metrics.serviceMonitor.relabelings[0].targetLabel | string | `"receiver"` |  |
-| minio.console.image.repository | string | `"kubernetes/bitnami/minio-object-browser"` |  |
-| minio.console.image.tag | string | `"2.0.2-debian-12-r3"` |  |
-| ingress.enabled | bool | `true` |  |
-| ingress.className | string | `"nginx"` |  |
-| ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt"` |  |
-| ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
-| ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" | string | `"16k"` |  |
-| ingress.paths[0].path | string | `"/"` |  |
-| ingress.paths[0].pathType | string | `"ImplementationSpecific"` |  |
+| osc-minio.enable | bool | `true` |  |
+| osc-minio.minio.fullnameOverride | string | `"osc-mlflow-minio"` |  |
+| osc-minio.minio.defaultBuckets | string | `"mlflow-artifacts"` |  |
 | mlflow.image.repository | string | `"docker-registry.osc.edu/kubernetes/mlflow"` |  |
 | mlflow.image.tag | string | `"v3.17.1-full"` |  |
 | mlflow.resources.requests.cpu | string | `"1000m"` |  |
@@ -131,6 +111,9 @@ mlflow:
 | mlflow.readinessProbe.periodSeconds | int | `5` |  |
 | mlflow.readinessProbe.timeoutSeconds | int | `3` |  |
 | mlflow.readinessProbe.failureThreshold | int | `3` |  |
+| mlflow.commonLabels.receiver | string | `"{{ index .Values.global.alert.receiver }}"` |  |
+| mlflow.commonLabels."{{ include "osc.common.serviceAccountKey" . }}" | string | `"{{ include \"osc.common.serviceAccountValue\" . }}"` |  |
+| mlflow.nodeSelector."{{ include "osc.common.nodeSelectorRoleKey" . }}" | string | `""` |  |
 | mlflow.initImages.dbchecker.repository | string | `"docker-registry.osc.edu/kubernetes/busybox"` |  |
 | mlflow.initImages.dbchecker.tag | string | `"1.38.0"` |  |
 | mlflow.initImages.dbchecker.pullPolicy | string | `"IfNotPresent"` |  |
@@ -144,30 +127,37 @@ mlflow:
 | mlflow.backendStore.databaseConnectionCheck | bool | `true` |  |
 | mlflow.backendStore.defaultSqlitePath | string | `":memory:"` |  |
 | mlflow.backendStore.postgres.enabled | bool | `true` |  |
-| mlflow.backendStore.postgres.host | string | `"osc-mlflow-postgresql"` |  |
+| mlflow.backendStore.postgres.host | string | `"{{ .Release.Name }}-postgresql"` |  |
 | mlflow.backendStore.postgres.port | int | `5432` |  |
-| mlflow.backendStore.postgres.database | string | `"mlflow"` |  |
+| mlflow.backendStore.postgres.database | string | `"{{ .Values.global.postgresql.auth.database }}"` |  |
 | mlflow.backendStore.postgres.driver | string | `"psycopg2"` |  |
-| mlflow.backendStore.existingDatabaseSecret.name | string | `"osc-mlflow-app-secrets"` |  |
-| mlflow.backendStore.existingDatabaseSecret.usernameKey | string | `"pg_username"` |  |
-| mlflow.backendStore.existingDatabaseSecret.passwordKey | string | `"pg_password"` |  |
+| mlflow.backendStore.postgres.user | string | `"{{ .Values.global.postgresql.auth.username }}"` |  |
+| mlflow.backendStore.postgres.password | string | `"{{ .Values.global.postgresql.auth.password }}"` |  |
 | mlflow.artifactRoot.proxiedArtifactStorage | bool | `true` |  |
 | mlflow.artifactRoot.defaultArtifactRoot | string | `"./mlruns"` |  |
 | mlflow.artifactRoot.defaultArtifactsDestination | string | `"s3://mlflow-artifacts/"` |  |
+| mlflow.ingress.enabled | bool | `true` |  |
+| mlflow.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt"` |  |
+| mlflow.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
+| mlflow.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" | string | `"16k"` |  |
+| mlflow.ingress.hosts[0].host | string | `"{{ .Values.global.ingress.host }}"` |  |
+| mlflow.ingress.hosts[0].paths[0].path | string | `"/"` |  |
+| mlflow.ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
+| mlflow.ingress.tls[0].secretName | string | `"osc-mlflow-cert"` |  |
+| mlflow.ingress.tls[0].hosts[0] | string | `"{{ .Values.global.ingress.host }}"` |  |
 | mlflow.extraEnvVars.AWS_DEFAULT_REGION | string | `"us-east-1"` |  |
 | mlflow.extraEnvVars.MLFLOW_S3_ENDPOINT_URL | string | `"http://osc-mlflow-minio:9000"` |  |
 | mlflow.extraEnvVars.MLFLOW_DEFAULT_ARTIFACT_ROOT | string | `"s3://mlflow-artifacts/"` |  |
 | mlflow.extraSecretNamesForEnvFrom[0] | string | `"osc-mlflow-app-secrets"` |  |
 | mlflow.auth.enabled | bool | `true` |  |
-| mlflow.auth.adminUsername | string | `"admin"` |  |
-| mlflow.auth.adminPassword | string | `"changeme-admin"` |  |
+| mlflow.auth.adminUsername | string | `"{{ .Values.global.mlflow.auth.adminUsername }}"` |  |
+| mlflow.auth.adminPassword | string | `"{{ .Values.global.mlflow.auth.adminPassword }}"` |  |
 | mlflow.auth.postgres.enabled | bool | `true` |  |
-| mlflow.auth.postgres.host | string | `"osc-mlflow-postgresql"` |  |
+| mlflow.auth.postgres.host | string | `"{{ .Release.Name }}-postgresql"` |  |
 | mlflow.auth.postgres.port | int | `5432` |  |
-| mlflow.auth.postgres.database | string | `"mlflow"` |  |
-| mlflow.auth.postgres.existingSecret.name | string | `"osc-mlflow-app-secrets"` |  |
-| mlflow.auth.postgres.existingSecret.usernameKey | string | `"pg_username"` |  |
-| mlflow.auth.postgres.existingSecret.passwordKey | string | `"pg_password"` |  |
+| mlflow.auth.postgres.database | string | `"{{ .Values.global.postgresql.auth.database }}"` |  |
+| mlflow.auth.postgres.user | string | `"{{ .Values.global.postgresql.auth.username }}"` |  |
+| mlflow.auth.postgres.password | string | `"{{ .Values.global.postgresql.auth.password }}"` |  |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
