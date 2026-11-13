@@ -5,7 +5,7 @@ global:
     # -- OSC registry password
     # @default -- **required**
     password:
-  oscServiceAccount: oscchat
+  oscServiceAccount: mlflow
   storageClass: local-ess
   ingress:
     host: ""
