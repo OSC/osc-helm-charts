@@ -156,7 +156,7 @@ mlflow:
     MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-minio:9000"
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://mlflow-artifacts/"
   extraSecretNamesForEnvFrom:
-    - osc-mlflow-app-secrets
+    - {{ .Release.Name }}-app-secrets
   auth:
     enabled: true
     adminUsername: '{{ .Values.global.mlflow.auth.adminUsername }}'
