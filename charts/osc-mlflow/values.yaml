@@ -72,7 +72,7 @@ osc-minio:
   enable: true
   minio:
     fullnameOverride: osc-mlflow-minio
-   defaultBuckets: "mlflow-artifacts"
+    defaultBuckets: "mlflow-artifacts"
 
 mlflow:
   image:
