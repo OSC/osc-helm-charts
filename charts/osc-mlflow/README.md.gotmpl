@@ -1,0 +1,52 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+## OSC MLFlow Chart
+
+This chart handles the OSC's deployment of MLFlow.
+
+Components:
+
+* Postgresql
+* Minio
+* MLFlow
+
+## Usage
+
+The following is the minimal values to deploy this chart:
+
+```yaml
+---
+global:
+  imagePullSecret:
+    password: <webservices-read password>
+  ingress:
+    host: <Ingress host>
+    hostAlias: <Ingress host alias>
+database:
+  postgresql:
+    auth:
+      postgresPassword: <postgres root password>
+      username: <username>
+      password: <postgres database password>
+  redis:
+    auth:
+      password: <redis password>
+
+minio:
+  auth:
+    rootUser: <minio root username>
+    rootPassword: <minio root password>
+
+mlflow:
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
