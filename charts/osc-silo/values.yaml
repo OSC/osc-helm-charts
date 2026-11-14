@@ -61,6 +61,8 @@ silo:
   mcImage:
     # @ignored
     repository: '{{ .Values.global.imagePullSecret.registry }}/kubernetes/pgsty/mc'
+    # -- silo mc image tag
+    # @default -- Same as silo.image.tag
     tag: '{{ .Values.image.tag }}'
   # @ignored
   imagePullSecrets:
@@ -83,6 +85,7 @@ silo:
     accessMode: ReadWriteMany
     annotations:
       osc.edu/fileset: '{{ .Values.global.fileset }}'
+  # @ignored
   service:
     annotations:
       prometheus.io/probe_path: /minio/health/live
