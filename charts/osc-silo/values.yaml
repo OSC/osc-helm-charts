@@ -151,6 +151,8 @@ silo:
   buckets: []
   # @ignored
   makePolicyJob:
+    securityContext:
+      enabled: true
     resources:
       limits:
         cpu: 1
@@ -158,17 +160,10 @@ silo:
       requests:
         cpu: 500m
         memory: 64Mi
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      seccompProfile:
-        type: RuntimeDefault
-      privileged: false
-      runAsNonRoot: true
   # @ignored
   makeUserJob:
+    securityContext:
+      enabled: true
     resources:
       limits:
         cpu: 1
@@ -176,17 +171,10 @@ silo:
       requests:
         cpu: 500m
         memory: 64Mi
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      seccompProfile:
-        type: RuntimeDefault
-      privileged: false
-      runAsNonRoot: true
   # @ignored
   makeServiceAccountJob:
+    securityContext:
+      enabled: true
     resources:
       limits:
         cpu: 1
@@ -194,17 +182,10 @@ silo:
       requests:
         cpu: 500m
         memory: 64Mi
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      seccompProfile:
-        type: RuntimeDefault
-      privileged: false
-      runAsNonRoot: true
   # @ignored
   makeBucketJob:
+    securityContext:
+      enabled: true
     resources:
       limits:
         cpu: 1
@@ -212,17 +193,10 @@ silo:
       requests:
         cpu: 500m
         memory: 64Mi
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      seccompProfile:
-        type: RuntimeDefault
-      privileged: false
-      runAsNonRoot: true
   # @ignored
   customCommandJob:
+    securityContext:
+      enabled: true
     resources:
       limits:
         cpu: 1
@@ -230,21 +204,21 @@ silo:
       requests:
         cpu: 500m
         memory: 64Mi
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      seccompProfile:
-        type: RuntimeDefault
-      privileged: false
-      runAsNonRoot: true
   # @ignored
   postJob:
     securityContext:
       enabled: true
     nodeSelector:
       '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+      runAsNonRoot: true
   # @ignored
   oidc:
     enabled: true
