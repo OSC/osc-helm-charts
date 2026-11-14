@@ -29,10 +29,17 @@ dependencies:
     version: 0.21.1
     repository: https://osc.github.io/osc-helm-charts
     # repository: file://../database
-  - name: osc-minio
-    version: 0.1.4
-    repository: https://osc.github.io/osc-helm-charts
-    condition: osc-minio.enable
+  - name: osc-silo
+    # version: 0.1.0
+    # repository: https://osc.github.io/osc-helm-charts
+    # Use OCI until merged and released
+    #   https://github.com/OSC/osc-helm-charts/pull/578
+    # helm dependency update charts/osc-silo
+    # helm package charts/osc-silo --version 0.1.0-rc0
+    # helm push osc-silo-0.1.0-rc0.tgz oci://docker-registry.osc.edu/webservices/
+    version: 0.1.0-rc0
+    repository: oci://docker-registry.osc.edu/webservices
+    condition: osc-silo.enable
   - name: qdrant
     version: 1.16.3
     repository: "https://qdrant.github.io/qdrant-helm"
@@ -42,7 +49,7 @@ dependencies:
     repository: "oci://registry-1.docker.io/bitnamicharts"
     condition: rabbitmq.enable
   - name: osc-common
-    version: 0.16.1
+    version: 0.18.0
     repository: https://osc.github.io/osc-helm-charts
   - name: vllm-stack
     # version: 0.1.11

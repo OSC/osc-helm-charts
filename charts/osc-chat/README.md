@@ -34,13 +34,12 @@ global:
   ingress:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
-    minio:
+    silo:
       api: <minio host name>
       console: <minio console host name>
-  minio:
-    auth:
-      rootUser: <minio root username>
-      rootPassword: <minio root password>
+  silo:
+    rootUser: <minio root username>
+    rootPassword: <minio root password>
   llm:
     host: <LLM server host>
   embedding:
@@ -80,6 +79,7 @@ secrets:
 | https://osc.github.io/osc-helm-charts | osc-minio | 0.1.4 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
 | oci://docker-registry.osc.edu/kubernetes/vllm | vllm-stack | 0.1.11-osc-r1 |
+| oci://docker-registry.osc.edu/webservices | osc-silo | 0.1.0-rc0 |
 | oci://registry-1.docker.io/bitnamicharts | rabbitmq | 16.0.14 |
 
 ## Values
@@ -103,10 +103,10 @@ secrets:
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
-| global.ingress.minio.api | string | `""` | Minio API host |
-| global.ingress.minio.console | string | `""` | Minio console host |
-| global.minio.auth.rootUser | string | `"minioadmin"` | The minio root user |
-| global.minio.auth.rootPassword | string | `"minioadmin"` | The minio root password |
+| global.ingress.silo.api | string | `""` | Silo API host |
+| global.ingress.silo.console | string | `""` | Silo console host |
+| global.silo.rootUser | string | `"minioadmin"` | The Silo root user |
+| global.silo.rootPassword | string | `"minioadmin"` | The Silo root password |
 | global.networkPolicy.ingressAllowedPods[0]."app.kubernetes.io/name" | string | `"osc-mcp"` |  |
 | database.postgresql.auth.postgresPassword | string | `"secret"` |  |
 | database.postgresql.auth.database | string | `"name"` |  |

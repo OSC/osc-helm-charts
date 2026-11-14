@@ -35,13 +35,12 @@ global:
   ingress:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
-    minio:
+    silo:
       api: <minio host name>
       console: <minio console host name>
-  minio:
-    auth:
-      rootUser: <minio root username>
-      rootPassword: <minio root password>
+  silo:
+    rootUser: <minio root username>
+    rootPassword: <minio root password>
   llm:
     host: <LLM server host>
   embedding:
