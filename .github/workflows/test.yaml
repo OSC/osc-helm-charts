@@ -63,6 +63,7 @@ jobs:
           - cryosparc
           - regression-logging
           - osc-minio
+          - osc-silo
     name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
