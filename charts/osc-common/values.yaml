@@ -91,7 +91,7 @@ global:
         # -- The secret name for the Keycloak Client secret
         # @default -- <Release name>-auth-secret
         name: "{{ .Release.Name }}-auth-secret"
-      configmap:
+      configMap:
         # -- The configmap name for the Keycloak Client config
         # @default -- <Release name>-auth-config
         name: "{{ .Release.Name }}-auth-config"
@@ -120,10 +120,34 @@ keycloakClient:
     # -- The secret name for the Keycloak Client secret
     # @default -- global.auth.keycloakClient.secret.name
     name: "{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"
-  configmap:
+    # @ignored
+    clientSecretKey: client-secret
+    # @ignored
+    clientIdKey: client-id
+    # @ignored
+    issuerUrlKey: issuer-url
+    # @ignored
+    create: true
+    # @ignored
+    envVarKeys: false
+    # @ignored
+    keyPrefix: ""
+  configMap:
     # -- The configmap name for the Keycloak Client config
-    # @default -- global.auth.keycloakClient.configmap.name
-    name: "{{ tpl .Values.global.auth.keycloakClient.configmap.name . }}"
+    # @default -- global.auth.keycloakClient.configMap.name
+    name: "{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}"
+    # @ignored
+    keycloakUrlKey: KEYCLOAK_URL
+    # @ignored
+    keycloakHostKey: KEYCLOAK_HOST
+    # @ignored
+    issuerUrlKey: ISSUER_URL
+    # @ignored
+    providerUrlKey: PROVIDER_URL
+    # @ignored
+    envVarKeys: true
+    # @ignored
+    keyPrefix: ""
 
 imagePullSecret:
   # -- Create the image pull secret
@@ -144,7 +168,7 @@ oauth2-proxy:
     # -- Path to oauth2-proxy on the OSC registry
     repository: kubernetes/oauth2-proxy
     # -- oauth2-proxy image tag.  **must be replicated to the OSC registry**
-    tag: v7.15.2
+    tag: v7.15.6
   # @ignored
   config:
     existingSecret: "{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"
@@ -171,7 +195,7 @@ oauth2-proxy:
   # @ignored
   envFrom:
     - configMapRef:
-        name: "{{ tpl .Values.global.auth.keycloakClient.configmap.name . }}"
+        name: "{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}"
   # @ignored
   extraArgs:
     provider: oidc
