@@ -9,8 +9,8 @@ maintainers:
 dependencies:
   - name: silo
     # version: 7.0.5
-    # TODO: Use custom image
-    # Upstream doesn't publish OCI or Helm charts so publish from tags at OSC
+    # Use OCI until merged and tagged
+    # https://github.com/pgsty/silo/pull/351
     #  helm package helm/silo --version 7.0.5-osc-r0
     #  helm push silo-7.0.5-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/pgsty
     version: 7.0.5-osc-r0
