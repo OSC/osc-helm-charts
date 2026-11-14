@@ -22,3 +22,9 @@ silo:
   persistence:
     accessMode: ReadWriteOnce
     size: 50Mi
+  buckets:
+    - name: mybucket
+      policy: none
+      purge: false
+      versioning: false
+      objectlocking: false

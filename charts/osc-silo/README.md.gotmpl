@@ -31,6 +31,13 @@ global:
   silo:
     rootUser: "minioadmin"
     rootPassword: "supersecret"
+silo:
+  buckets:
+    - name: mybucket
+      policy: none
+      purge: false
+      versioning: false
+      objectlocking: false
 ```
 
 {{ template "chart.valuesSection" . }}
