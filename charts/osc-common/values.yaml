@@ -109,6 +109,8 @@ global:
     receiver: ""
 
 keycloakClient:
+  # -- Enable KeycloakClient resource
+  enable: false
   # -- Use global values for redirectUris
   useGlobal: true
   # -- redirect URIs
