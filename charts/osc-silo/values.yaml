@@ -266,10 +266,9 @@ silo:
       interval: 60s
       targetLabels:
       - receiver
-      relabelConfigsCluster:
-        relabelingConfigs:
-          - targetLabel: receiver
-            replacement: '{{ index .Values.global.alert.receiver }}'
+      probeRelabelingConfigs:
+      - targetLabel: receiver
+        replacement: '{{ index .Values.global.alert.receiver }}'
 # @ignored
 osc-common:
   nameOverride: silo
