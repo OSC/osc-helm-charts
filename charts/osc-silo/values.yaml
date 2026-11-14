@@ -49,8 +49,6 @@ global:
     rootPassword: "siloadmin"
 
 silo:
-  # -- Enable silo chart
-  enable: true
   # @ignored
   fullnameOverride: silo
   # @ignored

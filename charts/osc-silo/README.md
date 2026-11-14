@@ -14,7 +14,7 @@ A Helm chart for silo
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts | osc-common | 0.18.0 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.18.1 |
 | oci://docker-registry.osc.edu/kubernetes/pgsty | silo | 7.0.5-osc-r0 |
 
 ## Usage
@@ -53,7 +53,6 @@ global:
 | global.silo.allowedGroups | list | `["sysstf"]` | Groups allowed to access console |
 | global.silo.rootUser | string | `"siloadmin"` | The silo root user |
 | global.silo.rootPassword | string | `"siloadmin"` | The silo root password |
-| silo.enable | bool | `true` | Enable silo chart |
 | silo.image.tag | string | `"RELEASE.2026-11-12T00-00-00Z"` | silo image tag |
 | silo.mcImage.tag | string | `"{{ .Values.image.tag }}"` |  |
 | silo.rootUser | string | `"{{ .Values.global.silo.rootUser }}"` |  |

@@ -15,7 +15,6 @@ dependencies:
     #  helm push silo-7.0.5-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/pgsty
     version: 7.0.5-osc-r0
     repository: oci://docker-registry.osc.edu/kubernetes/pgsty
-    condition: silo.enable
   - name: osc-common
-    version: 0.18.0
+    version: 0.18.1
     repository: https://osc.github.io/osc-helm-charts
