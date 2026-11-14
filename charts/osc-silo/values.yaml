@@ -37,9 +37,6 @@ global:
     receiver: ""
   # -- Storage class for persistence
   storageClass: webservices-nfs-client
-  # @ignored
-  imagePullSecrets:
-    - '{{ include "osc.common.imagePullSecret.name" . }}'
   # -- The storage fileset
   fileset:
   silo:
@@ -67,6 +64,9 @@ silo:
     # @ignored
     repository: '{{ .Values.global.imagePullSecret.registry }}/kubernetes/pgsty/mc'
     tag: '{{ .Values.image.tag }}'
+  # @ignored
+  imagePullSecrets:
+    - name: '{{ include "osc.common.imagePullSecret.name" . }}'
   # @ignored
   mode: standalone
   # @ignored
