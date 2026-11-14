@@ -1,5 +1,5 @@
 {{- if or .Values.global.auth.enable .Values.global.auth.keycloakClient.forceCreate (index .Values "oauth2-proxy" "enable")}}
-apiVersion: keycloak.osc.edu/v1alpha1
+apiVersion: keycloak.osc.edu/v1alpha2
 kind: KeycloakClient
 metadata:
   labels:
@@ -36,12 +36,8 @@ spec:
   {{- if $config }}
   {{- tpl (toYaml $config) . | nindent 2 }}
   {{- end }}
-  clientSecretRef:
-    name: {{ tpl .Values.keycloakClient.secret.name . }}
-    key: client-secret
-    create: true
-    envVarKeys: false
+  secret:
+    {{- tpl (toYaml .Values.keycloakClient.secret) . | nindent 4 }}
   configMap:
-    name: {{ tpl .Values.keycloakClient.configmap.name . }}
-    envVarKeys: true
+    {{- tpl (toYaml .Values.keycloakClient.configMap) . | nindent 4 }}
 {{- end }}
