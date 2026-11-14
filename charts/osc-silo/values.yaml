@@ -70,6 +70,9 @@ silo:
   # @ignored
   mode: standalone
   # @ignored
+  additionalLabels:
+    keycloak.osc.edu/keycloakclient: silo
+  # @ignored
   commonLabels:
     receiver: '{{ index .Values.global.alert.receiver }}'
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
@@ -148,8 +151,6 @@ silo:
   svcaccts: []
   # -- Buckets to create
   buckets: []
-  # -- Additional environment variables
-  environment: {}
   # @ignored
   makePolicyJob:
     resources:
@@ -247,6 +248,21 @@ silo:
     nodeSelector:
       '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   # @ignored
+  oidc:
+    enabled: true
+    existingConfigMapName: silo-auth-config
+    existingConfigUrlKey: PROVIDER_URL
+    existingClientSecretName: silo-auth-secret
+    existingClientIdKey: client-id
+    existingClientSecretKey: client-secret
+    claimName: groups
+    scopes: openid,profile,email,groups,osc-oidc-clients
+    redirectUri: "https://{{ .Values.global.ingress.silo.api }}"
+  # -- Additional environment variables
+  environment:
+    # @ignored
+    CONSOLE_IDP_CALLBACK: "https://{{ .Values.global.ingress.silo.console }}"
+  # @ignored
   networkPolicy:
     enabled: true
     allowExternal: false
@@ -276,10 +292,11 @@ osc-common:
   imagePullSecret:
     create: false
   keycloakClient:
+    enable: true
     useGlobal: false
     secret:
       name: silo-auth-secret
-    configmap:
+    configMap:
       name: silo-auth-config
     redirectUris:
       - https://{{ .Values.global.ingress.silo.api }}/*
