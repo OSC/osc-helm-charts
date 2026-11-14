@@ -120,33 +120,33 @@ keycloakClient:
     # -- The secret name for the Keycloak Client secret
     # @default -- global.auth.keycloakClient.secret.name
     name: "{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"
-    # @ignored
+    # -- Client Secret key in the secret
     clientSecretKey: client-secret
-    # @ignored
+    # -- Client ID key in the secret
     clientIdKey: client-id
-    # @ignored
+    # -- Issuer URL key in the secret
     issuerUrlKey: issuer-url
     # @ignored
     create: true
-    # @ignored
+    # -- Use env var keys in the secret
     envVarKeys: false
-    # @ignored
+    # -- Key prefix in the secret
     keyPrefix: ""
   configMap:
     # -- The configmap name for the Keycloak Client config
     # @default -- global.auth.keycloakClient.configMap.name
     name: "{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}"
-    # @ignored
+    # -- Keycloak URL
     keycloakUrlKey: KEYCLOAK_URL
-    # @ignored
+    # -- Keycloak Host
     keycloakHostKey: KEYCLOAK_HOST
-    # @ignored
+    # -- Keycloak issuer URL
     issuerUrlKey: ISSUER_URL
-    # @ignored
+    # -- Keycloak provider well-known config URL
     providerUrlKey: PROVIDER_URL
-    # @ignored
+    # -- Use env var keys in the configmap
     envVarKeys: true
-    # @ignored
+    # -- Key prefix in the configmap
     keyPrefix: ""
 
 imagePullSecret:

@@ -106,7 +106,18 @@ global:
 | keycloakClient.redirectUris | redirect URIs | `[]` |
 | keycloakClient.config | Additional Keycloak Client configs | global.auth.keycloakClient.config |
 | keycloakClient.secret.name | The secret name for the Keycloak Client secret | global.auth.keycloakClient.secret.name |
+| keycloakClient.secret.clientSecretKey | Client Secret key in the secret | `"client-secret"` |
+| keycloakClient.secret.clientIdKey | Client ID key in the secret | `"client-id"` |
+| keycloakClient.secret.issuerUrlKey | Issuer URL key in the secret | `"issuer-url"` |
+| keycloakClient.secret.envVarKeys | Use env var keys in the secret | `false` |
+| keycloakClient.secret.keyPrefix | Key prefix in the secret | `""` |
 | keycloakClient.configMap.name | The configmap name for the Keycloak Client config | global.auth.keycloakClient.configMap.name |
+| keycloakClient.configMap.keycloakUrlKey | Keycloak URL | `"KEYCLOAK_URL"` |
+| keycloakClient.configMap.keycloakHostKey | Keycloak Host | `"KEYCLOAK_HOST"` |
+| keycloakClient.configMap.issuerUrlKey | Keycloak issuer URL | `"ISSUER_URL"` |
+| keycloakClient.configMap.providerUrlKey | Keycloak provider well-known config URL | `"PROVIDER_URL"` |
+| keycloakClient.configMap.envVarKeys | Use env var keys in the configmap | `true` |
+| keycloakClient.configMap.keyPrefix | Key prefix in the configmap | `""` |
 | imagePullSecret.create | Create the image pull secret | `true` |
 | rbac.create | Create common RBAC when global items defined | `true` |
 | oauth2-proxy.enable | Enable oauth2-proxy | false |
