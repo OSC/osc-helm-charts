@@ -56,7 +56,6 @@ jobs:
           - database
           - webservice
           - prometheus
-          - kubernetes-dashboard-proxy
           - kyverno-policies
           - paas
           - osc-open-webui
