@@ -12,7 +12,6 @@ Charts for deploying OSC specific Kubernetes services using Helm
   - [Environment-Specific Values](#environment-specific-values)
 - [Infrastructure charts](#infrastructure-charts)
   - [prometheus](#prometheus)
-  - [kubernetes-dashboard-proxy](#kubernetes-dashboard-proxy)
   - [paas](#paas)
   - [kyverno-policies](#kyverno-policies)
 - [Docker Images](#docker-images)
@@ -158,9 +157,6 @@ The [prometheus](charts/prometheus) chart deploys Prometheus monitoring solution
 - kube-state-metrics for Kubernetes resource metrics
 - dcgm-exporter for GPU metrics (when applicable)
 - Integration with osc-common for consistent configuration
-
-### kubernetes-dashboard-proxy
-The [kubernetes-dashboard-proxy](charts/kubernetes-dashboard-proxy) chart deploys a proxy for accessing the Kubernetes Dashboard with OSC-specific configurations.
 
 ### paas
 The [paas](charts/paas/README.md) chart provides a bootstrap Helm chart for OSC's Platform as a Service deployments. It includes:
