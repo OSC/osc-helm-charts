@@ -43,9 +43,7 @@ jobs:
           #- nominatim
           - "rigatoni"
           - webmo
-          - emthub
           - chatsqc
-          - emt-api
           - webmo-oberlin
           - chatisa
           - ouollama
