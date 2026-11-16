@@ -30,9 +30,15 @@ dependencies:
     repository: https://osc.github.io/osc-helm-charts
     condition: database.enable
   - name: mlflow
-    version: 1.11.8
-    # TODO: Using fork for now, PR: https://github.com/community-charts/helm-charts/pull/870
-    repository: https://khsa1.github.io/helm-charts
+    # repository: https://community-charts.github.io/helm-charts
+    # version: 1.11.7
+    # # Use OCI until merged: 
+    # https://github.com/community-charts/helm-charts/pull/870
+    # Left as example:
+    #   helm package charts/mlflow --version 1.11.8-osc-r0
+    #   helm push mlflow-1.11.8-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes
+    repository: oci://docker-registry.osc.edu/kubernetes
+    version: 1.11.8-osc-r0
   - name: osc-minio
     version: 0.1.3
     repository: https://osc.github.io/osc-helm-charts
