@@ -145,6 +145,7 @@ mlflow:
 | mlflow.ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
 | mlflow.ingress.tls[0].secretName | string | `"osc-mlflow-cert"` |  |
 | mlflow.ingress.tls[0].hosts[0] | string | `"{{ .Values.global.ingress.host }}"` |  |
+| mlflow.ingress.tls[0].hosts[1] | string | `"{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}"` |  |
 | mlflow.extraEnvVars.AWS_DEFAULT_REGION | string | `"us-east-1"` |  |
 | mlflow.extraEnvVars.MLFLOW_S3_ENDPOINT_URL | string | `"http://osc-mlflow-minio:9000"` |  |
 | mlflow.extraEnvVars.MLFLOW_DEFAULT_ARTIFACT_ROOT | string | `"s3://mlflow-artifacts/"` |  |
