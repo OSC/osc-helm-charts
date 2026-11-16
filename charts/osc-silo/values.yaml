@@ -40,13 +40,16 @@ global:
   # -- The storage fileset
   fileset:
   silo:
-    # -- Groups allowed to access console
-    allowedGroups:
-      - sysstf
     # -- The silo root user
     rootUser: "siloadmin"
     # -- The silo root password
     rootPassword: "siloadmin"
+    # -- The silo readwrite username
+    user: silo
+    # -- The silo readwrite password
+    password: changeme
+    # -- Default bucket to create
+    defaultBucket: '{{ .Release.Name }}'
 
 silo:
   # @ignored
@@ -149,11 +152,22 @@ silo:
   # -- Silo policies
   policies: []
   # -- Additional users
-  users: []
+  # @default -- Create a single readwrite user
+  users:
+    - accessKey: '{{ .Values.global.silo.user }}'
+      existingSecret: '{{ .Values.fullnameOverride }}-users-secret'
+      existingSecretKey: password
+      policy: readwrite
   # -- Additional service accounts
   svcaccts: []
   # -- Buckets to create
-  buckets: []
+  # @default -- Single bucket based on global.silo.defaultBucket
+  buckets:
+    - name: '{{ tpl .Values.global.silo.defaultBucket . }}'
+      policy: none
+      purge: false
+      versioning: false
+      objectlocking: false
   # @ignored
   makePolicyJob:
     securityContext:

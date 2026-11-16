@@ -35,13 +35,9 @@ global:
   silo:
     rootUser: "minioadmin"
     rootPassword: "supersecret"
-silo:
-  buckets:
-    - name: mybucket
-      policy: none
-      purge: false
-      versioning: false
-      objectlocking: false
+    user: appuser
+    password: apppassword
+    defaultBucket: app
 ```
 
 ## Values
@@ -57,17 +53,19 @@ silo:
 | global.alert.receiver | string | `""` | The alert receiver |
 | global.storageClass | string | `"webservices-nfs-client"` | Storage class for persistence |
 | global.fileset | string | `nil` | The storage fileset |
-| global.silo.allowedGroups | list | `["sysstf"]` | Groups allowed to access console |
 | global.silo.rootUser | string | `"siloadmin"` | The silo root user |
 | global.silo.rootPassword | string | `"siloadmin"` | The silo root password |
+| global.silo.user | string | `"silo"` | The silo readwrite username |
+| global.silo.password | string | `"changeme"` | The silo readwrite password |
+| global.silo.defaultBucket | string | `"{{ .Release.Name }}"` | Default bucket to create |
 | silo.image.tag | string | `"RELEASE.2026-11-12T00-00-00Z"` | silo image tag |
 | silo.mcImage.tag | string | Same as silo.image.tag | silo mc image tag |
 | silo.rootUser | string | `"{{ .Values.global.silo.rootUser }}"` |  |
 | silo.rootPassword | string | `"{{ .Values.global.silo.rootPassword }}"` |  |
 | silo.policies | list | `[]` | Silo policies |
-| silo.users | list | `[]` | Additional users |
+| silo.users | list | Create a single readwrite user | Additional users |
 | silo.svcaccts | list | `[]` | Additional service accounts |
-| silo.buckets | list | `[]` | Buckets to create |
+| silo.buckets | list | Single bucket based on global.silo.defaultBucket | Buckets to create |
 | silo.environment | object | `{}` | Additional environment variables |
 
 ----------------------------------------------

@@ -8,6 +8,8 @@ global:
       api: test-api.example.com
       console: test-silo-console.example.com
   storageClass: standard
+  silo:
+    defaultBucket: test
 osc-common:
   imagePullSecret:
     create: true
@@ -22,9 +24,3 @@ silo:
   persistence:
     accessMode: ReadWriteOnce
     size: 50Mi
-  buckets:
-    - name: mybucket
-      policy: none
-      purge: false
-      versioning: false
-      objectlocking: false
