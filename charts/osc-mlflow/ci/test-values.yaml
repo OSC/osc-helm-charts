@@ -1,0 +1,46 @@
+global:
+  oscServiceAccount: nobody
+  imagePullSecret:
+    password: IMAGE-PULL-PASSWORD
+  storageClass: standard
+
+database:
+  postgresql:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 128Mi
+      requests:
+        cpu: 500m
+        memory: 64Mi
+
+osc-minio:
+  minio:
+    resources:
+      limits:
+        cpu: 1
+        memory: 128Mi
+      requests:
+        cpu: 250m
+        memory: 64Mi
+    persistence:
+      accessModes:
+      - ReadWriteOnce
+      size: 50Mi
+    console:
+      resources:
+        limits:
+          cpu: 1
+          memory: 128Mi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+
+mlflow:
+  resources:
+    limits:
+      cpu: 1
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 128Mi

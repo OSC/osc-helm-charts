@@ -42,16 +42,17 @@ minio:
     rootPassword: <minio root password>
 
 mlflow:
+  flaskServerSecretKey: <flask password>
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://khsa1.github.io/helm-charts | mlflow | 1.11.8 |
 | https://osc.github.io/osc-helm-charts | database | 0.21.1 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.17.4 |
 | https://osc.github.io/osc-helm-charts | osc-minio | 0.1.3 |
+| oci://docker-registry.osc.edu/kubernetes | mlflow | 1.11.8-osc-r0 |
 
 ## Values
 
@@ -88,8 +89,6 @@ mlflow:
 | database.postgresql.resources.limits.memory | string | `"4Gi"` |  |
 | database.postgresql.resources.requests.cpu | string | `"1000m"` |  |
 | database.postgresql.resources.requests.memory | string | `"2Gi"` |  |
-| database.postgresql.resources.requests.cpu | string | `"500m"` |  |
-| database.postgresql.resources.requests.memory | string | `"1Gi"` |  |
 | osc-minio.enable | bool | `true` |  |
 | osc-minio.minio.fullnameOverride | string | `"osc-mlflow-minio"` |  |
 | osc-minio.minio.defaultBuckets | string | `"mlflow-artifacts"` |  |
@@ -118,10 +117,10 @@ mlflow:
 | mlflow.initImages.dbchecker.tag | string | `"1.38.0"` |  |
 | mlflow.initImages.dbchecker.pullPolicy | string | `"IfNotPresent"` |  |
 | mlflow.initImages.mlflowDbMigration.repository | string | `"docker-registry.osc.edu/kubernetes/mlflow"` |  |
-| mlflow.initImages.mlflowDbMigration.tag | string | `"v3.17.1-full"` |  |
+| mlflow.initImages.mlflowDbMigration.tag | string | `"{{ .Values.image.tag }}"` |  |
 | mlflow.initImages.mlflowDbMigration.pullPolicy | string | `"IfNotPresent"` |  |
 | mlflow.initImages.iniFileInitializer.repository | string | `"docker-registry.osc.edu/kubernetes/busybox"` |  |
-| mlflow.initImages.iniFileInitializer.tag | string | `"1.38.0"` |  |
+| mlflow.initImages.iniFileInitializer.tag | string | `"{{ .Values.initImages.dbchecker.tag }}"` |  |
 | mlflow.initImages.iniFileInitializer.pullPolicy | string | `"IfNotPresent"` |  |
 | mlflow.backendStore.databaseMigration | bool | `true` |  |
 | mlflow.backendStore.databaseConnectionCheck | bool | `true` |  |
@@ -140,6 +139,7 @@ mlflow:
 | mlflow.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt"` |  |
 | mlflow.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
 | mlflow.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" | string | `"16k"` |  |
+| mlflow.ingress.annotations."nginx.ingress.kubernetes.io/server-alias" | string | `"{{ .Values.global.ingress.hostAlias }}"` |  |
 | mlflow.ingress.hosts[0].host | string | `"{{ .Values.global.ingress.host }}"` |  |
 | mlflow.ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | mlflow.ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
@@ -148,7 +148,8 @@ mlflow:
 | mlflow.extraEnvVars.AWS_DEFAULT_REGION | string | `"us-east-1"` |  |
 | mlflow.extraEnvVars.MLFLOW_S3_ENDPOINT_URL | string | `"http://osc-mlflow-minio:9000"` |  |
 | mlflow.extraEnvVars.MLFLOW_DEFAULT_ARTIFACT_ROOT | string | `"s3://mlflow-artifacts/"` |  |
-| mlflow.extraSecretNamesForEnvFrom[0] | string | `"osc-mlflow-app-secrets"` |  |
+| mlflow.extraSecretNamesForEnvFrom[0] | string | `"{{ .Release.Name }}-app-secrets"` |  |
+| mlflow.flaskServerSecretKey | string | **required** | flask server secret key |
 | mlflow.auth.enabled | bool | `true` |  |
 | mlflow.auth.adminUsername | string | `"{{ .Values.global.mlflow.auth.adminUsername }}"` |  |
 | mlflow.auth.adminPassword | string | `"{{ .Values.global.mlflow.auth.adminPassword }}"` |  |
