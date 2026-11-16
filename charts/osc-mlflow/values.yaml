@@ -78,6 +78,8 @@ mlflow:
   image:
     repository: docker-registry.osc.edu/kubernetes/mlflow
     tag: "v3.17.1-full"
+  imagePullSecrets:
+    - name: '{{ .Values.global.imagePullSecret.name }}'
   resources:
     requests:
       cpu: 1000m

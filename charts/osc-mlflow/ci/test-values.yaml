@@ -11,13 +11,29 @@ global:
 
 database:
   postgresql:
-    resources:
-      limits:
-        cpu: 1000m
-        memory: 128Mi
-      requests:
-        cpu: 500m
-        memory: 64Mi
+    primary:
+      persistence:
+        size: 50Mi
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 200m
+          memory: 256Mi
+    backup:
+      cronjob:
+        schedule: '* * * * *'
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 128Mi
+        storage:
+          accessModes:
+          - ReadWriteOnce
 
 osc-minio:
   minio:
