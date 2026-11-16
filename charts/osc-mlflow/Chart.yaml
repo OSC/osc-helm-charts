@@ -32,7 +32,7 @@ dependencies:
   - name: mlflow
     # repository: https://community-charts.github.io/helm-charts
     # version: 1.11.7
-    # # Use OCI until merged: 
+    # Use OCI until merged:
     # https://github.com/community-charts/helm-charts/pull/870
     # Left as example:
     #   helm package charts/mlflow --version 1.11.8-osc-r0
