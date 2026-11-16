@@ -94,6 +94,7 @@ mlflow:
 | osc-minio.minio.defaultBuckets | string | `"mlflow-artifacts"` |  |
 | mlflow.image.repository | string | `"docker-registry.osc.edu/kubernetes/mlflow"` |  |
 | mlflow.image.tag | string | `"v3.17.1-full"` |  |
+| mlflow.imagePullSecrets[0].name | string | `"{{ .Values.global.imagePullSecret.name }}"` |  |
 | mlflow.resources.requests.cpu | string | `"1000m"` |  |
 | mlflow.resources.requests.memory | string | `"4Gi"` |  |
 | mlflow.resources.limits.cpu | string | `"4000m"` |  |
