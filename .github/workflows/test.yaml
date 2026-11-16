@@ -62,6 +62,7 @@ jobs:
           - osc-open-webui
           - cryosparc
           - regression-logging
+          - osc-mlflow
     name: Test Helm Chart ${{ matrix.chart }}
     steps:
       - name: Checkout
