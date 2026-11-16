@@ -152,6 +152,7 @@ mlflow:
       - secretName: osc-mlflow-cert
         hosts:
           - '{{ .Values.global.ingress.host }}'
+          - '{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}'
   extraEnvVars:
     AWS_DEFAULT_REGION: "us-east-1"
     MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-minio:9000"
