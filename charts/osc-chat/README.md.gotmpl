@@ -35,6 +35,13 @@ global:
   ingress:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
+    minio:
+      api: <minio host name>
+      console: <minio console host name>
+  minio:
+    auth:
+      rootUser: <minio root username>
+      rootPassword: <minio root password>
   llm:
     host: <LLM server host>
   embedding:
@@ -53,13 +60,6 @@ rabbitmq:
   auth:
     username: <rabbitmq root username>
     password: <rabbitmq root password>
-
-minio:
-  auth:
-    rootUser: <minio root username>
-    rootPassword: <minio root password>
-  ingress:
-    hostname: <minio host name>
 
 qdrant:
   apiKey: <qdrant API key>

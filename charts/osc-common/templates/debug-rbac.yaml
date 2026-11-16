@@ -1,4 +1,4 @@
-{{- if .Values.global.debugGroups }}
+{{- if and .Values.global.debugGroups .Values.rbac.create }}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1

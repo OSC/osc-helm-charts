@@ -174,17 +174,6 @@ RabbitMQ connection details (using dependency chart naming)
 {{- end }}
 
 {{/*
-MinIO connection details (using dependency chart naming)
-*/}}
-{{- define "osc-chat.minio.host" -}}
-{{ include "osc-chat.fullname" . }}-minio
-{{- end }}
-
-{{- define "osc-chat.minio.port" -}}
-9000
-{{- end }}
-
-{{/*
 Backend connection details
 */}}
 {{- define "osc-chat.backend.host" -}}
@@ -265,8 +254,7 @@ RABBITMQ_PORT: {{ include "osc-chat.rabbitmq.port" . | quote }}
 RABBITMQ_QUEUE: {{ include "osc-chat.fullname" . }}
 
 QDRANT_URL: "http://{{ include "osc-chat.fullname" . }}-qdrant:6333"
-MINIO_URL: "http://{{ include "osc-chat.fullname" . }}-minio:9000"
-MINIO_PUBLIC_URL: {{ printf "https://%s" (.Values.minio.ingress.hostname)  | quote }}
+MINIO_PUBLIC_URL: {{ printf "https://%s" (.Values.global.ingress.minio.api)  | quote }}
 KEYCLOAK_URL: {{ .Values.keycloak.url | quote }}
 LLM_URL: {{ include "osc-chat.llm_server.host" . | quote }}
 EMBEDDING_URL: {{ include "osc-chat.embedding.host" . | quote }}
@@ -290,8 +278,8 @@ RABBITMQ_PASSWORD: {{ .Values.rabbitmq.auth.password | b64enc | quote }}
 RABBITMQ_URL: {{ printf "amqp://%s:%s@%s:%s" .Values.rabbitmq.auth.username .Values.rabbitmq.auth.password (include "osc-chat.rabbitmq.host" .) (include "osc-chat.rabbitmq.port" .) | b64enc | quote }}
 
 # MinIO credentials (matching dependency chart passwords)
-MINIO_ACCESS_KEY: {{ .Values.minio.auth.rootUser | b64enc | quote }}
-MINIO_SECRET_KEY: {{ .Values.minio.auth.rootPassword | b64enc | quote }}
+MINIO_ACCESS_KEY: {{ .Values.global.minio.auth.rootUser | b64enc | quote }}
+MINIO_SECRET_KEY: {{ .Values.global.minio.auth.rootPassword | b64enc | quote }}
 
 # API keys (OSC Chat specific)
 {{- if .Values.secrets.api.openaiKey }}

@@ -1,4 +1,4 @@
-{{- if .Values.global.maintenanceGroups }}
+{{- if and .Values.global.maintenanceGroups .Values.rbac.create }}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1

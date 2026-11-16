@@ -58,7 +58,7 @@ global:
     # -- OSC managed webservices-deploy ServiceAccount name
     serviceAccount: webservices-deploy
   auth:
-    # -- Enable auth management
+    # -- Enable auth management, also `oauth2-proxy.enable` supported
     enable: false
     # -- The upstream service for the OAuth2 proxy. **required** when auth is enabled
     upstream: ""
@@ -89,12 +89,12 @@ global:
       forceCreate: false
       secret:
         # -- The secret name for the Keycloak Client secret
-        # @default <Release name>-secret
-        name: ""
-      configmap:
+        # @default -- <Release name>-auth-secret
+        name: "{{ .Release.Name }}-auth-secret"
+      configMap:
         # -- The configmap name for the Keycloak Client config
-        # @default <Release name>-config
-        name: ""
+        # @default -- <Release name>-auth-config
+        name: "{{ .Release.Name }}-auth-config"
       # -- Additional Keycloak Client configs
       config: {}
   ingress:
@@ -108,7 +108,61 @@ global:
     # -- The alert receiver name
     receiver: ""
 
+keycloakClient:
+  # -- Enable KeycloakClient resource
+  enable: false
+  # -- Use global values for redirectUris
+  useGlobal: true
+  # -- redirect URIs
+  redirectUris: []
+  # -- Additional Keycloak Client configs
+  # @default -- global.auth.keycloakClient.config
+  config: {}
+  secret:
+    # -- The secret name for the Keycloak Client secret
+    # @default -- global.auth.keycloakClient.secret.name
+    name: "{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"
+    # -- Client Secret key in the secret
+    clientSecretKey: client-secret
+    # -- Client ID key in the secret
+    clientIdKey: client-id
+    # -- Issuer URL key in the secret
+    issuerUrlKey: issuer-url
+    # @ignored
+    create: true
+    # -- Use env var keys in the secret
+    envVarKeys: false
+    # -- Key prefix in the secret
+    keyPrefix: ""
+  configMap:
+    # -- The configmap name for the Keycloak Client config
+    # @default -- global.auth.keycloakClient.configMap.name
+    name: "{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}"
+    # -- Keycloak URL
+    keycloakUrlKey: KEYCLOAK_URL
+    # -- Keycloak Host
+    keycloakHostKey: KEYCLOAK_HOST
+    # -- Keycloak issuer URL
+    issuerUrlKey: ISSUER_URL
+    # -- Keycloak provider well-known config URL
+    providerUrlKey: PROVIDER_URL
+    # -- Use env var keys in the configmap
+    envVarKeys: true
+    # -- Key prefix in the configmap
+    keyPrefix: ""
+
+imagePullSecret:
+  # -- Create the image pull secret
+  create: true
+
+rbac:
+  # -- Create common RBAC when global items defined
+  create: true
+
 oauth2-proxy:
+  # -- Enable oauth2-proxy
+  # @default -- false
+  enable:
   image:
     # -- The OSC registry
     # @default -- The OSC registry hostname
@@ -116,10 +170,10 @@ oauth2-proxy:
     # -- Path to oauth2-proxy on the OSC registry
     repository: kubernetes/oauth2-proxy
     # -- oauth2-proxy image tag.  **must be replicated to the OSC registry**
-    tag: v7.15.2
+    tag: v7.15.6
   # @ignored
   config:
-    existingSecret: '{{ include "osc.common.auth.secret.name" . }}'
+    existingSecret: "{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"
     cookieName: _{{ include "osc.common.name" . }}{{ include "osc.common.environment" . }}
     configFile: |-
       {{- if ((((.Values).global).auth).skipAuthRoutes) }}
@@ -143,7 +197,7 @@ oauth2-proxy:
   # @ignored
   envFrom:
     - configMapRef:
-        name: '{{ include "osc.common.auth.configmap.name" . }}'
+        name: "{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}"
   # @ignored
   extraArgs:
     provider: oidc

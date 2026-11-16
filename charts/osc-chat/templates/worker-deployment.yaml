@@ -75,6 +75,10 @@ spec:
                 configMapKeyRef:
                   name: {{ include "osc-chat.fullname" . }}-app-config
                   key: RABBITMQ_QUEUE
+            - name: S3_ENDPOINT
+              value: "http://{{ index .Values "osc-minio" "minio" "fullnameOverride" }}:9000"
+            - name: MINIO_URL
+              value: "http://{{ index .Values "osc-minio" "minio" "fullnameOverride" }}:9000"
             - name: QDRANT_COLLECTION_NAME
               valueFrom:
                 configMapKeyRef:

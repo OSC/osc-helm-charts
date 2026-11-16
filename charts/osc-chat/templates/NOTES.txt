@@ -42,7 +42,7 @@
 {{- if .Values.qdrant.enabled }}
    ✓ Qdrant Vector DB: Enabled
 {{- end }}
-{{- if .Values.minio.enable }}
+{{- if (index .Values "osc-minio" "enable") }}
    ✓ MinIO Object Storage: Enabled
 {{- end }}
 {{- if .Values.keycloak.enabled }}
@@ -72,9 +72,9 @@
    kubectl logs -f deployment/{{ include "osc-chat.fullname" . }}-backend
 
    # Access MinIO Console (if enabled)
-{{- if .Values.minio.enable }}
-   kubectl port-forward service/{{ include "osc-chat.fullname" . }}-minio 9001:9001
-   # Then visit http://localhost:9001
+{{- if (index .Values "osc-minio" "enable") }}
+   kubectl port-forward service/minio 9000:9000
+   # Then visit http://localhost:9000
 {{- end }}
 
    # Access Keycloak Admin Console (if enabled)

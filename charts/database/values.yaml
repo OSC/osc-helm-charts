@@ -436,6 +436,11 @@ postgresql:
         - name: dshm
           mountPath: /dev/shm
     # @ignored
+    initdb:
+      scripts:
+        metrics.sql: |
+          GRANT pg_monitor TO {{ include "postgresql.v1.username" . }};
+    # @ignored
     networkPolicy:
       enabled: true
       allowExternal: false

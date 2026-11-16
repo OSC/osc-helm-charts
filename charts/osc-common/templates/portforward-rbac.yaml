@@ -1,4 +1,4 @@
-{{- if or .Values.global.portforwardGroups .Values.global.portforwardServiceAccounts }}
+{{- if and (or .Values.global.portforwardGroups .Values.global.portforwardServiceAccounts) .Values.rbac.create }}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
