@@ -157,6 +157,9 @@ mlflow:
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://mlflow-artifacts/"
   extraSecretNamesForEnvFrom:
     - '{{ .Release.Name }}-app-secrets'
+  # -- flask server secret key
+  # @default -- **required**
+  flaskServerSecretKey: changeme
   auth:
     enabled: true
     adminUsername: '{{ .Values.global.mlflow.auth.adminUsername }}'
