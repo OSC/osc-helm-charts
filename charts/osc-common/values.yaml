@@ -273,12 +273,12 @@ oauth2-proxy:
       cert-manager.io/cluster-issuer: letsencrypt
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
-      nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.hostAlias }}'
     # -- Additional Ingress paths
     extraPaths: []
     # @ignored
     hosts:
       - '{{ .Values.global.ingress.host }}'
+      - '{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}'
     # @ignored
     tls:
       - secretName: '{{ .Release.Name }}-cert'
