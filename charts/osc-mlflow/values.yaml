@@ -10,7 +10,7 @@ global:
   ingress:
     host: ""
     hostAlias: ""
-    minio:
+    silo:
       api: ""
       console: ""
   alert:
@@ -25,10 +25,12 @@ global:
       password: changeme-mlflow
       postgresPassword: changeme-postgres
       database: mlflow
-  minio:
-    auth:
-      rootUser: mlflowadmin
-      rootPassword: changeme-minio
+  silo:
+    rootUser: mlflowadmin
+    rootPassword: changeme-minio
+    user: mlflow
+    password: changeme
+    defaultBucket: "mlflow-artifacts"
   mlflow:
     auth:
       adminUsername: admin
@@ -68,11 +70,8 @@ database:
 #        annotations:
 #          osc.edu/fileset: '{{ .Values.global.fileset }}'
 
-osc-minio:
+osc-silo:
   enable: true
-  minio:
-    fullnameOverride: osc-mlflow-minio
-    defaultBuckets: "mlflow-artifacts"
 
 mlflow:
   image:
@@ -137,7 +136,7 @@ mlflow:
   artifactRoot:
     proxiedArtifactStorage: true
     defaultArtifactRoot: "./mlruns"
-    defaultArtifactsDestination: "s3://mlflow-artifacts/"
+    defaultArtifactsDestination: "s3://{{ .Values.global.silo.defaultBucket }}/"
   ingress:
     enabled: true
     annotations:

@@ -39,10 +39,17 @@ dependencies:
     #   helm push mlflow-1.11.8-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes
     repository: oci://docker-registry.osc.edu/kubernetes
     version: 1.11.8-osc-r0
-  - name: osc-minio
-    version: 0.1.3
-    repository: https://osc.github.io/osc-helm-charts
-    condition: osc-minio.enable
+  - name: osc-silo
+    # version: 0.1.0
+    # repository: https://osc.github.io/osc-helm-charts
+    # Use OCI image until merged and released:
+    # https://github.com/OSC/osc-helm-charts/pull/578
+    # helm dependency update charts/osc-silo
+    # helm package charts/osc-silo --version 0.1.0-rc0
+    # helm push osc-silo-0.1.0-rc0.tgz oci://docker-registry.osc.edu/webservices/
+    version: 0.1.0-rc0
+    repository: oci://docker-registry.osc.edu/webservices
+    condition: osc-silo.enable
   - name: osc-common
     version: 0.17.4
     repository: https://osc.github.io/osc-helm-charts

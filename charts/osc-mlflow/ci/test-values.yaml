@@ -5,7 +5,7 @@ global:
   storageClass: standard
   ingress:
     host: test.example.com
-    minio:
+    silo:
       api: test-api.example.com
       console: test-minio-console.example.com
 
@@ -35,8 +35,8 @@ database:
           accessModes:
           - ReadWriteOnce
 
-osc-minio:
-  minio:
+osc-silo:
+  silo:
     resources:
       limits:
         cpu: 1000m
@@ -45,17 +45,8 @@ osc-minio:
         cpu: 250m
         memory: 64Mi
     persistence:
-      accessModes:
-      - ReadWriteOnce
+      accessMode: ReadWriteOnce
       size: 50Mi
-    console:
-      resources:
-        limits:
-          cpu: 1000m
-          memory: 128Mi
-        requests:
-          cpu: 250m
-          memory: 64Mi
 
 mlflow:
   resources:
