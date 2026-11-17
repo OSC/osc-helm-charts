@@ -60,7 +60,7 @@ osc-minio:
 mlflow:
   resources:
     limits:
-      cpu: 2
+      cpu: 2000m
       memory: 2Gi
     requests:
       cpu: 500m
