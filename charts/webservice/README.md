@@ -14,7 +14,7 @@ OSC webservice bootstrap Helm Chart
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts/ | database | 0.21.2 |
+| https://osc.github.io/osc-helm-charts/ | database | 0.21.1 |
 | https://osc.github.io/osc-helm-charts/ | osc-common | 0.17.0 |
 
 ## Usage
