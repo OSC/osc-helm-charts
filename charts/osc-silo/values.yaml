@@ -82,7 +82,9 @@ silo:
   # @ignored
   podLabels:
     app.kubernetes.io/name: silo
+  # @ignored
   rootUser: '{{ .Values.global.silo.rootUser }}'
+  # @ignored
   rootPassword: '{{ .Values.global.silo.rootPassword }}'
   # @ignored
   persistence:

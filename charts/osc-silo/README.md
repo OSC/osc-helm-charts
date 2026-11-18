@@ -60,8 +60,6 @@ global:
 | global.silo.defaultBucket | string | `"{{ .Release.Name }}"` | Default bucket to create |
 | silo.image.tag | string | `"RELEASE.2026-11-12T00-00-00Z"` | silo image tag |
 | silo.mcImage.tag | string | Same as silo.image.tag | silo mc image tag |
-| silo.rootUser | string | `"{{ .Values.global.silo.rootUser }}"` |  |
-| silo.rootPassword | string | `"{{ .Values.global.silo.rootPassword }}"` |  |
 | silo.policies | list | `[]` | Silo policies |
 | silo.users | list | Create a single readwrite user | Additional users |
 | silo.svcaccts | list | `[]` | Additional service accounts |
