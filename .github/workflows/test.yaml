@@ -140,8 +140,14 @@ jobs:
         run: |
           helm repo add kyverno https://kyverno.github.io/kyverno/
           helm install kyverno kyverno/kyverno -n kyverno --create-namespace -f .github/config/kyverno-values.yaml --version 3.6.4
-          timeout 240 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{.items[0].status.phase}" | grep Running ; do echo "Waiting for Kyverno" ; sleep 10 ; done' || exit 0
-          sleep 60
+          timeout 120 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{range .items[*]}{.status.containerStatuses[*].ready}{end}" | grep "true" ; do echo "Waiting for Kyverno" ; sleep 10 ; done'
+      - name: Install Kyverno policies
+        if: matrix.chart != 'kyverno-policies'
+        run: |
+          helm dependency build charts/kyverno-policies
+          helm install kyverno-policies charts/kyverno-policies -n kyverno -f .github/config/kyverno-policies-values.yaml
+          kubectl apply -f .github/config/k8-ldap-configmaps.yaml
+          sleep 120
       - name: Install cert-manager
         run: |
           helm repo add jetstack https://charts.jetstack.io
@@ -167,7 +173,16 @@ jobs:
           sudo mkdir -p /users/PAS0710
           sudo install -d -o 65534 -g 65534 -m 0700 /users/PAS0710/cryosciapps
       - name: Add namespaces
-        run: kubectl create namespace ${{ matrix.chart }}
+        run: |
+          kubectl create namespace ${{ matrix.chart }}
+      - name: Label namespace (infra)
+        if: matrix.chart == 'prometheus' || matrix.chart == 'kyverno-policies'
+        run: |
+          kubectl label namespace ${{ matrix.chart }} osc.edu/role=infrastructure
+      - name: Label namespace (webservice)
+        if: matrix.chart != 'prometheus' && matrix.chart != 'kyverno-policies'
+        run: |
+          kubectl label namespace ${{ matrix.chart }} osc.edu/role=webservice
       - name: Run chart-testing (install)
         run: |
           ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }}
