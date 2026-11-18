@@ -1,6 +1,6 @@
 # kyverno-policies
 
-![Version: 0.46.7](https://img.shields.io/badge/Version-0.46.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
+![Version: 0.46.8](https://img.shields.io/badge/Version-0.46.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.16.4](https://img.shields.io/badge/AppVersion-v1.16.4-informational?style=flat-square)
 
 OSC Kyverno policies deployment
 
@@ -368,6 +368,7 @@ OSC Kyverno policies deployment
 | Key | Description | Default |
 |-----|-------------|---------|
 | global |  | `{}` |
+| allowImageVolumes.appNames | Pods where `app.kubernetes.io/name` is allowed to have volumes in the image | `["prometheus","postgresql","minio","silo"]` |
 | users.allowHostPaths | Allowed host paths for user namespaces | `["/var/lib/sss/pipes","/etc/sssd","/etc/nsswitch.conf","/etc/pam.d","/etc/slurm","/var/run/munge/munge.socket.2","/users/?*","/fs/?*","/apps/?*","/nfsroot/?*"]` |
 | users.authorizedRegistries | Authorized registries for user namespaces | `["docker-registry.osc.edu","docker-registry-test.osc.edu"]` |
 | webservices.allowHostPaths | Allowed host paths for webservices | `["/var/lib/sss/pipes","/etc/sssd","/etc/nsswitch.conf","/etc/slurm","/var/run/munge/munge.socket.2","/users/?*","/fs/?*"]` |
