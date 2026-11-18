@@ -79,6 +79,9 @@ silo:
   commonLabels:
     receiver: '{{ index .Values.global.alert.receiver }}'
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+  # @ignored
+  podLabels:
+    app.kubernetes.io/name: silo
   rootUser: '{{ .Values.global.silo.rootUser }}'
   rootPassword: '{{ .Values.global.silo.rootPassword }}'
   # @ignored
