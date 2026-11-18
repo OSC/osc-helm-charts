@@ -1,6 +1,6 @@
 global:
   environment: dev
-  oscServiceAccount: test
+  oscServiceAccount: nobody
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
@@ -31,10 +31,6 @@ podSecurityContext:
   runAsUser: 65534
   runAsGroup: 65534
   fsGroup: 65534
-
-extraEnv:
-  - name: USER
-    value: "{{ .Values.global.oscServiceAccount }}"
 
 osc-common:
   oauth2-proxy:

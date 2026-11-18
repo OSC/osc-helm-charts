@@ -1,6 +1,6 @@
 global:
   environment: dev
-  oscServiceAccount: test
+  oscServiceAccount: nobody
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
@@ -26,13 +26,9 @@ mounts:
   # Override the default as 'ct install' test uses randomized release name and we need to precreate the directory
   home: /users/PAS0710/cryosciapps
 podSecurityContext:
-  runAsUser: 1000
-  runAsGroup: 1001
-  fsGroup: 1001
-
-extraEnv:
-  - name: USER
-    value: "{{ .Values.global.oscServiceAccount }}"
+  runAsUser: 65534
+  runAsGroup: 65534
+  fsGroup: 65534
 
 osc-common:
   oauth2-proxy:
