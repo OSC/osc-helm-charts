@@ -1,5 +1,5 @@
 global:
-  oscServiceAccount: test
+  oscServiceAccount: nobody
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
@@ -49,9 +49,9 @@ open-webui:
         enabled: false
     deployment:
       labels:
-        osc.edu/service-account: test
+        osc.edu/service-account: nobody
     podLabels:
-      osc.edu/service-account: test
+      osc.edu/service-account: nobody
     resources:
       limits:
         memory: 500Mi
