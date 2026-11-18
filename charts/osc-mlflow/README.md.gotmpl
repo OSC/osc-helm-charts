@@ -12,7 +12,7 @@ This chart handles the OSC's deployment of MLFlow.
 Components:
 
 * Postgresql
-* Minio
+* Silo
 * MLFlow
 
 ## Usage
@@ -37,10 +37,10 @@ database:
     auth:
       password: <redis password>
 
-minio:
+silo:
   auth:
-    rootUser: <minio root username>
-    rootPassword: <minio root password>
+    rootUser: <silo root username>
+    rootPassword: <silo root password>
 
 mlflow:
   flaskServerSecretKey: <flask password>

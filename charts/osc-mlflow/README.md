@@ -11,7 +11,7 @@ This chart handles the OSC's deployment of MLFlow.
 Components:
 
 * Postgresql
-* Minio
+* Silo
 * MLFlow
 
 ## Usage
@@ -36,10 +36,10 @@ database:
     auth:
       password: <redis password>
 
-minio:
+silo:
   auth:
-    rootUser: <minio root username>
-    rootPassword: <minio root password>
+    rootUser: <silo root username>
+    rootPassword: <silo root password>
 
 mlflow:
   flaskServerSecretKey: <flask password>
@@ -51,8 +51,8 @@ mlflow:
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts | database | 0.21.1 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.17.4 |
-| https://osc.github.io/osc-helm-charts | osc-minio | 0.1.3 |
 | oci://docker-registry.osc.edu/kubernetes | mlflow | 1.11.8-osc-r0 |
+| oci://docker-registry.osc.edu/webservices | osc-silo | 0.1.0-rc0 |
 
 ## Values
 
@@ -65,8 +65,8 @@ mlflow:
 | global.storageClass | string | `"local-ess"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
-| global.ingress.minio.api | string | `""` |  |
-| global.ingress.minio.console | string | `""` |  |
+| global.ingress.silo.api | string | `""` |  |
+| global.ingress.silo.console | string | `""` |  |
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.security.allowInsecureImages | bool | `true` |  |
 | global.nodeSelectorRole | string | `"webservices"` |  |
@@ -75,8 +75,11 @@ mlflow:
 | global.postgresql.auth.password | string | `"changeme-mlflow"` |  |
 | global.postgresql.auth.postgresPassword | string | `"changeme-postgres"` |  |
 | global.postgresql.auth.database | string | `"mlflow"` |  |
-| global.minio.auth.rootUser | string | `"mlflowadmin"` |  |
-| global.minio.auth.rootPassword | string | `"changeme-minio"` |  |
+| global.silo.rootUser | string | `"mlflowadmin"` |  |
+| global.silo.rootPassword | string | `"changeme-silo"` |  |
+| global.silo.user | string | `"mlflow"` |  |
+| global.silo.password | string | `"changeme"` |  |
+| global.silo.defaultBucket | string | `"mlflow-artifacts"` |  |
 | global.mlflow.auth.adminUsername | string | `"admin"` |  |
 | global.mlflow.auth.adminPassword | string | `"changeme-admin"` |  |
 | global.debugGroups[0] | string | `"sappstf"` |  |
@@ -89,9 +92,8 @@ mlflow:
 | database.postgresql.resources.limits.memory | string | `"4Gi"` |  |
 | database.postgresql.resources.requests.cpu | string | `"1000m"` |  |
 | database.postgresql.resources.requests.memory | string | `"2Gi"` |  |
-| osc-minio.enable | bool | `true` |  |
-| osc-minio.minio.fullnameOverride | string | `"osc-mlflow-minio"` |  |
-| osc-minio.minio.defaultBuckets | string | `"mlflow-artifacts"` |  |
+| osc-silo.enable | bool | `true` |  |
+| osc-silo.silo.fullnameOverride | string | `"osc-mlflow-silo"` |  |
 | mlflow.image.repository | string | `"docker-registry.osc.edu/kubernetes/mlflow"` |  |
 | mlflow.image.tag | string | `"v3.17.1-full"` |  |
 | mlflow.imagePullSecrets[0].name | string | `"{{ .Values.global.imagePullSecret.name }}"` |  |
@@ -135,7 +137,7 @@ mlflow:
 | mlflow.backendStore.postgres.password | string | `"{{ .Values.global.postgresql.auth.password }}"` |  |
 | mlflow.artifactRoot.proxiedArtifactStorage | bool | `true` |  |
 | mlflow.artifactRoot.defaultArtifactRoot | string | `"./mlruns"` |  |
-| mlflow.artifactRoot.defaultArtifactsDestination | string | `"s3://mlflow-artifacts/"` |  |
+| mlflow.artifactRoot.defaultArtifactsDestination | string | `"s3://{{ .Values.global.silo.defaultBucket }}/"` |  |
 | mlflow.ingress.enabled | bool | `true` |  |
 | mlflow.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt"` |  |
 | mlflow.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
@@ -148,8 +150,8 @@ mlflow:
 | mlflow.ingress.tls[0].hosts[0] | string | `"{{ .Values.global.ingress.host }}"` |  |
 | mlflow.ingress.tls[0].hosts[1] | string | `"{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}"` |  |
 | mlflow.extraEnvVars.AWS_DEFAULT_REGION | string | `"us-east-1"` |  |
-| mlflow.extraEnvVars.MLFLOW_S3_ENDPOINT_URL | string | `"http://osc-mlflow-minio:9000"` |  |
-| mlflow.extraEnvVars.MLFLOW_DEFAULT_ARTIFACT_ROOT | string | `"s3://mlflow-artifacts/"` |  |
+| mlflow.extraEnvVars.MLFLOW_S3_ENDPOINT_URL | string | `"http://osc-mlflow-silo:9000"` |  |
+| mlflow.extraEnvVars.MLFLOW_DEFAULT_ARTIFACT_ROOT | string | `"s3://{{ .Values.global.silo.defaultBucket }}/"` |  |
 | mlflow.extraSecretNamesForEnvFrom[0] | string | `"{{ .Release.Name }}-app-secrets"` |  |
 | mlflow.flaskServerSecretKey | string | **required** | flask server secret key |
 | mlflow.auth.enabled | bool | `true` |  |

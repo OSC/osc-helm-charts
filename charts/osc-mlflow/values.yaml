@@ -27,7 +27,7 @@ global:
       database: mlflow
   silo:
     rootUser: mlflowadmin
-    rootPassword: changeme-minio
+    rootPassword: changeme-silo
     user: mlflow
     password: changeme
     defaultBucket: "mlflow-artifacts"
