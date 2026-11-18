@@ -32,6 +32,10 @@ podSecurityContext:
   runAsGroup: 65534
   fsGroup: 65534
 
+extraEnv:
+  - name: USER
+    value: "{{ .Values.global.oscServiceAccount }}"
+
 osc-common:
   oauth2-proxy:
     resources:
