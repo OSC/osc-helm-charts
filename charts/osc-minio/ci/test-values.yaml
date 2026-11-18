@@ -1,5 +1,5 @@
 global:
-  oscServiceAccount: nobody
+  oscServiceAccount: test
   imagePullSecret:
     create: true
     password: IMAGE-PULL-PASSWORD

@@ -1,7 +1,7 @@
 # This file does not get tested due to lacking '-values' suffix
 # This file is instead used for render testing
 global:
-  oscServiceAccount: nobody
+  oscServiceAccount: test
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test

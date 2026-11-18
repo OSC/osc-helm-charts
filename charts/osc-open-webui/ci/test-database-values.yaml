@@ -1,5 +1,5 @@
 global:
-  oscServiceAccount: nobody
+  oscServiceAccount: test
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test
