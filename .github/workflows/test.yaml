@@ -130,6 +130,16 @@ jobs:
         run: |
           helm install prometheus-operator-crds oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds -n prometheus-operator-crds --create-namespace --version 28.0.1 \
             --wait --timeout 300s
+      - name: Install cert-manager
+        run: |
+          helm repo add jetstack https://charts.jetstack.io
+          helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.18.1 \
+            --set crds.enabled=true --wait --timeout 300s
+      - name: Install keycloak-cr-operator
+        run: |
+          helm repo add keycloak-cr-operator https://osc.github.io/keycloak-cr-operator/
+          helm install keycloak-cr-operator keycloak-cr-operator/keycloak-cr-operator -n keycloak-cr-operator --create-namespace \
+            -f .github/config/keycloak-cr-operator-values.yaml --version v0.1.0 --wait --timeout 300s
       - name: Install Keycloak
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -148,16 +158,6 @@ jobs:
           helm install kyverno-policies charts/kyverno-policies -n kyverno -f .github/config/kyverno-policies-values.yaml
           kubectl apply -f .github/config/k8-ldap-configmaps.yaml
           sleep 120
-      - name: Install cert-manager
-        run: |
-          helm repo add jetstack https://charts.jetstack.io
-          helm install cert-manager jetstack/cert-manager -n cert-manager --create-namespace --version v1.18.1 \
-            --set crds.enabled=true --wait --timeout 300s
-      - name: Install keycloak-cr-operator
-        run: |
-          helm repo add keycloak-cr-operator https://osc.github.io/keycloak-cr-operator/
-          helm install keycloak-cr-operator keycloak-cr-operator/keycloak-cr-operator -n keycloak-cr-operator --create-namespace \
-            -f .github/config/keycloak-cr-operator-values.yaml --version v0.1.0 --wait --timeout 300s
       - name: Setup Environment
         run: |
           sudo apt-get update
