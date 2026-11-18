@@ -19,7 +19,7 @@ args:
   - "-listen=:{{ .Values.global.service.port }}"
   - "-text=Hello World"
 image:
-  repository: hashicorp/http-echo
+  repository: docker-registry.osc.edu/kubernetes/hashicorp/http-echo
   tag: latest
 envSecrets:
   TEST: secret

@@ -65,3 +65,6 @@ open-webui:
     volumes: []
     volumeMounts: []
     extraEnv: []
+    tests:
+      # The tests aren't configurable and violate Kyverno policies
+      enabled: false
