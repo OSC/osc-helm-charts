@@ -123,16 +123,16 @@ mlflow:
       tag: "1.38.0"
       pullPolicy: IfNotPresent
     mlflowDbMigration:
-      repository: docker-registry.osc.edu/kubernetes/mlflow
+      repository: "{{ .Values.image.repository }}"
       tag: "{{ .Values.image.tag }}"
       pullPolicy: IfNotPresent
     iniFileInitializer:
-      repository: docker-registry.osc.edu/kubernetes/busybox
+      repository: "{{ .Values.initImages.dbchecker.repository }}"
       tag: "{{ .Values.initImages.dbchecker.tag }}"
       pullPolicy: IfNotPresent
   # PostgreSQL backend store configuration
   backendStore:
-    #databaseMigration: true
+    databaseMigration: true
     databaseConnectionCheck: true
     defaultSqlitePath: ":memory:"
     postgres:
