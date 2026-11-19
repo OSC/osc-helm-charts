@@ -58,6 +58,7 @@ global:
 | global.silo.user | string | `"silo"` | The silo readwrite username |
 | global.silo.password | string | `"changeme"` | The silo readwrite password |
 | global.silo.defaultBucket | string | `"{{ .Release.Name }}"` | Default bucket to create |
+| global.silo.defaultBucketPolicy | string | `"none"` | Default bucket policy |
 | silo.image.tag | string | `"RELEASE.2026-11-12T00-00-00Z"` | silo image tag |
 | silo.mcImage.tag | string | Same as silo.image.tag | silo mc image tag |
 | silo.policies | list | `[]` | Silo policies |

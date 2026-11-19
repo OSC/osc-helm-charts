@@ -50,6 +50,8 @@ global:
     password: changeme
     # -- Default bucket to create
     defaultBucket: '{{ .Release.Name }}'
+    # -- Default bucket policy
+    defaultBucketPolicy: none
 
 silo:
   # @ignored
@@ -169,7 +171,7 @@ silo:
   # @default -- Single bucket based on global.silo.defaultBucket
   buckets:
     - name: '{{ tpl .Values.global.silo.defaultBucket . }}'
-      policy: none
+      policy: '{{ tpl .Values.global.silo.defaultBucketPolicy . }}'
       purge: false
       versioning: false
       objectlocking: false
