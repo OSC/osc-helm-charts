@@ -123,6 +123,7 @@ jobs:
         run: |
           sed -i 's|OSC-IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_READ_TOKEN}}|g' charts/*/ci/*.yaml
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts/*/ci/*.yaml
+          sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' .github/config/*.yaml
       - name: Set cryosparc license
         if: matrix.chart == 'cryosparc'
         run: |
@@ -131,18 +132,6 @@ jobs:
         run: |
           helm install prometheus-operator-crds oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds -n prometheus-operator-crds --create-namespace --version 28.0.1 \
             --wait --timeout 300s
-      - name: Install Keycloak
-        run: |
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 21.2.0 \
-            -f .github/config/keycloak-values.yaml \
-            --wait --timeout 300s
-      - name: Install Kyverno
-        run: |
-          helm repo add kyverno https://kyverno.github.io/kyverno/
-          helm install kyverno kyverno/kyverno -n kyverno --create-namespace -f .github/config/kyverno-values.yaml --version 3.6.4
-          timeout 240 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{.items[0].status.phase}" | grep Running ; do echo "Waiting for Kyverno" ; sleep 10 ; done' || exit 0
-          sleep 60
       - name: Install cert-manager
         run: |
           helm repo add jetstack https://charts.jetstack.io
@@ -153,6 +142,24 @@ jobs:
           helm repo add keycloak-cr-operator https://osc.github.io/keycloak-cr-operator/
           helm install keycloak-cr-operator keycloak-cr-operator/keycloak-cr-operator -n keycloak-cr-operator --create-namespace \
             -f .github/config/keycloak-cr-operator-values.yaml --version v0.1.0 --wait --timeout 300s
+      - name: Install Keycloak
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm install keycloak bitnami/keycloak -n keycloak --create-namespace --version 21.2.0 \
+            -f .github/config/keycloak-values.yaml \
+            --wait --timeout 300s
+      - name: Install Kyverno
+        run: |
+          helm repo add kyverno https://kyverno.github.io/kyverno/
+          helm install kyverno kyverno/kyverno -n kyverno --create-namespace -f .github/config/kyverno-values.yaml --version 3.6.4
+          timeout 120 /bin/bash -c 'until kubectl get pods -n kyverno -l app.kubernetes.io/component=admission-controller -o jsonpath="{range .items[*]}{.status.containerStatuses[*].ready}{end}" | grep "true" ; do echo "Waiting for Kyverno" ; sleep 10 ; done'
+      - name: Install Kyverno policies
+        if: matrix.chart != 'kyverno-policies' && matrix.chart != 'paas'
+        run: |
+          helm dependency build charts/kyverno-policies
+          helm install kyverno-policies charts/kyverno-policies -n kyverno -f .github/config/kyverno-policies-values.yaml
+          kubectl apply -f .github/config/k8-ldap-configmaps.yaml
+          sleep 120
       - name: Setup Environment
         run: |
           sudo apt-get update
@@ -168,7 +175,16 @@ jobs:
           sudo mkdir -p /users/PAS0710
           sudo install -d -o 65534 -g 65534 -m 0700 /users/PAS0710/cryosciapps
       - name: Add namespaces
-        run: kubectl create namespace ${{ matrix.chart }}
+        run: |
+          kubectl create namespace ${{ matrix.chart }}
+      - name: Label namespace (infra)
+        if: matrix.chart == 'prometheus' || matrix.chart == 'kyverno-policies'
+        run: |
+          kubectl label namespace ${{ matrix.chart }} osc.edu/role=infrastructure
+      - name: Label namespace (webservice)
+        if: matrix.chart != 'prometheus' && matrix.chart != 'kyverno-policies'
+        run: |
+          kubectl label namespace ${{ matrix.chart }} osc.edu/role=webservice
       - name: Run chart-testing (install)
         run: |
           ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }}

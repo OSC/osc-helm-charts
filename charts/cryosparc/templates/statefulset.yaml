@@ -87,6 +87,9 @@ spec:
             secretKeyRef:
               name: {{ include "cryosparc.name" . }}
               key: license
+      {{- with .Values.extraEnv }}
+        {{- tpl (toYaml .) $ | nindent 8 -}}
+      {{- end }}
         volumeMounts:
         - name: scripts
           mountPath: /scripts

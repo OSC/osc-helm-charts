@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.24](https://img.shields.io/badge/Version-0.1.24-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.24](https://img.shields.io/badge/AppVersion-0.1.24-informational?style=flat-square)
+![Version: 0.1.25](https://img.shields.io/badge/Version-0.1.25-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.25](https://img.shields.io/badge/AppVersion-0.1.25-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -77,7 +77,7 @@ secrets:
 | https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.10 |
 | https://osc.github.io/osc-helm-charts | database | 0.21.1 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.16.1 |
-| https://osc.github.io/osc-helm-charts | osc-minio | 0.1.3 |
+| https://osc.github.io/osc-helm-charts | osc-minio | 0.1.4 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
 | oci://docker-registry.osc.edu/kubernetes/vllm | vllm-stack | 0.1.11-osc-r1 |
 | oci://registry-1.docker.io/bitnamicharts | rabbitmq | 16.0.14 |

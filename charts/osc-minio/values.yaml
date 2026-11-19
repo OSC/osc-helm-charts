@@ -210,6 +210,8 @@ osc-common:
       - name: OAUTH2_PROXY_ALLOWED_GROUPS
         value: '{{ .Values.global.minio.allowedGroups | join "," }}'
     ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.minio.console }}'
       hosts:
         - '{{ required "minio console host required at global.ingress.minio.console" .Values.global.ingress.minio.console }}'
       tls:
