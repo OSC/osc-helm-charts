@@ -38,6 +38,8 @@ global:
     user: appuser
     password: apppassword
     defaultBucket: app
+  storageClass: <OSC storage class>
+  fileset: <project if using GPFS>
 ```
 
 ## Values
