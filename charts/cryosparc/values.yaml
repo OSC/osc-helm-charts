@@ -146,6 +146,9 @@ nodeSelector: {}
 podSecurityContext:
   runAsNonRoot: true
 
+# -- Additional env data
+extraEnv: []
+
 # @ignored
 initContainerResources:
   limits:

@@ -14,6 +14,9 @@ users:
     - docker-registry.osc.edu
 webservices:
   allowHostPaths:
+    - /var/lib/sss/pipes
+    - /etc/sssd
+    - /etc/nsswitch.conf
     - /etc/slurm
     - /var/run/munge/munge.socket.2
     - /users/?*

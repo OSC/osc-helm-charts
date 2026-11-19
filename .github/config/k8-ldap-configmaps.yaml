@@ -20,6 +20,7 @@ data:
   user-webmooberlin: "49133"
   user-ouollama: "49669"
   user-wlebmodel: "52407"
+  user-nobody: "65534"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -38,6 +39,7 @@ data:
   user-webmooberlin: "9173"
   user-ouollama: "8085"
   user-wlebmodel: "9807"
+  user-nobody: "65534"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -56,3 +58,4 @@ data:
   user-webmooberlin: '["9173"]'
   user-ouollama: '["8085"]'
   user-wlebmodel: '["9807","9262"]'
+  user-nobody: '["65534"]'

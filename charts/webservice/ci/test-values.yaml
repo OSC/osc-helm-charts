@@ -19,7 +19,7 @@ args:
   - "-listen=:{{ .Values.global.service.port }}"
   - "-text=Hello World"
 image:
-  repository: hashicorp/http-echo
+  repository: docker-registry.osc.edu/kubernetes/hashicorp/http-echo
   tag: latest
 envSecrets:
   TEST: secret
@@ -83,3 +83,16 @@ database:
         requests:
           cpu: 200m
           memory: 256Mi
+    backup:
+      cronjob:
+        schedule: '* * * * *'
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 128Mi
+        storage:
+          accessModes:
+          - ReadWriteOnce
