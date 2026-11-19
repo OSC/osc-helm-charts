@@ -19,6 +19,14 @@ global:
     allowInsecureImages: true
   nodeSelectorRole: webservices
   fileset: PZS0645
+  auth:
+    enable: false
+    keycloakClient:
+      forceCreate: true
+      config:
+        webOrigins:
+          - https://{{ .Values.global.ingress.host }}
+          - '{{ printf "https://%s" (.Values.global.ingress.hostAlias | default .Values.global.ingress.host) }}'
   postgresql:
     auth:
       username: mlflow
@@ -124,7 +132,7 @@ mlflow:
       pullPolicy: IfNotPresent
   # PostgreSQL backend store configuration
   backendStore:
-    databaseMigration: true
+    #databaseMigration: true
     databaseConnectionCheck: true
     defaultSqlitePath: ":memory:"
     postgres:
@@ -160,13 +168,44 @@ mlflow:
     AWS_DEFAULT_REGION: "us-east-1"
     MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-silo:9000"
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://{{ .Values.global.silo.defaultBucket }}/"
+    OIDC_DISCOVERY_URL: "https://idp.osc.edu/realms/osc/.well-known/openid-configuration"
+    #OIDC_SCOPE: "openid profile email groups osc-oidc-clients"
+    #OIDC_GROUPS_ATTRIBUTE: "groups"
   extraSecretNamesForEnvFrom:
     - '{{ .Release.Name }}-app-secrets'
+    - '{{ tpl .Values.global.auth.keycloakClient.secret.name . }}'
+  extraConfigMapNamesForEnvFrom:
+    - '{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}'
   # -- flask server secret key
   # @default -- **required**
   flaskServerSecretKey: changeme
-  auth:
+  oidcAuth:
     enabled: true
+    existingSecret:
+      name: '{{ (tpl .Values.global.auth.keycloakClient.secret.name .) }}'
+      clientSecretKey: OIDC_CLIENT_SECRET
+    #extraSecretNamesForEnvFrom:
+    #  - '{{ .Values.global.auth.keycloakClient.secret.name }}'
+    #extraConfigMapNamesForEnvFrom:
+    #  - '{{ .Values.global.auth.keycloakClient.configMap.name }}'
+    # discoveryUrl: https://idp.osc.edu/realms/osc/.well-known/openid-configuration
+    scope: "openid profile email groups osc-oidc-clients"
+    providerDisplayName: "Login to OSC"
+    groupName:
+      - oscall
+    adminGroupName:
+      - sysstf
+      - sappstf
+    database:
+      postgres:
+        enabled: true
+        host: '{{ .Release.Name }}-postgresql'
+        port: 5432
+        database: '{{ .Values.global.postgresql.auth.database }}'
+        user: '{{ .Values.global.postgresql.auth.username }}'
+        password: '{{ .Values.global.postgresql.auth.password }}'
+  auth:
+    enabled: false
     adminUsername: '{{ .Values.global.mlflow.auth.adminUsername }}'
     adminPassword: '{{ .Values.global.mlflow.auth.adminPassword }}'
     postgres:
@@ -176,3 +215,12 @@ mlflow:
       database: '{{ .Values.global.postgresql.auth.database }}'
       user: '{{ .Values.global.postgresql.auth.username }}'
       password: '{{ .Values.global.postgresql.auth.password }}'
+
+osc-common:
+  keycloakClient:
+    secret:
+      envVarKeys: true
+      keyPrefix: OIDC_
+      clientSecretKey: CLIENT_SECRET
+    configMap:
+      providerUrlKey: OIDC_DISCOVERY_URL
