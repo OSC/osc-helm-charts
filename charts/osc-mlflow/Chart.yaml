@@ -51,5 +51,5 @@ dependencies:
     repository: oci://docker-registry.osc.edu/webservices
     condition: osc-silo.enable
   - name: osc-common
-    version: 0.17.4
+    version: 0.18.1
     repository: https://osc.github.io/osc-helm-charts
