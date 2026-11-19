@@ -1,5 +1,6 @@
 global:
   environment: dev
+  oscServiceAccount: nobody
   imagePullSecret:
     password: IMAGE-PULL-PASSWORD
   nodeSelectorRole: test

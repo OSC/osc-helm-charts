@@ -315,6 +315,9 @@ data:
   path: /data
 
 database:
+  # @ignored
+  oscCommon:
+    enable: false
   # -- Enable database subchart
   # @section -- Database
   enable: false

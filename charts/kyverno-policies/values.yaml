@@ -8,6 +8,13 @@ global:
   # @ignored
   webservicesDeploy:
     create: false
+allowImageVolumes:
+  # -- Pods where `app.kubernetes.io/name` is allowed to have volumes in the image
+  appNames:
+    - prometheus
+    - postgresql
+    - minio
+    - silo
 users:
   # -- Allowed host paths for user namespaces
   allowHostPaths:

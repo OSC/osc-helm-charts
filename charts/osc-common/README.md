@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.18.0](https://img.shields.io/badge/Version-0.18.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.18.1](https://img.shields.io/badge/Version-0.18.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -102,6 +102,7 @@ global:
 | global.ingress.hostAlias | Ingress host alias | `""` |
 | global.ingress.additionalHosts | Ingress additional hosts | `[]` |
 | global.alert.receiver | The alert receiver name | `""` |
+| keycloakClient.enable | Enable KeycloakClient resource | `false` |
 | keycloakClient.useGlobal | Use global values for redirectUris | `true` |
 | keycloakClient.redirectUris | redirect URIs | `[]` |
 | keycloakClient.config | Additional Keycloak Client configs | global.auth.keycloakClient.config |
