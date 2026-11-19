@@ -152,7 +152,6 @@ redis:
 | postgresql.primary.resources | Set limits for primary PostgreSQL pod | `{"limits":{"cpu":"4","memory":"4Gi"},"requests":{"cpu":"1","memory":"256Mi"}}` |
 | postgresql.backup.cronjob.schedule | PostgreSQL cron backup schedule | `"@daily"` |
 | postgresql.backup.cronjob.storage |  | `{}` |
-| postgresql.backup.cronjob.annotations | Backup storage annotations | `{}` |
 | postgresql.volumePermissions.image.repository | The OSC registry path to replicated image. This value should not need to be changed. | `"kubernetes/bitnami/os-shell"` |
 | postgresql.volumePermissions.image.tag | The version of replicated image. **This version of must replicated to OSC registry** | `"12-debian-12-r51"` |
 | postgresql.metrics.enabled |  | `true` |

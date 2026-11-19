@@ -484,8 +484,9 @@ postgresql:
         # @ignored
         accessModes:
         - ReadWriteMany
-      # -- Backup storage annotations
-      annotations: {}
+      # @ignored
+      annotations:
+        osc.edu/fileset: '{{ .Values.global.fileset }}'
   volumePermissions:
     image:
       # -- The OSC registry path to replicated image.
