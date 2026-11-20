@@ -96,6 +96,14 @@ mlflow:
     limits:
       cpu: 4000m
       memory: 16Gi
+  # @ignored
+  initResources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 128Mi
   livenessProbe:
     httpGet:
       path: /health
