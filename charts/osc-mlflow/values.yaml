@@ -224,6 +224,7 @@ mlflow:
       user: '{{ .Values.global.postgresql.auth.username }}'
       password: '{{ .Values.global.postgresql.auth.password }}'
 
+# @ignored
 osc-common:
   keycloakClient:
     secret:
