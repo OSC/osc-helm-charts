@@ -43,6 +43,10 @@ global:
     auth:
       adminUsername: admin
       adminPassword: changeme-admin
+      postgresql:
+        username: mlflow-auth
+        password: changeme-mlflow-auth
+        database: mlflow-auth
   debugGroups:
     - sappstf
   maintenanceGroups:
@@ -62,6 +66,11 @@ database:
       password: '{{ .Values.global.postgresql.auth.password }}'
     # @ignored
     primary:
+      initdb:
+        scripts:
+          mlflow-auth-db.sql: |
+            CREATE USER {{ .Values.global.mlflow.auth.postgresql.username }} WITH PASSWORD '{{ .Values.global.mlflow.auth.postgresql.password }}';
+            CREATE DATABASE {{ .Values.global.mlflow.auth.postgresql.database }} OWNER {{ .Values.global.mlflow.auth.postgresql.username }};
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
@@ -187,6 +196,7 @@ mlflow:
   # -- flask server secret key
   # @default -- **required**
   flaskServerSecretKey: changeme
+  # @ignored
   oidcAuth:
     enabled: true
     existingSecret:
@@ -209,20 +219,9 @@ mlflow:
         enabled: true
         host: '{{ .Release.Name }}-postgresql'
         port: 5432
-        database: '{{ .Values.global.postgresql.auth.database }}'
-        user: '{{ .Values.global.postgresql.auth.username }}'
-        password: '{{ .Values.global.postgresql.auth.password }}'
-  auth:
-    enabled: false
-    adminUsername: '{{ .Values.global.mlflow.auth.adminUsername }}'
-    adminPassword: '{{ .Values.global.mlflow.auth.adminPassword }}'
-    postgres:
-      enabled: true
-      host: '{{ .Release.Name }}-postgresql'
-      port: 5432
-      database: '{{ .Values.global.postgresql.auth.database }}'
-      user: '{{ .Values.global.postgresql.auth.username }}'
-      password: '{{ .Values.global.postgresql.auth.password }}'
+        database: '{{ .Values.global.mlflow.auth.postgresql.database }}'
+        user: '{{ .Values.global.mlflow.auth.postgresql.username }}'
+        password: '{{ .Values.global.mlflow.auth.postgresql.password }}'
 
 # @ignored
 osc-common:
