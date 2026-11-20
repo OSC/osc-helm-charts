@@ -116,18 +116,6 @@ mlflow:
 | mlflow.resources.requests.memory | string | `"4Gi"` |  |
 | mlflow.resources.limits.cpu | string | `"4000m"` |  |
 | mlflow.resources.limits.memory | string | `"16Gi"` |  |
-| mlflow.livenessProbe.httpGet.path | string | `"/health"` |  |
-| mlflow.livenessProbe.httpGet.port | int | `5000` |  |
-| mlflow.livenessProbe.initialDelaySeconds | int | `30` |  |
-| mlflow.livenessProbe.periodSeconds | int | `10` |  |
-| mlflow.livenessProbe.timeoutSeconds | int | `5` |  |
-| mlflow.livenessProbe.failureThreshold | int | `3` |  |
-| mlflow.readinessProbe.httpGet.path | string | `"/health"` |  |
-| mlflow.readinessProbe.httpGet.port | int | `5000` |  |
-| mlflow.readinessProbe.initialDelaySeconds | int | `10` |  |
-| mlflow.readinessProbe.periodSeconds | int | `5` |  |
-| mlflow.readinessProbe.timeoutSeconds | int | `3` |  |
-| mlflow.readinessProbe.failureThreshold | int | `3` |  |
 | mlflow.commonLabels.receiver | string | `"{{ index .Values.global.alert.receiver }}"` |  |
 | mlflow.commonLabels."{{ include "osc.common.serviceAccountKey" . }}" | string | `"{{ include \"osc.common.serviceAccountValue\" . }}"` |  |
 | mlflow.nodeSelector."{{ include "osc.common.nodeSelectorRoleKey" . }}" | string | `""` |  |

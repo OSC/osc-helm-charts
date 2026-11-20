@@ -129,22 +129,18 @@ mlflow:
     requests:
       cpu: 500m
       memory: 128Mi
+  # @ignored
   livenessProbe:
-    httpGet:
-      path: /health
-      port: 5000
     initialDelaySeconds: 30
-    periodSeconds: 10
+    periodSeconds: 30
     timeoutSeconds: 5
-    failureThreshold: 3
+    failureThreshold: 5
+  # @ignored
   readinessProbe:
-    httpGet:
-      path: /health
-      port: 5000
     initialDelaySeconds: 10
-    periodSeconds: 5
+    periodSeconds: 30
     timeoutSeconds: 3
-    failureThreshold: 3
+    failureThreshold: 5
   commonLabels:
     receiver: '{{ index .Values.global.alert.receiver }}'
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
