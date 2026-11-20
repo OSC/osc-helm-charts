@@ -66,11 +66,27 @@ database:
       password: '{{ .Values.global.postgresql.auth.password }}'
     # @ignored
     primary:
+      # extraEnvVarsSecret: mlflow-auth-db-secret
+      extraEnvVars:
+        - name: MLFLOW_AUTH_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: '{{ .Release.Name }}-oidc-auth-db-secret'
+              key: username
+        - name: MLFLOW_AUTH_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: '{{ .Release.Name }}-oidc-auth-db-secret'
+              key: password
       initdb:
         scripts:
-          mlflow-auth-db.sql: |
-            CREATE USER {{ .Values.global.mlflow.auth.postgresql.username }} WITH PASSWORD '{{ .Values.global.mlflow.auth.postgresql.password }}';
-            CREATE DATABASE {{ .Values.global.mlflow.auth.postgresql.database }} OWNER {{ .Values.global.mlflow.auth.postgresql.username }};
+          mlflow-auth-db.sh: |
+            export PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD"
+            psql -v ON_ERROR_STOP=1 -h localhost -p $POSTGRESQL_PORT_NUMBER -U postgres -d "postgres" <<-EOSQL
+              CREATE USER "$MLFLOW_AUTH_DB_USERNAME" WITH PASSWORD '$MLFLOW_AUTH_DB_PASSWORD';
+              CREATE DATABASE "{{ .Values.global.mlflow.auth.postgresql.database }}" OWNER "$MLFLOW_AUTH_DB_USERNAME";
+              GRANT ALL PRIVILEGES ON DATABASE "{{ .Values.global.mlflow.auth.postgresql.database }}" TO "$MLFLOW_AUTH_DB_USERNAME";
+            EOSQL
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
