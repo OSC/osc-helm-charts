@@ -177,8 +177,8 @@ mlflow:
     MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-silo:9000"
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://{{ .Values.global.silo.defaultBucket }}/"
     OIDC_DISCOVERY_URL: "https://idp.osc.edu/realms/osc/.well-known/openid-configuration"
-    #OIDC_SCOPE: "openid profile email groups osc-oidc-clients"
-    #OIDC_GROUPS_ATTRIBUTE: "groups"
+    # OIDC_SCOPE: "openid profile email groups osc-oidc-clients"
+    # OIDC_GROUPS_ATTRIBUTE: "groups"
   extraSecretNamesForEnvFrom:
     - '{{ .Release.Name }}-app-secrets'
     - '{{ tpl .Values.global.auth.keycloakClient.secret.name . }}'
@@ -192,9 +192,9 @@ mlflow:
     existingSecret:
       name: '{{ (tpl .Values.global.auth.keycloakClient.secret.name .) }}'
       clientSecretKey: OIDC_CLIENT_SECRET
-    #extraSecretNamesForEnvFrom:
+    # extraSecretNamesForEnvFrom:
     #  - '{{ .Values.global.auth.keycloakClient.secret.name }}'
-    #extraConfigMapNamesForEnvFrom:
+    # extraConfigMapNamesForEnvFrom:
     #  - '{{ .Values.global.auth.keycloakClient.configMap.name }}'
     # discoveryUrl: https://idp.osc.edu/realms/osc/.well-known/openid-configuration
     scope: "openid profile email groups osc-oidc-clients"

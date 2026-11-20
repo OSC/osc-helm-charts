@@ -98,8 +98,8 @@ mlflow:
 | database.postgresql.resources.requests.memory | string | `"2Gi"` |  |
 | osc-silo.enable | bool | `true` |  |
 | osc-silo.silo.fullnameOverride | string | `"osc-mlflow-silo"` |  |
-| mlflow.image.repository | string | `"docker-registry.osc.edu/kubernetes/mlflow-tracking-server"` |  |
-| mlflow.image.tag | string | `"3.18.0-11.3.1-20261119"` |  |
+| mlflow.image.repository | string | `"docker-registry.osc.edu/kubernetes/mlflow"` |  |
+| mlflow.image.tag | string | `"v3.17.1-full"` |  |
 | mlflow.imagePullSecrets[0].name | string | `"{{ .Values.global.imagePullSecret.name }}"` |  |
 | mlflow.resources.requests.cpu | string | `"1000m"` |  |
 | mlflow.resources.requests.memory | string | `"4Gi"` |  |
@@ -156,6 +156,7 @@ mlflow:
 | mlflow.extraEnvVars.AWS_DEFAULT_REGION | string | `"us-east-1"` |  |
 | mlflow.extraEnvVars.MLFLOW_S3_ENDPOINT_URL | string | `"http://osc-mlflow-silo:9000"` |  |
 | mlflow.extraEnvVars.MLFLOW_DEFAULT_ARTIFACT_ROOT | string | `"s3://{{ .Values.global.silo.defaultBucket }}/"` |  |
+| mlflow.extraEnvVars.OIDC_DISCOVERY_URL | string | `"https://idp.osc.edu/realms/osc/.well-known/openid-configuration"` |  |
 | mlflow.extraSecretNamesForEnvFrom[0] | string | `"{{ .Release.Name }}-app-secrets"` |  |
 | mlflow.extraSecretNamesForEnvFrom[1] | string | `"{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"` |  |
 | mlflow.extraConfigMapNamesForEnvFrom[0] | string | `"{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}"` |  |
