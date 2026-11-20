@@ -105,6 +105,7 @@ mariadb:
     password:
   # @ignored
   commonLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
     receiver: '{{ index .Values.global.alert.receiver }}'
   primary:
     # @ignored
@@ -376,6 +377,7 @@ postgresql:
     password:
   # @ignored
   commonLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
     receiver: '{{ index .Values.global.alert.receiver }}'
   primary:
     # @ignored
@@ -482,8 +484,9 @@ postgresql:
         # @ignored
         accessModes:
         - ReadWriteMany
-      # -- Backup storage annotations
-      annotations: {}
+      # @ignored
+      annotations:
+        osc.edu/fileset: '{{ .Values.global.fileset }}'
   volumePermissions:
     image:
       # -- The OSC registry path to replicated image.
@@ -551,6 +554,7 @@ redis:
   architecture: standalone
   # @ignored
   commonLabels:
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
     receiver: '{{ index .Values.global.alert.receiver }}'
   master:
     # @ignored
