@@ -85,8 +85,8 @@ osc-silo:
 
 mlflow:
   image:
-    repository: docker-registry.osc.edu/kubernetes/mlflow
-    tag: "v3.17.1-full"
+    repository: docker-registry.osc.edu/kubernetes/mlflow-tracking-server
+    tag: "3.18.0-11.3.1-20261119"
   imagePullSecrets:
     - name: '{{ .Values.global.imagePullSecret.name }}'
   resources:
@@ -176,7 +176,7 @@ mlflow:
     AWS_DEFAULT_REGION: "us-east-1"
     MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-silo:9000"
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://{{ .Values.global.silo.defaultBucket }}/"
-    OIDC_DISCOVERY_URL: "https://idp.osc.edu/realms/osc/.well-known/openid-configuration"
+    # OIDC_DISCOVERY_URL: "https://idp.osc.edu/realms/osc/.well-known/openid-configuration"
     # OIDC_SCOPE: "openid profile email groups osc-oidc-clients"
     # OIDC_GROUPS_ATTRIBUTE: "groups"
   extraSecretNamesForEnvFrom:
