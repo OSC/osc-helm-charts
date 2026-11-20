@@ -56,3 +56,10 @@ mlflow:
     requests:
       cpu: 500m
       memory: 512Mi
+  initResources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 64Mi
