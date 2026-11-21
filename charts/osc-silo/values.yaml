@@ -258,10 +258,13 @@ silo:
     claimName: groups
     scopes: openid,profile,email,groups,osc-oidc-clients
     redirectUri: "https://{{ .Values.global.ingress.silo.api }}"
+    displayName: Login with OSC IDP
   # -- Additional environment variables
   environment:
     # @ignored
     CONSOLE_IDP_CALLBACK: "https://{{ .Values.global.ingress.silo.console }}"
+    # @ignored
+    MINIO_BROWSER_REDIRECT_URL: "https://{{ .Values.global.ingress.silo.console }}"
   # @ignored
   networkPolicy:
     enabled: true
