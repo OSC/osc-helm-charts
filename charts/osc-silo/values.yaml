@@ -1,0 +1,314 @@
+global:
+  # -- The service account used by OSC deployments.
+  # Also pulled from global.env.<env>.serviceAccount
+  oscServiceAccount: ""
+  # -- The deployment's OSC environment
+  environment: production
+  # -- The nodeSelector role
+  nodeSelectorRole: webservices
+  imagePullSecret:
+    # @ignored
+    create: false
+    # @ignored
+    name: osc-registry
+    # @ignored
+    registry: docker-registry.osc.edu
+    # -- The image pull secret password for database images
+    # @default -- **required**
+    password:
+  # @ignored
+  networkPolicy:
+    create: false
+    # @ignored
+    ingressNamespace: ingress-nginx
+    # @ignored
+    prometheusNamespace: prometheus
+  # @ignored
+  webservicesDeploy:
+    create: false
+  ingress:
+    silo:
+      # -- silo API host
+      api: ""
+      # -- silo console host
+      console: ""
+  alert:
+    # -- The alert receiver
+    receiver: ""
+  # -- Storage class for persistence
+  storageClass: webservices-nfs-client
+  # -- The storage fileset
+  fileset:
+  silo:
+    # -- The silo root user
+    rootUser: "siloadmin"
+    # -- The silo root password
+    rootPassword: "siloadmin"
+    # -- The silo readwrite username
+    user: silo
+    # -- The silo readwrite password
+    password: changeme
+    # -- Default bucket to create
+    defaultBucket: '{{ .Release.Name }}'
+    # -- Default bucket policy
+    defaultBucketPolicy: none
+
+silo:
+  # @ignored
+  fullnameOverride: silo
+  # @ignored
+  nameOverride: silo
+  image:
+    # @ignored
+    repository: '{{ .Values.global.imagePullSecret.registry }}/kubernetes/pgsty/silo'
+    # -- silo image tag
+    tag: RELEASE.2026-11-12T00-00-00Z
+  mcImage:
+    # @ignored
+    repository: '{{ .Values.global.imagePullSecret.registry }}/kubernetes/pgsty/mc'
+    # -- silo mc image tag
+    # @default -- Same as silo.image.tag
+    tag: '{{ .Values.image.tag }}'
+  # @ignored
+  imagePullSecrets:
+    - name: '{{ include "osc.common.imagePullSecret.name" . }}'
+  # @ignored
+  mode: standalone
+  # @ignored
+  additionalLabels:
+    keycloak.osc.edu/keycloakclient: silo
+  # @ignored
+  commonLabels:
+    receiver: '{{ index .Values.global.alert.receiver }}'
+    '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+  # @ignored
+  podLabels:
+    app.kubernetes.io/name: silo
+  # @ignored
+  rootUser: '{{ .Values.global.silo.rootUser }}'
+  # @ignored
+  rootPassword: '{{ .Values.global.silo.rootPassword }}'
+  # @ignored
+  persistence:
+    enabled: true
+    size: 100Gi
+    accessMode: ReadWriteMany
+    annotations:
+      osc.edu/fileset: '{{ .Values.global.fileset }}'
+  # @ignored
+  service:
+    annotations:
+      prometheus.io/probe_module: http-healthz
+      prometheus.io/probe_path: /minio/health/live
+      prometheus.io/probe_scheme: http
+  # @ignored
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+      prometheus.io/probe_module: http-healthz
+      prometheus.io/probe_path: /minio/health/live
+      prometheus.io/probe_scheme: https
+    hosts:
+      - '{{ required "ingress api host required at global.ingress.silo.api" .Values.global.ingress.silo.api }}'
+    tls:
+      - secretName: '{{ include "silo.fullname" . }}-tls'
+        hosts:
+          - '{{ .Values.global.ingress.silo.api }}'
+    path: /
+  # @ignored
+  consoleIngress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 16k
+      nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7,192.148.247.0/24,10.0.0.0/8'
+      # prometheus.io/probe_path: /minio/health/live
+      prometheus.io/probe_scheme: https
+    hosts:
+      - '{{ required "ingress api host required at global.ingress.silo.api" .Values.global.ingress.silo.console }}'
+    tls:
+      - secretName: '{{ include "silo.fullname" . }}-console-tls'
+        hosts:
+          - '{{ .Values.global.ingress.silo.console }}'
+    path: /
+  # @ignored
+  nodeSelector:
+    '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+  # @ignored
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault
+    privileged: false
+    runAsNonRoot: true
+  # @ignored
+  resources:
+    limits:
+      cpu: 2
+      memory: 1024Mi
+    requests:
+      cpu: 1
+      memory: 512Mi
+  # -- Silo policies
+  policies: []
+  # -- Additional users
+  # @default -- Create a single readwrite user
+  users:
+    - accessKey: '{{ .Values.global.silo.user }}'
+      existingSecret: '{{ .Values.fullnameOverride }}-users-secret'
+      existingSecretKey: password
+      policy: readwrite
+  # -- Additional service accounts
+  svcaccts: []
+  # -- Buckets to create
+  # @default -- Single bucket based on global.silo.defaultBucket
+  buckets:
+    - name: '{{ tpl .Values.global.silo.defaultBucket . }}'
+      policy: '{{ tpl .Values.global.silo.defaultBucketPolicy . }}'
+      purge: false
+      versioning: false
+      objectlocking: false
+  # @ignored
+  makePolicyJob:
+    securityContext:
+      enabled: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 256Mi
+      requests:
+        cpu: 500m
+        memory: 64Mi
+  # @ignored
+  makeUserJob:
+    securityContext:
+      enabled: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 256Mi
+      requests:
+        cpu: 500m
+        memory: 64Mi
+  # @ignored
+  makeServiceAccountJob:
+    securityContext:
+      enabled: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 256Mi
+      requests:
+        cpu: 500m
+        memory: 64Mi
+  # @ignored
+  makeBucketJob:
+    securityContext:
+      enabled: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 256Mi
+      requests:
+        cpu: 500m
+        memory: 64Mi
+  # @ignored
+  customCommandJob:
+    securityContext:
+      enabled: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 256Mi
+      requests:
+        cpu: 500m
+        memory: 64Mi
+  # @ignored
+  postJob:
+    securityContext:
+      enabled: true
+    nodeSelector:
+      '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
+      privileged: false
+      runAsNonRoot: true
+  # @ignored
+  oidc:
+    enabled: true
+    existingConfigMapName: silo-auth-config
+    existingConfigUrlKey: PROVIDER_URL
+    existingClientSecretName: silo-auth-secret
+    existingClientIdKey: client-id
+    existingClientSecretKey: client-secret
+    claimName: groups
+    scopes: openid,profile,email,groups,osc-oidc-clients
+    redirectUri: "https://{{ .Values.global.ingress.silo.api }}"
+    displayName: Login with OSC IDP
+  # -- Additional environment variables
+  environment:
+    # @ignored
+    CONSOLE_IDP_CALLBACK: "https://{{ .Values.global.ingress.silo.console }}"
+    # @ignored
+    MINIO_BROWSER_REDIRECT_URL: "https://{{ .Values.global.ingress.silo.console }}"
+  # @ignored
+  networkPolicy:
+    enabled: true
+    allowExternal: false
+    allowFrom:
+      - podSelector: {}
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: '{{ .Values.global.networkPolicy.prometheusNamespace }}'
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: '{{ .Values.global.networkPolicy.ingressNamespace }}'
+  # @ignored
+  metrics:
+    serviceMonitor:
+      enabled: true
+      includeNode: true
+      interval: 60s
+      targetLabels:
+      - receiver
+      probeRelabelingConfigs:
+      - targetLabel: receiver
+        replacement: '{{ index .Values.global.alert.receiver }}'
+# @ignored
+osc-common:
+  nameOverride: silo
+  fullnameOverride: silo
+  imagePullSecret:
+    create: false
+  keycloakClient:
+    enable: true
+    useGlobal: false
+    secret:
+      name: silo-auth-secret
+    configMap:
+      name: silo-auth-config
+    redirectUris:
+      - https://{{ .Values.global.ingress.silo.api }}/*
+      - https://{{ .Values.global.ingress.silo.console }}/*
+    config:
+      webOrigins:
+        - https://{{ .Values.global.ingress.silo.api }}
+        - https://{{ .Values.global.ingress.silo.console }}
+  rbac:
+    create: false
+  oauth2-proxy:
+    enable: false

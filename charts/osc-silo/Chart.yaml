@@ -1,0 +1,20 @@
+apiVersion: v2
+name: osc-silo
+description: A Helm chart for silo
+type: application
+version: 0.1.0
+appVersion: "RELEASE.2026-11-12T00-00-00Z"
+maintainers:
+  - name: treydock
+dependencies:
+  - name: silo
+    # version: 7.0.5
+    # Use OCI until merged and tagged
+    # https://github.com/pgsty/silo/pull/351
+    #  helm package helm/silo --version 7.0.5-osc-r0
+    #  helm push silo-7.0.5-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/pgsty
+    version: 7.0.5-osc-r0
+    repository: oci://docker-registry.osc.edu/kubernetes/pgsty
+  - name: osc-common
+    version: 0.18.1
+    repository: https://osc.github.io/osc-helm-charts
