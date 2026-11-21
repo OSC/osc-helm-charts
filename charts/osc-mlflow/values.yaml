@@ -1,24 +1,41 @@
 global:
+  # @ignored
   imageRegistry: docker-registry.osc.edu
   imagePullSecret:
+    # @ignored
     name: osc-registry
     # -- OSC registry password
     # @default -- **required**
     password:
+  # @ignored
   oscServiceAccount: mlflow
+  # @ignored
   storageClass: local-ess
   ingress:
+    # -- mlflow ingress host
+    # @default -- **required**
     host: ""
+    # -- mlflow ingress host
+    # @default -- **required**
     hostAlias: ""
     silo:
+      # -- mlflow silo api ingress host
+      # @default -- **required**
       api: ""
+      # -- mlflow silo console ingress host
+      # @default -- **required**
       console: ""
+  # @ignored
   alert:
     receiver: sciapps
+  # @ignored
   security:
     allowInsecureImages: true
+  # @ignored
   nodeSelectorRole: webservices
+  # @ignored
   fileset: PZS0645
+  # @ignored
   auth:
     enable: false
     keycloakClient:
@@ -29,36 +46,55 @@ global:
           - '{{ printf "https://%s" (.Values.global.ingress.hostAlias | default .Values.global.ingress.host) }}'
   postgresql:
     auth:
+      # -- The postgresql mlflow username
       username: mlflow
+      # -- The postgresql mlflow password
       password: changeme-mlflow
+      # -- The postgres user password
       postgresPassword: changeme-postgres
+      # @ignored
       database: mlflow
   silo:
+    # -- The silo root user
     rootUser: mlflowadmin
+    # -- The silo root password
     rootPassword: changeme-silo
+    # -- The silo username for mlflow
     user: mlflow
+    # -- The silo password for mlflow
     password: changeme
+    # @ignored
     defaultBucket: "mlflow-artifacts"
   mlflow:
     auth:
+      # -- The mlflow admin username
       adminUsername: admin
+      # -- The mlflow admin password
       adminPassword: changeme-admin
       postgresql:
+        # -- The mlflow auth db username
         username: mlflow-auth
+        # -- The mlflow auth db password
         password: changeme-mlflow-auth
+        # @ignored
         database: mlflow-auth
+  # @ignored
   debugGroups:
     - sappstf
+  # @ignored
   maintenanceGroups:
     - sappstf
 
+# @ignored
 database:
   # @ignored
   oscCommon:
     enable: false
+  # @ignored
   postgresql:
     # @ignored
     enable: true
+    # @ignored
     auth:
       postgresPassword: '{{ .Values.global.postgresql.auth.postgresPassword }}'
       database: '{{ .Values.global.postgresql.database }}'
@@ -66,7 +102,6 @@ database:
       password: '{{ .Values.global.postgresql.auth.password }}'
     # @ignored
     primary:
-      # extraEnvVarsSecret: mlflow-auth-db-secret
       extraEnvVars:
         - name: MLFLOW_AUTH_DB_USERNAME
           valueFrom:
@@ -90,6 +125,7 @@ database:
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
+    # @ignored
     resources:
       limits:
         cpu: 2000m
@@ -97,12 +133,8 @@ database:
       requests:
         cpu: 1000m
         memory: 2Gi
-#    # @ignored
-#    backup:
-#      cronjob:
-#        annotations:
-#          osc.edu/fileset: '{{ .Values.global.fileset }}'
 
+# @ignored
 osc-silo:
   enable: true
   silo:
@@ -110,10 +142,14 @@ osc-silo:
 
 mlflow:
   image:
+    # -- mlflow image
     repository: docker-registry.osc.edu/kubernetes/mlflow-tracking-server
+    # -- mlflow image tag
     tag: "3.18.0-11.3.1-20261119"
+  # @ignored
   imagePullSecrets:
     - name: '{{ .Values.global.imagePullSecret.name }}'
+  # @ignored
   resources:
     requests:
       cpu: 1000m
@@ -141,25 +177,33 @@ mlflow:
     periodSeconds: 30
     timeoutSeconds: 3
     failureThreshold: 5
+  # @ignored
   commonLabels:
     receiver: '{{ index .Values.global.alert.receiver }}'
     '{{ include "osc.common.serviceAccountKey" . }}': '{{ include "osc.common.serviceAccountValue" . }}'
+  # @ignored
   nodeSelector:
     '{{ include "osc.common.nodeSelectorRoleKey" . }}': ''
   initImages:
     dbchecker:
+      # -- mlflow init image
       repository: docker-registry.osc.edu/kubernetes/busybox
+      # -- mlflow init image tag
       tag: "1.38.0"
+      # @ignored
       pullPolicy: IfNotPresent
+    # @ignored
     mlflowDbMigration:
       repository: "{{ .Values.image.repository }}"
       tag: "{{ .Values.image.tag }}"
       pullPolicy: IfNotPresent
+    # @ignored
     iniFileInitializer:
       repository: "{{ .Values.initImages.dbchecker.repository }}"
       tag: "{{ .Values.initImages.dbchecker.tag }}"
       pullPolicy: IfNotPresent
   # PostgreSQL backend store configuration
+  # @ignored
   backendStore:
     databaseMigration: true
     databaseConnectionCheck: true
@@ -172,10 +216,12 @@ mlflow:
       driver: "psycopg2"
       user: '{{ .Values.global.postgresql.auth.username }}'
       password: '{{ .Values.global.postgresql.auth.password }}'
+  # @ignored
   artifactRoot:
     proxiedArtifactStorage: true
     defaultArtifactRoot: "./mlruns"
     defaultArtifactsDestination: "s3://{{ .Values.global.silo.defaultBucket }}/"
+  # @ignored
   ingress:
     enabled: true
     className: nginx
@@ -196,6 +242,7 @@ mlflow:
         hosts:
           - '{{ .Values.global.ingress.host }}'
           - '{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}'
+  # @ignored
   extraEnvVars:
     AWS_DEFAULT_REGION: "us-east-1"
     MLFLOW_S3_ENDPOINT_URL: "http://mlflow-silo:9000"
@@ -203,9 +250,11 @@ mlflow:
     # OIDC_DISCOVERY_URL: "https://idp.osc.edu/realms/osc/.well-known/openid-configuration"
     # OIDC_SCOPE: "openid profile email groups osc-oidc-clients"
     # OIDC_GROUPS_ATTRIBUTE: "groups"
+  # @ignored
   extraSecretNamesForEnvFrom:
     - '{{ .Release.Name }}-app-secrets'
     - '{{ tpl .Values.global.auth.keycloakClient.secret.name . }}'
+  # @ignored
   extraConfigMapNamesForEnvFrom:
     - '{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}'
   # -- flask server secret key

@@ -27,16 +27,16 @@ global:
   ingress:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
-database:
   postgresql:
     auth:
       postgresPassword: <postgres root password>
       username: <username>
       password: <postgres database password>
-  redis:
-    auth:
-      password: <redis password>
-
+  silo:
+    rootUser: <root user>
+    rootPassword: <root user password>
+    user: <mlflow silo user>
+    password: <mlflow silo password>
   mlflow:
     auth:
       adminUsername: <username>
@@ -44,11 +44,6 @@ database:
       postgresql:
         username: <auth db username>
         password: <auth db password>
-
-silo:
-  auth:
-    rootUser: <silo root username>
-    rootPassword: <silo root password>
 
 mlflow:
   flaskServerSecretKey: <flask password>

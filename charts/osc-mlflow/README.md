@@ -26,16 +26,16 @@ global:
   ingress:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
-database:
   postgresql:
     auth:
       postgresPassword: <postgres root password>
       username: <username>
       password: <postgres database password>
-  redis:
-    auth:
-      password: <redis password>
-
+  silo:
+    rootUser: <root user>
+    rootPassword: <root user password>
+    user: <mlflow silo user>
+    password: <mlflow silo password>
   mlflow:
     auth:
       adminUsername: <username>
@@ -43,11 +43,6 @@ database:
       postgresql:
         username: <auth db username>
         password: <auth db password>
-
-silo:
-  auth:
-    rootUser: <silo root username>
-    rootPassword: <silo root password>
 
 mlflow:
   flaskServerSecretKey: <flask password>
@@ -66,98 +61,26 @@ mlflow:
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| global.imageRegistry | string | `"docker-registry.osc.edu"` |  |
-| global.imagePullSecret.name | string | `"osc-registry"` |  |
 | global.imagePullSecret.password | string | **required** | OSC registry password |
-| global.oscServiceAccount | string | `"mlflow"` |  |
-| global.storageClass | string | `"local-ess"` |  |
-| global.ingress.host | string | `""` |  |
-| global.ingress.hostAlias | string | `""` |  |
-| global.ingress.silo.api | string | `""` |  |
-| global.ingress.silo.console | string | `""` |  |
-| global.alert.receiver | string | `"sciapps"` |  |
-| global.security.allowInsecureImages | bool | `true` |  |
-| global.nodeSelectorRole | string | `"webservices"` |  |
-| global.fileset | string | `"PZS0645"` |  |
-| global.auth.enable | bool | `false` |  |
-| global.auth.keycloakClient.forceCreate | bool | `true` |  |
-| global.auth.keycloakClient.config.webOrigins[0] | string | `"https://{{ .Values.global.ingress.host }}"` |  |
-| global.auth.keycloakClient.config.webOrigins[1] | string | `"{{ printf \"https://%s\" (.Values.global.ingress.hostAlias | default .Values.global.ingress.host) }}"` |  |
-| global.postgresql.auth.username | string | `"mlflow"` |  |
-| global.postgresql.auth.password | string | `"changeme-mlflow"` |  |
-| global.postgresql.auth.postgresPassword | string | `"changeme-postgres"` |  |
-| global.postgresql.auth.database | string | `"mlflow"` |  |
-| global.silo.rootUser | string | `"mlflowadmin"` |  |
-| global.silo.rootPassword | string | `"changeme-silo"` |  |
-| global.silo.user | string | `"mlflow"` |  |
-| global.silo.password | string | `"changeme"` |  |
-| global.silo.defaultBucket | string | `"mlflow-artifacts"` |  |
-| global.mlflow.auth.adminUsername | string | `"admin"` |  |
-| global.mlflow.auth.adminPassword | string | `"changeme-admin"` |  |
-| global.mlflow.auth.postgresql.username | string | `"mlflow-auth"` |  |
-| global.mlflow.auth.postgresql.password | string | `"changeme-mlflow-auth"` |  |
-| global.mlflow.auth.postgresql.database | string | `"mlflow-auth"` |  |
-| global.debugGroups[0] | string | `"sappstf"` |  |
-| global.maintenanceGroups[0] | string | `"sappstf"` |  |
-| database.postgresql.auth.postgresPassword | string | `"{{ .Values.global.postgresql.auth.postgresPassword }}"` |  |
-| database.postgresql.auth.database | string | `"{{ .Values.global.postgresql.database }}"` |  |
-| database.postgresql.auth.username | string | `"{{ .Values.global.postgresql.auth.username }}"` |  |
-| database.postgresql.auth.password | string | `"{{ .Values.global.postgresql.auth.password }}"` |  |
-| database.postgresql.resources.limits.cpu | string | `"2000m"` |  |
-| database.postgresql.resources.limits.memory | string | `"4Gi"` |  |
-| database.postgresql.resources.requests.cpu | string | `"1000m"` |  |
-| database.postgresql.resources.requests.memory | string | `"2Gi"` |  |
-| osc-silo.enable | bool | `true` |  |
-| osc-silo.silo.fullnameOverride | string | `"osc-mlflow-silo"` |  |
-| mlflow.image.repository | string | `"docker-registry.osc.edu/kubernetes/mlflow-tracking-server"` |  |
-| mlflow.image.tag | string | `"3.18.0-11.3.1-20261119"` |  |
-| mlflow.imagePullSecrets[0].name | string | `"{{ .Values.global.imagePullSecret.name }}"` |  |
-| mlflow.resources.requests.cpu | string | `"1000m"` |  |
-| mlflow.resources.requests.memory | string | `"4Gi"` |  |
-| mlflow.resources.limits.cpu | string | `"4000m"` |  |
-| mlflow.resources.limits.memory | string | `"16Gi"` |  |
-| mlflow.commonLabels.receiver | string | `"{{ index .Values.global.alert.receiver }}"` |  |
-| mlflow.commonLabels."{{ include "osc.common.serviceAccountKey" . }}" | string | `"{{ include \"osc.common.serviceAccountValue\" . }}"` |  |
-| mlflow.nodeSelector."{{ include "osc.common.nodeSelectorRoleKey" . }}" | string | `""` |  |
-| mlflow.initImages.dbchecker.repository | string | `"docker-registry.osc.edu/kubernetes/busybox"` |  |
-| mlflow.initImages.dbchecker.tag | string | `"1.38.0"` |  |
-| mlflow.initImages.dbchecker.pullPolicy | string | `"IfNotPresent"` |  |
-| mlflow.initImages.mlflowDbMigration.repository | string | `"{{ .Values.image.repository }}"` |  |
-| mlflow.initImages.mlflowDbMigration.tag | string | `"{{ .Values.image.tag }}"` |  |
-| mlflow.initImages.mlflowDbMigration.pullPolicy | string | `"IfNotPresent"` |  |
-| mlflow.initImages.iniFileInitializer.repository | string | `"{{ .Values.initImages.dbchecker.repository }}"` |  |
-| mlflow.initImages.iniFileInitializer.tag | string | `"{{ .Values.initImages.dbchecker.tag }}"` |  |
-| mlflow.initImages.iniFileInitializer.pullPolicy | string | `"IfNotPresent"` |  |
-| mlflow.backendStore.databaseMigration | bool | `true` |  |
-| mlflow.backendStore.databaseConnectionCheck | bool | `true` |  |
-| mlflow.backendStore.defaultSqlitePath | string | `":memory:"` |  |
-| mlflow.backendStore.postgres.enabled | bool | `true` |  |
-| mlflow.backendStore.postgres.host | string | `"{{ .Release.Name }}-postgresql"` |  |
-| mlflow.backendStore.postgres.port | int | `5432` |  |
-| mlflow.backendStore.postgres.database | string | `"{{ .Values.global.postgresql.auth.database }}"` |  |
-| mlflow.backendStore.postgres.driver | string | `"psycopg2"` |  |
-| mlflow.backendStore.postgres.user | string | `"{{ .Values.global.postgresql.auth.username }}"` |  |
-| mlflow.backendStore.postgres.password | string | `"{{ .Values.global.postgresql.auth.password }}"` |  |
-| mlflow.artifactRoot.proxiedArtifactStorage | bool | `true` |  |
-| mlflow.artifactRoot.defaultArtifactRoot | string | `"./mlruns"` |  |
-| mlflow.artifactRoot.defaultArtifactsDestination | string | `"s3://{{ .Values.global.silo.defaultBucket }}/"` |  |
-| mlflow.ingress.enabled | bool | `true` |  |
-| mlflow.ingress.annotations."cert-manager.io/cluster-issuer" | string | `"letsencrypt"` |  |
-| mlflow.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect" | string | `"true"` |  |
-| mlflow.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size" | string | `"16k"` |  |
-| mlflow.ingress.annotations."nginx.ingress.kubernetes.io/server-alias" | string | `"{{ .Values.global.ingress.hostAlias }}"` |  |
-| mlflow.ingress.hosts[0].host | string | `"{{ .Values.global.ingress.host }}"` |  |
-| mlflow.ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| mlflow.ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
-| mlflow.ingress.tls[0].secretName | string | `"osc-mlflow-cert"` |  |
-| mlflow.ingress.tls[0].hosts[0] | string | `"{{ .Values.global.ingress.host }}"` |  |
-| mlflow.ingress.tls[0].hosts[1] | string | `"{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}"` |  |
-| mlflow.extraEnvVars.AWS_DEFAULT_REGION | string | `"us-east-1"` |  |
-| mlflow.extraEnvVars.MLFLOW_S3_ENDPOINT_URL | string | `"http://osc-mlflow-silo:9000"` |  |
-| mlflow.extraEnvVars.MLFLOW_DEFAULT_ARTIFACT_ROOT | string | `"s3://{{ .Values.global.silo.defaultBucket }}/"` |  |
-| mlflow.extraSecretNamesForEnvFrom[0] | string | `"{{ .Release.Name }}-app-secrets"` |  |
-| mlflow.extraSecretNamesForEnvFrom[1] | string | `"{{ tpl .Values.global.auth.keycloakClient.secret.name . }}"` |  |
-| mlflow.extraConfigMapNamesForEnvFrom[0] | string | `"{{ tpl .Values.global.auth.keycloakClient.configMap.name . }}"` |  |
+| global.ingress.host | string | **required** | mlflow ingress host |
+| global.ingress.hostAlias | string | **required** | mlflow ingress host |
+| global.ingress.silo.api | string | **required** | mlflow silo api ingress host |
+| global.ingress.silo.console | string | **required** | mlflow silo console ingress host |
+| global.postgresql.auth.username | string | `"mlflow"` | The postgresql mlflow username |
+| global.postgresql.auth.password | string | `"changeme-mlflow"` | The postgresql mlflow password |
+| global.postgresql.auth.postgresPassword | string | `"changeme-postgres"` | The postgres user password |
+| global.silo.rootUser | string | `"mlflowadmin"` | The silo root user |
+| global.silo.rootPassword | string | `"changeme-silo"` | The silo root password |
+| global.silo.user | string | `"mlflow"` | The silo username for mlflow |
+| global.silo.password | string | `"changeme"` | The silo password for mlflow |
+| global.mlflow.auth.adminUsername | string | `"admin"` | The mlflow admin username |
+| global.mlflow.auth.adminPassword | string | `"changeme-admin"` | The mlflow admin password |
+| global.mlflow.auth.postgresql.username | string | `"mlflow-auth"` | The mlflow auth db username |
+| global.mlflow.auth.postgresql.password | string | `"changeme-mlflow-auth"` | The mlflow auth db password |
+| mlflow.image.repository | string | `"docker-registry.osc.edu/kubernetes/mlflow-tracking-server"` | mlflow image |
+| mlflow.image.tag | string | `"3.18.0-11.3.1-20261119"` | mlflow image tag |
+| mlflow.initImages.dbchecker.repository | string | `"docker-registry.osc.edu/kubernetes/busybox"` | mlflow init image |
+| mlflow.initImages.dbchecker.tag | string | `"1.38.0"` | mlflow init image tag |
 | mlflow.flaskServerSecretKey | string | **required** | flask server secret key |
 
 ----------------------------------------------
