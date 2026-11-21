@@ -51,8 +51,8 @@ osc-silo:
 mlflow:
   resources:
     limits:
-      cpu: 2000m
-      memory: 2Gi
+      cpu: 4000m
+      memory: 4Gi
     requests:
       cpu: 500m
       memory: 512Mi
@@ -63,3 +63,7 @@ mlflow:
     requests:
       cpu: 100m
       memory: 64Mi
+  livenessProbe:
+    initialDelaySeconds: 60
+  readinessProbe:
+    initialDelaySeconds: 60
