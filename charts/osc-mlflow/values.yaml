@@ -139,6 +139,12 @@ osc-silo:
   enable: true
   silo:
     fullnameOverride: mlflow-silo
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7,192.148.247.0/24,192.148.248.0/24,10.0.0.0/8'
+    consoleIngress:
+      annotations:
+        nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7,192.148.247.0/24,192.148.248.0/24,10.0.0.0/8'
 
 mlflow:
   image:
@@ -232,6 +238,7 @@ mlflow:
       nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.hostAlias }}'
       prometheus.io/probe_module: http-healthz
       prometheus.io/probe_path: /health
+      nginx.ingress.kubernetes.io/whitelist-source-range: '131.187.45.7,192.148.247.0/24,192.148.248.0/24,10.0.0.0/8'
     hosts:
       - host: '{{ .Values.global.ingress.host }}'
         paths:
@@ -260,9 +267,10 @@ mlflow:
   # -- flask server secret key
   # @default -- **required**
   flaskServerSecretKey: changeme
-  # @ignored
   oidcAuth:
+    # @ignored
     enabled: true
+    # @ignored
     existingSecret:
       name: '{{ (tpl .Values.global.auth.keycloakClient.secret.name .) }}'
       clientSecretKey: OIDC_CLIENT_SECRET
@@ -271,13 +279,21 @@ mlflow:
     # extraConfigMapNamesForEnvFrom:
     #  - '{{ .Values.global.auth.keycloakClient.configMap.name }}'
     # discoveryUrl: https://idp.osc.edu/realms/osc/.well-known/openid-configuration
+    # -- mlflow redirect URI.  Set to `https://{{ .Values.global.ingress.host }}/callback` to avoid hostAlias
+    # @default -- global.ingress.hostAlias or global.ingress.host
+    redirectUri: "https://{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}/callback"
+    # @ignored
     scope: "openid profile email groups osc-oidc-clients"
+    # @ignored
     providerDisplayName: "Login to OSC"
+    # @ignored
     groupName:
       - oscall
+    # @ignored
     adminGroupName:
       - sysstf
       - sappstf
+    # @ignored
     database:
       postgres:
         enabled: true
@@ -290,6 +306,10 @@ mlflow:
 # @ignored
 osc-common:
   keycloakClient:
+    useGlobal: false
+    redirectUris:
+      - 'https://{{ .Values.global.ingress.host }}/callback'
+      - 'https://{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}/callback'
     secret:
       envVarKeys: true
       keyPrefix: OIDC_
