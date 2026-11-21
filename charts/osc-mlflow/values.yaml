@@ -106,7 +106,7 @@ database:
 osc-silo:
   enable: true
   silo:
-    fullnameOverride: osc-mlflow-silo
+    fullnameOverride: mlflow-silo
 
 mlflow:
   image:
@@ -131,7 +131,7 @@ mlflow:
       memory: 128Mi
   # @ignored
   livenessProbe:
-    initialDelaySeconds: 30
+    initialDelaySeconds: 60
     periodSeconds: 30
     timeoutSeconds: 5
     failureThreshold: 5
@@ -178,11 +178,14 @@ mlflow:
     defaultArtifactsDestination: "s3://{{ .Values.global.silo.defaultBucket }}/"
   ingress:
     enabled: true
+    className: nginx
     annotations:
       cert-manager.io/cluster-issuer: "letsencrypt"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
       nginx.ingress.kubernetes.io/server-alias: '{{ .Values.global.ingress.hostAlias }}'
+      prometheus.io/probe_module: http-healthz
+      prometheus.io/probe_path: /health
     hosts:
       - host: '{{ .Values.global.ingress.host }}'
         paths:
@@ -195,7 +198,7 @@ mlflow:
           - '{{ .Values.global.ingress.hostAlias | default .Values.global.ingress.host }}'
   extraEnvVars:
     AWS_DEFAULT_REGION: "us-east-1"
-    MLFLOW_S3_ENDPOINT_URL: "http://osc-mlflow-silo:9000"
+    MLFLOW_S3_ENDPOINT_URL: "http://mlflow-silo:9000"
     MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://{{ .Values.global.silo.defaultBucket }}/"
     # OIDC_DISCOVERY_URL: "https://idp.osc.edu/realms/osc/.well-known/openid-configuration"
     # OIDC_SCOPE: "openid profile email groups osc-oidc-clients"
