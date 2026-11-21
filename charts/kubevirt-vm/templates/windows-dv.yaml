@@ -1,0 +1,26 @@
+{{- range $name, $vm := .Values.vms }}
+{{- if eq $vm.os "windows11" }}
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "kubevirt-vm.labels" $ | nindent 4 }}
+    {{- include "kubevirt-vm.vm.labels" (dict "root" $ "name" $name "vm" $vm) | nindent 4 }}
+spec:
+  source:
+    pvc:
+      name: {{ $.Values.windows11.base.name }}
+      namespace: {{ $.Values.windows11.base.namespace }}
+  storage:
+    accessModes:
+    - ReadWriteMany
+    volumeMode: Filesystem
+    resources:
+      requests:
+        storage: {{ $vm.storageRequest | default $.Values.vm.defaults.storageRequest }}
+    storageClassName: {{ $.Values.global.storageClassName }}
+{{- end }}
+{{- end }}
