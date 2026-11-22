@@ -188,6 +188,10 @@ jobs:
       - name: Run chart-testing (install)
         run: |
           ct install --debug --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }} --skip-clean-up
+      - name: Debug silo
+        if: failure() && matrix.chart == 'osc-silo'
+        run: |
+          kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 --all-containers=true
       - name: Debug failure
         if: failure()
         run: |
