@@ -10,16 +10,6 @@ global:
   storageClass: standard
   silo:
     defaultBucket: test
-    policies:
-      - name: testing-admin
-        statements:
-          - effect: Allow
-            actions:
-              - 's3:*'
-            resources:
-              - 'arn:aws:s3:::*'
-            conditions:
-              - ForAnyValue:StringEquals: '"jwt:groups": "admin"'
 osc-common:
   imagePullSecret:
     create: true
@@ -27,7 +17,7 @@ silo:
   resources:
     limits:
       cpu: 1
-      memory: 128Mi
+      memory: 512Mi
     requests:
       cpu: 250m
       memory: 64Mi
