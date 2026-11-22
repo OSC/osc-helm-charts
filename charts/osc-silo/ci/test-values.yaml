@@ -24,3 +24,4 @@ silo:
   persistence:
     accessMode: ReadWriteOnce
     size: 50Mi
+  policies: []
