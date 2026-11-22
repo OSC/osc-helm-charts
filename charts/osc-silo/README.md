@@ -61,9 +61,10 @@ global:
 | global.silo.password | string | `"changeme"` | The silo readwrite password |
 | global.silo.defaultBucket | string | `"{{ .Release.Name }}"` | Default bucket to create |
 | global.silo.defaultBucketPolicy | string | `"none"` | Default bucket policy |
+| global.silo.adminGroups | list | `["sysstf"]` | Admin groups for silo |
+| global.silo.policies | list | `[]` | Additional silo policies |
 | silo.image.tag | string | `"RELEASE.2026-11-12T00-00-00Z"` | silo image tag |
 | silo.mcImage.tag | string | Same as silo.image.tag | silo mc image tag |
-| silo.policies | list | `[]` | Silo policies |
 | silo.users | list | Create a single readwrite user | Additional users |
 | silo.svcaccts | list | `[]` | Additional service accounts |
 | silo.buckets | list | Single bucket based on global.silo.defaultBucket | Buckets to create |

@@ -52,7 +52,11 @@ global:
     defaultBucket: '{{ .Release.Name }}'
     # -- Default bucket policy
     defaultBucketPolicy: none
-
+    # -- Admin groups for silo
+    adminGroups:
+      - sysstf
+    # -- Additional silo policies
+    policies: []
 silo:
   # @ignored
   fullnameOverride: silo
@@ -158,8 +162,28 @@ silo:
     requests:
       cpu: 1
       memory: 512Mi
-  # -- Silo policies
-  policies: []
+  # @ignored
+  policies: |-
+    {{- range .Values.global.silo.adminGroups }}
+    - name: {{ . }}
+      statements:
+        - effect: Allow
+          actions:
+            - 'admin:*'
+        - effect: Allow
+          actions:
+            - 'kms:*'
+        - effect: Allow
+          actions:
+            - 's3:*'
+          resources:
+            - 'arn:aws:s3:::*'
+          #conditions:
+          #  - ForAnyValue:StringEquals: '"jwt:groups": "{{ . }}"'
+    {{- end }}
+    {{- with .Values.global.silo.policies }}
+    {{ tpl (toYaml .) $ }}
+    {{- end }}
   # -- Additional users
   # @default -- Create a single readwrite user
   users:

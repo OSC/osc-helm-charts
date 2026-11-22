@@ -10,6 +10,16 @@ global:
   storageClass: standard
   silo:
     defaultBucket: test
+    policies:
+      - name: test
+        statements:
+          - effect: Allow
+            actions:
+              - 's3:*'
+            resources:
+              - 'arn:aws:s3:::*'
+            conditions:
+              - ForAnyValue:StringEquals: '"jwt:groups": "test"'
 osc-common:
   imagePullSecret:
     create: true
