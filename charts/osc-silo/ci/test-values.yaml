@@ -11,7 +11,7 @@ global:
   silo:
     defaultBucket: test
     policies:
-      - name: test
+      - name: testing-admin
         statements:
           - effect: Allow
             actions:
@@ -19,7 +19,7 @@ global:
             resources:
               - 'arn:aws:s3:::*'
             conditions:
-              - ForAnyValue:StringEquals: '"jwt:groups": "test"'
+              - ForAnyValue:StringEquals: '"jwt:groups": "admin"'
 osc-common:
   imagePullSecret:
     create: true

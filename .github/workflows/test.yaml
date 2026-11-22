@@ -187,7 +187,7 @@ jobs:
           kubectl label namespace ${{ matrix.chart }} osc.edu/role=webservice
       - name: Run chart-testing (install)
         run: |
-          ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }}
+          ct install --debug --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }} --skip-clean-up
       - name: Debug failure
         if: failure()
         run: |
