@@ -191,7 +191,10 @@ jobs:
       - name: Debug silo
         if: failure() && matrix.chart == 'osc-silo'
         run: |
+          kubectl describe job -n osc-silo silo-post-job
           kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 -c silo-make-policy
+          kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 -c silo-make-bucket
+          kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 -c silo-make-user
       - name: Debug failure
         if: failure()
         run: |
