@@ -74,9 +74,8 @@ secrets:
 | Repository | Name | Version |
 |------------|------|---------|
 | https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.10 |
-| https://osc.github.io/osc-helm-charts | database | 0.21.1 |
-| https://osc.github.io/osc-helm-charts | osc-common | 0.16.1 |
-| https://osc.github.io/osc-helm-charts | osc-minio | 0.1.4 |
+| https://osc.github.io/osc-helm-charts | database | 0.21.3 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.18.0 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
 | oci://docker-registry.osc.edu/kubernetes/vllm | vllm-stack | 0.1.11-osc-r1 |
 | oci://docker-registry.osc.edu/webservices | osc-silo | 0.1.0-rc0 |
@@ -107,6 +106,8 @@ secrets:
 | global.ingress.silo.console | string | `""` | Silo console host |
 | global.silo.rootUser | string | `"minioadmin"` | The Silo root user |
 | global.silo.rootPassword | string | `"minioadmin"` | The Silo root password |
+| global.silo.user | string | `"osc-chat"` | The silo user |
+| global.silo.password | string | `"changeme"` | The silo password |
 | global.networkPolicy.ingressAllowedPods[0]."app.kubernetes.io/name" | string | `"osc-mcp"` |  |
 | database.postgresql.auth.postgresPassword | string | `"secret"` |  |
 | database.postgresql.auth.database | string | `"name"` |  |

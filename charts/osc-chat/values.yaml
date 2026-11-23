@@ -57,6 +57,16 @@ global:
     rootUser: "minioadmin"
     # -- The Silo root password
     rootPassword: "minioadmin"
+    # -- The silo user
+    user: osc-chat
+    # -- The silo password
+    password: changeme
+    # @ignored
+    defaultBucket: osc-chat
+    # @ignored
+    adminGroups:
+      - sysstf
+      - sappstf
   networkPolicy:
     ingressAllowedPods:
       - app.kubernetes.io/name: "osc-mcp"
@@ -81,11 +91,6 @@ database:
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
-      # @ignored
-      initdb:
-        scripts:
-          extra-grants.sql: |
-            GRANT EXECUTE ON FUNCTION pg_ls_waldir() TO {{ .Values.auth.username }};
     # @ignored
     backup:
       cronjob:
@@ -107,12 +112,6 @@ osc-silo:
   silo:
     # Keep same names as before the dedicated chart and silo migration
     fullnameOverride: osc-chat-minio
-    buckets:
-    - name: osc-chat
-      policy: none
-      purge: false
-      versioning: false
-      objectlocking: false
     persistence:
       # Kept to avoid attempts to change misconfigured previous PVC before shared chart
       accessMode: ReadWriteOnce
@@ -252,7 +251,7 @@ worker:
   # @ignored
   env:
     QDRANT_COLLECTION_NAME: '{{ include "osc-chat.name" . }}'
-    S3_BUCKET_NAME: 'osc-chat'
+    S3_BUCKET_NAME: '{{ .Values.global.silo.defaultBucket }}'
   resources:
     limits:
       cpu: 4
