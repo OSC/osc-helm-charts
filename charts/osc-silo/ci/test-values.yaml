@@ -4,8 +4,9 @@ global:
     create: true
     password: IMAGE-PULL-PASSWORD
   ingress:
+    host: test-api.example.com
     silo:
-      api: test-api.example.com
+      api: '{{ .Values.global.ingress.host }}'
       console: test-silo-console.example.com
   storageClass: standard
   silo:

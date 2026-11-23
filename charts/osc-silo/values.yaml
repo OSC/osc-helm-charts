@@ -117,11 +117,11 @@ silo:
       prometheus.io/probe_path: /minio/health/live
       prometheus.io/probe_scheme: https
     hosts:
-      - '{{ required "ingress api host required at global.ingress.silo.api" .Values.global.ingress.silo.api }}'
+      - '{{ required "ingress api host required at global.ingress.silo.api" (tpl .Values.global.ingress.silo.api .) }}'
     tls:
       - secretName: '{{ include "silo.fullname" . }}-tls'
         hosts:
-          - '{{ .Values.global.ingress.silo.api }}'
+          - '{{ (tpl .Values.global.ingress.silo.api .) }}'
     path: /
   # @ignored
   consoleIngress:
@@ -135,7 +135,7 @@ silo:
       # prometheus.io/probe_path: /minio/health/live
       prometheus.io/probe_scheme: https
     hosts:
-      - '{{ required "ingress api host required at global.ingress.silo.api" .Values.global.ingress.silo.console }}'
+      - '{{ required "ingress api host required at global.ingress.silo.console" .Values.global.ingress.silo.console }}'
     tls:
       - secretName: '{{ include "silo.fullname" . }}-console-tls'
         hosts:
@@ -325,11 +325,11 @@ osc-common:
     configMap:
       name: silo-auth-config
     redirectUris:
-      - https://{{ .Values.global.ingress.silo.api }}/*
+      - https://{{ (tpl .Values.global.ingress.silo.api .) }}/*
       - https://{{ .Values.global.ingress.silo.console }}/*
     config:
       webOrigins:
-        - https://{{ .Values.global.ingress.silo.api }}
+        - https://{{ (tpl .Values.global.ingress.silo.api .) }}
         - https://{{ .Values.global.ingress.silo.console }}
   rbac:
     create: false
