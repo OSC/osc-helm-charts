@@ -52,7 +52,7 @@ mlflow:
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://osc.github.io/osc-helm-charts | database | 0.21.2 |
+| https://osc.github.io/osc-helm-charts | database | 0.21.3 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.18.1 |
 | oci://docker-registry.osc.edu/kubernetes | mlflow | 1.11.8-osc-r0 |
 | oci://docker-registry.osc.edu/webservices | osc-silo | 0.1.0-rc0 |
