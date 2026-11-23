@@ -442,6 +442,7 @@ postgresql:
       scripts:
         metrics.sql: |
           GRANT pg_monitor TO {{ include "postgresql.v1.username" . }};
+          GRANT EXECUTE ON FUNCTION pg_ls_waldir() TO {{ include "postgresql.v1.username" . }};
     # @ignored
     networkPolicy:
       enabled: true
