@@ -187,15 +187,7 @@ jobs:
           kubectl label namespace ${{ matrix.chart }} osc.edu/role=webservice
       - name: Run chart-testing (install)
         run: |
-          ct install --debug --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }} --skip-clean-up
-      - name: Debug silo
-        if: failure() && matrix.chart == 'osc-silo'
-        run: |
-          kubectl describe job -n osc-silo silo-post-job
-          kubectl logs -n osc-silo -l app=silo --tail=200
-          kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 -c silo-make-policy
-          kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 -c silo-make-bucket
-          kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 -c silo-make-user
+          ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }}
       - name: Debug failure
         if: failure()
         run: |
