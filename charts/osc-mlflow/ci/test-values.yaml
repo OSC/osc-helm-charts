@@ -23,13 +23,13 @@ database:
           memory: 256Mi
     backup:
       cronjob:
-        schedule: '* * * * *'
+        schedule: '*/5 * * * *'
         resources:
           limits:
             cpu: 500m
             memory: 512Mi
           requests:
-            cpu: 200m
+            cpu: 100m
             memory: 128Mi
         storage:
           accessModes:
@@ -44,12 +44,41 @@ osc-silo:
       requests:
         cpu: 250m
         memory: 64Mi
+    makePolicyJob:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 32Mi
+    makeUserJob:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 32Mi
+    makeServiceAccountJob:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 32Mi
+    makeBucketJob:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 32Mi
     persistence:
       accessMode: ReadWriteOnce
       size: 50Mi
-    # Adding policies during CI/CD and 'ct install' causes errors for the other post-install
-    # init containers, so just omit during CI/CD
-    policies: []
 
 mlflow:
   resources:
@@ -66,7 +95,5 @@ mlflow:
     requests:
       cpu: 100m
       memory: 64Mi
-  livenessProbe:
-    initialDelaySeconds: 60
-  readinessProbe:
+  startupProbe:
     initialDelaySeconds: 60
