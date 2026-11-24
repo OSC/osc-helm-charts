@@ -38,6 +38,21 @@ global:
     user: appuser
     password: apppassword
     defaultBucket: app
+    defaultBucketPolicy: none
+    adminGroups:
+      - sysstf
+    # Admin policies added based on `adminGroups`.
+    # These policies are merged with admin policies
+    policies:
+      - name: example-admin
+        statements:
+          - effect: Allow
+            actions:
+              - 's3:*'
+            resources:
+              - 'arn:aws:s3:::*'
+            conditions:
+              - ForAnyValue:StringEquals: '"jwt:groups": "admin"'
   storageClass: <OSC storage class>
   fileset: <project if using GPFS>
 ```
