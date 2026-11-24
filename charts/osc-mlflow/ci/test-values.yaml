@@ -48,7 +48,7 @@ osc-silo:
       resources:
         limits:
           cpu: 500m
-          memory: 64Mi
+          memory: 128Mi
         requests:
           cpu: 100m
           memory: 32Mi
@@ -56,7 +56,7 @@ osc-silo:
       resources:
         limits:
           cpu: 500m
-          memory: 64Mi
+          memory: 128Mi
         requests:
           cpu: 100m
           memory: 32Mi
@@ -64,7 +64,7 @@ osc-silo:
       resources:
         limits:
           cpu: 500m
-          memory: 64Mi
+          memory: 128Mi
         requests:
           cpu: 100m
           memory: 32Mi
@@ -72,7 +72,7 @@ osc-silo:
       resources:
         limits:
           cpu: 500m
-          memory: 64Mi
+          memory: 128Mi
         requests:
           cpu: 100m
           memory: 32Mi

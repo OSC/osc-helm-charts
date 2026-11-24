@@ -22,6 +22,38 @@ silo:
     requests:
       cpu: 250m
       memory: 64Mi
+  makePolicyJob:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 32Mi
+  makeUserJob:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 32Mi
+  makeServiceAccountJob:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 32Mi
+  makeBucketJob:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 32Mi
   persistence:
     accessMode: ReadWriteOnce
     size: 50Mi

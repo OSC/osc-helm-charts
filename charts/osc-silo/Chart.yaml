@@ -2,7 +2,7 @@ apiVersion: v2
 name: osc-silo
 description: A Helm chart for silo
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "RELEASE.2026-11-12T00-00-00Z"
 maintainers:
   - name: treydock
