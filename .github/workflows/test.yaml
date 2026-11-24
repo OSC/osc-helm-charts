@@ -61,6 +61,7 @@ jobs:
           - osc-open-webui
           - cryosparc
           - regression-logging
+          - osc-mlflow
           - osc-minio
           - osc-silo
     name: Test Helm Chart ${{ matrix.chart }}

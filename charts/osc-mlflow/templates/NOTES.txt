@@ -1,0 +1,39 @@
+1. Get the MLFlow application URL:
+
+   {{- if .Values.mlflow.ingress.enabled }}
+   http{{ if .Values.global.ingress.host }}s{{ end }}://{{ .Values.global.ingress.host | default "chart-example.local" }}
+
+   {{- else }}
+   Export the environment variables and port-forward:
+   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "osc-mlflow.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 5000:5000
+   Visit http://127.0.0.1:5000
+   {{- end }}
+
+2. Access the MLFlow UI:
+   - MLFlow UI: https://{{ .Values.global.ingress.host }}
+   - MinIO Console: Available internally for artifact storage
+
+3. Important Notes:
+   - PostgreSQL database is configured for MLFlow metadata storage
+   - MinIO is configured for artifact storage (models, experiments, etc.)
+   - MLFlow's built-in basic auth is enabled for API access
+   - Default bucket 'mlflow-artifacts' is created in MinIO
+
+4. Useful Commands:
+   # Check pod status
+   kubectl get pods -l "app.kubernetes.io/instance={{ .Release.Name }}"
+
+   # View logs
+   kubectl logs -l "app.kubernetes.io/instance={{ .Release.Name }}"
+
+   # Port-forward MLFlow server
+   kubectl port-forward svc/{{ include "osc-mlflow.fullname" . }} 5000:5000 -n {{ .Release.Namespace }}
+
+   # Port-forward MinIO console
+   kubectl port-forward svc/{{ include "osc-mlflow.fullname" . }}-minio 9001:9001 -n {{ .Release.Namespace }}
+
+5. Next Steps:
+   - Update the passwords in values.yaml before deploying to production
+   - Configure your MLFlow client to connect to the URL shown above
+   - Set up backup strategies for PostgreSQL and MinIO data
