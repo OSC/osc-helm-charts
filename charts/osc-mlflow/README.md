@@ -26,6 +26,9 @@ global:
   ingress:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
+    silo:
+      api: <silo API host>
+      console: <silo console host>
   postgresql:
     auth:
       postgresPassword: <postgres root password>
@@ -54,8 +57,8 @@ mlflow:
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts | database | 0.21.3 |
 | https://osc.github.io/osc-helm-charts | osc-common | 0.18.1 |
+| https://osc.github.io/osc-helm-charts | osc-silo | 0.1.0 |
 | oci://docker-registry.osc.edu/kubernetes | mlflow | 1.11.8-osc-r0 |
-| oci://docker-registry.osc.edu/webservices | osc-silo | 0.1.0-rc0 |
 
 ## Values
 
