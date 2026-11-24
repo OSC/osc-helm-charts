@@ -50,6 +50,8 @@ global:
   portforwardGroups: []
   # -- Service accounts that can do port forwarding. Element keys are `name` and `namespace`.
   portforwardServiceAccounts: []
+  # -- Groups that can view all resources, including Secrets
+  viewGroups: []
   webservicesDeploy:
     # -- Create webservices deployment rolebinding
     create: true
