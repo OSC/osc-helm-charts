@@ -57,6 +57,3 @@ silo:
   persistence:
     accessMode: ReadWriteOnce
     size: 50Mi
-  # Adding policies during CI/CD and 'ct install' causes errors for the other post-install
-  # init containers, so just omit during CI/CD
-  policies: []
