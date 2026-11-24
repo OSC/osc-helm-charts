@@ -257,10 +257,6 @@ mlflow:
   extraEnvVars:
     AWS_DEFAULT_REGION: "us-east-1"
     MLFLOW_S3_ENDPOINT_URL: "http://mlflow-silo:9000"
-    MLFLOW_DEFAULT_ARTIFACT_ROOT: "s3://{{ .Values.global.silo.defaultBucket }}/"
-    # OIDC_DISCOVERY_URL: "https://idp.osc.edu/realms/osc/.well-known/openid-configuration"
-    # OIDC_SCOPE: "openid profile email groups osc-oidc-clients"
-    # OIDC_GROUPS_ATTRIBUTE: "groups"
   # @ignored
   extraSecretNamesForEnvFrom:
     - '{{ .Release.Name }}-app-secrets'
