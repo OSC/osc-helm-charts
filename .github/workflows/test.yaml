@@ -199,6 +199,8 @@ jobs:
         run: |
           kubectl describe job -n osc-mlflow mlflow-silo-post-job
           kubectl describe pod -n osc-mlflow -l batch.kubernetes.io/job-name=mlflow-silo-post-job
+          kubectl describe service -n osc-mlflow
+          kubectl get networkpolicy -n osc-mlflow -o yaml
           kubectl logs -n osc-mlflow -l app=silo --tail=200
           kubectl logs -n osc-mlflow -l batch.kubernetes.io/job-name=mlflow-silo-post-job --tail=100 -c silo-make-bucket
           kubectl logs -n osc-mlflow -l batch.kubernetes.io/job-name=mlflow-silo-post-job --tail=100 -c silo-make-user
@@ -207,6 +209,8 @@ jobs:
         run: |
           kubectl describe job -n osc-silo silo-post-job
           kubectl describe pod -n osc-silo
+          kubectl describe service -n osc-silo
+          kubectl get networkpolicy -n osc-silo -o yaml
           kubectl logs -n osc-silo -l app=silo --tail=200
           kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 -c silo-make-bucket
           kubectl logs -n osc-silo -l batch.kubernetes.io/job-name=silo-post-job --tail=100 -c silo-make-user

@@ -15,7 +15,7 @@ A Helm chart for silo
 | Repository | Name | Version |
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts | osc-common | 0.18.1 |
-| oci://docker-registry.osc.edu/kubernetes/pgsty | silo | 7.0.5-osc-r0 |
+| oci://docker-registry.osc.edu/kubernetes/pgsty | silo | 7.0.5-osc-r1 |
 
 ## Usage
 

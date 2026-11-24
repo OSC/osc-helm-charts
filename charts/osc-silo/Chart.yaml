@@ -11,9 +11,9 @@ dependencies:
     # version: 7.0.5
     # Use OCI until merged and tagged
     # https://github.com/pgsty/silo/pull/351
-    #  helm package helm/silo --version 7.0.5-osc-r0
-    #  helm push silo-7.0.5-osc-r0.tgz oci://docker-registry.osc.edu/kubernetes/pgsty
-    version: 7.0.5-osc-r0
+    #  helm package helm/silo --version 7.0.5-osc-r1
+    #  helm push silo-7.0.5-osc-r1.tgz oci://docker-registry.osc.edu/kubernetes/pgsty
+    version: 7.0.5-osc-r1
     repository: oci://docker-registry.osc.edu/kubernetes/pgsty
   - name: osc-common
     version: 0.18.1
