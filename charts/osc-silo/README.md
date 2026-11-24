@@ -1,6 +1,6 @@
 # osc-silo
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: RELEASE.2026-11-12T00-00-00Z](https://img.shields.io/badge/AppVersion-RELEASE.2026--11--12T00--00--00Z-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: RELEASE.2026-11-12T00-00-00Z](https://img.shields.io/badge/AppVersion-RELEASE.2026--11--12T00--00--00Z-informational?style=flat-square)
 
 A Helm chart for silo
 
@@ -15,7 +15,7 @@ A Helm chart for silo
 | Repository | Name | Version |
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts | osc-common | 0.18.1 |
-| oci://docker-registry.osc.edu/kubernetes/pgsty | silo | 7.0.5-osc-r0 |
+| oci://docker-registry.osc.edu/kubernetes/pgsty | silo | 7.0.5-osc-r1 |
 
 ## Usage
 
