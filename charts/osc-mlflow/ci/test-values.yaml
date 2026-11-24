@@ -23,13 +23,13 @@ database:
           memory: 256Mi
     backup:
       cronjob:
-        schedule: '* * * * *'
+        schedule: '*/5 * * * *'
         resources:
           limits:
             cpu: 500m
             memory: 512Mi
           requests:
-            cpu: 200m
+            cpu: 100m
             memory: 128Mi
         storage:
           accessModes:

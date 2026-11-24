@@ -187,8 +187,21 @@ jobs:
         run: |
           kubectl label namespace ${{ matrix.chart }} osc.edu/role=webservice
       - name: Run chart-testing (install)
+        if: matrix.chart != 'osc-mlflow'
         run: |
           ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }}
+      - name: Run chart-testing (install)
+        if: matrix.chart == 'osc-mlflow'
+        run: |
+          ct install --config .github/config/cf.yaml --charts charts/${{ matrix.chart }} --namespace ${{ matrix.chart }} --skip-clean-up
+      - name: Debug silo
+        if: failure() && matrix.chart == 'osc-mlflow'
+        run: |
+          kubectl describe job -n osc-mlflow mlflow-silo-post-job
+          kubectl logs -n osc-mlflow -l app=silo --tail=200
+          kubectl logs -n osc-mlflow -l batch.kubernetes.io/job-name=mlflow-silo-post-job --tail=100 -c silo-make-policy
+          kubectl logs -n osc-mlflow -l batch.kubernetes.io/job-name=mlflow-silo-post-job --tail=100 -c silo-make-bucket
+          kubectl logs -n osc-mlflow -l batch.kubernetes.io/job-name=mlflow-silo-post-job --tail=100 -c silo-make-user
       - name: Debug failure
         if: failure()
         run: |
