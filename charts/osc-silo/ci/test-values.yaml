@@ -1,0 +1,30 @@
+global:
+  oscServiceAccount: nobody
+  imagePullSecret:
+    create: true
+    password: IMAGE-PULL-PASSWORD
+  ingress:
+    host: test-api.example.com
+    silo:
+      api: '{{ .Values.global.ingress.host }}'
+      console: test-silo-console.example.com
+  storageClass: standard
+  silo:
+    defaultBucket: test
+osc-common:
+  imagePullSecret:
+    create: true
+silo:
+  resources:
+    limits:
+      cpu: 1
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 64Mi
+  persistence:
+    accessMode: ReadWriteOnce
+    size: 50Mi
+  # Adding policies during CI/CD and 'ct install' causes errors for the other post-install
+  # init containers, so just omit during CI/CD
+  policies: []
