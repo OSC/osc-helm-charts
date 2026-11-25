@@ -44,6 +44,16 @@ global:
         webOrigins:
           - https://{{ .Values.global.ingress.host }}
           - '{{ printf "https://%s" (.Values.global.ingress.hostAlias | default .Values.global.ingress.host) }}'
+  # @ignored
+  networkPolicy:
+    allowFrom:
+      - podSelector: {}
+      - namespaceSelector:
+          matchLabels:
+            osc.edu/access-mlflow: 'true'
+      - namespaceSelector:
+          matchLabels:
+            app.kubernetes.io/name: 'paas-staff'
   postgresql:
     auth:
       # -- The postgresql mlflow username
