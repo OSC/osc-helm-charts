@@ -6,7 +6,8 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
+  packages: write
 
 jobs:
   release:
@@ -21,19 +22,29 @@ jobs:
         uses: azure/setup-helm@v4
         with:
           version: v4.1.1
+      - name: Log in to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io \
+            --username ${{ github.actor }} \
+            --password-stdin
       - name: Helm login
         run: |
           echo -n '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}' | helm registry login docker-registry.osc.edu -u '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}' --password-stdin
       - name: Publish Helm charts
-        # TODO: Move this logic into this file maybe using
-        # https://github.com/helm/chart-releaser-action/issues/168#issuecomment-2015204236
-        uses: treydock/helm-gh-pages@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          login_registry: 'on'
-          registry_host: docker-registry.osc.edu
-          registry_username: '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_USERNAME }}'
-          registry_password: '${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_TOKEN }}'
+        run: |
+          for chart in $(find charts -maxdepth 1 -mindepth 1 -type d); do
+            name=$(basename $chart)
+            version=$(helm show chart $chart | grep "^version:" | awk '{ print $2 }')
+            released_version=$(helm show chart oci://ghcr.io/${{ github.repository_owner }}/charts/${name} 2>&1 | grep "^version:" | awk '{ print $2 }')
+            if [ "$version" == "$released_version" ]; then
+              echo "Chart ${name} already pushed, skipping"
+              continue
+            fi
+            helm package $chart -u
+            package=${name}-${version}.tgz
+            helm push $package oci://ghcr.io/${{ github.repository_owner }}/charts
+          done
+
       - name: Publish private Helm charts
         run: |
           for chart in $(find charts-private -maxdepth 1 -mindepth 1 -type d); do
