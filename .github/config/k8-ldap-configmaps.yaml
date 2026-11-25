@@ -11,7 +11,6 @@ metadata:
 data:
   user-immunegenetics: "41773"
   user-k8spublic: "38635"
-  user-nominatim: "39237"
   user-phylogatrdev: "33253"
   user-test: "1000"
   user-webmo: "42113"
@@ -30,7 +29,6 @@ metadata:
 data:
   user-immunegenetics: "4215"
   user-k8spublic: "4097"
-  user-nominatim: "4097"
   user-phylogatrdev: "6314"
   user-test: "1001"
   user-webmo: "3608"
@@ -49,7 +47,6 @@ metadata:
 data:
   user-immunegenetics: '["4215"]'
   user-k8spublic: '["4097"]'
-  user-nominatim: '["4097"]'
   user-phylogatrdev: '["6314","6557","6558"]'
   user-test: '["1001","1002"]'
   user-webmo: '["3608","3427"]'

@@ -18,8 +18,6 @@ jobs:
           - dcgm-exporter
           - mariadb
           - postgresql
-          - nominatim
-          - postgresql-nominatim
           - cryosparc
           - vllm-runtime
           - open-webui
