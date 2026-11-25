@@ -103,6 +103,9 @@ global:
     - sappstf
 
 # @ignored
+clusterDomain: cluster.local
+
+# @ignored
 database:
   # @ignored
   oscCommon:
