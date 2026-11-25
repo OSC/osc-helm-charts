@@ -82,3 +82,10 @@ metadata:
   name: wlebmodel
   labels:
     osc.edu/role: webservice
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: soar 
+  labels:
+    osc.edu/role: webservice
