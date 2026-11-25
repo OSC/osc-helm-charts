@@ -36,6 +36,14 @@ global:
     #    - require: test
     #    - client: test
     #
+    # -- Additional ingress allow rules
+    allowFrom: []
+    # Example:
+    # - podSelector: {}
+    # - namespaceSelector:
+    #     matchLabels:
+    #       kubernetes.io/metadata.name: '{{ .Values.global.nodeSelectorRole }}'
+    #
     # -- Name of the Ingress namespace
     ingressNamespace: ingress-nginx
     # -- Name of the Prometheus namespace

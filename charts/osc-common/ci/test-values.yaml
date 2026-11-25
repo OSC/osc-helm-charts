@@ -7,6 +7,11 @@ global:
     ingressAllowedPods:
       - require: foo
       - app.kubernetes.io/name: '{{ include "osc.common.name" . }}'
+    allowFrom:
+      - podSelector: {}
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: '{{ .Values.global.nodeSelectorRole }}'
     ports:
       - '{{ .Values.service.port }}'
   viewGroups:

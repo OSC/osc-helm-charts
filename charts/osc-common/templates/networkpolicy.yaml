@@ -38,6 +38,9 @@ spec:
         matchLabels:
           kubernetes.io/metadata.name: {{ .Values.global.networkPolicy.prometheusNamespace }}
     {{- end }}
+  {{- with .Values.global.networkPolicy.allowFrom }}
+    {{- tpl (toYaml .) $ | nindent 4 }}
+  {{- end }}
     {{- range .Values.global.networkPolicy.ports }}
     ports:
       - protocol: TCP
