@@ -35,10 +35,10 @@ dependencies:
     # Use OCI until merged:
     # https://github.com/community-charts/helm-charts/pull/870
     # Left as example:
-    #   helm package charts/mlflow --version 1.11.8-osc-r1
-    #   helm push mlflow-1.11.8-osc-r1.tgz oci://docker-registry.osc.edu/kubernetes
+    #   helm package charts/mlflow --version 1.11.8-osc-r2
+    #   helm push mlflow-1.11.8-osc-r2.tgz oci://docker-registry.osc.edu/kubernetes
     repository: oci://docker-registry.osc.edu/kubernetes
-    version: 1.11.8-osc-r1
+    version: 1.11.8-osc-r2
   - name: osc-silo
     version: 0.1.1
     repository: https://osc.github.io/osc-helm-charts
