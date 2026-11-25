@@ -10,3 +10,7 @@ push:
 
 kind-load:
 	kind load docker-image $(TAG)
+
+check-exists:
+	@echo "Checking if $(TAG) exists"
+	docker manifest inspect $(TAG) > /dev/null 2>&1
