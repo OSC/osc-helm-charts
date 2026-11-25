@@ -1,6 +1,6 @@
 # osc-chat
 
-![Version: 0.1.25](https://img.shields.io/badge/Version-0.1.25-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.25](https://img.shields.io/badge/AppVersion-0.1.25-informational?style=flat-square)
+![Version: 0.1.26](https://img.shields.io/badge/Version-0.1.26-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.26](https://img.shields.io/badge/AppVersion-0.1.26-informational?style=flat-square)
 
 A Helm chart for the OSC Chat service
 
@@ -34,13 +34,12 @@ global:
   ingress:
     host: <Ingress host>
     hostAlias: <Ingress host alias>
-    minio:
+    silo:
       api: <minio host name>
       console: <minio console host name>
-  minio:
-    auth:
-      rootUser: <minio root username>
-      rootPassword: <minio root password>
+  silo:
+    rootUser: <minio root username>
+    rootPassword: <minio root password>
   llm:
     host: <LLM server host>
   embedding:
@@ -75,11 +74,11 @@ secrets:
 | Repository | Name | Version |
 |------------|------|---------|
 | https://center-for-ai-innovation.github.io/hpcgpt-cli | osc-mcp | 0.1.10 |
-| https://osc.github.io/osc-helm-charts | database | 0.21.1 |
-| https://osc.github.io/osc-helm-charts | osc-common | 0.16.1 |
-| https://osc.github.io/osc-helm-charts | osc-minio | 0.1.4 |
+| https://osc.github.io/osc-helm-charts | database | 0.21.3 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.18.0 |
 | https://qdrant.github.io/qdrant-helm | qdrant | 1.16.3 |
 | oci://docker-registry.osc.edu/kubernetes/vllm | vllm-stack | 0.1.11-osc-r1 |
+| oci://docker-registry.osc.edu/webservices | osc-silo | 0.1.0-rc0 |
 | oci://registry-1.docker.io/bitnamicharts | rabbitmq | 16.0.14 |
 
 ## Values
@@ -103,10 +102,12 @@ secrets:
 | global.alert.receiver | string | `"sciapps"` |  |
 | global.ingress.host | string | `""` |  |
 | global.ingress.hostAlias | string | `""` |  |
-| global.ingress.minio.api | string | `""` | Minio API host |
-| global.ingress.minio.console | string | `""` | Minio console host |
-| global.minio.auth.rootUser | string | `"minioadmin"` | The minio root user |
-| global.minio.auth.rootPassword | string | `"minioadmin"` | The minio root password |
+| global.ingress.silo.api | string | `""` | Silo API host |
+| global.ingress.silo.console | string | `""` | Silo console host |
+| global.silo.rootUser | string | `"minioadmin"` | The Silo root user |
+| global.silo.rootPassword | string | `"minioadmin"` | The Silo root password |
+| global.silo.user | string | `"osc-chat"` | The silo user |
+| global.silo.password | string | `"changeme"` | The silo password |
 | global.networkPolicy.ingressAllowedPods[0]."app.kubernetes.io/name" | string | `"osc-mcp"` |  |
 | database.postgresql.auth.postgresPassword | string | `"secret"` |  |
 | database.postgresql.auth.database | string | `"name"` |  |

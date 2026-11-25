@@ -47,17 +47,26 @@ global:
   ingress:
     host: ""
     hostAlias: ""
-    minio:
-      # -- Minio API host
+    silo:
+      # -- Silo API host
       api: ""
-      # -- Minio console host
+      # -- Silo console host
       console: ""
-  minio:
-    auth:
-      # -- The minio root user
-      rootUser: "minioadmin"
-      # -- The minio root password
-      rootPassword: "minioadmin"
+  silo:
+    # -- The Silo root user
+    rootUser: "minioadmin"
+    # -- The Silo root password
+    rootPassword: "minioadmin"
+    # -- The silo user
+    user: osc-chat
+    # -- The silo password
+    password: changeme
+    # @ignored
+    defaultBucket: osc-chat
+    # @ignored
+    adminGroups:
+      - sysstf
+      - sappstf
   networkPolicy:
     ingressAllowedPods:
       - app.kubernetes.io/name: "osc-mcp"
@@ -82,11 +91,6 @@ database:
       persistence:
         annotations:
           osc.edu/fileset: '{{ .Values.global.fileset }}'
-      # @ignored
-      initdb:
-        scripts:
-          extra-grants.sql: |
-            GRANT EXECUTE ON FUNCTION pg_ls_waldir() TO {{ .Values.auth.username }};
     # @ignored
     backup:
       cronjob:
@@ -103,22 +107,16 @@ database:
           osc.edu/fileset: PZS0645
 
 # @ignored
-osc-minio:
+osc-silo:
   enable: true
-  minio:
-    # Keep same names as before the dedicated chart
+  silo:
+    # Keep same names as before the dedicated chart and silo migration
     fullnameOverride: osc-chat-minio
-    defaultBuckets: "osc-chat"
     persistence:
       # Kept to avoid attempts to change misconfigured previous PVC before shared chart
-      accessModes:
-        - ReadWriteOnce
+      accessMode: ReadWriteOnce
       # Kept to avoid attempts to change misconfigured previous PVC before shared chart
       size: 8Gi
-  osc-common:
-    oauth2-proxy:
-      extraArgs:
-        upstream: "http://osc-chat-minio-console.{{ .Release.Namespace }}.svc.cluster.local:9090"
 
 qdrant:
   enable: true
@@ -253,7 +251,7 @@ worker:
   # @ignored
   env:
     QDRANT_COLLECTION_NAME: '{{ include "osc-chat.name" . }}'
-    S3_BUCKET_NAME: '{{ index .Values "osc-minio" "minio" "defaultBuckets" }}'
+    S3_BUCKET_NAME: '{{ .Values.global.silo.defaultBucket }}'
   resources:
     limits:
       cpu: 4
