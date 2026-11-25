@@ -88,6 +88,9 @@ global:
   # @ignored
   maintenanceGroups:
     - sappstf
+  # @ignored
+  viewGroups:
+    - sappstf
 
 # @ignored
 database:
@@ -176,8 +179,14 @@ mlflow:
       cpu: 500m
       memory: 128Mi
   # @ignored
-  livenessProbe:
+  startupProbe:
     initialDelaySeconds: 60
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 5
+  # @ignored
+  livenessProbe:
+    initialDelaySeconds: 10
     periodSeconds: 30
     timeoutSeconds: 5
     failureThreshold: 5
@@ -185,7 +194,7 @@ mlflow:
   readinessProbe:
     initialDelaySeconds: 10
     periodSeconds: 30
-    timeoutSeconds: 3
+    timeoutSeconds: 5
     failureThreshold: 5
   # @ignored
   commonLabels:
