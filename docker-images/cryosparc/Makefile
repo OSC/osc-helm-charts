@@ -30,3 +30,7 @@ push:
 kind-load:
 	kind load docker-image $(TAG_v4)
 	kind load docker-image $(TAG_v5)
+
+check-exists:
+	@echo "Checking if $(TAG_v5) exists"
+	docker manifest inspect $(TAG_v5) > /dev/null 2>&1

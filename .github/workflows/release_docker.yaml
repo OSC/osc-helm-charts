@@ -61,7 +61,19 @@ jobs:
           if [ "${{ matrix.image }}" == "cryosparc" ]; then
             echo "LICENSE_ID=${{ secrets.CRYOSPARC_LICENSE_ID }}" >> $GITHUB_ENV
           fi
+      - name: Check if image tag exists
+        id: check_image
+        run: |
+          if make -f docker-images/${{ matrix.image }}/Makefile check-exists; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Image ${{ matrix.image }} already exists. Skipping build."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Image ${{ matrix.image }} not found. Proceeding with build."
+          fi
+
       - name: Build and Push ${{ matrix.image }} image
+        if: steps.check_image.outputs.exists != 'true'
         run: |
           make -f docker-images/${{ matrix.image }}/Makefile build
           make -f docker-images/${{ matrix.image }}/Makefile push
