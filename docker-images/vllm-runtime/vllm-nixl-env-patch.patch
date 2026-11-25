@@ -1,0 +1,270 @@
+From f9f770ca0b02f8b83ae92997a68efa797611ce36 Mon Sep 17 00:00:00 2001
+From: shaharmor98 <17088876+shaharmor98@users.noreply.github.com>
+Date: Mon, 11 May 2026 10:40:37 +0300
+Subject: [PATCH] fix nixl side-channel host selection (#41806)
+
+Signed-off-by: Shahar Mor <smor@nvidia.com>
+Co-authored-by: mergify[bot] <37929162+mergify[bot]@users.noreply.github.com>
+---
+ tests/test_envs.py                            |   8 ++
+ tests/test_ray_env.py                         |  14 ++
+ .../engine/test_core_engine_actor_manager.py  | 136 ++++++++++++++++++
+ .../kv_connector/v1/nixl/scheduler.py         |   3 +-
+ vllm/envs.py                                  |   1 +
+ vllm/v1/engine/core.py                        |  12 ++
+ vllm/v1/engine/utils.py                       |   6 +-
+ vllm/v1/executor/ray_utils.py                 |   1 +
+ 8 files changed, 179 insertions(+), 2 deletions(-)
+ create mode 100644 tests/v1/engine/test_core_engine_actor_manager.py
+
+diff --git a/tests/v1/engine/test_core_engine_actor_manager.py b/tests/v1/engine/test_core_engine_actor_manager.py
+new file mode 100644
+index 000000000..195ddda05
+--- /dev/null
++++ b/tests/v1/engine/test_core_engine_actor_manager.py
+@@ -0,0 +1,136 @@
++# SPDX-License-Identifier: Apache-2.0
++# SPDX-FileCopyrightText: Copyright contributors to the vLLM project
++
++import os
++import uuid
++from pathlib import Path
++from types import SimpleNamespace
++from typing import Any
++
++import pytest
++import ray
++
++from vllm.v1.engine.core import EngineCoreActorMixin
++from vllm.v1.engine.utils import CoreEngineActorManager, EngineZmqAddresses
++
++
++class _StubEngineCoreActor(EngineCoreActorMixin):
++    def __init__(
++        self,
++        vllm_config: Any,
++        local_client: bool,
++        addresses: EngineZmqAddresses,
++        executor_class: type[Any],
++        log_stats: bool,
++        dp_rank: int = 0,
++        local_dp_rank: int = 0,
++    ):
++        # Exercise the production Ray actor mixin without loading a model.
++        EngineCoreActorMixin.__init__(
++            self, vllm_config, addresses, dp_rank, local_dp_rank
++        )
++
++    def _set_visible_devices(self, vllm_config: Any, local_dp_rank: int) -> None:
++        pass
++
++    def wait_for_init(self) -> None:
++        pass
++
++    def run(self) -> None:
++        pass
++
++    def get_nixl_side_channel_host(self) -> str | None:
++        return os.environ.get("VLLM_NIXL_SIDE_CHANNEL_HOST")
++
++
++class _DummyExecutor:
++    pass
++
++
++def _make_vllm_config() -> SimpleNamespace:
++    return SimpleNamespace(
++        parallel_config=SimpleNamespace(
++            data_parallel_size=1,
++            data_parallel_size_local=1,
++            enable_elastic_ep=False,
++            world_size=1,
++        ),
++        model_config=SimpleNamespace(is_moe=False),
++        kv_transfer_config=None,
++    )
++
++
++def _make_addresses() -> EngineZmqAddresses:
++    return EngineZmqAddresses(
++        inputs=["tcp://127.0.0.1:12345"],
++        outputs=["tcp://127.0.0.1:12346"],
++    )
++
++
++def _make_cpu_placement_group():
++    pg = ray.util.placement_group(
++        [{"CPU": 0.001}, {"CPU": 1.0}],
++        strategy="PACK",
++    )
++    ray.get(pg.ready())
++    return pg
++
++
++@pytest.fixture
++def ray_context():
++    started_ray = False
++    if not ray.is_initialized():
++        project_root = str(Path(__file__).resolve().parents[3])
++        ray.init(
++            num_cpus=2,
++            runtime_env={"env_vars": {"PYTHONPATH": project_root}},
++            log_to_driver=False,
++        )
++        started_ray = True
++
++    yield
++
++    if started_ray:
++        ray.shutdown()
++
++
++@pytest.mark.usefixtures("ray_context")
++def test_driver_nixl_side_channel_host_does_not_leak_to_engine_core_actor(
++    monkeypatch: pytest.MonkeyPatch,
++) -> None:
++    driver_marker = f"driver-only-nixl-host-{uuid.uuid4()}"
++    created_placement_groups: list[Any] = []
++    manager: CoreEngineActorManager | None = None
++
++    def create_dp_placement_groups(vllm_config: Any):
++        pg = _make_cpu_placement_group()
++        created_placement_groups.append(pg)
++        return [pg], [0]
++
++    monkeypatch.setenv("VLLM_NIXL_SIDE_CHANNEL_HOST", driver_marker)
++    monkeypatch.setattr("vllm.v1.engine.core.EngineCoreActor", _StubEngineCoreActor)
++    monkeypatch.setattr(
++        CoreEngineActorManager,
++        "create_dp_placement_groups",
++        staticmethod(create_dp_placement_groups),
++    )
++
++    try:
++        manager = CoreEngineActorManager(
++            vllm_config=_make_vllm_config(),
++            addresses=_make_addresses(),
++            executor_class=_DummyExecutor,
++            log_stats=False,
++        )
++        actor = manager.local_engine_actors[0]
++        actor_host = ray.get(actor.get_nixl_side_channel_host.remote())
++        node_host = ray.util.get_node_ip_address()
++
++        assert actor_host != driver_marker
++        assert actor_host == node_host
++    finally:
++        if manager is not None:
++            manager.shutdown()
++        else:
++            for pg in created_placement_groups:
++                ray.util.remove_placement_group(pg)
+diff --git a/vllm/distributed/kv_transfer/kv_connector/v1/nixl/scheduler.py b/vllm/distributed/kv_transfer/kv_connector/v1/nixl/scheduler.py
+index a053f2c32..285e054dd 100644
+--- a/vllm/distributed/kv_transfer/kv_connector/v1/nixl/scheduler.py
++++ b/vllm/distributed/kv_transfer/kv_connector/v1/nixl/scheduler.py
+@@ -209,6 +209,7 @@ class NixlConnectorScheduler:
+                     encoded_data,
+                     ready_event,
+                     self._stop_event,
++                    self.side_channel_host,
+                     self.side_channel_port,
+                 ),
+                 daemon=True,
+@@ -222,6 +223,7 @@ class NixlConnectorScheduler:
+         encoded_data: dict[int, Any],
+         ready_event: threading.Event,
+         stop_event: threading.Event,
++        host: str,
+         port: int,
+     ):
+         """Background thread for getting new NIXL handshakes."""
+@@ -229,7 +231,6 @@ class NixlConnectorScheduler:
+         # to a better approach via HTTP endpoint soon.
+ 
+         # Listen for new requests for metadata.
+-        host = envs.VLLM_NIXL_SIDE_CHANNEL_HOST
+         path = make_zmq_path("tcp", host, port)
+         logger.debug("Starting listening on path: %s", path)
+         with zmq_ctx(zmq.ROUTER, path) as sock:
+diff --git a/vllm/envs.py b/vllm/envs.py
+index ded474dc0..091995722 100755
+--- a/vllm/envs.py
++++ b/vllm/envs.py
+@@ -1884,6 +1884,7 @@ def compile_factors() -> dict[str, object]:
+         "VLLM_SERVER_DEV_MODE",
+         "VLLM_DP_MASTER_IP",
+         "VLLM_DP_MASTER_PORT",
++        "VLLM_NIXL_SIDE_CHANNEL_HOST",
+         "VLLM_RANDOMIZE_DP_DUMMY_INPUTS",
+         "VLLM_CI_USE_S3",
+         "VLLM_MODEL_REDIRECT_PATH",
+diff --git a/vllm/v1/engine/core.py b/vllm/v1/engine/core.py
+index 122cdd8f9..07d3cca05 100644
+--- a/vllm/v1/engine/core.py
++++ b/vllm/v1/engine/core.py
+@@ -2005,6 +2005,8 @@ class EngineCoreActorMixin:
+         vllm_config.parallel_config.data_parallel_index = dp_rank
+         vllm_config.parallel_config.data_parallel_rank_local = local_dp_rank
+ 
++        self._set_nixl_side_channel_host()
++
+         # Set CUDA_VISIBLE_DEVICES as early as possible in actor life cycle
+         # NOTE: in MP we set CUDA_VISIBLE_DEVICES at process creation time,
+         # and this cannot be done in the same way for Ray because:
+@@ -2024,6 +2026,16 @@ class EngineCoreActorMixin:
+         # of ray.
+         self._set_visible_devices(vllm_config, local_dp_rank)
+ 
++    @staticmethod
++    def _set_nixl_side_channel_host():
++        import ray
++
++        # The driver-side value is excluded from Ray actor env propagation.
++        # Fill in an actor-local default while preserving explicit overrides.
++        os.environ.setdefault(
++            "VLLM_NIXL_SIDE_CHANNEL_HOST", ray.util.get_node_ip_address()
++        )
++
+     def _set_visible_devices(self, vllm_config: VllmConfig, local_dp_rank: int):
+         from vllm.platforms import current_platform
+ 
+diff --git a/vllm/v1/engine/utils.py b/vllm/v1/engine/utils.py
+index a28c1366d..28df7bbc7 100644
+--- a/vllm/v1/engine/utils.py
++++ b/vllm/v1/engine/utils.py
+@@ -27,6 +27,7 @@ from vllm.utils.network_utils import get_open_zmq_ipc_path, zmq_socket_ctx
+ from vllm.utils.system_utils import get_mp_context
+ from vllm.v1.engine.coordinator import DPCoordinator
+ from vllm.v1.executor import Executor
++from vllm.v1.executor.ray_utils import WORKER_SPECIFIC_ENV_VARS
+ from vllm.v1.utils import get_engine_client_zmq_addr, shutdown
+ 
+ if TYPE_CHECKING:
+@@ -356,7 +357,10 @@ class CoreEngineActorManager:
+         self.local_engine_actors: list[ray.ActorHandle] = []
+         self.remote_engine_actors: list[ray.ActorHandle] = []
+ 
+-        env_vars_list = get_env_vars_to_copy(destination=actor_class.__name__)
++        env_vars_list = get_env_vars_to_copy(
++            destination=actor_class.__name__,
++            exclude_vars=WORKER_SPECIFIC_ENV_VARS,
++        )
+         self.env_vars_dict = {
+             name: os.environ[name] for name in env_vars_list if name in os.environ
+         }
+diff --git a/vllm/v1/executor/ray_utils.py b/vllm/v1/executor/ray_utils.py
+index 1541b24de..9083b9195 100644
+--- a/vllm/v1/executor/ray_utils.py
++++ b/vllm/v1/executor/ray_utils.py
+@@ -33,6 +33,7 @@ PG_WAIT_TIMEOUT = 1800
+ WORKER_SPECIFIC_ENV_VARS: set[str] = {
+     "VLLM_HOST_IP",
+     "VLLM_HOST_PORT",
++    "VLLM_NIXL_SIDE_CHANNEL_HOST",
+     "LOCAL_RANK",
+     "CUDA_VISIBLE_DEVICES",
+     "HIP_VISIBLE_DEVICES",
+-- 
+2.39.5 (Apple Git-154)
+

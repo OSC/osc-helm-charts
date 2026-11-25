@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.scripts.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "dynamo.labels" . | nindent 4 }}
+data:
+  hf-wait.sh: |
+    set -x
+    MODEL_NAME=${1}
+    if kubectl get job ${MODEL_NAME}-download -n {{ .Release.Namespace }} &>/dev/null; then
+      echo "Waiting for download job to finish..."
+      kubectl wait --for=condition=complete job/${MODEL_NAME}-download -n {{ .Release.Namespace }} --timeout=300s
+      exit $?
+    else
+      echo "Job not found, exit"
+      exit 0
+    fi
+  keepalive.sh: |
+    {{- include "dynamo.keepalive.content" . | nindent 4 }}
