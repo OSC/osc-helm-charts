@@ -1,6 +1,6 @@
 # osc-common
 
-![Version: 0.19.0](https://img.shields.io/badge/Version-0.19.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.20.0](https://img.shields.io/badge/Version-0.20.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 OSC common Helm Chart
 
@@ -75,6 +75,7 @@ global:
 | global.networkPolicy.create | Create the network policy | `true` |
 | global.networkPolicy.podSelector | Labels for NetworkPolicy podSelector. Defaults to `"osc.common.selectorLabels"` | `nil` |
 | global.networkPolicy.ingressAllowedPods | Labels of pods allowed to Ingress from the same namespace | `[]` |
+| global.networkPolicy.allowFrom | Additional ingress allow rules | `[]` |
 | global.networkPolicy.ingressNamespace | Name of the Ingress namespace | `"ingress-nginx"` |
 | global.networkPolicy.prometheusNamespace | Name of the Prometheus namespace | `"prometheus"` |
 | global.networkPolicy.ports | Ports that should be used for the network policy | `[]` |
