@@ -1,6 +1,6 @@
 # osc-mlflow
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.0](https://img.shields.io/badge/AppVersion-0.2.0-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.3.0](https://img.shields.io/badge/AppVersion-0.3.0-informational?style=flat-square)
 
 A Helm chart for mlflow deployment at OSC
 
@@ -56,7 +56,7 @@ mlflow:
 | Repository | Name | Version |
 |------------|------|---------|
 | https://osc.github.io/osc-helm-charts | database | 0.21.3 |
-| https://osc.github.io/osc-helm-charts | osc-common | 0.19.0 |
+| https://osc.github.io/osc-helm-charts | osc-common | 0.20.0 |
 | https://osc.github.io/osc-helm-charts | osc-silo | 0.1.1 |
 | oci://docker-registry.osc.edu/kubernetes | mlflow | 1.11.8-osc-r1 |
 
