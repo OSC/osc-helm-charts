@@ -38,9 +38,6 @@ jobs:
           # https://github.com/OSC/phylogatr-web/pull/91
           # - "phylogatr-web"
           - "sirmodel"
-          # TODO: Maybe too few resources with Kind cluster to support init job
-          # Init job is required to bootstrap Nominatim
-          #- nominatim
           - "rigatoni"
           - webmo
           - chatsqc
@@ -71,15 +68,6 @@ jobs:
         run: |
           kubectl label node kind-control-plane node-role.kubernetes.io/test=''
           kubectl label node kind-control-plane node-role.kubernetes.io/webservices=''
-      - name: Build and Load nominatim images
-        if: matrix.chart == 'nominatim'
-        run: |
-          make -f docker-images/postgresql/Makefile build
-          make -f docker-images/postgresql/Makefile kind-load
-          make -f docker-images/nominatim/Makefile build
-          make -f docker-images/nominatim/Makefile kind-load
-          make -f docker-images/postgresql-nominatim/Makefile build
-          make -f docker-images/postgresql-nominatim/Makefile kind-load
       - name: Set image pull secret
         run: |
           sed -i 's|IMAGE-PULL-PASSWORD|${{ secrets.OSC_REGISTRY_ROBOT_WEBSERVICES_READ_TOKEN}}|g' charts-private/${{ matrix.chart }}/ci/*.yaml
@@ -125,10 +113,6 @@ jobs:
           kubectl describe pod -A
           kubectl describe service -A
           kubectl describe daemonset -A
-          if [ ${{ matrix.chart }} == "nominatim" ]; then
-            kubectl describe job -A
-            kubectl logs job.batch/$(kubectl get jobs -n nominatim -o jsonpath="{.items[0].metadata.name}") -n nominatim
-          fi
       - name: Get logs
         if: failure()
         run: |

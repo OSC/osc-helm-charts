@@ -179,8 +179,6 @@ Docker images are built under the [docker-images](./docker-images/) directory fo
 - [dcgm-exporter](./docker-images/dcgm-exporter/) - NVIDIA DCGM exporter for GPU metrics
 - [mariadb](./docker-images/mariadb/) - MariaDB database image
 - [postgresql](./docker-images/postgresql/) - PostgreSQL database image
-- [nominatim](./docker-images/nominatim/) - Nominatim geocoding service image
-- [postgresql-nominatim](./docker-images/postgresql-nominatim/) - PostgreSQL image with Nominatim support
 
 These images are used by various Helm charts in this repository and are built with OSC-specific configurations and security standards.
 
